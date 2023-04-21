@@ -26,7 +26,27 @@
 			"pics_path": "pics",
 			"should_update": true,
 			"should_read": true
+		},
+		{
+			"url": "https://github.com/Orikka-CS/EMP-TY",
+			"repo_name": "Custom expansions",
+			"repo_path": "./repositories/expansions",
+			"data_path": "",
+			"pics_path": "pics",
+			"script_path": "script",
+			"should_update": false,
+			"should_read": true
 		}
+	],
+	"urls": [
+		{
+            "url": "https://raw.githubusercontent.com/Orikka-CS/OriCS-pics/main/pics/field/{}.png",
+            "type": "field"
+        },
+		{
+            "url": "https://raw.githubusercontent.com/Orikka-CS/EMP-TY/main/pics/field/{}.png",
+            "type": "field"
+        }
 	],
 	"servers": [
 		{
