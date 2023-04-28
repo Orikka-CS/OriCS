@@ -50,7 +50,7 @@ function s.splimit(e,c)
 end
 function s.tfil1(c,e,tp)
 	return c:IsSetCard(0x903) and 
-		((c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE))
+		((c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0)
 			or (c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsSSetable()) or c:IsAbleToHand())
 end
 function s.tff1(c)
@@ -76,31 +76,62 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 --Operation
+function s.setfilter(c)
+	if c:IsMonster() then
+		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+			and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
+	elseif c:IsType(TYPE_SPELL+TYPE_TRAP) then
+		return c:IsSSetable()
+	end
+	return false
+end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local ft1=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ft2=Duel.GetLocationCount(tp,LOCATION_SZONE)
 	local g=Duel.GetMatchingGroup(s.tfil1,tp,LOCATION_DECK,0,nil,e,tp)
 	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,s.tfun1,1,tp,HINTMSG_ATOHAND)
-	if #sg~=2 then
-		return
-	end
-	for tc in aux.Next(sg) do
-		Duel.ConfirmCards(tp,tc)
-		if tc:IsMonster() then
-			if tc:IsAbleToHand() and (Duel.GetLocationCount(tp,LOCATION_MZONE)<=0
-				or not tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
-				or Duel.SelectYesNo(tp,aux.Stringid(id,0))) then
-				Duel.SendtoHand(tc,nil,REASON_EFFECT)
-			else
-				Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
+	if #sg~=2 then return end
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft=math.min(ft,1) end
+	--first card
+	local tc=sg:Select(tp,1,1,nil):GetFirst()
+	aux.ToHandOrElse(tc,tp,function(c)
+			if tc:IsMonster() then
+				return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+					and tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
+			elseif tc:IsType(TYPE_SPELL+TYPE_TRAP) then
+				return tc:IsSSetable()
 			end
-		elseif tc:IsType(TYPE_SPELL+TYPE_TRAP) then
-			if tc:IsAbleToHand() and (Duel.GetLocationCount(tp,LOCATION_SZONE)<=0
-				or not tc:IsSSetable()
-				or Duel.SelectYesNo(tp,aux.Stringid(id,0))) then
-				Duel.SendtoHand(tc,nil,REASON_EFFECT)
+			return false
+		end,
+	function(c)
+			if tc:IsMonster() then
+				Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
+				ft1=ft1-1
 			else
 				Duel.SSet(tp,tc)
+				ft2=ft2-1
 			end
-		end
-	end
+		end,1153)
+	--second card
+	tc=(sg-tc):Select(tp,1,1,nil):GetFirst()
+	aux.ToHandOrElse(tc,tp,function(c)
+			if tc:IsMonster() then
+				return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+					and tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
+			elseif tc:IsType(TYPE_SPELL+TYPE_TRAP) then
+				return tc:IsSSetable()
+			end
+			return false
+		end,
+	function(c)
+			if tc:IsMonster() then
+				Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
+				ft1=ft1-1
+			else
+				Duel.SSet(tp,tc)
+				ft2=ft2-1
+			end
+		end,1153)
+	Duel.SpecialSummonComplete()
 	Duel.ConfirmCards(1-tp,sg)
 end

@@ -35,7 +35,7 @@ function s.initial_effect(c)
 	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e4:SetCode(EVENT_DESTROYED)
 	e4:SetRange(LOCATION_FZONE)
-	e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
+	e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e4:SetCondition(s.spcon)
 	e4:SetTarget(s.sptg)
 	e4:SetOperation(s.spop)
@@ -84,8 +84,8 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 			and Duel.IsExistingMatchingCard(s.tfil12,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp)
 	end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -98,28 +98,27 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local sg=Duel.SelectMatchingCard(tp,s.tfil12,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
 		local tc=sg:GetFirst()
-		if tc:IsMonster() then
-			if tc:IsAbleToHand() and (Duel.GetLocationCount(tp,LOCATION_MZONE)<=0
-				or not tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
-				or Duel.SelectYesNo(tp,aux.Stringid(id,0))) then
-				Duel.SendtoHand(tc,nil,REASON_EFFECT)
-			else
-				Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
-			end
-		elseif tc:IsType(TYPE_SPELL+TYPE_TRAP) then
-			if tc:IsAbleToHand() and (Duel.GetLocationCount(tp,LOCATION_SZONE)<=0
-				or not tc:IsSSetable()
-				or Duel.SelectYesNo(tp,aux.Stringid(id,0))) then
-				Duel.SendtoHand(tc,nil,REASON_EFFECT)
-			else
-				Duel.SSet(tp,tc)
-			end
-		end
+		aux.ToHandOrElse(tc,tp,function(c)
+				if tc:IsMonster() then
+					return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+						and tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
+				elseif tc:IsType(TYPE_SPELL+TYPE_TRAP) then
+					return tc:IsSSetable()
+				end
+				return false
+			end,
+		function(c)
+				if tc:IsMonster() then
+					Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
+				else
+					Duel.SSet(tp,tc)
+				end
+			end,1153)
 	end
 end
 --special summon
-function s.cfilter(c,p)
-	return c:IsReason(REASON_BATTLE+REASON_EFFECT) and c:IsPreviousLocation(LOCATION_MZONE) and c:GetPreviousControler()==p
+function s.cfilter(c,tp)
+	return c:IsReason(REASON_BATTLE+REASON_EFFECT) and c:IsPreviousLocation(LOCATION_MZONE) and c:GetPreviousControler()==tp
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local g=eg:Filter(s.cfilter,nil,1-tp)
@@ -137,9 +136,8 @@ end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	if ft<=0 then return end
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft=1 end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_DECK,0,1,ft,nil,e,tp)
-	if #g>0 then
-		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
-	end
+	local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_GRAVE,0,1,math.min(ft,e:GetLabel()),nil,e,tp)
+	Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 end
