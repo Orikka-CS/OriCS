@@ -266,15 +266,15 @@ end
 --Duel.LoadScript("OriCS_proc_ritual.lua")
 --Duel.LoadScript("OriCS_proc_synchro.lua")
 --Duel.LoadScript("OriCS_proc_xyz.lua")
-Duel.LoadScript("convert-from-core/core_constant.lua")
-if IREDO_COMES_TRUE==nil then Duel.LoadScript("convert-from-core/core_proc_procs.lua") end
-Duel.LoadScript("convert-from-core/core_proc_fusion.lua")
-Duel.LoadScript("convert-from-core/core_proc_link.lua")
-Duel.LoadScript("convert-from-core/core_proc_pendulum.lua")
-Duel.LoadScript("convert-from-core/core_proc_ritual.lua")
-Duel.LoadScript("convert-from-core/core_proc_synchro.lua")
-Duel.LoadScript("convert-from-core/core_proc_xyz.lua")
-Duel.LoadScript("convert-from-core/core_utility.lua")
+Duel.LoadScript("ygocore_constant.lua")
+if IREDO_COMES_TRUE==nil then Duel.LoadScript("ygocore_proc_procs.lua") end
+Duel.LoadScript("ygocore_proc_fusion.lua")
+Duel.LoadScript("ygocore_proc_link.lua")
+Duel.LoadScript("ygocore_proc_pendulum.lua")
+Duel.LoadScript("ygocore_proc_ritual.lua")
+Duel.LoadScript("ygocore_proc_synchro.lua")
+Duel.LoadScript("ygocore_proc_xyz.lua")
+Duel.LoadScript("ygocore_utility.lua")
 
 --OriCS utilities
 Duel.LoadScript("_register_effect.lua");
