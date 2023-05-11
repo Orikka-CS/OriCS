@@ -1,5 +1,6 @@
-EFFECT_ADD_CUSTOM_TYPE				=0x1000
-EFFECT_REMOVE_CUSTOM_TYPE			=0x1001
+--globals to be declared
+--EFFECT_ADD_CUSTOM_TYPE	=
+--EFFECT_REMOVE_CUSTOM_TYPE	=
 
 Card.auxCustomType=true
 
@@ -17,13 +18,13 @@ function Card.GetCustomType(c)
 	end
 	local t = c:GetOriginalCustomType()
 	local eset = {}
-	for _,te in ipairs({c:IsHasEffect(EFFECT_CHANGE_TYPE)}) do
+	for _,te in ipairs({c:GetCardEffect(EFFECT_CHANGE_TYPE)}) do
 		table.insert(eset,te)
 	end
-	if EFFECT_ADD_CUSTOM_TYPE then for _,te in ipairs({c:IsHasEffect(EFFECT_ADD_CUSTOM_TYPE)}) do
+	if EFFECT_ADD_CUSTOM_TYPE then for _,te in ipairs({c:GetCardEffect(EFFECT_ADD_CUSTOM_TYPE)}) do
 		table.insert(eset,te)
 	end end
-	if EFFECT_REMOVE_CUSTOM_TYPE then for _,te in ipairs({c:IsHasEffect(EFFECT_REMOVE_CUSTOM_TYPE)}) do
+	if EFFECT_REMOVE_CUSTOM_TYPE then for _,te in ipairs({c:GetCardEffect(EFFECT_REMOVE_CUSTOM_TYPE)}) do
 		table.insert(eset,te)
 	end end
 	table.sort(eset,function(e1,e2) return e1:GetFieldID()<e2:GetFieldID() end)

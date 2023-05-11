@@ -277,8 +277,9 @@ Duel.LoadScript("ygocore_proc_xyz.lua")
 Duel.LoadScript("ygocore_utility.lua")
 
 --OriCS utilities
-Duel.LoadScript("_register_effect.lua");
-Duel.LoadScript("AuxCard_CustomType.lua")
+Duel.LoadScript("_register_effect.lua")
+Duel.LoadScript("_custom_type.lua")
+Duel.LoadScript("custom_card_type_constants.lua")
 Duel.LoadScript("proc_equation.lua")
 Duel.LoadScript("proc_order.lua")
 Duel.LoadScript("proc_diffusion.lua")

@@ -1,5 +1,7 @@
+--[[
 FLAG_EFFECT_SCRIPTED	=18452823
 TYPE_SCRIPTED			=0x80000000
+--]]
 
 function Auxiliary.ScriptedFilter(c)
 	local code
