@@ -31,13 +31,21 @@ function s.initial_effect(c)
 	local e6=e4:Clone()
 	e6:SetCode(EFFECT_XYZ_MAT_RESTRICTION)
 	c:RegisterEffect(e6)
-	--Link material limitations
+	--Link material limitations (external utilities needed)
 	local e7=e4:Clone()
-	e7:SetCode(EFFECT_LINK_MAT_RESTRICTION)
+	e7:SetCode(73941492+TYPE_LINK)
 	c:RegisterEffect(e7)
+	--Custom Summon Type material limitations (external utilities needed)
+	local e8=e4:Clone()
+	e8:SetCode(73941492+TYPE_SPSUMMON)
+	e8:SetValue(s.matfilter)
+	c:RegisterEffect(e8)
 end
 s.listed_series={0x903}
 function s.filter(e,c)
+	return c:IsSetCard(0x903)
+end
+function s.matfilter(e,c,sumtype,tp)
 	return c:IsSetCard(0x903)
 end
 function s.destg(e,c)
