@@ -115,6 +115,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 				end
 			end,1153)
 	end
+	Duel.ConfirmCards(1-tp,tc)
 end
 --special summon
 function s.cfilter(c,tp)
