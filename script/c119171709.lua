@@ -114,8 +114,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 					Duel.SSet(tp,tc)
 				end
 			end,1153)
+		Duel.ConfirmCards(1-tp,tc)
 	end
-	Duel.ConfirmCards(1-tp,tc)
 end
 --special summon
 function s.cfilter(c,tp)
