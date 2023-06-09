@@ -1,22 +1,22 @@
 --소울 슬레이어-베르트
 local s,id=GetID()
 function s.initial_effect(c)
-	--destroy
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_SELF_DESTROY)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
-	e1:SetTarget(s.destg)
-	c:RegisterEffect(e1)
 	--summon process
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_LIMIT_SUMMON_PROC)
-	e2:SetCondition(s.ntcon)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_LIMIT_SUMMON_PROC)
+	e1:SetCondition(s.ntcon)
+	c:RegisterEffect(e1)
+	local e2=e1:Clone()
+	e2:SetCode(EFFECT_LIMIT_SET_PROC)
 	c:RegisterEffect(e2)
-	local e3=e2:Clone()
-	e3:SetCode(EFFECT_LIMIT_SET_PROC)
+	--adjust
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e3:SetCode(EVENT_ADJUST)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCondition(s.adjustcon)
+	e3:SetOperation(s.adjustop)
 	c:RegisterEffect(e3)
 	--Fusion, Synchro, and Xyz material limitations
 	local e4=Effect.CreateEffect(c)
@@ -42,19 +42,42 @@ function s.initial_effect(c)
 	c:RegisterEffect(e8)
 end
 s.listed_series={0x903}
+--summon process
+function s.ntcon(e,c,minc)
+	if c==nil then return true end
+	return minc==0 and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
+end
+--adjust
+function s.desfilter(c,e)
+	return not c:IsImmuneToEffect(e) and c:IsDestructable(e)
+		and not c:IsSetCard(0x903) and
+		((c:IsLevelAbove(7) and c:IsLevelBelow(9))
+			or (c:IsRankAbove(7) and c:IsRankBelow(9))
+			or (c:IsLinkAbove(5) and c:IsLinkBelow(6)))
+end
+function s.adjustcon(e,tp,eg,ep,ev,re,r,rp)
+	local phase=Duel.GetCurrentPhase()
+	if (phase==PHASE_DAMAGE and not Duel.IsDamageCalculated()) or phase==PHASE_DAMAGE_CAL then return end
+	local g=Duel.GetMatchingGroup(s.desfilter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
+	if #g>0 then
+		e:GetHandler():CreateEffectRelation(e)
+		return true
+	end
+	return false
+end
+function s.adjustop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local g=Duel.GetMatchingGroup(s.desfilter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
+	if #g>0 then
+		Duel.Hint(HINT_CARD,0,id)
+		Duel.SendtoGrave(g,REASON_EFFECT|REASON_DESTROY,PLAYER_NONE,tp)
+		Duel.Readjust()
+	end
+end
+--material limitations
 function s.filter(e,c)
 	return c:IsSetCard(0x903)
 end
 function s.matfilter(e,c,sumtype,tp)
 	return c:IsSetCard(0x903)
-end
-function s.destg(e,c)
-	return not c:IsSetCard(0x903) and
-		((c:IsLevelAbove(7) and c:IsLevelBelow(9))
-			or (c:IsRankAbove(7) and c:IsRankBelow(9))
-			or (c:IsLinkAbove(5) and c:IsLinkBelow(6)))
-end
-function s.ntcon(e,c,minc)
-	if c==nil then return true end
-	return minc==0 and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
 end

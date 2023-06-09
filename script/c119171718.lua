@@ -53,5 +53,5 @@ function s.ifilter(e,re,rp)
 end
 function s.efilter(e,re)
 	local et=re:GetCode()
-	return et==EFFECT_ADD_SETCODE or (et==EFFECT_CHANGE_SETCODE and re:GetValue()~=0)
+	return et==EFFECT_ADD_SETCODE or (EFFECT_CHANGE_SETCODE and et==EFFECT_CHANGE_SETCODE and re:GetValue()~=0)
 end

@@ -62,6 +62,7 @@ end
 function s.tfun1(sg,e,tp,mg)
 	local ft1=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	local ft2=Duel.GetLocationCount(tp,LOCATION_SZONE)
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft1=math.min(ft1,1) end
 	local c1=sg:FilterCount(s.tff1,nil)
 	local c2=sg:FilterCount(s.tff2,nil)
 	local c3=sg:GetClassCount(Card.GetCode)
@@ -88,10 +89,10 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local ft1=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	local ft2=Duel.GetLocationCount(tp,LOCATION_SZONE)
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft1=math.min(ft1,1) end
 	local g=Duel.GetMatchingGroup(s.tfil1,tp,LOCATION_DECK,0,nil,e,tp)
 	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,s.tfun1,1,tp,HINTMSG_ATOHAND)
 	if #sg~=2 then return end
-	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft=math.min(ft,1) end
 	--first card
 	local tc=sg:Select(tp,1,1,nil):GetFirst()
 	aux.ToHandOrElse(tc,tp,function(c)

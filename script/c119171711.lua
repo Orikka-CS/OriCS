@@ -1,14 +1,14 @@
 --소울 슬레이어-루쥬
 local s,id=GetID()
 function s.initial_effect(c)
-	--destroy
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_SELF_DESTROY)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
-	e1:SetTarget(s.destg)
-	c:RegisterEffect(e1)
+	--adjust
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e3:SetCode(EVENT_ADJUST)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCondition(s.adjustcon)
+	e3:SetOperation(s.adjustop)
+	c:RegisterEffect(e3)
 	--Fusion, Synchro, and Xyz material limitations
 	local e4=Effect.CreateEffect(c)
 	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
@@ -33,12 +33,34 @@ function s.initial_effect(c)
 	c:RegisterEffect(e8)
 end
 s.listed_series={0x903}
+--adjust
+function s.desfilter(c,e)
+	return not c:IsImmuneToEffect(e) and c:IsDestructable(e)
+		and not c:IsSetCard(0x903) and (c:IsLevelBelow(3) or c:IsRankBelow(3) or c:IsLinkBelow(2))
+end
+function s.adjustcon(e,tp,eg,ep,ev,re,r,rp)
+	local phase=Duel.GetCurrentPhase()
+	if (phase==PHASE_DAMAGE and not Duel.IsDamageCalculated()) or phase==PHASE_DAMAGE_CAL then return end
+	local g=Duel.GetMatchingGroup(s.desfilter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
+	if #g>0 then
+		e:GetHandler():CreateEffectRelation(e)
+		return true
+	end
+	return false
+end
+function s.adjustop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local g=Duel.GetMatchingGroup(s.desfilter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
+	if #g>0 then
+		Duel.Hint(HINT_CARD,0,id)
+		Duel.SendtoGrave(g,REASON_EFFECT|REASON_DESTROY,PLAYER_NONE,tp)
+		Duel.Readjust()
+	end
+end
+--material limitations
 function s.filter(e,c)
 	return c:IsSetCard(0x903)
 end
 function s.matfilter(e,c,sumtype,tp)
 	return c:IsSetCard(0x903)
-end
-function s.destg(e,c)
-	return not c:IsSetCard(0x903) and (c:IsLevelBelow(3) or c:IsRankBelow(3) or c:IsLinkBelow(2))
 end

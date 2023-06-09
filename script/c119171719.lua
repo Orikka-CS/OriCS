@@ -1,4 +1,4 @@
---소울 슬레이어의 (미정)
+--소울 슬레이어의 도리
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activated
