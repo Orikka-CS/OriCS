@@ -10,11 +10,11 @@ Link.AddProcedure=function(c,f,min,max,specialchk,desc)
 		local gc=g:GetFirst()
 		while gc do
 			if gc:IsHasEffect(EFFECT_LINK_MAT_RESTRICTION) then
-				local eff={gc:GetCardEffect(EFFECT_LINK_MAT_RESTRICTION)}
-				for _,e in ipairs(eff) do
-					local fValue=e:GetValue()
+				local effs={gc:GetCardEffect(EFFECT_LINK_MAT_RESTRICTION)}
+				for _,eff in ipairs(effs) do
+					local fValue=eff:GetValue()
 					local fFilter=function(tc,te) return not fValue(te,tc) end
-					if g:IsExists(fFilter,1,gc,e) then return false end
+					if g:IsExists(fFilter,1,gc,eff) then return false end
 				end
 			end
 			gc=g:GetNext()
