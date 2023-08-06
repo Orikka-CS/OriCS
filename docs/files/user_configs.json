@@ -40,22 +40,22 @@
 	],
 	"urls": [
 		{
-            "url": "https://raw.githubusercontent.com/Orikka-CS/OriCS-pics/main/pics/field/{}.png",
-            "type": "field"
-        },
+			"url": "https://raw.githubusercontent.com/Orikka-CS/OriCS-pics/main/pics/field/{}.png",
+			"type": "field"
+		},
 		{
-            "url": "https://raw.githubusercontent.com/Orikka-CS/EMP-TY/main/pics/field/{}.png",
-            "type": "field"
-        }
+			"url": "https://raw.githubusercontent.com/Orikka-CS/EMP-TY/main/pics/field/{}.png",
+			"type": "field"
+		}
 	],
 	"servers": [
 		{
-			"name": "오릿카 서버",
-			"address": "cs.orikka.o-r.kr",
-			"duelport": 10000,
-			"roomaddress": "cs.orikka.o-r.kr",
+			"name": "오리CS 서버",
+			"address": "one.for-o.n-e.kr",
+			"duelport": 25252,
+			"roomaddress": "one.for-o.n-e.kr",
 			"roomlistprotocol": "http",
-			"roomlistport": 20000
+			"roomlistport": 29292
 		}
 	]
 }
