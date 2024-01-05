@@ -223,6 +223,7 @@ Duel.LoadScript("ygocore_proc_xyz.lua")
 Duel.LoadScript("ygocore_utility.lua")
 
 --OriCS utilities
+Duel.LoadScript("deprefunc_nodebug.lua")
 Duel.LoadScript("_register_effect.lua")
 Duel.LoadScript("_custom_type.lua")
 Duel.LoadScript("custom_card_type_constants.lua")
