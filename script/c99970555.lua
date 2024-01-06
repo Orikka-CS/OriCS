@@ -11,7 +11,7 @@ function cm.initial_effect(c)
 	e1:SetD(m,0)
 	e1:SetCategory(CATEGORY_REMOVE+CATEGORY_SPECIAL_SUMMON)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetCL(1)
+	e1:SetCL(1,{m,1})
 	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
 	
@@ -109,7 +109,7 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e1,tp)
 end
 function cm.aclimit(e,re,tp)
-	return re:GetActivateLocation()==LOCATION_GRAVE or re:GetActivateLocation()==LOCATION_HAND
+	return re:GetActivateLocation()==LOCATION_GRAVE+LOCATION_HAND
 end
 
 --노블체인
