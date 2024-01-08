@@ -17,8 +17,8 @@ function cm.initial_effect(c)
 	--Destroy 1 card on the field
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_DESTROY)
-	e3:SetType(EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_CARD_TARGET)
 	e3:SetCode(EVENT_LEAVE_FIELD)
 	e3:SetRange(LOCATION_GRAVE)
 	e3:SetCountLimit(1,m+1)
@@ -95,18 +95,18 @@ end
 
 
 function cm.cfilter(c,tp)
-	return c:GetReasonPlayer()==1-tp and c:IsSetCard(0xb2d) and c:IsPreviousControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD)
+	return c:IsSetCard(0xb2d) and c:IsPreviousControler(tp) and c:GetReasonPlayer()==1-tp
 end
 
 function cm.descon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(cm.cfilter,1,e:GetHandler(),tp) and aux.exccon(e)
+	return eg:IsExists(cm.cfilter,1,e:GetHandler(),tp)
 end
 
 function cm.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() end
-	if chk==0 then return Duel.IsExistingTarget(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
+	if chk==0 then return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectTarget(tp,nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+	local g=Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,tp,0)
 end
 
