@@ -1,7 +1,7 @@
 --No.22 不乱健
 function c95480810.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_FIEND),8,2)
+	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_FIEND),8,2)
 	c:EnableReviveLimit()
 	--destroy and damage
 	local e1=Effect.CreateEffect(c)

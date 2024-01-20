@@ -1,18 +1,8 @@
 --블루아카이브
+--230404(VERITAS)
 
 kaos={}
 Kaos=kaos
-
-
-
---Arcaea 코스트
-function kaos.Arcaeacost(e,tp,eg,ep,ev,re,r,rp,chk)
-   local g=Duel.GetDecktopGroup(1-tp,1)
-   if chk==0 then return g:GetCount()>0 
-   end
-   Duel.DisableShuffleCheck()
-   Duel.SendtoDeck(g,nil,-2,REASON_COST)
-end
 
 
 --융합 소환에 성공했을
@@ -53,7 +43,12 @@ function kaos.hdco(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoGrave(e:GetHandler(),REASON_COST+REASON_DISCARD)
 end
 
-
+--패의 이 카드를 상대에게 보이고 발동할 수 있다.
+function kaos.hdopencost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return not e:GetHandler():IsPublic() end
+	Duel.ConfirmCards(1-tp,e:GetHandler())
+	Duel.ShuffleHand(tp)
+end
 
 --패를 1장 버리고 발동할 수 있다.
 function kaos.onecost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -66,6 +61,9 @@ function kaos.xyzcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
+
+
+
 
 
 --하이랜더
@@ -88,6 +86,9 @@ function kaos.spell(c)
 	c:RegisterEffect(e2)
 end
 
+
+
+
 --덱에 편성할 수 없다
 function kaos.cannoteditdeck(c)
 	local e0=Effect.CreateEffect(c)
@@ -107,6 +108,8 @@ function kaos.cannoteditdeckop(e,tp,eg,ep,ev,re,r,rp)
 	local WIN_REASON_THE_DECK=0x71
 	Duel.Win(1-tp,WIN_REASON_THE_DECK)
 end
+
+
 
 
 --ERiS
@@ -243,8 +246,6 @@ function kaos.milkop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Draw(p,d,REASON_EFFECT)
 	end
 end
-
-
 
 --리미트
 function kaos.milklimit(c)
@@ -444,7 +445,10 @@ end
 
 
 
+
+
 --Neverwor!D
+--네버월드
 --네버월드 자괴
 function kaos.neverworld(c)
 	local e4=Effect.CreateEffect(c)
@@ -473,9 +477,14 @@ function kaos.nvop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 
+
+
+
+
+
+
 --C1tYPop(나이트 스케이프)
 --특소
---spsummon1
 function kaos.C1tYPop(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(c:GetOriginalCode(),0))
@@ -563,6 +572,10 @@ end
 function kaos.ksrgcon2(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsEnvironment(112603082)
 end
+
+
+
+
 
 
 
@@ -727,6 +740,13 @@ function kaos.psopLink(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
+
+
+
+
+
+
+
 --LSD: Dream Emulator.
 --놓는다
 function kaos.LSD(c)
@@ -843,6 +863,17 @@ function kaos.chaosatkdef(c)
 	c:RegisterEffect(e3)
 end
 
+
+
+
+
+
+
+
+
+
+
+
 --none
 --페이탈에러
 --DATA : COMPLEX NUMBER
@@ -886,8 +917,6 @@ function kaos.fatalop(e,c)
 	return c:IsType(TYPE_EFFECT) and not c:IsSetCard(0xe93)
 end
 
-
-
 --자체 특소
 function kaos.fatcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToDeckAsCost,tp,LOCATION_HAND,0,1,nil) end
@@ -909,6 +938,11 @@ end
 
 
 
+
+
+
+
+--R Sound Design
 --RSDlimit
 function kaos.RSDlimit(c)
 	local ea=Effect.CreateEffect(c)
@@ -951,6 +985,12 @@ end
 
 
 
+
+
+
+
+
+--Re(리)： 
 --Re(리)： 카운터
 function kaos.recounter(c)
 	local e0=Effect.CreateEffect(c)
@@ -971,6 +1011,13 @@ end
 
 
 
+
+
+
+
+
+
+--CHUNITHM
 --CHUNITHM 공격 제약
 function kaos.chuxyz(c)
 	local e2=Effect.CreateEffect(c)
@@ -985,6 +1032,30 @@ function kaos.chuxyzcon(e)
 end
 
 
+
+
+
+
+
+
+
+--Arcaea
+--Arcaea 코스트
+function kaos.Arcaeacost(e,tp,eg,ep,ev,re,r,rp,chk)
+   local g=Duel.GetDecktopGroup(1-tp,1)
+   if chk==0 then return g:GetCount()>0 
+   end
+   Duel.DisableShuffleCheck()
+   Duel.SendtoDeck(g,nil,-2,REASON_COST)
+end
+
+
+
+
+
+
+
+--아트릭시아
 --아트릭시아 패 마법 소멸 코스트
 function kaos.atricostfilter(c,ec,tp)
 	return c:IsType(TYPE_SPELL)
@@ -997,7 +1068,13 @@ function kaos.atricost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 
---미술과 공통 효과
+
+
+
+
+
+
+--어째서 내가 미술과에!?
 --특소
 function kaos.doubizyu2(c)
 	local e3=Effect.CreateEffect(c)
@@ -1033,6 +1110,25 @@ function kaos.dbspop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--etc.
 --Exritual
 	local type=Card.GetType
 	Card.GetType=function(c)
@@ -1089,36 +1185,39 @@ end
 end
 
 --ExRitual
---편집자 주: 이 부분도 차후에 작업할 필요가 있음
-local type=Card.GetType
+	local type=Card.GetType
 	Card.GetType=function(c)
 	if c.CardType_ExRitual then
 		return bit.bor(type(c),TYPE_FUSION)-TYPE_FUSION
 	end
 	return type(c)
 end
-local otype=Card.GetOriginalType
+--
+	local otype=Card.GetOriginalType
 	Card.GetOriginalType=function(c)
 	if c.CardType_ExRitual then
 		return bit.bor(otype(c),TYPE_FUSION)-TYPE_FUSION
 	end
 	return otype(c)
 end
-local ftype=Card.GetFusionType
+--
+	local ftype=Card.GetFusionType
 	Card.GetFusionType=function(c)
 	if c.CardType_ExRitual then
 		return bit.bor(ftype(c),TYPE_FUSION)-TYPE_FUSION
 	end
 	return ftype(c)
 end
-local ptype=Card.GetPreviousTypeOnField
+--
+	local ptype=Card.GetPreviousTypeOnField
 	Card.GetPreviousTypeOnField=function(c)
 	if c.CardType_ExRitual then
 		return bit.bor(ptype(c),TYPE_FUSION)-TYPE_FUSION
 	end
 	return ptype(c)
 end
-local itype=Card.IsType
+--
+	local itype=Card.IsType
 	Card.IsType=function(c,t)
 	if c.CardType_ExRitual then
 		if t==TYPE_FUSION then
@@ -1128,13 +1227,69 @@ local itype=Card.IsType
 	end
 	return itype(c,t)
 end
-local iftype=Card.IsFusionType
+--
+	local iftype=Card.IsFusionType
 	Card.IsFusionType=function(c,t)
 	if c.CardType_ExRitual then
 		if t==TYPE_FUSION then
 			return false
 		end
 		return iftype(c,bit.bor(t,TYPE_FUSION)-TYPE_FUSION)
+	end
+	return iftype(c,t)
+end
+
+--this is not xyz monster
+	local type=Card.GetType
+	Card.GetType=function(c)
+	if c.CardType_kiniro then
+		return bit.bor(type(c),TYPE_XYZ)-TYPE_XYZ
+	end
+	return type(c)
+end
+--
+	local otype=Card.GetOriginalType
+	Card.GetOriginalType=function(c)
+	if c.CardType_kiniro then
+		return bit.bor(otype(c),TYPE_XYZ)-TYPE_XYZ
+	end
+	return otype(c)
+end
+--
+	local ftype=Card.GetFusionType
+	Card.GetFusionType=function(c)
+	if c.CardType_kiniro then
+		return bit.bor(ftype(c),TYPE_XYZ)-TYPE_XYZ
+	end
+	return ftype(c)
+end
+--
+	local ptype=Card.GetPreviousTypeOnField
+	Card.GetPreviousTypeOnField=function(c)
+	if c.CardType_kiniro then
+		return bit.bor(ptype(c),TYPE_XYZ)-TYPE_XYZ
+	end
+	return ptype(c)
+end
+--
+	local itype=Card.IsType
+	Card.IsType=function(c,t)
+	if c.CardType_kiniro then
+		if t==TYPE_XYZ then
+			return false
+		end
+		return itype(c,bit.bor(t,TYPE_XYZ)-TYPE_XYZ)
+	end
+	return itype(c,t)
+end
+--
+	local iftype=Card.IsFusionType
+	Card.IsFusionType=function(c,t)
+	if c.CardType_kiniro then
+		if t==TYPE_XYZ then
+			return false
+		end
+		return iftype(c,bit.bor(t,TYPE_XYZ)-TYPE_XYZ)
 	end
 	return iftype(c,t)
 end

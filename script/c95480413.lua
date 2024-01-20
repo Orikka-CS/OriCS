@@ -2,7 +2,7 @@
 function c95480413.initial_effect(c)
 	c:SetUniqueOnField(1,0,95480413)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_WYRM),10,2)
+	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_WYRM),10,2)
 	c:EnableReviveLimit()
 	--negate activate
 	local e1=Effect.CreateEffect(c)
@@ -45,7 +45,7 @@ end
 function c95480413.negop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if Duel.NegateEffect(ev) and e:GetLabelObject():IsRace(RACE_WYRM) then
-		local g=Duel.SelectMatchingCard(tp,Card.IsCanOverlay,tp,LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,1,1,nil)
+		local g=Duel.SelectMatchingCard(tp,Card.IsCanOverlay,tp,LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,1,1,c)
 		local tc=g:GetFirst()
 		if tc and c:IsRelateToEffect(e) then
 			Duel.Overlay(c,Group.FromCards(tc))

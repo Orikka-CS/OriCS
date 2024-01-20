@@ -13,6 +13,13 @@ function s.initial_effect(c)
 	e1:SetOperation(s.extracon)
 	e1:SetValue(s.extraval)
 	c:RegisterEffect(e1)
+	local cicbsm=Card.IsCanBeLinkMaterial
+	function Card.IsCanBeLinkMaterial(mc,sc,...)
+		if mc:GetLevel()==0 and sc==c then
+			return true
+		end
+		return cicbsm(mc,sc,...)
+	end
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
@@ -30,30 +37,30 @@ function s.initial_effect(c)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
 	--remove
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(id,1))
-	e3:SetCategory(CATEGORY_DESTROY+CATEGORY_NEGATE)
-	e3:SetType(EFFECT_TYPE_QUICK_O)
-	e3:SetCode(EVENT_CHAINING)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
-	e3:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
-	e3:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
-	e3:SetCost(s.rmcost)
-	e3:SetCondition(s.con4)
-	e3:SetTarget(s.tar4)
-	e3:SetOperation(s.op4)
-	c:RegisterEffect(e3)
+	local e4=Effect.CreateEffect(c)
+	e4:SetDescription(aux.Stringid(id,1))
+	e4:SetCategory(CATEGORY_DESTROY+CATEGORY_NEGATE)
+	e4:SetType(EFFECT_TYPE_QUICK_O)
+	e4:SetCode(EVENT_CHAINING)
+	e4:SetRange(LOCATION_MZONE)
+	e4:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
+	e4:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
+	e4:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
+	e4:SetCost(s.rmcost)
+	e4:SetCondition(s.con4)
+	e4:SetTarget(s.tar4)
+	e4:SetOperation(s.op4)
+	c:RegisterEffect(e4)
 end
-function s.lcheck(g,lc,sumtype,tp)
-	return g:CheckDifferentProperty(Card.GetCode,lc,sumtype,tp) and g:IsExists(Card.IsSetCard,1,nil,0xe78)
+function s.lcheck(g,lc)
+	return g:GetClassCount(Card.GetCode)==g:GetCount() and g:IsExists(Card.IsSetCard,1,nil,0xe78)
 end
 s.curgroup=nil
 function s.extracon(c,e,tp,sg,mg,lc,og,chk)
-	return not s.curgroup or #(sg&s.curgroup)<2
+	return not s.curgroup or #(sg&s.curgroup)<7
 end
 function s.extafilter(c)
-	return c:IsSetCard(0xe78) and c:IsFaceup() and not c:IsCode(112604240)
+	return c:IsSetCard(0xe78) and not c:IsCode(112604240)
 end
 function s.extraval(chk,summon_type,e,...)
 	if chk==0 then
@@ -61,7 +68,7 @@ function s.extraval(chk,summon_type,e,...)
 		if summon_type~=SUMMON_TYPE_LINK or sc~=e:GetHandler() then
 			return Group.CreateGroup()
 		else
-			s.curgroup=Duel.GetMatchingGroup(s.extrafilter,tp,LOCATION_SZONE,0,nil)
+			s.curgroup=Duel.GetMatchingGroup(s.extrafilter,tp,LOCATION_FZONE+LOCATION_SZONE,0,nil)
 			s.curgroup:KeepAlive()
 			return s.curgroup
 		end

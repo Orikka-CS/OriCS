@@ -1,6 +1,7 @@
 --클라디스 메이든 디바인 퍼니시먼트
 function c95480821.initial_effect(c)
 	--xyz summon
+	Xyz.AddProcedure(c,nil,9,3,nil,nil,99)
 	c:EnableReviveLimit()
 	--cannot special summon
 	local e1=Effect.CreateEffect(c)

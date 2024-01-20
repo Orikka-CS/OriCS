@@ -1,19 +1,19 @@
 --KNo.65 아케론
-function c95481417.initial_effect(c)
+local s,id=GetID()
+function s.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0xd51),1,2)
+	Xyz.AddProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0xd51),nil,2,nil,nil,nil,nil,false,s.xyzcheck)
 	c:EnableReviveLimit()
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_REMOVE)
-	e1:SetCode(EVENT_CHAINING)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
-	e1:SetCountLimit(1,95481417)
-	e1:SetCondition(c95481417.negcon)
-	e1:SetCost(c95481417.negcost)
-	e1:SetTarget(c95481417.negtg)
-	e1:SetOperation(c95481417.negop)
+	e1:SetHintTiming(0,TIMING_MAIN_END)
+	e1:SetCountLimit(1,id)
+	e1:SetCost(s.atkcost)
+	e1:SetTarget(s.sptg)
+	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
 	--handes
 	local e4=Effect.CreateEffect(c)
@@ -22,55 +22,61 @@ function c95481417.initial_effect(c)
 	e4:SetCode(EVENT_TO_GRAVE)
 	e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e4:SetCountLimit(1,95481483)
-	e4:SetCondition(c95481417.hdcon)
-	e4:SetTarget(c95481417.hdtg)
-	e4:SetOperation(c95481417.hdop)
+	e4:SetCondition(s.hdcon)
+	e4:SetTarget(s.hdtg)
+	e4:SetOperation(s.hdop)
 	c:RegisterEffect(e4)
 end
-function c95481417.negcon(e,tp,eg,ep,ev,re,r,rp)
-	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) and re:GetHandler()~=e:GetHandler()
-		and re:IsActiveType(TYPE_MONSTER) and Duel.IsChainNegatable(ev)
+function s.xyzcheck(g,tp,xyz)
+	local mg=g:Filter(function(c) return not c:IsHasEffect(511001175) end,nil)
+	return mg:GetClassCount(Card.GetLevel)==1
 end
-function c95481417.cfilter(c)
-	return not c:IsStatus(STATUS_BATTLE_DESTROYED)
-end
-function c95481417.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
-function c95481417.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return re:GetHandler():IsAbleToRemove() end
-	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
+function s.tfil1(c,e,tp)
+	return c:IsSetCard(0xd51) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function c95481417.negop(e,tp,eg,ep,ev,re,r,rp)
+function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(s.tfil1,tp,LOCATION_DECK,0,1,nil,e,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
+end
+function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local rc=re:GetHandler()
-	if Duel.NegateActivation(ev) and  c:IsRelateToEffect(e) and c:IsFaceup() then
-		if rc:IsRelateToEffect(re) and rc:IsControler(1-tp) and rc:GetBaseAttack()>0 then
-			local atk=math.ceil(rc:GetBaseAttack()/2)
-			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_UPDATE_ATTACK)
-			e1:SetValue(atk)
-			e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
-			c:RegisterEffect(e1)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,s.tfil1,tp,LOCATION_DECK,0,1,1,nil,e,tp)
+	if #g>0 then
+		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+		local tc=g:GetFirst()
+		local te=tc.event_leave_grave[tc]
+		Duel.ClearTargetCard()
+		local tg=te:GetTarget()
+		if tg then
+			tg(e,tp,eg,ep,ev,re,r,rp,1)
+		end
+		local op=te:GetOperation()
+		if op then
+			op(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
 
-function c95481417.hdcon(e,tp,eg,ep,ev,re,r,rp)
+function s.hdcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD)
 end
-function c95481417.filter(c)
+function s.filter(c)
 	return c:IsSetCard(0xd51) and c:IsAbleToHand()
 end
-function c95481417.hdtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c95481417.filter,tp,LOCATION_DECK,0,1,nil) end
+function s.hdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
-function c95481417.hdop(e,tp,eg,ep,ev,re,r,rp)
+function s.hdop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,c95481417.filter,tp,LOCATION_DECK,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK,0,1,1,nil)
 	if g:GetCount()>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)

@@ -30,15 +30,16 @@ function cm.initial_effect(c)
 
 end
 
-
 function cm.mttg(e,c)
 	local tc=c:GetEquipTarget()
 	return tc
 end
+
 function cm.mtval(e,c)
 	if not c then return false end
 	return c:IsSetCard(0xb2d)
 end
+
 function cm.filter(c,e,tp,m,f,chkf)
 	return c:IsType(TYPE_FUSION) and (not f or f(c))
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial(m,nil,chkf)
@@ -58,6 +59,7 @@ function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 		me:SetTarget(cm.mttg)
 		me:SetValue(cm.mtval)
 		Duel.RegisterEffect(me,tp)
+
 		local chkf=tp
 		local mg1=Duel.GetFusionMaterial(tp)
 		Auxiliary.FCheckAdditional=cm.fcheck
@@ -80,6 +82,7 @@ end
 
 
 function cm.activate(e,tp,eg,ep,ev,re,r,rp)
+
 	local me=Effect.CreateEffect(e:GetHandler())
 	me:SetType(EFFECT_TYPE_FIELD)
 	me:SetCode(EFFECT_EXTRA_FUSION_MATERIAL)
@@ -87,6 +90,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	me:SetTarget(cm.mttg)
 	me:SetValue(cm.mtval)
 	Duel.RegisterEffect(me,tp)
+
 	local chkf=tp
 	local mg1=Duel.GetFusionMaterial(tp):Filter(cm.filter2,nil,e)
 	Auxiliary.FCheckAdditional=cm.fcheck
@@ -122,6 +126,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	Auxiliary.FCheckAdditional=nil
 	me:Reset()
 end
+
 
 function cm.exfilter(c,tp)
 	return c:GetSummonPlayer()==tp and c:GetSummonType()==SUMMON_TYPE_MODULE and c:IsFaceup() and c:IsSetCard(0xb2d)

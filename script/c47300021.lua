@@ -38,9 +38,18 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,cm.filter,tp,LOCATION_DECK,0,1,1,nil)
 	if g:GetCount()<=0 then return end
 	local tc=g:GetFirst()
-	if tc:IsAbleToHand() and (not tc:IsAbleToGrave() or Duel.SelectOption(tp,1190,1191)==0) then
-		Duel.SendtoHand(tc,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,tc)
+
+	if tc:IsAbleToHand() and not tc:IsAbleToGrave() then
+
+		local op=Duel.SelectOption(tp,aux.Stringid(m,0),aux.Stringid(m,1))
+
+		if op==0 then
+			Duel.SendtoHand(tc,nil,REASON_EFFECT)
+			Duel.ConfirmCards(1-tp,tc)
+		else
+			Duel.SendtoGrave(tc,REASON_EFFECT)
+		end
+
 	else
 		Duel.SendtoGrave(tc,REASON_EFFECT)
 	end

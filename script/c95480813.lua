@@ -1,7 +1,7 @@
 --RR－エトランゼ・ファルコン
 function c95480813.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddXyzProcedure(c,nil,3,9)
+	Xyz.AddProcedure(c,nil,9,3)
 	--battle
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

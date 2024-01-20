@@ -2,8 +2,8 @@
 function c95480423.initial_effect(c)
 	c:SetUniqueOnField(1,0,95480423)
 	--xyz summon
+	Xyz.AddProcedure(c,c95480423.mfilter,nil,2,nil,nil,99,nil,false,c95480423.xyzcheck)
 	c:EnableReviveLimit()
-	aux.AddXyzProcedureLevelFree(c,c95480423.mfilter,c95480423.xyzcheck,2,99)
 	--negate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -24,8 +24,8 @@ function c95480423.initial_effect(c)
 	e2:SetOperation(c95480423.tgop)
 	c:RegisterEffect(e2)
 end
-function c95480423.mfilter(c,xyzc)
-	return c:IsFaceup() and  c:IsXyzType(TYPE_XYZ) and c:IsSetCard(0xd45)
+function c95480423.mfilter(c,xyz,sumtype,tp)
+	return c:IsType(TYPE_XYZ,xyz,sumtype,tp) and c:IsSetCard(0xd45,xyz,sumtype,tp)
 end
 function c95480423.xyzcheck(g)
 	return g:GetClassCount(Card.GetRank)==1

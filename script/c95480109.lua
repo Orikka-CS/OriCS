@@ -18,7 +18,7 @@ function c95480109.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.PayLPCost(tp,2000)
 end
 function c95480109.filter(c)
-	return c:IsFaceup() and c:IsLinkState() and c:IsSetCard(0xd5f) and c:IsLevelAbove(1) and not (c:IsLevel(10) and c:IsRace(RACE_WYRM) and c:GetAttack()==0 and c:GetDefense()==0)
+	return c:IsFaceup() and c:IsLinked() and c:IsSetCard(0xd5f) and c:IsLevelAbove(1) and not (c:IsLevel(10) and c:IsRace(RACE_WYRM) and c:GetAttack()==0 and c:GetDefense()==0)
 end
 function c95480109.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()

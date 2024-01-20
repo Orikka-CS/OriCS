@@ -6,7 +6,7 @@ function cm.initial_effect(c)
 
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcFun2(c,cm.matfilter,aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER),true)
+	aux.AddFusionProcFun2(c,cm.matfilter,aux.TRUE,true)
 
 	--equip
 	local e0=Effect.CreateEffect(c)

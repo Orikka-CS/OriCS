@@ -40,7 +40,11 @@ function Card.GetRegisteredEffectCount(c)
 	local code=c:GetOriginalCode()
 	local mt=_G["c"..code]
 	if mt.eff_ct and type(mt.eff_ct)=="table" and mt.eff_ct[c] and type(mt.eff_ct[c])=="table" then
-		return #(mt.eff_ct[c])
+		local ct=0
+		while mt.eff_ct[c][ct] do
+			ct=ct+1
+		end
+		return ct
 	end
 	return -1
 end

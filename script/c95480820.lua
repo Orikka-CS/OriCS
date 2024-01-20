@@ -1,7 +1,7 @@
 --클라디스 메이든 다크 저지먼트
 function c95480820.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0xd52),8,2,nil,nil,99)
+	Xyz.AddProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0xd52),8,2,nil,nil,99)
 	c:EnableReviveLimit()
 	--atk
 	local e1=Effect.CreateEffect(c)

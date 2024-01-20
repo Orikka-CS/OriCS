@@ -206,66 +206,12 @@ Effect.SetCountLimit=function(e,max,code,flag,...)
 	setCntLmt(e,max,code,flag,...)
 end
 
---Hand Test
-if Duel.GetFieldGroupCount(1,LOCATION_DECK,0)==0 and Duel.IsDuelType(DUEL_ATTACK_FIRST_TURN) then
-	local f=io.open("deck/handtest.ydk","r")
-	if f==nil then
-		return
-	end
-	local loc=0
-	local dt={}
-	local et={}
-	for line in f:lines() do
-		if line=="#main" then
-			loc=LOCATION_DECK
-		elseif line=="#extra" then
-			loc=LOCATION_EXTRA
-		elseif line=="!side" then
-			loc=0
-		elseif loc~=0 then
-			local code=tonumber(line)
-			if loc==LOCATION_DECK then
-				table.insert(dt,code)
-			elseif loc==LOCATION_EXTRA then
-				table.insert(et,code)
-			end
-		end
-	end
-	local ct={}
-	local rt={}
-	for i=1,#dt do
-		while true do
-			local rn=Duel.GetRandomNumber(1,#dt)
-			if rt[rn]==nil then
-				rt[rn]=true
-				ct[i]=rn
-				break
-			end
-		end
-	end
-	for i=1,#dt do
-		local code=dt[ct[i]]
-		Debug.AddCard(code,1,1,LOCATION_DECK,0,POS_FACEDOWN)
-	end
-	for i=1,#et do
-		local code=et[i]
-		Debug.AddCard(code,1,1,LOCATION_EXTRA,0,POS_FACEDOWN)
-	end
-	local e1=Effect.GlobalEffect()
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_CANNOT_BP)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	e1:SetTargetRange(1,0)
-	Duel.RegisterEffect(e1,0)
-end
-
 --Convert from Core
 --Duel.LoadScript("OriCS_proc_fusion.lua")
 --Duel.LoadScript("OriCS_proc_link.lua")
 --Duel.LoadScript("OriCS_proc_ritual.lua")
 --Duel.LoadScript("OriCS_proc_synchro.lua")
---Duel.LoadScript("OriCS_proc_xyz.lua")
+Duel.LoadScript("OriCS_proc_xyz.lua")
 Duel.LoadScript("ygocore_constant.lua")
 if IREDO_COMES_TRUE==nil then Duel.LoadScript("ygocore_proc_procs.lua") end
 Duel.LoadScript("ygocore_proc_fusion.lua")
@@ -277,6 +223,7 @@ Duel.LoadScript("ygocore_proc_xyz.lua")
 Duel.LoadScript("ygocore_utility.lua")
 
 --OriCS utilities
+Duel.LoadScript("deprefunc_nodebug.lua")
 Duel.LoadScript("_register_effect.lua")
 Duel.LoadScript("_custom_type.lua")
 Duel.LoadScript("custom_card_type_constants.lua")

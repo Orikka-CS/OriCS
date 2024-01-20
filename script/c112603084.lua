@@ -12,6 +12,7 @@ function cm.initial_effect(c)
 	e1:SetTarget(cm.target)
 	e1:SetOperation(cm.activate)
 	c:RegisterEffect(e1)
+	Duel.AddCustomActivityCounter(m,ACTIVITY_SPSUMMON,cm.counterfilter)
 	
 	--destroy
 	local e3=Effect.CreateEffect(c)
@@ -27,7 +28,9 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e3)
 	
 end
-
+function cm.counterfilter(c)
+	return c:IsSetCard(0xe92) or not c:IsSummonLocation(LOCATION_EXTRA)
+end
 --Activate
 function cm.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

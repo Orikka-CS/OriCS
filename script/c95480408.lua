@@ -15,11 +15,11 @@ function c95480408.tgfilter(c,e,tp)
 	return c:IsSetCard(0xd45) and c:IsAbleToGrave()
 end
 function c95480408.filter(c)
-	return c:IsDestructable() and c:IsType(TYPE_SPELL+TYPE_TRAP)
+	return c:IsType(TYPE_SPELL+TYPE_TRAP)
 end
 function c95480408.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsOnField() and c95480408.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c95480408.filter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
+	if chkc then return chkc:IsOnField() and c95480408.filter(chkc) and chkc~=e:GetHandler() end
+	if chk==0 then return Duel.IsExistingTarget(c95480408.filter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,e:GetHandler())
 		and Duel.IsExistingMatchingCard(c95480408.tgfilter,tp,LOCATION_DECK,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 	local g=Duel.SelectTarget(tp,c95480408.filter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)

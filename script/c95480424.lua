@@ -26,29 +26,28 @@ function c95480424.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c95480424.cfilter(c)
-	return c:IsSetCard(0xd45) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsDiscardable()
+	return c:IsSetCard(0xd45) and c:IsType(TYPE_SPELL+TYPE_TRAP)
 end
 function c95480424.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c95480424.cfilter,tp,LOCATION_HAND,0,1,nil) end
 	Duel.DiscardHand(tp,c95480424.cfilter,1,1,REASON_DISCARD+REASON_COST)
 end
 function c95480424.destg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)
-	if chk==0 then return Duel.IsPlayerCanDiscardDeck(tp,ct) end
-	Duel.SetTargetPlayer(tp)
-	Duel.SetTargetParam(ct)
-	Duel.SetOperationInfo(0,CATEGORY_DECKDES,nil,0,tp,ct)
+	if chk==0 then
+		local ac=Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)
+		return ac>0 and Duel.IsPlayerCanDiscardDeck(tp,ac)
+	end
 end
 function c95480424.desfilter(c)
 	return c:IsSetCard(0xd45) and c:IsLocation(LOCATION_GRAVE)
 end
 function c95480424.desop(e,tp,eg,ep,ev,re,r,rp)
-	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)
-	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	Duel.DiscardDeck(p,d,REASON_EFFECT)
+	local ac=Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)
+	if ac==0 or not Duel.IsPlayerCanDiscardDeck(tp,ac) then return end
+	Duel.DiscardDeck(tp,ac,REASON_EFFECT)
 	local g=Duel.GetOperatedGroup()
 	local ct=g:FilterCount(c95480424.desfilter,nil)
-	local dg=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
+	local dg=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
 	if ct~=0 and dg:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(95480424,0)) then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
@@ -59,24 +58,26 @@ function c95480424.desop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c95480424.cfilter2(c)
-	return c:IsSetCard(0xd45) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToRemoveAsCost()
+    	return c:IsSetCard(0xd45) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToRemoveAsCost()
 end
 function c95480424.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c95480424.cfilter2,tp,LOCATION_GRAVE,0,1,e:GetHandler()) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,c95480424.cfilter2,tp,LOCATION_GRAVE,0,1,1,e:GetHandler())
-	Duel.Remove(g,POS_FACEUP,REASON_COST)
+    	if chk==0 then return Duel.IsExistingMatchingCard(c95480424.cfilter2,tp,LOCATION_GRAVE,0,1,e:GetHandler()) end
+    	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+    	local g=Duel.SelectMatchingCard(tp,c95480424.cfilter2,tp,LOCATION_GRAVE,0,1,1,e:GetHandler())
+    	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function c95480424.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,95480424,0,0x11,300,3000,10,RACE_WYRM,ATTRIBUTE_FIRE) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
+    	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsPlayerCanSpecialSummonMonster(tp,95480424,0,0x11,300,3000,10,RACE_WYRM,ATTRIBUTE_FIRE) end
+    	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
 end
 function c95480424.spop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.IsPlayerCanSpecialSummonMonster(tp,95480424,0,0x11,300,3000,10,RACE_WYRM,ATTRIBUTE_FIRE) then
-		c:AddMonsterAttribute(TYPE_NORMAL)
-		Duel.SpecialSummon(c,SUMMON_VALUE_SELF,tp,tp,true,false,POS_FACEUP_DEFENSE)
-	end
+    	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+    	local c=e:GetHandler()
+    	if c:IsRelateToEffect(e) and Duel.IsPlayerCanSpecialSummonMonster(tp,95480424,0,0x11,300,3000,10,RACE_WYRM,ATTRIBUTE_FIRE) then
+        		c:AddMonsterAttribute(TYPE_NORMAL)
+		c:AssumeProperty(ASSUME_RACE,RACE_WYRM)
+		Duel.SpecialSummonStep(c,0,tp,tp,true,false,POS_FACEUP_DEFENSE)
+		c:AddMonsterAttributeComplete()
+		Duel.SpecialSummonComplete()
+    	end
 end

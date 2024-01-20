@@ -1,13 +1,14 @@
 --ブライト・フューチャー
-function c95481406.initial_effect(c)
+local s,id=GetID()
+function s.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,95481406+EFFECT_COUNT_CODE_OATH)
-	e1:SetTarget(c95481406.target)
-	e1:SetOperation(c95481406.activate)
+	e1:SetCountLimit(1,id+EFFECT_COUNT_CODE_OATH)
+	e1:SetTarget(s.target)
+	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 	--
 	local e2=Effect.CreateEffect(c)
@@ -17,25 +18,25 @@ function c95481406.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetCost(aux.bfgcost)
-	e2:SetTarget(c95481406.tg)
-	e2:SetOperation(c95481406.op)
+	e2:SetTarget(s.tg)
+	e2:SetOperation(s.op)
 	c:RegisterEffect(e2)
 end
-function c95481406.ctfilter(c)
+function s.ctfilter(c)
 	return c:IsFaceup() and c:IsSummonType(SUMMON_TYPE_SPECIAL)
 end
-function c95481406.spfilter(c,e,tp)
+function s.spfilter(c,e,tp)
 	return c:IsSetCard(0xd51) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and (c:IsFaceup() or c:IsLocation(LOCATION_GRAVE))
 end
-function c95481406.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c95481406.ctfilter,tp,0,LOCATION_MZONE,1,nil)
-		and Duel.IsExistingMatchingCard(c95481406.spfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,e,tp) end
+		and Duel.IsExistingMatchingCard(s.ctfilter,tp,0,LOCATION_MZONE,1,nil)
+		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE+LOCATION_REMOVED)
 end
-function c95481406.activate(e,tp,eg,ep,ev,re,r,rp)
-	local g1=Duel.GetMatchingGroup(c95481406.ctfilter,tp,0,LOCATION_MZONE,nil)
-	local g2=Duel.GetMatchingGroup(c95481406.spfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e,tp)
+function s.activate(e,tp,eg,ep,ev,re,r,rp)
+	local g1=Duel.GetMatchingGroup(s.ctfilter,tp,0,LOCATION_MZONE,nil)
+	local g2=Duel.GetMatchingGroup(s.spfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e,tp)
 	local ct=5
 	if Duel.IsPlayerAffectedByEffect(tp,59822133) then ct=1 end
 	ct=math.min(ct,g1:GetCount(),(Duel.GetLocationCount(tp,LOCATION_MZONE)))
@@ -45,21 +46,22 @@ function c95481406.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
-function c95481406.tgfilter(c)
+function s.tgfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0xd51) and c:IsType(TYPE_MONSTER)
 end
-function c95481406.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and c95481406.tgfilter(chkc) end
+function s.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and s.tgfilter(chkc) end
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,2)
-		and Duel.IsExistingTarget(c95481406.tgfilter,tp,LOCATION_REMOVED,0,3,nil) end
+		and Duel.IsExistingTarget(s.tgfilter,tp,LOCATION_REMOVED,0,3,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectTarget(tp,c95481406.tgfilter,tp,LOCATION_REMOVED,0,3,3,nil)
+	local g=Duel.SelectTarget(tp,s.tgfilter,tp,LOCATION_REMOVED,0,3,3,nil)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,3,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
 end
-function c95481406.op(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
-	if tg:GetCount()~=3 then return end
-	Duel.SendtoGrave(tg,REASON_EFFECT+REASON_RETURN)
-	Duel.BreakEffect()
-	Duel.Draw(tp,2,REASON_EFFECT)
+function s.op(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetTargetCards(e)
+	if #g>0 then
+		Duel.SendtoGrave(g,REASON_EFFECT+REASON_RETURN)
+		Duel.IsPlayerCanDraw(tp,2)
+	end
 end

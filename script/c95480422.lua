@@ -53,7 +53,7 @@ function c95480422.dfilter(c)
 	return c:IsSetCard(0xd45) and c:IsAbleToRemoveAsCost()
 end
 function c95480422.tdcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost()
+	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0 and e:GetHandler():IsAbleToRemoveAsCost()
 		and Duel.IsExistingMatchingCard(c95480422.dfilter,tp,LOCATION_HAND,0,1,e:GetHandler()) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectMatchingCard(tp,c95480422.dfilter,tp,LOCATION_HAND,0,1,1,e:GetHandler())

@@ -16,7 +16,6 @@ function cm.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP)
 	e2:SetHintTiming(TIMING_DAMAGE_STEP,TIMING_DAMAGE_STEP+TIMINGS_CHECK_MONSTER)
 	e2:SetCountLimit(1,m)
-	e2:SetCondition(aux.dscon)
 	e2:SetTarget(cm.adtg)
 	e2:SetOperation(cm.adop)
 	c:RegisterEffect(e2)
@@ -57,7 +56,6 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e31)
 	
 end
-
 --boost
 function cm.filter(c)
 	return c:IsFaceup() and c:IsSetCard(0xe92)

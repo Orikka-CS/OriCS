@@ -1,4 +1,182 @@
 --dependencies
+
+EFFECT_COINBEAT_EFFECT=18453923
+EFFECT_COINBEAT_MISFIRE=18453924
+
+local cregeff=Card.RegisterEffect
+function Card.RegisterEffect(c,e,forced,...)
+	cregeff(c,e,forced,...)
+	if e:IsHasType(EFFECT_TYPE_ACTIONS) and not e:IsHasType(EFFECT_TYPE_CONTINUOUS) then
+		local con=e:GetCondition()
+		local cost=e:GetCost()
+		local tg=e:GetTarget()
+		local op=e:GetOperation()
+		e:SetCost(function(e,tp,eg,ep,ev,re,r,rp,chk)
+			if chk==0 then
+				return not cost or cost(e,tp,eg,ep,ev,re,r,rp,0)
+			end
+			local coinbeat_misfire=false
+			local eset={Duel.IsPlayerAffectedByEffect(tp,EFFECT_COINBEAT_EFFECT)}
+			for _,te in ipairs(eset) do
+				local tep=te:GetHandlerPlayer()
+				local tc=te:GetHandler()
+				Duel.HintSelection(tc)
+				if Duel.AnnounceCoin(tp)~=Duel.TossCoin(1-tep,1) then
+					local top=te:GetOperation()
+					local tres=top(e,tp)
+					if not tres
+						or (con and not con(e,tp,eg,ep,ev,re,r,rp))
+						or (cost and not cost(e,tp,eg,ep,ev,re,r,rp,0))
+						or (tg and not tg(e,tp,eg,ep,ev,re,r,rp,0)) then
+						coinbeat_misfire=true
+					end
+				end
+			end
+			if coinbeat_misfire then
+				local e1=Effect.CreateEffect(e:GetHandler())
+				e1:SetType(EFFECT_TYPE_FIELD)
+				e1:SetCode(EFFECT_COINBEAT_MISFIRE)
+				e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+				e1:SetTargetRange(1,1)
+				e1:SetValue(Duel.GetCurrentChain())
+				e1:SetLabelObject(e)
+				e1:SetReset(RESET_CHAIN)
+				Duel.RegisterEffect(e1,tp)
+			end
+			local eset2={Duel.IsPlayerAffectedByEffect(tp,EFFECT_COINBEAT_MISFIRE)}
+			for _,te in ipairs(eset2) do
+				local val=te:GetValue()
+				local lo=te:GetLabelObject()
+				if lo==e and val==Duel.GetCurrentChain() then
+					return
+				end
+			end
+			if cost then
+				cost(e,tp,eg,ep,ev,re,r,rp,1)
+			end
+		end)
+		if tg then
+			e:SetTarget(function(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+				if chkc then
+					return tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+				end
+				if chk==0 then
+					return tg(e,tp,eg,ep,ev,re,r,rp,chk)
+				end
+				local eset2={Duel.IsPlayerAffectedByEffect(tp,EFFECT_COINBEAT_MISFIRE)}
+				for _,te in ipairs(eset2) do
+					local val=te:GetValue()
+					local lo=te:GetLabelObject()
+					if lo==e and val==Duel.GetCurrentChain() then
+						return
+					end
+				end
+				tg(e,tp,eg,ep,ev,re,r,rp,chk)
+			end)
+		end
+		if op then
+			e:SetOperation(function(e,tp,eg,ep,ev,re,r,rp)
+				local eset2={Duel.IsPlayerAffectedByEffect(tp,EFFECT_COINBEAT_MISFIRE)}
+				for _,te in ipairs(eset2) do
+					local val=te:GetValue()
+					local lo=te:GetLabelObject()
+					if lo==e and val==Duel.GetCurrentChain() then
+						return
+					end
+				end
+				op(e,tp,eg,ep,ev,re,r,rp)
+			end)
+		end
+	end
+end
+
+local dregeff=Duel.RegisterEffect
+function Duel.RegisterEffect(e,...)
+	dregeff(e,...)
+	if e:IsHasType(EFFECT_TYPE_ACTIONS) and not e:IsHasType(EFFECT_TYPE_CONTINUOUS) then
+		local con=e:GetCondition()
+		local cost=e:GetCost()
+		local tg=e:GetTarget()
+		local op=e:GetOperation()
+		e:SetCost(function(e,tp,eg,ep,ev,re,r,rp,chk)
+			if chk==0 then
+				return not cost or cost(e,tp,eg,ep,ev,re,r,rp,0)
+			end
+			local coinbeat_misfire=false
+			local eset={Duel.IsPlayerAffectedByEffect(tp,EFFECT_COINBEAT_EFFECT)}
+			for _,te in ipairs(eset) do
+				local tep=te:GetHandlerPlayer()
+				local tc=te:GetHandler()
+				Duel.HintSelection(tc)
+				if Duel.AnnounceCoin(tp)~=Duel.TossCoin(1-tep,1) then
+					local top=te:GetOperation()
+					local tres=top(e,tp)
+					if not tres
+						or (con and not con(e,tp,eg,ep,ev,re,r,rp))
+						or (cost and not cost(e,tp,eg,ep,ev,re,r,rp,0))
+						or (tg and not tg(e,tp,eg,ep,ev,re,r,rp,0)) then
+						coinbeat_misfire=true
+					end
+				end
+			end
+			if coinbeat_misfire then
+				local e1=Effect.CreateEffect(e:GetHandler())
+				e1:SetType(EFFECT_TYPE_FIELD)
+				e1:SetCode(EFFECT_COINBEAT_MISFIRE)
+				e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+				e1:SetTargetRange(1,1)
+				e1:SetValue(Duel.GetCurrentChain())
+				e1:SetLabelObject(e)
+				e1:SetReset(RESET_CHAIN)
+				Duel.RegisterEffect(e1,tp)
+			end
+			local eset2={Duel.IsPlayerAffectedByEffect(tp,EFFECT_COINBEAT_MISFIRE)}
+			for _,te in ipairs(eset2) do
+				local val=te:GetValue()
+				local lo=te:GetLabelObject()
+				if lo==e and val==Duel.GetCurrentChain() then
+					return
+				end
+			end
+			if cost then
+				cost(e,tp,eg,ep,ev,re,r,rp,0)
+			end
+		end)
+		if tg then
+			e:SetTarget(function(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+				if chkc then
+					return tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+				end
+				if chk==0 then
+					return tg(e,tp,eg,ep,ev,re,r,rp,chk)
+				end
+				local eset2={Duel.IsPlayerAffectedByEffect(tp,EFFECT_COINBEAT_MISFIRE)}
+				for _,te in ipairs(eset2) do
+					local val=te:GetValue()
+					local lo=te:GetLabelObject()
+					if lo==e and val==Duel.GetCurrentChain() then
+						return
+					end
+				end
+				tg(e,tp,eg,ep,ev,re,r,rp,chk)
+			end)
+		end
+		if op then
+			e:SetOperation(function(e,tp,eg,ep,ev,re,r,rp)
+				local eset2={Duel.IsPlayerAffectedByEffect(tp,EFFECT_COINBEAT_MISFIRE)}
+				for _,te in ipairs(eset2) do
+					local val=te:GetValue()
+					local lo=te:GetLabelObject()
+					if lo==e and val==Duel.GetCurrentChain() then
+						return
+					end
+				end
+				op(e,tp,eg,ep,ev,re,r,rp)
+			end)
+		end
+	end
+end
+
 if not RegEff then Duel.LoadScript("_register_effect.lua") end
 
 --constants
@@ -1950,7 +2128,7 @@ local DelightswornScrefTable = {
 			local rc=re:GetHandler()
 			return rc.delightsworn
 		end)
-		cregeff(c,e1)
+		Card.RegisterEffect(c,e1)
 		return {e,e1}
 	end},
 	[24508238] = {[0]=function(e,c)
@@ -2270,3 +2448,49 @@ RegEff.sgref(function(e,c)
 		return {e,e1}
 	end
 end)
+
+CARD_NEW_HEAVEN_AND_EARTH=18453801
+
+function Auxiliary.NewHeavenAndEarth()
+
+	if Auxiliary.GlobalNewHeavenAndEarth then
+		return
+	end
+
+	Auxiliary.GlobalNewHeavenAndEarth=true
+
+	local ge1=Effect.GlobalEffect()
+	ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	ge1:SetCode(EVENT_TO_GRAVE)
+	ge1:SetOperation(function(e,tp,eg,ep,ev,re,r,rp)
+		local tc=eg:GetFirst()
+		while tc do
+			local tatk=tc:GetTextAttack()
+			local trc=tc:GetReasonCard()
+			local tre=tc:GetReasonEffect()
+			if tre and not trc and tre:GetCode()==EFFECT_SPSUMMON_PROC then
+				trc=tre:GetHandler()
+			end
+			if (tc:GetPreviousAttributeOnField()&ATTRIBUTE_LIGHT>0
+				or (tc:GetPreviousLocation()&LOCATION_ONFIELD==0 and tc:GetOriginalAttribute()&ATTRIBUTE_LIGHT>0))
+				and not tc:IsReason(REASON_BATTLE+REASON_EFFECT)
+				and (not tc:IsReason(REASON_COST) or Duel.GetCurrentChain()==0)
+				and trc then
+				local e1=Effect.CreateEffect(tc)
+				e1:SetType(EFFECT_TYPE_SINGLE)
+				e1:SetCode(CARD_NEW_HEAVEN_AND_EARTH)
+				e1:SetRange(LOCATION_MZONE)
+				e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD)
+				e1:SetValue(math.max(tatk,0))
+				trc:RegisterEffect(e1)
+			end
+			if trc then
+				Duel.RaiseEvent(trc,18453882,e,0,0,0,0)
+			end
+			tc=eg:GetNext()
+		end
+	end)
+	Duel.RegisterEffect(ge1,0)
+end
+
+Auxiliary.NewHeavenAndEarth()
