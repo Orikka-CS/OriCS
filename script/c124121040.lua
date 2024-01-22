@@ -33,7 +33,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function s.tfil2(c,e,tp)
-	return c:IsCanBeSpecialSumomned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE) and c:IsSetCard(0xfa3)
+	return c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE) and c:IsSetCard(0xfa3)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then

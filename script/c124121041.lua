@@ -59,6 +59,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		Duel.BreakEffect()
 		g:Sub(sg)
 		Duel.SendtoGrave(g,REASON_EFFECT+REASON_EXCAVATE)
+		Duel.DisableShuffleCheck()
 	end
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
