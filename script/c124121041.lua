@@ -32,6 +32,8 @@ function s.initial_effect(c)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
 end
+s.material={87979586}
+s.listed_names={87979586}
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)<3 then

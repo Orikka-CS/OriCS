@@ -32,6 +32,8 @@ function s.initial_effect(c)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
 end
+s.material={87979586}
+s.listed_names={87979586}
 function s.tfil2(c,e,tp)
 	return c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE) and c:IsSetCard(0xfa3)
 end

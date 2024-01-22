@@ -40,8 +40,8 @@ function s.initial_effect(c)
 end
 function s.gop1(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()
-	if ph&(PHASE_MAIN+PHASE_MAIN2)>0 then
-		for tc in aux.Next(g) do
+	if ph&(PHASE_MAIN1+PHASE_MAIN2)>0 then
+		for tc in aux.Next(eg) do
 			tc:RegisterFlagEffect(id,RESET_PHASE+ph,0,1)
 		end
 	end
@@ -73,7 +73,7 @@ end
 function s.tar2(e,c)
 	return c:GetFlagEffect(id)>0
 end
-function s.nfil3(c)
+function s.nfil3(c,tp)
 	return c:IsPreviousControler(tp)
 		and c:IsPreviousPosition(POS_FACEUP)
 		and c:GetPreviousCodeOnField()==87979586

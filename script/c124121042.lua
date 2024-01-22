@@ -41,7 +41,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g)
 	end
 end
-function s.nfil2(c)
+function s.nfil2(c,tp)
 	return c:IsPreviousControler(tp)
 		and c:IsPreviousPosition(POS_FACEUP)
 		and c:GetPreviousCodeOnField()==87979586
