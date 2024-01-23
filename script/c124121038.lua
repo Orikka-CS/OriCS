@@ -54,7 +54,7 @@ function s.con1(e,c)
 		and Duel.IsExistingMatchingCard(s.nfil1,tp,LOCATION_DECK,0,1,nil,e,tp)
 		and Duel.IsExistingMatchingCard(aux.TRUE,tp,LOCATION_HAND,0,1,c)
 end
-function s.tar1(e,tp,eg,ep,ev,re,r,rp,c)
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,c)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
 	local g=Duel.SelectMatchingCard(tp,aux.TRUE,tp,LOCATION_HAND,0,0,1,c)
 	if #g>0 then
