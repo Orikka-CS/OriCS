@@ -234,6 +234,7 @@ function s.con3(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.nfil5(c,tp)
 	return c:IsCode(id+1) and (c:IsControler(tp) or c:IsFaceup())
+		and Duel.GetMZoneCount(tp,c)>0
 end
 function s.con5(e,c,minc)
 	if c==nil then
@@ -252,7 +253,7 @@ function s.tar51(e,c)
 end
 function s.tar52(e,tp,eg,ep,ev,re,r,rp,chk,c)
 	local mg=Duel.GMGroup(s.nfil5,tp,"M","M",nil,tp)
-	if Duel.GetLocCount(tp,"M")<=0 then
+	if Duel.GetLocCount(tp,"M")<=1 then
 		mg:Match(Card.IsControler,nil,tp)
 	end
 	local sg=Duel.SelectTribute(tp,c,1,1,mg,nil,nil,true)
