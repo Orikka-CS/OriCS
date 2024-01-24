@@ -145,13 +145,13 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 		return Duel.IEMCard(s.tfil2,tp,"D",0,1,nil)
 			and Duel.IsPlayerCanDraw(tp,1)
 			and Duel.GetLocCount(tp,"M")>0
-			and Duel.IsPlayerCanSpecialSummonMonster(tp,id+1,0x2c6,TYPES_TOKEN,2100,1200,7,RACE_PLANT,ATTRIBUTE_LIGHT,POS_FACEUP_DEFENSE)
+			--and Duel.IsPlayerCanSpecialSummonMonster(tp,id+1,0x2c6,TYPES_TOKEN,2100,1200,7,RACE_PLANT,ATTRIBUTE_LIGHT,POS_FACEUP_DEFENSE)
 			and Duel.GetCustomActivityCount(id,tp,ACTIVITY_CHAIN)==0
 	end
 	Duel.SOI(0,CATEGORY_TOHAND,nil,1,tp,"D")
 	Duel.SOI(0,CATEGORY_DRAW,nil,0,tp,1)
-	Duel.SOI(0,CATEGORY_TOKEN,nil,1,0,0)
-	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,0)
+	Duel.SPOI(0,CATEGORY_TOKEN,nil,1,0,0)
+	Duel.SPOI(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,0)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -177,7 +177,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 
 	if Duel.GetLocCount(tp,"M")>0
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,id+1,0x2c6,TYPES_TOKEN,2100,1200,7,RACE_PLANT,ATTRIBUTE_LIGHT,POS_FACEUP_DEFENSE)
-		then
+		and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		local token=Duel.CreateToken(tp,id+1)
 		Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 		local e1=MakeEff(c,"FC","M")
