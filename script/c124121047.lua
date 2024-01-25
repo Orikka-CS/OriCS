@@ -58,7 +58,7 @@ function s.nfil3(c)
 	return c:IsFaceup() and c:IsAttackAbove(2000)
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.nfil6,1,nil)
+	return eg:IsExists(s.nfil3,1,nil)
 end
 function s.tfil31(c)
 	return c:IsAbleToDeck() and c:IsFaceup() and c:IsType(TYPE_UNION)
