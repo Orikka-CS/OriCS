@@ -108,7 +108,7 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 		local sg=g:Select(tp,1,1,nil)
-		if Duel.Destroy(g,REASON_EFFECT)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+		if Duel.Destroy(sg,REASON_EFFECT)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 			Duel.BreakEffect()
 			Duel.Recover(tp,500,REASON_EFFECT)
 		end
