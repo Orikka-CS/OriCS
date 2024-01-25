@@ -54,6 +54,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local ec=tg:GetFirst()
 		if ec and aux.CheckUnionEquip(ec,tc) and Duel.Equip(tp,ec,tc) then
 			aux.SetUnionState(ec)
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+			local sg=Duel.SelectMatchingCard(tp,Card.IsAbleToRemove,tp,LOCATION_HAND,0,1,1,nil)
+			if #sg>0 then
+				Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+			end
 		end
 	end
 end
