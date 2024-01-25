@@ -1,4 +1,4 @@
---트라이드나 하르카나
+--트리아드나 하르카나
 local s,id=GetID()
 function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
@@ -29,15 +29,15 @@ function s.initial_effect(c)
 	e3:SetTarget(s.tar3)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
-	if not s.global_check then
-		s.global_check=true
+	aux.GlobalCheck(s,function()
 		local ge1=Effect.CreateEffect(c)
 		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		ge1:SetCode(EVENT_SPSUMMON_SUCCESS)
 		ge1:SetOperation(s.gop1)
 		Duel.RegisterEffect(ge1,0)
-	end
+	end)
 end
+s.listed_names={87979586}
 function s.gop1(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()
 	if ph&(PHASE_MAIN1+PHASE_MAIN2)>0 then
@@ -74,9 +74,10 @@ function s.tar2(e,c)
 	return c:GetFlagEffect(id)>0
 end
 function s.nfil3(c,tp)
+	local code1,code2=c:GetPreviousCodeOnField()
 	return c:IsPreviousControler(tp)
 		and c:IsPreviousPosition(POS_FACEUP)
-		and c:GetPreviousCodeOnField()==87979586
+		and (code1==87979586 or code2==87979586)
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.nfil3,1,nil,tp)

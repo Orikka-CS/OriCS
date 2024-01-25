@@ -1,4 +1,4 @@
---트라이드나 레인포린
+--트리아드나 레인포린
 local s,id=GetID()
 function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
@@ -24,6 +24,7 @@ function s.initial_effect(c)
 	e3:SetCode(EVENT_LEAVE_GRAVE)
 	c:RegisterEffect(e3)
 end
+s.listed_names={87979586}
 function s.tfil1(c,e,tp)
 	return c:IsAbleToHand() and c:IsSetCard(0xfa3) and c:GetType()~=TYPE_SPELL
 end
@@ -42,9 +43,10 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.nfil2(c,tp)
+	local code1,code2=c:GetPreviousCodeOnField()
 	return c:IsPreviousControler(tp)
 		and c:IsPreviousPosition(POS_FACEUP)
-		and c:GetPreviousCodeOnField()==87979586
+		and (code1==87979586 or code2==87979586)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.nfil2,1,nil,tp)
@@ -52,7 +54,7 @@ end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return true
+		return c:IsAbleToHand()
 	end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,0,0,0)
 end
@@ -69,8 +71,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	c:RegisterEffect(e1)
 end
 function s.ocon21(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c:IsAbleToHand()
+	return e:GetHandler():IsAbleToHand()
 end
 function s.oop21(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

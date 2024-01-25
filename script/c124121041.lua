@@ -24,7 +24,7 @@ function s.initial_effect(c)
 	e3:SetCode(EVENT_CHAINING)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
-	e3:SetCategory(CATEGORY_NEGATE+CATEGORY_REMOVE)
+	e3:SetCategory(CATEGORY_NEGATE+CATEGORY_TODECK)
 	e3:SetCountLimit(1)
 	e3:SetCondition(s.con3)
 	e3:SetCost(s.cost3)
@@ -66,8 +66,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsStatus(STATUS_BATTLE_DESTROYED)
-		and re:IsMonsterEffect() and Duel.IsChainNegatable(ev)
+	return not c:IsStatus(STATUS_BATTLE_DESTROYED)
+		and re:IsMonsterEffect()
+		and Duel.IsChainNegatable(ev)
 end
 function s.cost3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -88,9 +89,8 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then
-		return
+	if Duel.NegateActivation(ev) and rc:IsRelateToEffect(re) then
+		rc:CancelToGrave()
+		Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	end
-	rc:CancelToGrave()
-	Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 end
