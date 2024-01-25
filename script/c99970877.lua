@@ -52,6 +52,25 @@ function s.initial_effect(c)
 
 end
 
+function s.gop1(e,tp,eg,ep,ev,re,r,rp)
+	local cc=Duel.GetCurrentChain()
+	if cc>0 then
+		local ce=Duel.GetChainInfo(cc,CHAININFO_TRIGGERING_EFFECT)
+		if re==ce and re:IsActivated() then
+			Duel.RegisterFlagEffect(0,id,RESET_CHAIN,0,0,cc)
+		end
+	end
+end
+function s.gop2(e,tp,eg,ep,ev,re,r,rp)
+	Duel.ResetFlagEffect(0,id)
+end
+function s.gop3(e,tp,eg,ep,ev,re,r,rp)
+	local cc=Duel.GetCurrentChain()
+	if Duel.GetFlagEffectLabel(0,id)~=cc and re:IsHasCategory(CATEGORY_SPECIAL_SUMMON) then
+		Duel.RaiseEvent(Group.CreateGroup(),EVENT_CUSTOM+id,re,r,rp,ep,ev)
+	end
+end
+
 function s.xfil1(c,xyzc)
 	return c:IsSetCard(0x9d6e) and c:IsLevelAbove(1)
 end
