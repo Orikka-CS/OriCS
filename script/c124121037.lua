@@ -66,7 +66,7 @@ function s.con1(e,c)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,c)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
-	local g=Duel.SelectMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,0,1,nil)
+	local g=Duel.SelectMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,(Duel.IsSummonCancelable() and 0 or 1),1,nil)
 	if #g>0 then
 		g:KeepAlive()
 		e:SetLabelObject(g)

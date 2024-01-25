@@ -58,7 +58,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp,c,og)
 	--cost
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
 	local rg=Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,c)
-	local dg=aux.SelectUnselectGroup(rg,e,tp,0,1,aux.ChkfMMZ(2),1,tp,HINTMSG_DISCARD,nil,nil,true)
+	local dg=aux.SelectUnselectGroup(rg,e,tp,(Duel.IsSummonCancelable() and 0 or 1),1,aux.ChkfMMZ(2),1,tp,HINTMSG_DISCARD,nil,nil,true)
 	if #dg==0 then return end
 	Duel.SendtoGrave(dg,REASON_DISCARD+REASON_COST)
 	--spsummon
