@@ -39,6 +39,7 @@ function s.tfil12(c,ec)
 	return c:IsSetCard(0xfa4) and c:IsType(TYPE_UNION) and c:CheckUnionTarget(ec) and aux.CheckUnionEquip(c,ec)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
 	if chk==0 then
 		return Duel.IsExistingMatchingCard(s.tfil12,tp,LOCATION_DECK,0,1,nil,c)
 			and Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,LOCATION_HAND,0,1,nil)
