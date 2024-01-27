@@ -68,7 +68,7 @@ function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.nfil3,1,nil)
 end
 function s.tfil3(c)
-	return c:IsAbleToRemove() and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsAttribute(RACE_MACHINE)
+	return c:IsAbleToRemove() and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsRace(RACE_MACHINE)
 		and c:IsType(TYPE_UNION)
 end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
