@@ -33,25 +33,23 @@ function s.pfil1(c,lc,sumtype,tp)
 	return c:IsRace(RACE_MACHINE,lc,sumtype,tp) and c:IsAttribute(ATTRIBUTE_LIGHT,lc,sumtype,tp)
 end
 function s.tfil11(c,tp)
-	return c:IsFaceup() and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_DECK,0,1,nil,c)
+	return c:IsFaceup() and Duel.IsExistingMatchingCard(s.tfil12,tp,LOCATION_DECK,0,1,nil,c)
 end
 function s.tfil12(c,ec)
 	return c:IsSetCard(0xfa4) and c:IsType(TYPE_UNION) and c:CheckUnionTarget(ec) and aux.CheckUnionEquip(c,ec)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.IsExistingMatchingCard(s.tfil11,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,tp)
+		return Duel.IsExistingMatchingCard(s.tfil12,tp,LOCATION_DECK,0,1,nil,c)
 	end
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	local g=Duel.SelectMatchingCard(tp,s.tfil11,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,tp)
-	local tc=g:GetFirst()
-	if tc then
+	local c=e:GetHandler()
+	if c:IsFaceup() and c:IsRelateToEffect(e) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
-		local tg=Duel.SelectMatchingCard(tp,s.tfil12,tp,LOCATION_DECK,0,1,1,nil,tc)
+		local tg=Duel.SelectMatchingCard(tp,s.tfil12,tp,LOCATION_DECK,0,1,1,nil,c)
 		local ec=tg:GetFirst()
-		if ec and aux.CheckUnionEquip(ec,tc) and Duel.Equip(tp,ec,tc) then
+		if ec and aux.CheckUnionEquip(ec,c) and Duel.Equip(tp,ec,c) then
 			aux.SetUnionState(ec)
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 			local sg=Duel.SelectMatchingCard(tp,Card.IsAbleToRemove,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,0,1,nil)

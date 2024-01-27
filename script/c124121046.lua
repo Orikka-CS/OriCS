@@ -38,7 +38,7 @@ function s.initial_effect(c)
 	e5:SetType(EFFECT_TYPE_SINGLE)
 	e5:SetCode(EFFECT_UNION_LIMIT)
 	e5:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e5:SetValue(Auxiliary.UnionLimit(aux.TRUE))
+	e5:SetValue(Auxiliary.UnionLimit(s.ufil1))
 	c:RegisterEffect(e5)
 	local e6=Effect.CreateEffect(c)
 	e6:SetType(EFFECT_TYPE_SINGLE)
@@ -59,6 +59,9 @@ function s.initial_effect(c)
 	e7:SetOperation(s.op7)
 	c:RegisterEffect(e7)
 end
+function s.ufil1(c)
+	return c:IsRace(RACE_MACHINE) and c:IsAttribute(ATTRIBUTE_LIGHT)
+end
 function s.tfil1(c,f,oldrule,eg)
 	local ct1,ct2=c:GetUnionCount()
 	if c:IsFaceup() and (not f or f(c)) and eg:IsContains(c) then
@@ -75,14 +78,14 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
 	local code=c:GetOriginalCode()
 	if chkc then
-		return chkc:IsLocation(LOCATION_MZONE) and s.tfil1(chkc,aux.TRUE,false,eg)
+		return chkc:IsLocation(LOCATION_MZONE) and s.tfil1(chkc,s.ufil1,false,eg)
 	end
 	if chk==0 then
 		return c:GetFlagEffect(code)==0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0
-			and Duel.IsExistingTarget(s.tfil1,tp,LOCATION_MZONE,LOCATION_MZONE,1,c,aux.TRUE,false,eg)
+			and Duel.IsExistingTarget(s.tfil1,tp,LOCATION_MZONE,LOCATION_MZONE,1,c,s.ufil1,false,eg)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
-	local g=Duel.SelectTarget(tp,s.tfil1,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,c,aux.TRUE,false,eg)
+	local g=Duel.SelectTarget(tp,s.tfil1,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,c,s.ufil1,false,eg)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 	c:RegisterFlagEffect(code,RESET_EVENT+(RESETS_STANDARD-RESET_TOFIELD-RESET_LEAVE)+RESET_PHASE+PHASE_END,0,1)
 end
@@ -110,13 +113,13 @@ function s.tfil7(c)
 end
 function s.tar7(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.IsExistingMatchingCard(s.tfil7,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_ONFIELD,0,1,nil)
+		return Duel.IsExistingMatchingCard(s.tfil7,tp,LOCATION_DECK+LOCATION_EXTRA,0,1,nil)
 	end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_ONFIELD)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK+LOCATION_EXTRA)
 end
 function s.op7(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,s.tfil7,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_ONFIELD,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.tfil7,tp,LOCATION_DECK+LOCATION_EXTRA,0,1,1,nil)
 	if #g>0 then
 		Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 	end
