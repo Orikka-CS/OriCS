@@ -1,80 +1,109 @@
---í”Œë¡œë¦¬ì•„ íƒ€ìš´
-function c95481709.initial_effect(c)
-	--Activate
-	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,95481709)
-	e1:SetTarget(c95481709.tg1)
-	e1:SetOperation(c95481709.op1)
+--[ ¾ÆÆ®¸ð ]
+local s,id=GetID()
+function s.initial_effect(c)
+
+	RevLim(c)
+	c:SetSPSummonOnce(id)
+	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_AQUA),3,3)
+
+	local e0=MakeEff(c,"Qo","M")
+	e0:SetD(id,0)
+	e0:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e0:SetCode(EVENT_FREE_CHAIN)
+	WriteEff(e0,0,"CTO")
+	c:RegisterEffect(e0)
+
+	local e1=MakeEff(c,"STo")
+	e1:SetD(id,1)
+	e1:SetCategory(CATEGORY_REMOVE+CATEGORY_DAMAGE)
+	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetCondition(function(e) return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ) end)
+	WriteEff(e1,1,"O")
 	c:RegisterEffect(e1)
-	--change effect type
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e2:SetCode(95481709)
-	e2:SetRange(LOCATION_FZONE)
-	e2:SetTargetRange(1,0)
-	c:RegisterEffect(e2)
-	--place
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
-	e3:SetCode(EVENT_LEAVE_FIELD)
-	e3:SetRange(LOCATION_FZONE)
-	e3:SetCountLimit(1,95481791)
-	e3:SetCondition(c95481709.con3)
-	e3:SetTarget(c95481709.tg3)
-	e3:SetOperation(c95481709.op3)
-	c:RegisterEffect(e3)
+
 end
 
-function c95481709.fil1(c)
-	return c:IsSetCard(0xd50) and c:IsAbleToHand()
-end
-function c95481709.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c95481709.fil1,tp,LOCATION_DECK,0,3,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-end
-function c95481709.op1(e,tp,eg,ep,ev,re,r,rp)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if not c:IsRelateToEffect(e) then return end
-	local g=Duel.GetMatchingGroup(c95481709.fil1,tp,LOCATION_DECK,0,nil)
-	if g:GetCount()>=3 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local sg=g:Select(tp,3,3,nil)
-		Duel.ConfirmCards(1-tp,sg)
-		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_ATOHAND)
-		local tg=sg:Select(1-tp,1,1,nil)
-		Duel.SendtoHand(tg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,tg)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_DELAY)
+	e1:SetCode(EVENT_TO_HAND)
+	e1:SetCondition(s.drcon1)
+	e1:SetOperation(s.drop1)
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	Duel.RegisterEffect(e1,tp)
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+	e2:SetCode(EVENT_TO_HAND)
+	e2:SetCondition(s.regcon)
+	e2:SetOperation(s.regop)
+	e2:SetReset(RESET_PHASE+PHASE_END)
+	Duel.RegisterEffect(e2,tp)
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+	e3:SetCode(EVENT_CHAIN_SOLVED)
+	e3:SetCondition(s.drcon2)
+	e3:SetOperation(s.drop2)
+	e3:SetReset(RESET_PHASE+PHASE_END)
+	Duel.RegisterEffect(e3,tp)
+end
+function s.cfilter(c,tp)
+	return c:IsControler(1-tp) and not c:IsReason(REASON_DRAW) and c:IsPreviousLocation(LOCATION_DECK)
+end
+function s.drcon1(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.cfilter,1,nil,tp) 
+		and (not re:IsHasType(EFFECT_TYPE_ACTIONS) or re:IsHasType(EFFECT_TYPE_CONTINUOUS))
+end
+function s.drop1(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_CARD,0,id)
+	Duel.Damage(1-tp,300,REASON_EFFECT)
+	local g=Duel.GetDecktopGroup(1-tp,3)
+	if #g>0 then
+		Duel.DisableShuffleCheck()
+		Duel.Remove(g,POS_FACEDOWN,REASON_EFFECT)
+	end
+end
+function s.regcon(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.cfilter,1,nil,tp) and Duel.GetFlagEffect(tp,id)==0 
+		and re:IsHasType(EFFECT_TYPE_ACTIONS) and not re:IsHasType(EFFECT_TYPE_CONTINUOUS)
+end
+function s.regop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.RegisterFlagEffect(tp,id,RESET_CHAIN,0,1)
+end
+function s.drcon2(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetFlagEffect(tp,id)>0
+end
+function s.drop2(e,tp,eg,ep,ev,re,r,rp)
+	Duel.ResetFlagEffect(tp,id)
+	Duel.Hint(HINT_CARD,0,id)
+	Duel.Damage(1-tp,300,REASON_EFFECT)
+	local g=Duel.GetDecktopGroup(1-tp,3)
+	if #g>0 then
+		Duel.DisableShuffleCheck()
+		Duel.Remove(g,POS_FACEDOWN,REASON_EFFECT)
 	end
 end
 
-function c95481709.plcfilter(c,tp,rp)
-	return c:IsPreviousSetCard(0xd50) and c:IsPreviousControler(tp)
-		and c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousLocation(LOCATION_MZONE)
-		and (c:IsReason(REASON_BATTLE) or (rp==1-tp and c:IsReason(REASON_EFFECT)))
-end
-function c95481709.con3(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(c95481709.plcfilter,1,nil,tp,rp)
-end
-function c95481709.fil3(c,e,tp)
-	return c:IsSetCard(0xd50) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-end
-function c95481709.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c95481709.fil3,tp,LOCATION_DECK,0,1,nil,e,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
-end
-function c95481709.op3(e,tp,eg,ep,ev,re,r,rp)
+function s.cost0(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if not c:IsRelateToEffect(e) then return end
+	if chk==0 then return c:IsAbleToExtraAsCost() end
+	Duel.SendtoDeck(c,nil,0,REASON_COST)
+end
+function s.tar0fil(c,e,tp)
+	return not c:IsType(TYPE_XYZ) and c:IsSetCard(0xd4d) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+function s.tar0(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(s.tar0fil,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE)
+end
+function s.op0(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,c95481709.fil3,tp,LOCATION_DECK,0,1,1,nil,e,tp)
-	if g:GetCount()>0 then
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tar0fil),tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
+	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end

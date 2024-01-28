@@ -1,88 +1,60 @@
---플로리아 스프라우트
-function c95481710.initial_effect(c)
-	--Activate
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_ACTIVATE)
+--[ ��Ʈ�� ]
+local s,id=GetID()
+function s.initial_effect(c)
+
+	RevLim(c)
+	c:SetSPSummonOnce(id)
+	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_FIEND),3,3)
+
+	local e0=MakeEff(c,"Qo","M")
+	e0:SetD(id,0)
+	e0:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e0:SetCode(EVENT_FREE_CHAIN)
+	WriteEff(e0,0,"CTO")
 	c:RegisterEffect(e0)
-	--spsummon
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(95481710,0))
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetCountLimit(1,EFFECT_COUNT_CODE_SINGLE)
-	e1:SetRange(LOCATION_SZONE)
-	e1:SetCondition(c95481710.con1)
-	e1:SetTarget(c95481710.tg1)
-	e1:SetOperation(c95481710.op1)
+
+	local e1=MakeEff(c,"STo")
+	e1:SetD(id,1)
+	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetCondition(function(e) return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ) end)
+	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
-	local e2=e1:Clone()
-	e2:SetDescription(aux.Stringid(95481710,1))
-	e2:SetCategory(CATEGORY_REMOVE)
-	e2:SetTarget(c95481710.tg2)
-	e2:SetOperation(c95481710.op2)
-	c:RegisterEffect(e2)
-	--to hand
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(9659580,2))
-	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e3:SetType(EFFECT_TYPE_IGNITION)
-	e3:SetRange(LOCATION_GRAVE)
-	e3:SetCountLimit(1,95481710)
-	e3:SetCost(aux.bfgcost)
-	e3:SetTarget(c95481710.tg3)
-	e3:SetOperation(c95481710.op3)
-	c:RegisterEffect(e3)
+
 end
-function c95481710.cfil1(c)
-	return c:IsFacedown() or not c:IsRace(RACE_PLANT)
+
+function s.tar1fil(c)
+	return c:IsSetCard(0xd4d) and c:IsSpellTrap() and c:IsSSetable()
 end
-function c95481710.con1(e,tp,eg,ep,ev,re,r,rp)
-	return not Duel.IsExistingMatchingCard(c95481710.cfil1,tp,LOCATION_MZONE,0,1,nil)
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tar1fil,tp,LOCATION_DECK,0,1,nil) end
 end
-function c95481710.fil1(c,e,tp)
-	return c:IsSetCard(0xd50) and (c:IsLocation(LOCATION_HAND) or c:IsFaceup()) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-end
-function c95481710.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c95481710.fil1,tp,LOCATION_REMOVED+LOCATION_HAND,0,1,nil,e,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_REMOVED+LOCATION_HAND)
-end
-function c95481710.op1(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c95481710.fil1),tp,LOCATION_REMOVED+LOCATION_HAND,0,1,1,nil,e,tp)
-	if g:GetCount()>0 then
-		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
-	end
-end
-function c95481710.fil2(c)
-	return c:IsRace(RACE_PLANT) and c:IsAbleToRemove()
-end
-function c95481710.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingMatchingCard(c95481710.fil2,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK)
-end
-function c95481710.op2(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,c95481710.fil2,tp,LOCATION_DECK,0,1,1,nil)
-	if g:GetCount()>0 then
-		Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
+	local g=Duel.SelectMatchingCard(tp,s.tar1fil,tp,LOCATION_DECK,0,1,1,nil)
+	if #g>0 then
+		Duel.SSet(tp,g)
 	end
 end
 
-function c95481710.fil3(c)
-	return c:IsSetCard(0xd50) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
+function s.cost0(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c:IsAbleToExtraAsCost() end
+	Duel.SendtoDeck(c,nil,0,REASON_COST)
 end
-function c95481710.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c95481710.fil3,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+function s.tar0fil(c,e,tp)
+	return not c:IsType(TYPE_XYZ) and c:IsSetCard(0xd4d) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function c95481710.op3(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,c95481710.fil3,tp,LOCATION_DECK,0,1,1,nil)
-	if g:GetCount()>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,g)
+function s.tar0(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(s.tar0fil,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE)
+end
+function s.op0(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tar0fil),tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
+	if #g>0 then
+		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end

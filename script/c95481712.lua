@@ -1,90 +1,48 @@
---플로리아 바이올렛
-function c95481712.initial_effect(c)
-	--spsummon
+--[ ��Ʈ�� ]
+local s,id=GetID()
+function s.initial_effect(c)
+
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(88264978,0))
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetCountLimit(1,95481712)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCondition(c95481712.con1)
-	e1:SetCost(c95481712.cost)
-	e1:SetTarget(c95481712.tg1)
-	e1:SetOperation(c95481712.op1)
+	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY+CATEGORY_SPECIAL_SUMMON)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_CHAINING)
+	e1:SetCL(1,id,YuL.O)
+	WriteEff(e1,1,"NCTO")
 	c:RegisterEffect(e1)
-	local e2=e1:Clone()
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetHintTiming(0,TIMING_END_PHASE)
-	e2:SetCondition(c95481712.con2)
-	c:RegisterEffect(e2)
-	--draw
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(57030525,1))
-	e3:SetCategory(CATEGORY_TOGRAVE)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetCode(EVENT_REMOVE)
-	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
-	e3:SetCountLimit(1,95481712)
-	e3:SetTarget(c95481712.tg3)
-	e3:SetOperation(c95481712.op3)
-	c:RegisterEffect(e3)
-	local e4=e3:Clone()
-	e4:SetCode(EVENT_TO_GRAVE)
-	e4:SetCondition(c95481712.con4)
-	c:RegisterEffect(e4)
-	if not c95481712.bloominus_effect then
-		c95481712.bloominus_effect={}
-	end
-	c95481712.bloominus_effect[c]=e1
+	
 end
 
-function c95481712.con1(e,tp,eg,ep,ev,re,r,rp)
-	return not Duel.IsPlayerAffectedByEffect(tp,95481709)
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	return (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
-function c95481712.con2(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsPlayerAffectedByEffect(tp,95481709)
+function s.cost1fil(c)
+	return c:IsSetCard(0xd4d) and c:IsType(TYPE_XYZ) and c:IsAbleToExtraAsCost()
 end
-function c95481712.cfil1(c)
-	return c:IsRace(RACE_PLANT) and c:IsDiscardable()
+function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.cost1fil,tp,LOCATION_MZONE,0,1,nil,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectMatchingCard(tp,s.cost1fil,tp,LOCATION_MZONE,0,1,1,nil,tp)
+	Duel.SendtoDeck(g,nil,2,REASON_COST)
 end
-function c95481712.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c95481712.cfil1,tp,LOCATION_HAND,0,1,nil) end
-	Duel.DiscardHand(tp,c95481712.cfil1,1,1,REASON_COST+REASON_DISCARD)
-end
-function c95481712.fil1(c)
-	return c:IsSetCard(0xd50) and c:IsType(TYPE_MONSTER) and not c:IsCode(95481712) and c:IsAbleToHand()
-end
-function c95481712.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c95481712.fil1,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-end
-function c95481712.op1(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,c95481712.fil1,tp,LOCATION_DECK,0,1,1,nil)
-	if g:GetCount()>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
+	if re:GetHandler():IsDestructable() and re:GetHandler():IsRelateToEffect(re) then
+		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
 	end
 end
-
-function c95481712.con4(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsReason(REASON_COST) and e:GetHandler():IsPreviousLocation(LOCATION_HAND) and re:IsActivated()
-		and re:IsActiveType(TYPE_MONSTER) and Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_RACE)&RACE_PLANT>0
+function s.spfilter(c,e,tp)
+	return c:IsSetCard(0xd4d) and not c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function c95481712.fil2(c)
-	return c:IsRace(RACE_PLANT) and c:IsAbleToGrave()
-end
-function c95481712.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c95481712.fil2,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
-end
-function c95481712.op3(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,c95481712.fil2,tp,LOCATION_DECK,0,1,1,nil)
-	if g:GetCount()>0 then
-		Duel.SendtoGrave(g,REASON_EFFECT)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	if not Duel.NegateActivation(ev) then return end
+	if re:GetHandler():IsRelateToEffect(re) and Duel.Destroy(eg,REASON_EFFECT)~=0 then
+		local g=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.spfilter),tp,LOCATION_GRAVE,0,nil,e,tp)
+		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+			local sg=g:Select(tp,1,1,nil)
+			Duel.BreakEffect()
+			Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+		end
 	end
 end
-

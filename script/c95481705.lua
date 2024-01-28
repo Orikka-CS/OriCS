@@ -1,78 +1,89 @@
---플로리아 로즈
-function c95481705.initial_effect(c)
-	--spsummon
+--[ 아트모 ]
+local s,id=GetID()
+function s.initial_effect(c)
+
+	RevLim(c)
+	
+	local e99=Effect.CreateEffect(c)
+	e99:SetType(EFFECT_TYPE_FIELD)
+	e99:SetCode(EFFECT_SPSUMMON_PROC)
+	e99:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e99:SetRange(LOCATION_HAND)
+	e99:SetCountLimit(1,id)
+	e99:SetCondition(s.con99)
+	c:RegisterEffect(e99)
+	
+	local e0=MakeEff(c,"Qo","M")
+	e0:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e0:SetCode(EVENT_FREE_CHAIN)
+	e0:SetCountLimit(1)
+	WriteEff(e0,0,"NTO")
+	c:RegisterEffect(e0)
+	
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(88264978,0))
-	e1:SetCategory(CATEGORY_DESTROY)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetCountLimit(1,95481705)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCondition(c95481705.con1)
-	e1:SetCost(c95481705.cost1)
-	e1:SetTarget(c95481705.tg1)
-	e1:SetOperation(c95481705.op1)
+	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetCategory(CATEGORY_DISABLE)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(EVENT_CHAIN_SOLVING)
+	e1:SetRange(LOCATION_HAND)
+	e1:SetCondition(s.negcon)
+	e1:SetOperation(s.negop)
 	c:RegisterEffect(e1)
-	local e2=e1:Clone()
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetHintTiming(0,TIMING_END_PHASE)
-	e2:SetCondition(c95481705.con2)
-	c:RegisterEffect(e2)
-	--destroy replace
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e3:SetCode(EFFECT_DESTROY_REPLACE)
-	e3:SetRange(LOCATION_HAND)
-	e3:SetTarget(c95481705.tg3)
-	e3:SetValue(c95481705.val3)
-	e3:SetOperation(c95481705.op3)
-	c:RegisterEffect(e3)
-	if not c95481705.bloominus_effect then
-		c95481705.bloominus_effect={}
-	end
-	c95481705.bloominus_effect[c]=e1
+
 end
 
-function c95481705.con1(e,tp,eg,ep,ev,re,r,rp)
-	return not Duel.IsPlayerAffectedByEffect(tp,95481709)
+function s.negcon(e,tp,eg,ep,ev,re,r,rp)
+	local ch=Duel.GetCurrentChain(true)-1
+	return ep==1-tp and ch>0 and Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_CONTROLER)==tp
+		and Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_EFFECT):GetHandler():IsSetCard(0xd4d)
 end
-function c95481705.con2(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsPlayerAffectedByEffect(tp,95481709)
-end
-function c95481705.cfil1(c)
-	return c:IsRace(RACE_PLANT) and c:IsDiscardable()
-end
-function c95481705.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c95481705.cfil1,tp,LOCATION_HAND,0,1,nil) end
-	Duel.DiscardHand(tp,c95481705.cfil1,1,1,REASON_COST+REASON_DISCARD)
-end
-function c95481705.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingMatchingCard(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,e:GetHandler()) end
-	local g=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,e:GetHandler())
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
-end
-function c95481705.op1(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectMatchingCard(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,e:GetHandler())
-	if g:GetCount()>0 then
-		Duel.HintSelection(g)
-		Duel.Destroy(g,REASON_EFFECT)
+function s.negop(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.SelectEffectYesNo(tp,e:GetHandler()) then
+		e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+		if Duel.NegateEffect(ev) then
+			Duel.BreakEffect()
+			Duel.Destroy(e:GetHandler(),REASON_EFFECT)
+		end
 	end
 end
 
+function s.con99(e,c)
+	if c==nil then return true end
+	return Duel.GetFieldGroupCount(c:GetControler(),LOCATION_MZONE,0,nil)==0
+		and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
+end
 
-function c95481705.fil3(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0xd50) and c:IsLocation(LOCATION_MZONE)
-		and c:IsControler(tp)
+function s.con0(e,tp,eg,ep,ev,re,r,rp)
+	local ph=Duel.GetCurrentPhase()
+	return (ph==PHASE_MAIN1 or (ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE and Duel.GetTurnPlayer()==1-tp) or ph==PHASE_MAIN2)
 end
-function c95481705.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemove() and eg:IsExists(c95481705.fil3,1,nil,tp) end
-	return Duel.SelectEffectYesNo(tp,e:GetHandler(),96)
+
+function s.tar0fil(c,e,tp,mc)
+	return c:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and c:IsSetCard(0xd4d) and mc:IsCanBeXyzMaterial(c,tp)
+		and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0 and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
-function c95481705.val3(e,c)
-	return c95481705.fil3(c,e:GetHandlerPlayer())
+function s.tar0(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chk==0 then
+		local c=e:GetHandler()
+		local pg=aux.GetMustBeMaterialGroup(tp,Group.FromCards(c),tp,nil,nil,REASON_XYZ)
+		return (#pg<=0 or (#pg==1 and pg:IsContains(c))) and Duel.IsExistingMatchingCard(s.tar0fil,tp,LOCATION_EXTRA,0,1,nil,e,tp,c)
+	end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
-function c95481705.op3(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_EFFECT)
+function s.op0(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsFacedown() or not c:IsRelateToEffect(e) or c:IsControler(1-tp) or c:IsImmuneToEffect(e) then return end
+	local pg=aux.GetMustBeMaterialGroup(tp,Group.FromCards(c),tp,nil,nil,REASON_XYZ)
+	if #pg>1 or (#pg==1 and not pg:IsContains(c)) then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local sc=Duel.SelectMatchingCard(tp,s.tar0fil,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,c):GetFirst()
+	if sc then
+		local mg=Group.FromCards(c)
+		sc:SetMaterial(mg)
+		Duel.Overlay(sc,mg)
+		if Duel.SpecialSummon(sc,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)>0 then
+			sc:CompleteProcedure()
+		end
+	end
 end
 
