@@ -60,7 +60,7 @@ function c95480820.checkop(e,tp,eg,ep,ev,re,r,rp)
 	c:SetHint(CHINT_TURN,ct)
 	Duel.RegisterFlagEffect(tp,95480820,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_STANDBY+RESET_SELF_TURN,0,11-ct)
 	if ct==10 and Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)<=1 then
-		Duel.Win(tp,0x11)
+		Duel.Win(tp,0x90)
 		c:ResetFlagEffect(1082946)
 	end
 end
