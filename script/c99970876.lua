@@ -5,7 +5,7 @@ function s.initial_effect(c)
 	local e1=MakeEff(c,"I","H")
 	e1:SetCategory(CATEGORY_POSITION+CATEGORY_SPECIAL_SUMMON)
 	e1:SetCL(1,id)
-	WriteEff(e1,1,"NTO")
+	WriteEff(e1,1,"NCTO")
 	c:RegisterEffect(e1)
 	
 	local e2=MakeEff(c,"FTo","M")
@@ -38,6 +38,8 @@ function s.initial_effect(c)
 		ge3:SetOperation(s.gop3)
 		Duel.RegisterEffect(ge3,0)
 	end
+	
+	Duel.AddCustomActivityCounter(id,ACTIVITY_SPSUMMON,function(c) return c:IsSetCard(0x9d6e) end)
 
 end
 
@@ -62,6 +64,21 @@ end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsSetCard,0x9d6e),tp,LOCATION_MZONE,0,1,nil)
+end
+function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0 end
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetDescription(aux.Stringid(id,2))
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetTargetRange(1,0)
+	e1:SetTarget(s.splimit)
+	Duel.RegisterEffect(e1,tp)
+end
+function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
+	return not c:IsSetCard(0x9d6e)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

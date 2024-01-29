@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_TODECK+CATEGORY_SPECIAL_SUMMON)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCL(1,id)
-	WriteEff(e1,1,"TO")
+	WriteEff(e1,1,"CTO")
 	c:RegisterEffect(e1)
 
 	local e3=Effect.CreateEffect(c)
@@ -42,6 +42,8 @@ function s.initial_effect(c)
 		ge3:SetOperation(s.gop3)
 		Duel.RegisterEffect(ge3,0)
 	end
+	
+	Duel.AddCustomActivityCounter(id,ACTIVITY_SPSUMMON,function(c) return c:IsSetCard(0x9d6e) end)
 
 end
 
@@ -64,6 +66,21 @@ function s.gop3(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
+function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0 end
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetTargetRange(1,0)
+	e1:SetTarget(s.splimit)
+	Duel.RegisterEffect(e1,tp)
+end
+function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
+	return not c:IsSetCard(0x9d6e)
+end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and chkc:IsAbleToDeck() end
@@ -82,18 +99,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if tc:IsRelateToEffect(e) and Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)~=0 and c:IsRelateToEffect(e) then
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 	end
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
-	e1:SetD(id,0)
-	e1:SetTargetRange(1,0)
-	e1:SetTarget(s.splimit)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e1,tp)
-end
-function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not c:IsSetCard(0x9d6e)
 end
 
 function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)

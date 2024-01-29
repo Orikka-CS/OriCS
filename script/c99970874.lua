@@ -62,6 +62,8 @@ function s.initial_effect(c)
 		ge3:SetOperation(s.gop3)
 		Duel.RegisterEffect(ge3,0)
 	end
+	
+	Duel.AddCustomActivityCounter(id,ACTIVITY_SPSUMMON,function(c) return c:IsSetCard(0x9d6e) end)
 
 end
 
@@ -85,7 +87,19 @@ function s.gop3(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not e:GetHandler():IsPublic() end
+	if chk==0 then return not e:GetHandler():IsPublic() and Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0 end
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetTargetRange(1,0)
+	e1:SetTarget(s.splimit)
+	Duel.RegisterEffect(e1,tp)
+end
+function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
+	return not c:IsSetCard(0x9d6e)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) end
