@@ -14,8 +14,7 @@ function cm.initial_effect(c)
 	local e2=MakeEff(c,"Qo","M")
 	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetCost(spinel.rmcost)
-	WriteEff(e2,2,"TO")
+	WriteEff(e2,2,"CTO")
 	c:RegisterEffect(e2)
 	
 	--노블체인
@@ -25,7 +24,9 @@ function cm.initial_effect(c)
 	e0:SetCL(1,m)
 	WriteEff(e0,0,"NTO")
 	c:RegisterEffect(e0)
-
+	
+	Duel.AddCustomActivityCounter(id,ACTIVITY_SPSUMMON,function(c) return c:IsSetCard(0xe15) end)
+	
 end
 
 --제거
@@ -59,6 +60,22 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --회수
+function cm.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() and Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0 end
+	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetDescription(aux.Stringid(id,2))
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetTargetRange(1,0)
+	e1:SetTarget(s.splimit)
+	Duel.RegisterEffect(e1,tp)
+end
+function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
+	return not c:IsSetCard(0xe15)
+end
 function cm.thfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0xe15) and c:IsAbleToHand() and not c:IsCode(m)
 end

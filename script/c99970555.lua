@@ -11,7 +11,7 @@ function cm.initial_effect(c)
 	e1:SetD(m,0)
 	e1:SetCategory(CATEGORY_REMOVE+CATEGORY_SPECIAL_SUMMON)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetCL(1,{m,1})
+	e1:SetCL(1,m)
 	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
 	
@@ -20,8 +20,7 @@ function cm.initial_effect(c)
 	e2:SetD(m,1)
 	e2:SetCategory(CATEGORY_REMOVE+CATEGORY_DRAW)
 	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetCost(spinel.rmcost)
-	WriteEff(e2,2,"TO")
+	WriteEff(e2,2,"CTO")
 	c:RegisterEffect(e2)
 	
 	--발동 제한
@@ -38,9 +37,11 @@ function cm.initial_effect(c)
 	local e0=MakeEff(c,"Qo","R")
 	e0:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_ATKCHANGE+CATEGORY_DEFCHANGE)
 	e0:SetCode(EVENT_FREE_CHAIN)
-	e0:SetCL(1,m)
+	e0:SetCL(1,{m,1})
 	WriteEff(e0,0,"NTO")
 	c:RegisterEffect(e0)
+	
+	Duel.AddCustomActivityCounter(id,ACTIVITY_SPSUMMON,function(c) return c:IsSetCard(0xe15) end)
 	
 end
 
@@ -74,6 +75,22 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --제외 + 드로우
+function cm.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() and Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0 end
+	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetDescription(aux.Stringid(id,4))
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetTargetRange(1,0)
+	e1:SetTarget(s.splimit)
+	Duel.RegisterEffect(e1,tp)
+end
+function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
+	return not c:IsSetCard(0xe15)
+end
 function cm.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetDecktopGroup(tp,2)
 	local g2=Duel.GetDecktopGroup(1-tp,2)
@@ -109,7 +126,7 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e1,tp)
 end
 function cm.aclimit(e,re,tp)
-	return re:GetActivateLocation()==LOCATION_GRAVE+LOCATION_HAND
+	return re:GetActivateLocation()==LOCATION_GRAVE or re:GetActivateLocation()==LOCATION_HAND
 end
 
 --노블체인
