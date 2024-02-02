@@ -10,6 +10,7 @@ function s.initial_effect(c)
 	WriteEff(e2,2,"CTO")
 	c:RegisterEffect(e2)
 end
+s.listed_names={18453902}
 function s.tfil11(c)
 	return c:IsCode(18453903) and c:IsAbleToHand()
 end
