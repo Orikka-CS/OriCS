@@ -20,10 +20,11 @@ function s.tfil13(c)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
+	local exc=e:IsHasType(EFFECT_TYPE_ACTIVATE) and c or nil
 	if chkc then
-		return chkc:IsOnField() and chkc~=c
+		return chkc:IsOnField() and chkc~=exc
 	end
-	local g=Duel.GMGroup(s.tfil11,tp,"O","O",c,e)
+	local g=Duel.GMGroup(s.tfil11,tp,"O","O",exc,e)
 	local sg=Duel.GMGroup(s.tfil13,tp,"DG",0,nil)
 	if chk==0 then
 		return g:CheckSubGroup(s.tfun12,1,2,#sg>0)

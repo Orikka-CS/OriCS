@@ -9,11 +9,12 @@ function s.initial_effect(c)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
+	local exc=e:IsHasType(EFFECT_TYPE_ACTIVATE) and c or nil
 	if chkc then
-		return chkc:IsOnField() and chkc~=c
+		return chkc:IsOnField() and chkc~=exc
 	end
 	if chk==0 then
-		return Duel.IETarget(nil,tp,"O","O",1,c)
+		return Duel.IETarget(nil,tp,"O","O",1,exc)
 	end
-	Duel.STarget(tp,nil,tp,"O","O",1,1,c)
+	Duel.STarget(tp,nil,tp,"O","O",1,1,exc)
 end

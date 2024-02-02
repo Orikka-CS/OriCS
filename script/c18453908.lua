@@ -20,13 +20,14 @@ function s.tfil13(c,e,tp)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
+	local exc=e:IsHasType(EFFECT_TYPE_ACTIVATE) and c or nil
 	if chkc then
-		return chkc:IsOnField() and chkc~=c
+		return chkc:IsOnField() and chkc~=exc
 	end
 	if chk==0 then
-		return Duel.IETarget(s.tfil11,tp,"O","O",1,c,e,tp)
+		return Duel.IETarget(s.tfil11,tp,"O","O",1,exc,e,tp)
 	end
-	local g=Duel.STarget(tp,s.tfil11,tp,"O","O",1,1,c,e,tp)
+	local g=Duel.STarget(tp,s.tfil11,tp,"O","O",1,1,exc,e,tp)
 	local tc=g:GetFirst()
 	if s.tfil12(tc) then
 		e:SetLabel(1)
