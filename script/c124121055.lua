@@ -51,6 +51,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
 	if chk==0 then
 		return c:IsReleasable() and Duel.GetMZoneCount(tp,c)>1
 	end
