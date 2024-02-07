@@ -19,6 +19,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	Duel.AddCustomActivityCounter(id,ACTIVITY_SPSUMMON,s.afil1)
 end
+s.listed_names={124121056}
 function s.afil1(c)
 	return c:IsRace(RACE_FIEND)
 end
