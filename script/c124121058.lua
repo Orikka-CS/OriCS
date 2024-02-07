@@ -131,7 +131,7 @@ function s.op1(nulle1,nulle2)
 	end
 end
 function s.tfil2(c)
-	return c:IsFaceup() and c:GetOriginalCodeRule()==49064413
+	return c:IsFaceup() and c:GetOriginalCodeRule()==48948935
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then
