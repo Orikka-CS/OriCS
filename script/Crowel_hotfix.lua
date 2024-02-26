@@ -31,8 +31,9 @@ local EnableCurrentEffectCheck=function(...)
 		if func and string.sub(str,1,3)=="Set" then
 			--
 			local eset=func
-			Effect[str]=function(e,...)
-				local args={...}
+			Effect[str]=function(e,v,...)
+				if not v then return eset(e,nil,...) end
+				local args={v,...}
 				for pos,f_or_v in pairs(args) do
 					if type(f_or_v)=="function" then
 						local f2=function(e2,v2,...)
@@ -40,7 +41,7 @@ local EnableCurrentEffectCheck=function(...)
 								current_effect=e2
 								nexttg_cleanup(e2,v2 or nil)
 							end
-							local values={f_or_v(e2 or nil,v2 or nil,table.unpack({...}))}
+							local values={f_or_v(e2 or nil,v2 or nil,...)}
 							current_effect=nil
 							return table.unpack(values)
 						end
@@ -53,7 +54,7 @@ local EnableCurrentEffectCheck=function(...)
 		end
 	end
 end
-EnableCurrentEffectCheck("SetCost","SetTarget")
+EnableCurrentEffectCheck("SetCost","SetTarget","SetOperation")
 
 
 --Bug hotfix : Stacking LP Cost
