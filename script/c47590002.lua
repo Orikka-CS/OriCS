@@ -30,7 +30,7 @@ function cm.initial_effect(c)
 end
 
 function cm.filter(c)
-	return (c:IsSetCard(0x859) or c:IsRace(RACE_FIEND)) and c:IsAbleToGrave()
+	return (c:IsSetCard(0xcc9) or c:IsRace(RACE_FIEND)) and c:IsAbleToGrave()
 end
 
 function cm.e1tg(e,tp,eg,ep,ev,re,r,rp,chk)

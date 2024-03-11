@@ -13,7 +13,7 @@ function c47550016.initial_effect(c)
 end
 
 function c47550016.filter(c,e,tp)
-	return c:IsSetCard(0x487) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xcc7) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function c47550016.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -38,7 +38,7 @@ function c47550016.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function c47550016.lfilter(c)
-	return c:IsLinkSummonable(nil) and c:IsSetCard(0x487)
+	return c:IsLinkSummonable(nil) and c:IsSetCard(0xcc7)
 end
 
 function c47550016.activate(e,tp,eg,ep,ev,re,r,rp)

@@ -31,7 +31,7 @@ function cm.initial_effect(c)
 end
 
 function cm.filter(c,ft,e,tp)
-	return c:IsSetCard(0xb2d) and c:IsType(TYPE_MONSTER) and (c:IsAbleToHand() or (ft>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)))
+	return c:IsSetCard(0xccd) and c:IsType(TYPE_MONSTER) and (c:IsAbleToHand() or (ft>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)))
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -88,14 +88,14 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.splimit(e,c)
-	return not c:IsSetCard(0xb2d)
+	return not c:IsSetCard(0xccd)
 end
 
 
 
 
 function cm.cfilter(c,tp)
-	return c:IsSetCard(0xb2d) and c:IsPreviousControler(tp) and c:GetReasonPlayer()==1-tp
+	return c:IsSetCard(0xccd) and c:IsPreviousControler(tp) and c:GetReasonPlayer()==1-tp
 end
 
 function cm.descon(e,tp,eg,ep,ev,re,r,rp)

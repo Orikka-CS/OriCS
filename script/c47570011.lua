@@ -6,7 +6,7 @@ function cm.initial_effect(c)
 
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcCode2FunRep(c,cm.matfilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0xb2d),aux.TRUE,1,1,true,true,true)
+	aux.AddFusionProcCode2FunRep(c,cm.matfilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0xccd),aux.TRUE,1,1,true,true,true)
 
 	--splimit
 	local e99=Effect.CreateEffect(c)
@@ -59,9 +59,9 @@ function cm.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
 end
 
-cm.material_setcode=0xb2d
+cm.material_setcode=0xccd
 function cm.matfilter(c)
-	return (c:IsFusionType(TYPE_MODULE) or c:IsFusionType(TYPE_FUSION)) and c:IsFusionSetCard(0xb2d)
+	return (c:IsFusionType(TYPE_MODULE) or c:IsFusionType(TYPE_FUSION)) and c:IsFusionSetCard(0xccd)
 end
 
 function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
@@ -69,7 +69,7 @@ function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.eqfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xb2d)
+	return c:IsFaceup() and c:IsSetCard(0xccd)
 end
 function cm.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.eqfilter(chkc) end
@@ -104,7 +104,7 @@ end
 
 
 function cm.eq2filter(c)
-	return c:IsSetCard(0xb2d) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0xccd) and c:IsType(TYPE_MONSTER)
 end
 
 function cm.eq2tg(e,tp,eg,ep,ev,re,r,rp,chk)

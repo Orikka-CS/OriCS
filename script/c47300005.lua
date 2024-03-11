@@ -37,7 +37,7 @@ cm.custom_type=CUSTOMTYPE_SQUARE
 
 
 function cm.thfilter(c,e,tp)
-	return c:IsSetCard(0xe3e) and c:IsAbleToHand() and not c:IsCode(m)
+	return c:IsSetCard(0xcce) and c:IsAbleToHand() and not c:IsCode(m)
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -55,7 +55,7 @@ end
 
 
 function cm.gmfilter(c)
-	return c:IsSetCard(0xe3e) and c:GetExactManaCount(0x0)>=3
+	return c:IsSetCard(0xcce) and c:GetExactManaCount(0x0)>=3
 end
 function cm.gmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.gmfilter(chkc) end

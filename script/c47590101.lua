@@ -36,7 +36,7 @@ function cm.initial_effect(c)
 end
 
 function cm.matfilter(c,scard,sumtype,tp)
-	return c:IsSetCard(0x859,scard,sumtype,tp)
+	return c:IsSetCard(0xcc9,scard,sumtype,tp)
 end
 
 function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
@@ -44,7 +44,7 @@ function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.spfilter(c,e,tp)
-	return c:IsSetCard(0x859) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP)
+	return c:IsSetCard(0xcc9) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP)
 end
 
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)

@@ -39,7 +39,7 @@ end
 
 
 function cm.thfilter(c)
-	return c:IsSetCard(0xb2d) and c:IsAbleToHand() and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0xccd) and c:IsAbleToHand() and c:IsType(TYPE_MONSTER)
 end
 function cm.e1tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -69,7 +69,7 @@ function cm.filter1(c,e)
 	return (c:IsLocation(LOCATION_ONFIELD+LOCATION_GRAVE) or c:IsFaceup()) and c:IsType(TYPE_MONSTER) and c:IsCanBeFusionMaterial() and c:IsAbleToDeck() and not c:IsImmuneToEffect(e)
 end
 function cm.filter2(c,e,tp,m,f,chkf)
-	return c:IsType(TYPE_FUSION) and c:IsSetCard(0xb2d) and (not f or f(c))
+	return c:IsType(TYPE_FUSION) and c:IsSetCard(0xccd) and (not f or f(c))
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial(m,nil,chkf)
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)

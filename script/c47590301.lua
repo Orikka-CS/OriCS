@@ -19,10 +19,10 @@ function cm.initial_effect(c)
 end
 
 function cm.cfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x859) and c:IsType(TYPE_MONSTER)
+	return c:IsFaceup() and c:IsSetCard(0xcc9) and c:IsType(TYPE_MONSTER)
 end
 function cm.filter(c)
-	return c:IsFaceup() and c:IsSetCard(0x859) and c:IsType(TYPE_TUNER)
+	return c:IsFaceup() and c:IsSetCard(0xcc9) and c:IsType(TYPE_TUNER)
 end
 
 function cm.condition(e,tp,eg,ep,ev,re,r,rp)

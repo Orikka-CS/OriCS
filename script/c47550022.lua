@@ -62,11 +62,11 @@ end
 
 
 function c47550022.mfilter(c,lc,sumtype,tp)
-	--return g:IsExists(Card.IsSetCard,1,nil,0x487,lc,sumtype,tp)
+	--return g:IsExists(Card.IsSetCard,1,nil,0xcc7,lc,sumtype,tp)
 
-	--return c:IsSetCard(0x487,lc,sumtype,tp) and not c:IsCode(47550022,lc,sumtype,tp)
+	--return c:IsSetCard(0xcc7,lc,sumtype,tp) and not c:IsCode(47550022,lc,sumtype,tp)
 
-	return c:IsSetCard(0x487) and not c:IsCode(47550022)
+	return c:IsSetCard(0xcc7) and not c:IsCode(47550022)
 end
 function c47550022.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
@@ -97,7 +97,7 @@ end
 
 
 function c47550022.cfilter(c,tp)
-	return c:IsSetCard(0x487) and c:IsAttribute(ATTRIBUTE_DARK) and Duel.GetMZoneCount(tp,c)>0 and not c:IsCode(47550022)
+	return c:IsSetCard(0xcc7) and c:IsAttribute(ATTRIBUTE_DARK) and Duel.GetMZoneCount(tp,c)>0 and not c:IsCode(47550022)
 end
 function c47550022.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckReleaseGroup(tp,c47550022.cfilter,1,nil,tp) end

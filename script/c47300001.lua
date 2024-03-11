@@ -39,7 +39,7 @@ cm.square_mana={ATTRIBUTE_LIGHT,ATTRIBUTE_LIGHT}
 cm.custom_type=CUSTOMTYPE_SQUARE
 
 function cm.filter(c,tp)
-	return c:GetPreviousControler()==tp and c:IsSetCard(0xe3e) and c:IsType(TYPE_MONSTER)
+	return c:GetPreviousControler()==tp and c:IsSetCard(0xcce) and c:IsType(TYPE_MONSTER)
 end
 function cm.condition(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(cm.filter,1,nil,tp)
@@ -58,7 +58,7 @@ end
 
 
 function cm.gmfilter(c)
-	return c:IsSetCard(0xe3e) and c:GetExactManaCount(0x0)>=2
+	return c:IsSetCard(0xcce) and c:GetExactManaCount(0x0)>=2
 end
 function cm.gmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.gmfilter(chkc) end

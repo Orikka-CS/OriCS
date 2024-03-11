@@ -36,7 +36,7 @@ function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.eqfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xb2d)
+	return c:IsFaceup() and c:IsSetCard(0xccd)
 end
 function cm.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.eqfilter(chkc) end

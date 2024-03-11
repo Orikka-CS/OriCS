@@ -32,12 +32,12 @@ function cm.initial_effect(c)
 end
 
 function cm.filter(c)
-	return c:IsSetCard(0x859) and c:IsAbleToHand() and not c:IsCode(m)
+	return c:IsSetCard(0xcc9) and c:IsAbleToHand() and not c:IsCode(m)
 end
 
 function cm.e1con(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return e:GetHandler():IsLocation(LOCATION_GRAVE) and (r==REASON_SYNCHRO or (re and re:GetHandler():IsSetCard(0x859)))
+	return e:GetHandler():IsLocation(LOCATION_GRAVE) and (r==REASON_SYNCHRO or (re and re:GetHandler():IsSetCard(0xcc9)))
 end
 
 function cm.e1tg(e,tp,eg,ep,ev,re,r,rp,chk)

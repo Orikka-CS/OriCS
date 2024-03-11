@@ -56,7 +56,7 @@ function c47550019.eqcon(e)
 end
 
 function c47550019.mfilter(g,lc,sumtype,tp)
-	return g:IsExists(Card.IsSetCard,1,nil,0x487,lc,sumtype,tp)
+	return g:IsExists(Card.IsSetCard,1,nil,0xcc7,lc,sumtype,tp)
 end
 
 function c47550019.con1(e,tp,eg,ep,ev,re,r,rp)
@@ -94,7 +94,7 @@ function c47550019.spcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c47550019.filter(c,e,tp)
-	return c:IsSetCard(0x487) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xcc7) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function c47550019.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -128,7 +128,7 @@ function c47550019.spcon2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c47550019.tdfilter(c)
-	return c:IsSetCard(0x487) and c:IsType(TYPE_MONSTER) and c:IsAbleToDeck() and c:IsFaceup()
+	return c:IsSetCard(0xcc7) and c:IsType(TYPE_MONSTER) and c:IsAbleToDeck() and c:IsFaceup()
 end
 
 function c47550019.sptg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

@@ -44,7 +44,7 @@ function cm.initial_effect(c)
 end
 
 function cm.pfil1(c)
-	return c:IsSetCard(0xb2d) and c:IsType(TYPE_FUSION)
+	return c:IsSetCard(0xccd) and c:IsType(TYPE_FUSION)
 end
 
 function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
@@ -52,7 +52,7 @@ function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.eqfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xb2d)
+	return c:IsFaceup() and c:IsSetCard(0xccd)
 end
 function cm.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.eqfilter(chkc) end
@@ -86,7 +86,7 @@ end
 
 
 function cm.cfilter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0xb2d) and c:IsControler(tp)
+	return c:IsFaceup() and c:IsSetCard(0xccd) and c:IsControler(tp)
 end
 function cm.actcon(e)
 	local tp=e:GetHandlerPlayer()

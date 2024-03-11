@@ -111,7 +111,7 @@ end
 
 function c47550017.drcon(e,tp,eg,ep,ev,re,r,rp)
 	return ep==1-tp and Duel.GetCurrentChain()>1 and Duel.GetChainInfo(Duel.GetCurrentChain()-1,CHAININFO_TRIGGERING_CONTROLER) == tp
-		and Duel.GetChainInfo(Duel.GetCurrentChain()-1,CHAININFO_TRIGGERING_EFFECT):GetHandler():IsSetCard(0x487)
+		and Duel.GetChainInfo(Duel.GetCurrentChain()-1,CHAININFO_TRIGGERING_EFFECT):GetHandler():IsSetCard(0xcc7)
 end
 
 function c47550017.drtg(e,tp,eg,ep,ev,re,r,rp,chk)

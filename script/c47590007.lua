@@ -32,7 +32,7 @@ function cm.initial_effect(c)
 end
 
 function cm.costfilter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0x859)
+	return c:IsFaceup() and c:IsSetCard(0xcc9)
 		and Duel.GetMZoneCount(tp,c,tp)>0
 end
 
@@ -71,7 +71,7 @@ end
 
 
 function cm.repfilter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0x859)
+	return c:IsFaceup() and c:IsSetCard(0xcc9)
 		and c:IsOnField() and c:IsControler(tp) and c:IsReason(REASON_EFFECT+REASON_BATTLE) and not c:IsReason(REASON_REPLACE)
 end
 function cm.reptg(e,tp,eg,ep,ev,re,r,rp,chk)

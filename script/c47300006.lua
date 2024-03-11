@@ -39,13 +39,13 @@ cm.custom_type=CUSTOMTYPE_SQUARE
 
 function cm.tktg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,47300100,0xe3e,0x4011,0,1500,3,RACE_MACHINE,ATTRIBUTE_EARTH) end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,47300100,0xcce,0x4011,0,1500,3,RACE_MACHINE,ATTRIBUTE_EARTH) end
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end
 function cm.tkop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0
-		or not Duel.IsPlayerCanSpecialSummonMonster(tp,47300100,0xe3e,0x4011,0,1500,3,RACE_MACHINE,ATTRIBUTE_EARTH) then return end
+		or not Duel.IsPlayerCanSpecialSummonMonster(tp,47300100,0xcce,0x4011,0,1500,3,RACE_MACHINE,ATTRIBUTE_EARTH) then return end
 	local token=Duel.CreateToken(tp,47300100)
 	Duel.SpecialSummon(token,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 
@@ -66,7 +66,7 @@ end
 
 
 function cm.gmfilter(c)
-	return c:IsSetCard(0xe3e) and c:GetExactManaCount(0x0)>=3
+	return c:IsSetCard(0xcce) and c:GetExactManaCount(0x0)>=3
 end
 function cm.gmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.gmfilter(chkc) end

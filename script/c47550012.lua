@@ -73,7 +73,7 @@ function c47550012.eqcon(e)
 end
 
 function c47550012.mfilter(g,lc,sumtype,tp)
-	return g:IsExists(Card.IsSetCard,1,nil,0x487,lc,sumtype,tp)
+	return g:IsExists(Card.IsSetCard,1,nil,0xcc7,lc,sumtype,tp)
 end
 
 function c47550012.con1(e,tp,eg,ep,ev,re,r,rp)
@@ -101,12 +101,12 @@ function c47550012.ndcon(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsAttribute(ATTRIBUTE_LIGHT)
 end
 function c47550012.ndtar(e,c)
-	return (c:IsLinked() and c:IsSetCard(0x487)) or c==e:GetHandler()
+	return (c:IsLinked() and c:IsSetCard(0xcc7)) or c==e:GetHandler()
 end
 
 
 function c47550012.cfilter(c,g)
-	return not c:IsStatus(STATUS_BATTLE_DESTROYED) and g:IsContains(c) and c:IsSetCard(0x487)
+	return not c:IsStatus(STATUS_BATTLE_DESTROYED) and g:IsContains(c) and c:IsSetCard(0xcc7)
 end
 function c47550012.ctcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local lg=e:GetHandler():GetLinkedGroup()
@@ -141,7 +141,7 @@ function c47550012.ctop(e,tp,eg,ep,ev,re,r,rp)
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_ADD_SETCODE)
-		e1:SetValue(0x487)
+		e1:SetValue(0xcc7)
 		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
 		tc:RegisterEffect(e1)
 	end

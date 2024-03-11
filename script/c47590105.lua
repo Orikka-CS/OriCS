@@ -6,7 +6,7 @@ function cm.initial_effect(c)
 	
 	--synchro summon
 	c:EnableReviveLimit()
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0x859),aux.NonTuner(Card.IsRace,RACE_FIEND),1)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0xcc9),aux.NonTuner(Card.IsRace,RACE_FIEND),1)
 
 	--to grave
 	local e1=Effect.CreateEffect(c)
@@ -53,7 +53,7 @@ function cm.e1con(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.e1filter(c)
-	return c:IsSetCard(0x859) and c:IsFaceup()
+	return c:IsSetCard(0xcc9) and c:IsFaceup()
 end
  
 function cm.e1tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -86,7 +86,7 @@ function cm.e2con(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.e2filter(c,e,tp,lv)
-	return c:IsLevelBelow(lv-1) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE) and c:IsSetCard(0x859)
+	return c:IsLevelBelow(lv-1) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE) and c:IsSetCard(0xcc9)
 end
 
 function cm.e2tg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -121,7 +121,7 @@ end
 
 
 function cm.tfilter(c,e,tp)
-	return c:IsSetCard(0x859) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsCode(m)
+	return c:IsSetCard(0xcc9) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsCode(m)
 end
 function cm.tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then

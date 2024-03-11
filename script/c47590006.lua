@@ -33,7 +33,7 @@ function cm.initial_effect(c)
 end
 
 function cm.filter(c)
-	return c:IsSetCard(0x859) and c:IsAbleToDeck()
+	return c:IsSetCard(0xcc9) and c:IsAbleToDeck()
 end
 
 function cm.e1tg(e,tp,eg,ep,ev,re,r,rp,chk)

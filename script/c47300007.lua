@@ -38,7 +38,7 @@ cm.custom_type=CUSTOMTYPE_SQUARE
 
 
 function cm.costfilter(c,e)
-	return c:IsSetCard(0xe3e) and c:IsAbleToRemoveAsCost() and c:IsType(TYPE_SYNCHRO)
+	return c:IsSetCard(0xcce) and c:IsAbleToRemoveAsCost() and c:IsType(TYPE_SYNCHRO)
 end
 function cm.sscost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.costfilter,tp,LOCATION_GRAVE,0,1,nil) end
@@ -61,7 +61,7 @@ end
 
 
 function cm.gmfilter(c)
-	return c:IsSetCard(0xe3e) and c:GetExactManaCount(0x0)>=3
+	return c:IsSetCard(0xcce) and c:GetExactManaCount(0x0)>=3
 end
 function cm.gmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.gmfilter(chkc) end

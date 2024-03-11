@@ -35,7 +35,7 @@ end
 
 
 function cm.pfil1(c)
-	return c:IsSetCard(0xb2d) and not c:IsCode(m)
+	return c:IsSetCard(0xccd) and not c:IsCode(m)
 end
 
 
@@ -44,7 +44,7 @@ function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.eqfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xb2d)
+	return c:IsFaceup() and c:IsSetCard(0xccd)
 end
 function cm.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.eqfilter(chkc) end
@@ -85,7 +85,7 @@ function cm.effcost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function cm.spfilter(c,e,tp)
-	return c:IsSetCard(0xb2d) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsCode(m)
+	return c:IsSetCard(0xccd) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsCode(m)
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
@@ -112,5 +112,5 @@ function cm.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.splimit(e,c)
-	return not c:IsSetCard(0xb2d)
+	return not c:IsSetCard(0xccd)
 end

@@ -49,7 +49,7 @@ function c47550014.initial_effect(c)
 end
 
 function c47550014.thfilter(c)
-	return c:IsSetCard(0x487) and c:IsAbleToHand() and not c:IsCode(47550014)
+	return c:IsSetCard(0xcc7) and c:IsAbleToHand() and not c:IsCode(47550014)
 end
 function c47550014.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c47550014.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -67,7 +67,7 @@ end
 
 
 function c47550014.thfilter2(c)
-	return c:IsSetCard(0x487) and c:IsAbleToHand() and not c:IsCode(47550014)
+	return c:IsSetCard(0xcc7) and c:IsAbleToHand() and not c:IsCode(47550014)
 end
 function c47550014.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)==0 and Duel.GetTurnPlayer()~=tp

@@ -36,7 +36,7 @@ cm.square_mana={ATTRIBUTE_EARTH,ATTRIBUTE_LIGHT,ATTRIBUTE_LIGHT}
 cm.custom_type=CUSTOMTYPE_SQUARE
 
 function cm.thfilter(c,e,tp)
-	return c:IsSetCard(0xe3e) and c:IsAbleToHand() and not c:IsCode(m)and (c:IsFaceup() or not c:IsLocation(LOCATION_REMOVED))
+	return c:IsSetCard(0xcce) and c:IsAbleToHand() and not c:IsCode(m)and (c:IsFaceup() or not c:IsLocation(LOCATION_REMOVED))
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 
@@ -60,7 +60,7 @@ end
 
 
 function cm.gmfilter(c)
-	return c:IsSetCard(0xe3e) and c:GetExactManaCount(0x0)>=3
+	return c:IsSetCard(0xcce) and c:GetExactManaCount(0x0)>=3
 end
 function cm.gmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.gmfilter(chkc) end

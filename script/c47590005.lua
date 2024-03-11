@@ -33,7 +33,7 @@ function cm.initial_effect(c)
 end
 
 function cm.e1con(e,tp,eg,ep,ev,re,r,rp)
-	return ep==tp and bit.band(r,REASON_EFFECT)~=0 and re:GetHandler():IsSetCard(0x859)
+	return ep==tp and bit.band(r,REASON_EFFECT)~=0 and re:GetHandler():IsSetCard(0xcc9)
 end
 
 function cm.e1tg(e,tp,eg,ep,ev,re,r,rp,chk)

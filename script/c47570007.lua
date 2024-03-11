@@ -42,7 +42,7 @@ function cm.initial_effect(c)
 	
 end
 function cm.mfilter(c)
-	return c:IsLinkSetCard(0xb2d) and not c:IsLinkType(TYPE_LINK)
+	return c:IsLinkSetCard(0xccd) and not c:IsLinkType(TYPE_LINK)
 end
 
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -69,7 +69,7 @@ function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.eqfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xb2d)
+	return c:IsFaceup() and c:IsSetCard(0xccd)
 end
 function cm.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.eqfilter(chkc) end
@@ -108,7 +108,7 @@ function cm.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Release(c,REASON_COST)
 end
 function cm.spfilter(c,e,tp)
-	return c:IsSetCard(0xb2d) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xccd) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

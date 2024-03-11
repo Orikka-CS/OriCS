@@ -35,7 +35,7 @@ function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.eqfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xb2d)
+	return c:IsFaceup() and c:IsSetCard(0xccd)
 end
 function cm.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.eqfilter(chkc) end
@@ -72,7 +72,7 @@ function cm.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return c:GetPreviousLocation()==LOCATION_SZONE
 end
 function cm.thfilter(c)
-	return not c:IsCode(m) and c:IsSetCard(0xb2d)
+	return not c:IsCode(m) and c:IsSetCard(0xccd)
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,LOCATION_DECK,0,1,nil) end

@@ -49,7 +49,7 @@ function c47550001.condition(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if tc:IsControler(1-tp) then tc=Duel.GetAttackTarget() end
 	e:SetLabelObject(tc)
-	return tc and tc:IsSetCard(0x487) and tc:IsRelateToBattle() and Duel.GetAttackTarget()~=nil and c:IsAttribute(ATTRIBUTE_LIGHT)
+	return tc and tc:IsSetCard(0xcc7) and tc:IsRelateToBattle() and Duel.GetAttackTarget()~=nil and c:IsAttribute(ATTRIBUTE_LIGHT)
 end
 function c47550001.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsDiscardable() end
@@ -73,7 +73,7 @@ function c47550001.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsAttribute(ATTRIBUTE_DARK)
 end
 function c47550001.thfilter(c,e,tp)
-	return c:IsSetCard(0x487) and not c:IsCode(47550001) and c:IsAbleToHand()
+	return c:IsSetCard(0xcc7) and not c:IsCode(47550001) and c:IsAbleToHand()
 end
 function c47550001.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c47550001.thfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp) end

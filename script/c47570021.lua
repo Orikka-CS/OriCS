@@ -38,11 +38,11 @@ function cm.initial_effect(c)
 end
 
 function cm.cfilter(c)
-	return c:IsSetCard(0xb2d) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0xccd) and c:IsType(TYPE_MONSTER)
 end
 
 function cm.filter2(c)
-	return c:IsSetCard(0xb2d) and c:IsType(TYPE_MONSTER) and not c:IsForbidden()
+	return c:IsSetCard(0xccd) and c:IsType(TYPE_MONSTER) and not c:IsForbidden()
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and cm.cfilter(chkc) end
@@ -79,7 +79,7 @@ function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return aux.exccon(e)
 end
 function cm.spfilter(c,e,tp)
-	return c:IsSetCard(0xb2d) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xccd) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
@@ -96,7 +96,7 @@ function cm.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.hcfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xb2d) and (c:IsType(TYPE_FUSION) or c:IsType(TYPE_MODULE))
+	return c:IsFaceup() and c:IsSetCard(0xccd) and (c:IsType(TYPE_FUSION) or c:IsType(TYPE_MODULE))
 end
 function cm.handcon(e)
 	return Duel.IsExistingMatchingCard(cm.hcfilter,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,nil)

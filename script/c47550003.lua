@@ -46,7 +46,7 @@ function c47550003.sscon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c47550003.ssfil(c,e,tp)
-	return c:IsSetCard(0x487) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xcc7) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function c47550003.sstar(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -74,7 +74,7 @@ function c47550003.sccon(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsAttribute(ATTRIBUTE_DARK)
 end
 function c47550003.scfil(c)
-	return c:IsSetCard(0x487) and c:IsAbleToHand() and not c:IsCode(47550003)
+	return c:IsSetCard(0xcc7) and c:IsAbleToHand() and not c:IsCode(47550003)
 end
 function c47550003.sctar(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then

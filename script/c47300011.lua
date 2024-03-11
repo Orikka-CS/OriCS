@@ -52,7 +52,7 @@ function cm.condition(e,tp,eg,ep,ev,re,r,rp)
 	return c:GetManaCount(ATTRIBUTE_DARK)+c:GetManaCount(ATTRIBUTE_DIVINE)+c:GetManaCount(ATTRIBUTE_EARTH)+c:GetManaCount(ATTRIBUTE_FIRE)+c:GetManaCount(ATTRIBUTE_LIGHT)+c:GetManaCount(ATTRIBUTE_WATER)+c:GetManaCount(ATTRIBUTE_WIND)>0
 end
 function cm.filter(c)
-	return c:IsSetCard(0xe3e) and c:IsAbleToHand()
+	return c:IsSetCard(0xcce) and c:IsAbleToHand()
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.filter,tp,LOCATION_DECK,0,1,nil) end
@@ -88,7 +88,7 @@ function cm.tcon(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsPreviousLocation(LOCATION_MZONE) and c:IsSummonType(SUMMON_TYPE_SYNCHRO)
 end
 function cm.tfilter2(c,e,tp)
-	return c:IsSetCard(0xe3e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsLevelBelow(3) and (c:IsFaceup() or not c:IsLocation(LOCATION_REMOVED))
+	return c:IsSetCard(0xcce) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsLevelBelow(3) and (c:IsFaceup() or not c:IsLocation(LOCATION_REMOVED))
 end
 function cm.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then

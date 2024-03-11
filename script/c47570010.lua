@@ -41,9 +41,9 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e2)
 
 end
-cm.material_setcode=0xb2d
+cm.material_setcode=0xccd
 function cm.matfilter(c)
-	return c:IsFusionType(TYPE_MODULE) and c:IsFusionSetCard(0xb2d)
+	return c:IsFusionType(TYPE_MODULE) and c:IsFusionSetCard(0xccd)
 end
 
 
@@ -52,7 +52,7 @@ function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.eqfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xb2d)
+	return c:IsFaceup() and c:IsSetCard(0xccd)
 end
 function cm.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.eqfilter(chkc) end
@@ -99,7 +99,7 @@ function cm.condition(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if tc:IsControler(1-tp) then tc=Duel.GetAttackTarget() end
 	e:SetLabelObject(tc)
-	return tc and tc:IsSetCard(0xb2d) and tc:IsRelateToBattle() and Duel.GetAttackTarget()~=nil
+	return tc and tc:IsSetCard(0xccd) and tc:IsRelateToBattle() and Duel.GetAttackTarget()~=nil
 end
 function cm.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 	local tc=e:GetLabelObject()

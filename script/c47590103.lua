@@ -40,7 +40,7 @@ function cm.initial_effect(c)
 end
 
 function cm.matfilter(c,scard,sumtype,tp)
-	return c:IsSetCard(0x859,scard,sumtype,tp)
+	return c:IsSetCard(0xcc9,scard,sumtype,tp)
 end
 
 function cm.e1con(e,tp,eg,ep,ev,re,r,rp)
@@ -48,7 +48,7 @@ function cm.e1con(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cm.filter(c,e,tp)
-	return c:IsSetCard(0x859) and c:IsType(TYPE_EQUIP) and c:IsAbleToHand()
+	return c:IsSetCard(0xcc9) and c:IsType(TYPE_EQUIP) and c:IsAbleToHand()
 end
 
 function cm.e1tg(e,tp,eg,ep,ev,re,r,rp,chk)

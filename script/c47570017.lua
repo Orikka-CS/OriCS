@@ -45,7 +45,7 @@ end
 
 
 function cm.spfilter(c,e,tp)
-	return c:IsSetCard(0xb2d) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xccd) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and cm.spfilter(chkc,e,tp) end
@@ -91,7 +91,7 @@ end
 
 
 function cm.exfilter(c,tp)
-	return c:GetSummonPlayer()==tp and c:GetSummonType()==SUMMON_TYPE_FUSION and c:IsFaceup() and c:IsSetCard(0xb2d)
+	return c:GetSummonPlayer()==tp and c:GetSummonType()==SUMMON_TYPE_FUSION and c:IsFaceup() and c:IsSetCard(0xccd)
 end
 function cm.tdcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(cm.exfilter,1,nil,tp)

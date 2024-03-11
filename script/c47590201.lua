@@ -38,7 +38,7 @@ function cm.initial_effect(c)
 end
 
 function cm.thfilter(c)
-	return c:IsSetCard(0x859) and c:IsAbleToHand() and not c:IsCode(m)
+	return c:IsSetCard(0xcc9) and c:IsAbleToHand() and not c:IsCode(m)
 end
 function cm.e1tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -59,5 +59,5 @@ end
 function cm.effectfilter(e,ct)
 	local p=e:GetHandler():GetControler()
 	local te,tp,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
-	return p==tp and te:GetHandler():IsSetCard(0x859) and bit.band(loc,LOCATION_ONFIELD)~=0
+	return p==tp and te:GetHandler():IsSetCard(0xcc9) and bit.band(loc,LOCATION_ONFIELD)~=0
 end

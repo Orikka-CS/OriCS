@@ -49,7 +49,7 @@ end
 
 
 function c47550020.cfilter(c)
-	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsSetCard(0x487) and c:IsAbleToGraveAsCost()
+	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsSetCard(0xcc7) and c:IsAbleToGraveAsCost()
 end
 function c47550020.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c47550020.cfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -82,7 +82,7 @@ function c47550020.setcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c47550020.stfilter(c)
-	return c:IsSetCard(0x487) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsSSetable()
+	return c:IsSetCard(0xcc7) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsSSetable()
 end
 function c47550020.settg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0

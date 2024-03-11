@@ -69,7 +69,7 @@ end
 
 
 function cm.cfilter(c)
-	return c:IsSetCard(0xe3e) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0xcce) and c:IsType(TYPE_MONSTER)
 end
 function cm.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(cm.cfilter,tp,LOCATION_ONFIELD,0,1,nil)

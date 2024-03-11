@@ -15,11 +15,11 @@ end
 
 
 function c47550018.costfilter(c)
-	return c:IsSetCard(0x487)
+	return c:IsSetCard(0xcc7)
 end
 
 function c47550018.filter(c)
-	return c:IsFaceup() and c:IsSetCard(0x487) and c:IsType(TYPE_LINK) and c:GetLinkedGroupCount()>0
+	return c:IsFaceup() and c:IsSetCard(0xcc7) and c:IsType(TYPE_LINK) and c:GetLinkedGroupCount()>0
 end
 
 

@@ -37,7 +37,7 @@ end
 
 function cm.mtval(e,c)
 	if not c then return false end
-	return c:IsSetCard(0xb2d)
+	return c:IsSetCard(0xccd)
 end
 
 function cm.filter(c,e,tp,m,f,chkf)
@@ -129,7 +129,7 @@ end
 
 
 function cm.exfilter(c,tp)
-	return c:GetSummonPlayer()==tp and c:GetSummonType()==SUMMON_TYPE_MODULE and c:IsFaceup() and c:IsSetCard(0xb2d)
+	return c:GetSummonPlayer()==tp and c:GetSummonType()==SUMMON_TYPE_MODULE and c:IsFaceup() and c:IsSetCard(0xccd)
 end
 function cm.tdcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(cm.exfilter,1,nil,tp)

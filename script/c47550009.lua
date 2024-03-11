@@ -17,7 +17,7 @@ function c47550009.initial_effect(c)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetTargetRange(LOCATION_MZONE,0)
 	e1:SetCondition(c47550009.picon)
-	e1:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0x487))
+	e1:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xcc7))
 	c:RegisterEffect(e1)
 
 	--dark:specialsummon
@@ -47,7 +47,7 @@ end
 
 
 function c47550009.costfilter(c,e)
-	return c:IsSetCard(0x487) and c:IsAbleToRemoveAsCost()
+	return c:IsSetCard(0xcc7) and c:IsAbleToRemoveAsCost()
 end
 function c47550009.sscost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c47550009.costfilter,tp,LOCATION_GRAVE,0,1,e:GetHandler()) end

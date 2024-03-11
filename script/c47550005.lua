@@ -52,7 +52,7 @@ function c47550005.sscon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c47550005.ssfil(c,e,tp)
-	return c:IsSetCard(0x487) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsCode(47550005)
+	return c:IsSetCard(0xcc7) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsCode(47550005)
 end
 
 function c47550005.sstar(e,tp,eg,ep,ev,re,r,rp,chk)

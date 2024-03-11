@@ -50,7 +50,7 @@ function c47550007.tgcon(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsAttribute(ATTRIBUTE_LIGHT)
 end
 function c47550007.tgfilter(c,e,tp)
-	return c:IsSetCard(0x487) and not c:IsCode(47550007) and c:IsAbleToGrave()
+	return c:IsSetCard(0xcc7) and not c:IsCode(47550007) and c:IsAbleToGrave()
 end
 function c47550007.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c47550007.tgfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end
@@ -70,7 +70,7 @@ function c47550007.thcon2(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsAttribute(ATTRIBUTE_DARK)
 end
 function c47550007.thfilter2(c,e,tp)
-	return c:IsFaceup() and c:IsSetCard(0x487) and c:IsAbleToHand() and not c:IsCode(47550007) and c:IsFaceup()
+	return c:IsFaceup() and c:IsSetCard(0xcc7) and c:IsAbleToHand() and not c:IsCode(47550007) and c:IsFaceup()
 end
 function c47550007.thtg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and c47550007.thfilter2(chkc,e,tp) end

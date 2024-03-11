@@ -47,7 +47,7 @@ end
 
 
 function cm.thfilter(c)
-	return c:IsSetCard(0xe3e) and c:IsAbleToHand() and c:IsFaceup()
+	return c:IsSetCard(0xcce) and c:IsAbleToHand() and c:IsFaceup()
 end
 function cm.thtg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and cm.thfilter(chkc) end
@@ -71,7 +71,7 @@ function cm.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.spfilter(c,e,tp)
-	return c:IsSetCard(0xe3e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and (c:IsFaceup() or not c:IsLocation(LOCATION_REMOVED))
+	return c:IsSetCard(0xcce) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and (c:IsFaceup() or not c:IsLocation(LOCATION_REMOVED))
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and cm.spfilter(chkc,e,tp) end

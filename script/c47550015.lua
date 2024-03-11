@@ -47,7 +47,7 @@ function c47550015.descon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c47550015.desfilter(c,e,tp)
-	return c:IsSetCard(0x487) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0xcc7) and c:IsType(TYPE_MONSTER)
 end
 
 function c47550015.desop(e,tp,eg,ep,ev,re,r,rp)
@@ -60,12 +60,12 @@ function c47550015.desop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c47550015.tgtg(e,c)
-	return c:IsSetCard(0x487) and c~=e:GetHandler()
+	return c:IsSetCard(0xcc7) and c~=e:GetHandler()
 end
 
 
 function c47550015.spfilter(c,e,tp)
-	return c:IsSetCard(0x487) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xcc7) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c47550015.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

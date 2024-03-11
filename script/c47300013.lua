@@ -172,7 +172,7 @@ function cm.tcon(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousPosition(POS_FACEUP)
 end
 function cm.tfilter2(c,e,tp)
-	return c:IsSetCard(0xe3e) and c:IsCanBeSpecialSummoned(e,0,tp,true,false) and c:IsLevelBelow(8) and (c:IsFaceup() or not c:IsLocation(LOCATION_REMOVED))
+	return c:IsSetCard(0xcce) and c:IsCanBeSpecialSummoned(e,0,tp,true,false) and c:IsLevelBelow(8) and (c:IsFaceup() or not c:IsLocation(LOCATION_REMOVED))
 end
 function cm.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then

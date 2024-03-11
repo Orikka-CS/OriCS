@@ -76,7 +76,7 @@ function c47550013.mfilter(g,lc)
 	return g:IsExists(c47550013.mzfilter,1,nil,lc)
 end
 function c47550013.mzfilter(c,lc)
-	return c:IsSetCard(0x487) and c:IsType(TYPE_LINK)
+	return c:IsSetCard(0xcc7) and c:IsType(TYPE_LINK)
 end
 
 function c47550013.con1(e,tp,eg,ep,ev,re,r,rp)
@@ -103,18 +103,18 @@ function c47550013.ndcon(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsAttribute(ATTRIBUTE_LIGHT)
 end
 function c47550013.ndtar(e,c)
-	return (c:IsLinked() and c:IsSetCard(0x487)) or c==e:GetHandler()
+	return (c:IsLinked() and c:IsSetCard(0xcc7)) or c==e:GetHandler()
 end
 
 function c47550013.effectfilter(e,ct)
 	local p=e:GetHandler():GetControler()
 	local te,tp,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
-	return p==tp and te:GetHandler():IsSetCard(0x487)
+	return p==tp and te:GetHandler():IsSetCard(0xcc7)
 end
 
 
 function c47550013.cfilter(c,g)
-	return not c:IsStatus(STATUS_BATTLE_DESTROYED) and g:IsContains(c) and c:IsSetCard(0x487)
+	return not c:IsStatus(STATUS_BATTLE_DESTROYED) and g:IsContains(c) and c:IsSetCard(0xcc7)
 end
 function c47550013.tgcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local lg=e:GetHandler():GetLinkedGroup()
