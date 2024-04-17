@@ -24,7 +24,7 @@ function cm.initial_effect(c)
 	WriteEff(e0,0,"NTO")
 	c:RegisterEffect(e0)
 	
-	Duel.AddCustomActivityCounter(id,ACTIVITY_SPSUMMON,function(c) return c:IsSetCard(0xe15) end)
+	Duel.AddCustomActivityCounter(m,ACTIVITY_SPSUMMON,function(c) return c:IsSetCard(0xe15) end)
 	
 end
 
