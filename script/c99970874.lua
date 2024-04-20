@@ -141,7 +141,7 @@ end
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetLabelObject():GetLabel()~=0 then return end
 	local tc=e:GetHandler():GetFirstCardTarget()
-	if tc and tc:IsLocation(LOCATION_MZONE) then
+	if tc and tc:IsLocation(LOCATION_ONFIELD) then
 		Duel.Destroy(tc,REASON_EFFECT)
 	end
 end
