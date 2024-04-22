@@ -1,5 +1,102 @@
 --dependencies
 
+local cregeff=Card.RegisterEffect
+function Card.RegisterEffect(c,e,forced,...)
+	cregeff(c,e,forced,...)
+	local code=c:GetOriginalCode()
+	if code~=18454019 or not e:IsHasProperty(EFFECT_FLAG_INITIAL) then
+		if e:GetCode()==EFFECT_CANNOT_BE_EFFECT_TARGET then
+			local con=e:GetCondition()
+			e:SetCondition(function(e,...)
+				local tp=e:GetHandlerPlayer()
+				if Duel.IsPlayerAffectedByEffect(tp,18454016) then
+					return false
+				end
+				return not con or con(e,...)
+			end)
+		end
+		if e:GetCode()==EFFECT_INDESTRUCTABLE_EFFECT then
+			local con=e:GetCondition()
+			e:SetCondition(function(e,...)
+				local tp=e:GetHandlerPlayer()
+				if Duel.IsPlayerAffectedByEffect(tp,18454015) then
+					return false
+				end
+				return not con or con(e,...)
+			end)
+		end
+	end
+	if e:GetCode()==EFFECT_DESTROY_REPLACE then
+		if e:IsHasType(EFFECT_TYPE_SINGLE) then
+			local tg=e:GetTarget()
+			e:SetTarget(function(e,tp,...)
+				local c=e:GetHandler()
+				if Duel.IsPlayerAffectedByEffect(tp,18454015) and c:IsReason(REASON_EFFECT) then
+					return false
+				end
+				return not tg or tg(e,tp,...)
+			end)
+		end
+		if e:IsHasType(EFFECT_TYPE_FIELD) then
+			local val=e:GetValue()
+			e:SetValue(function(e,c,...)
+				local tp=e:GetHandlerPlayer()
+				if Duel.IsPlayerAffectedByEffect(tp,18454015) and c:IsReason(REASON_EFFECT) then
+					return false
+				end
+				return not val or val(e,c,...)
+			end)
+		end
+	end
+end
+
+local dregeff=Duel.RegisterEffect
+function Duel.RegisterEffect(e,...)
+	dregeff(e,...)
+	if e:GetCode()==EFFECT_CANNOT_BE_EFFECT_TARGET then
+		local con=e:GetCondition()
+		e:SetCondition(function(e,...)
+			local tp=e:GetHandlerPlayer()
+			if Duel.IsPlayerAffectedByEffect(tp,18454016) then
+				return false
+			end
+			return not con or con(e,...)
+		end)
+	end
+	if e:GetCode()==EFFECT_INDESTRUCTABLE_EFFECT then
+		local con=e:GetCondition()
+		e:SetCondition(function(e,...)
+			local tp=e:GetHandlerPlayer()
+			if Duel.IsPlayerAffectedByEffect(tp,18454015) then
+				return false
+			end
+			return not con or con(e,...)
+		end)
+	end
+	if e:GetCode()==EFFECT_DESTROY_REPLACE then
+		if e:IsHasType(EFFECT_TYPE_SINGLE) then
+			local tg=e:GetTarget()
+			e:SetTarget(function(e,tp,...)
+				local c=e:GetHandler()
+				if Duel.IsPlayerAffectedByEffect(tp,18454015) and c:IsReason(REASON_EFFECT) then
+					return false
+				end
+				return not tg or tg(e,tp,...)
+			end)
+		end
+		if e:IsHasType(EFFECT_TYPE_FIELD) then
+			local val=e:GetValue()
+			e:SetValue(function(e,c,...)
+				local tp=e:GetHandlerPlayer()
+				if Duel.IsPlayerAffectedByEffect(tp,18454015) and c:IsReason(REASON_EFFECT) then
+					return false
+				end
+				return not val or val(e,c,...)
+			end)
+		end
+	end
+end
+
 EFFECT_COINBEAT_EFFECT=18453923
 EFFECT_COINBEAT_MISFIRE=18453924
 
