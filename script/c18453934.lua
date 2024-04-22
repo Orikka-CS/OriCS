@@ -22,7 +22,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SMCard(tp,s.tfil1,tp,"D",0,1,1,nil)
+	local g=Duel.SMCard(tp,s.tfil1,tp,"D",0,1,1,nil,e,tp)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		Duel.BreakEffect()
