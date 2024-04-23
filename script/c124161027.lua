@@ -19,13 +19,11 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE,PLAYER_NONE,0)>0 and #g>0 end
 	local ct=g:GetClassCount(Card.GetCode)
-	if ct>=2 and Duel.GetLocationCount(tp,LOCATION_MZONE,PLAYER_NONE,0)>1 then
-		local dis=Duel.SelectDisableField(tp,2,LOCATION_MZONE,0,0)
-		Duel.Hint(HINT_ZONE,tp,dis)
-		Duel.SetTargetParam(dis)
-	end
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE,PLAYER_NONE,0)>1 and ct>=2 end
+	local dis=Duel.SelectDisableField(tp,2,LOCATION_MZONE,0,0)
+	Duel.Hint(HINT_ZONE,tp,dis)
+	Duel.SetTargetParam(dis)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)

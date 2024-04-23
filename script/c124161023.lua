@@ -54,7 +54,7 @@ function s.op1(e,tc,tp,sg,chk)
 	if not c:IsRelateToEffect(e) then return end
 	local sg=Duel.GetFirstTarget()
 	if sg:IsRelateToEffect(e) then
-		if Duel.SendtoGrave(sg,REASON_EFFECT) then
+		if Duel.SendtoGrave(sg,REASON_EFFECT) and sg:IsLocation(LOCATION_GRAVE) then
 			local dis=0
 			local og=Duel.GetOperatedGroup()
 			local target=og:GetFirst()
