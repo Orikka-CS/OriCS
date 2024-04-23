@@ -41,7 +41,7 @@ function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.nfil3,1,nil)
 end
 function s.tfil1(c)
-	return c:IsAbleToHand() and (c:IsCode(24094653) or (c:IsType(TYPE_TRAP) and c:IsSetCard(0xfa2)))
+	return c:IsAbleToHand() and c:IsType(TYPE_TRAP) and c:IsSetCard(0xfa2)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
