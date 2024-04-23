@@ -25,27 +25,23 @@ function s.initial_effect(c)
 end
 function s.tfil1(c,e,tp)
 	return ((Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false))
-		or c:IsAbleToHand()) and (c:IsType(TYPE_FUSION) or c:IsRace(RACE_WINGEDBEAST))
+		or c:IsAbleToHand()) and c:IsRace(RACE_WINGEDBEAST)
 end
-function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then
-		return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tfil1(chkc,e,tp)
-	end
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.IsExistingTarget(s.tfil1,tp,LOCATION_GRAVE,0,1,nil,e,tp)
+		return Duel.IsExistingMatchingCard(s.tfil1,tp,LOCATION_GRAVE,0,1,nil,e,tp)
 	end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectTarget(tp,s.tfil1,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE)
 	local cc=Duel.GetCurrentChain()
 	if cc>1 then
 		local cp=Duel.GetChainInfo(cc-1,CHAININFO_TRIGGERING_PLAYER)
 		if cp~=tp then
-			e:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON+CATEGORY_NEGATE)
+			e:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON+CATEGORY_NEGATE+CATEGORY_DESTROY)
 			local ce=Duel.GetChainInfo(cc-1,CHAININFO_TRIGGERING_EFFECT)
 			local ch=ce:GetHandler()
 			Duel.SetOperationInfo(0,CATEGORY_NEGATE,Group.FromCards(ch),1,0,0)
+			Duel.SetOperationInfo(0,CATEGORY_DESTROY,Group.FromCards(ch),1,0,0)
 		else
 			e:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON)
 		end
@@ -54,8 +50,10 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	end
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,s.tfil1,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
+	local tc=g:GetFirst()
+	if tc then
 		local res=aux.ToHandOrElse(tc,tp,
 			function(sc)
 				return sc:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
