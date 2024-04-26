@@ -41,7 +41,9 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 			local ce=Duel.GetChainInfo(cc-1,CHAININFO_TRIGGERING_EFFECT)
 			local ch=ce:GetHandler()
 			Duel.SetOperationInfo(0,CATEGORY_NEGATE,Group.FromCards(ch),1,0,0)
-			Duel.SetOperationInfo(0,CATEGORY_DESTROY,Group.FromCards(ch),1,0,0)
+			if ch:IsRelateToEffect(ce) then
+				Duel.SetOperationInfo(0,CATEGORY_DESTROY,Group.FromCards(ch),1,0,0)
+			end
 		else
 			e:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON)
 		end
@@ -68,7 +70,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			if cc>1 then
 				local cp=Duel.GetChainInfo(cc-1,CHAININFO_TRIGGERING_PLAYER)
 				if cp~=tp then
-					Duel.NegateActivation(cc-1)
+					local ce=Duel.GetChainInfo(cc-1,CHAININFO_TRIGGERING_EFFECT)
+					local ch=ce:GetHandler()
+					if Duel.NegateActivation(cc-1) and ch:IsRelateToEffect(ce) then
+						Duel.Destroy(Group.FromCards(ch),REASON_EFFECT)
+					end
 				end
 			end
 		end
