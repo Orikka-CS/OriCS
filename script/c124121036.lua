@@ -91,17 +91,17 @@ function s.cost4(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.IsPlayerCanDiscardDeck(tp,3)
+		return Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,LOCATION_GRAVE,LOCATION_GRAVE,3,nil)
 	end
-	Duel.SetOperationInfo(0,CATEGORY_DECKDES,nil,0,tp,3)
+	--Duel.SetOperationInfo(0,CATEGORY_DECKDES,nil,0,tp,3)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,3,PLAYER_ALL,LOCATION_GRAVE)
 end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.DiscardDeck(tp,3,REASON_EFFECT)>0 then
+	--if Duel.DiscardDeck(tp,3,REASON_EFFECT)>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 		local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_GRAVE,LOCATION_GRAVE,3,3,nil)
 		if #g==3 then
 			Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
 		end
-	end
+	--end
 end
