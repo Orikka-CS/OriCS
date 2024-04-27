@@ -1,11 +1,11 @@
---트리아드나 하르카나
+--트라이드나 하르카나
 local s,id=GetID()
 function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e1:SetCountLimit(1,id)
+	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -24,30 +24,35 @@ function s.initial_effect(c)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCategory(CATEGORY_POSITION)
-	e3:SetCountLimit(1,id)
+	e3:SetCountLimit(1,{id,1})
 	e3:SetCondition(s.con3)
-	e3:SetTarget(s.tar3)
+	--e3:SetTarget(s.tar3)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
-	aux.GlobalCheck(s,function()
+	if not s.global_check then
+		s.global_check=true
 		local ge1=Effect.CreateEffect(c)
 		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		ge1:SetCode(EVENT_SPSUMMON_SUCCESS)
 		ge1:SetOperation(s.gop1)
 		Duel.RegisterEffect(ge1,0)
-	end)
+	end
 end
-s.listed_names={87979586}
 function s.gop1(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()
 	if ph&(PHASE_MAIN1+PHASE_MAIN2)>0 then
 		for tc in aux.Next(eg) do
-			tc:RegisterFlagEffect(id,RESET_PHASE+ph,0,1)
+			if Duel.GetFlagEffect(0,id)>0 then
+				tc:RegisterFlagEffect(id,RESET_PHASE+ph,0,1)
+			end
+			if Duel.GetFlagEffect(1,id)>0 then
+				tc:RegisterFlagEffect(id+1,RESET_PHASE+ph,0,1)
+			end
 		end
 	end
 end
 function s.tfil1(c,e,tp)
-	return c:IsAbleToHand() and c:IsCode(87979586)
+	return c:IsAbleToHand() and (c:IsCode(87979586) or (c:IsSetCard(0xfa3) and c:IsType(TYPE_MONSTER)))
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -71,13 +76,16 @@ function s.con2(e)
 	return Duel.IsExistingMatchingCard(s.nfil2,tp,LOCATION_ONFIELD,0,1,nil)
 end
 function s.tar2(e,c)
-	return c:GetFlagEffect(id)>0
+	local tp=e:GetHandlerPlayer()
+	if c:GetFlagEffect(id+tp)>0 then
+		Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
+	end
+	return c:GetFlagEffect(id+tp)>0
 end
 function s.nfil3(c,tp)
-	local code1,code2=c:GetPreviousCodeOnField()
 	return c:IsPreviousControler(tp)
 		and c:IsPreviousPosition(POS_FACEUP)
-		and (code1==87979586 or code2==87979586)
+		and c:GetPreviousCodeOnField()==87979586
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.nfil3,1,nil,tp)
