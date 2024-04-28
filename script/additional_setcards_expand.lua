@@ -523,3 +523,4 @@ data_setname[18454022]={"마과학"}
 data_setname[18454023]={"마과학"}
 data_setname[18454024]={"마과학"}
 data_setname[18454025]={"마과학"}
+data_setname[18454033]={"아세리마"}
