@@ -97,7 +97,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
-	local g=Duel.SMCard(tp,s.tfli2,tp,"D",0,1,1,nil,tp)
+	local g=Duel.SMCard(tp,s.tfil2,tp,"D",0,1,1,nil,tp)
 	local tc=g:GetFirst()
 	if tc then
 		aux.ToHandOrElse(tc,tp,
