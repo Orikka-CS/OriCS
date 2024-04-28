@@ -19,7 +19,7 @@ function s.initial_effect(c)
 	local g=Group.CreateGroup()
 	g:KeepAlive()
 	e3:SetLabelObject(g)
-	local e4=MakeEff(c,"FC")
+	local e4=MakeEff(c,"FC","S")
 	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 	e4:SetLabelObject(e3)
@@ -151,7 +151,7 @@ end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=e:GetLabelObject():Filter(s.ofil4,nil,e,tp)
 	if chkc then
-		return g:IsContains(chkc) and s.ofil4(e,tp)
+		return g:IsContains(chkc) and s.ofil4(chkc,e,tp)
 	end
 	if chk==0 then 
 		Duel.ResetFlagEffect(tp,id)
@@ -197,11 +197,11 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.ofil4(c,e,tp)
 	return c:IsType(TYPE_TUNER)
-		and c:IsLocation(LOCATION_MZONE) and c:IsFaceup() and c:IsControler(tp) and c:IsCanBeEffectTarget(e)
+		and c:IsLoc("M") and c:IsFaceup() and c:IsControler(tp) and c:IsCanBeEffectTarget(e)
 end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=eg:Filter(s.ofil4,nil,e,tp,false)
+	local tg=eg:Filter(s.ofil4,nil,e,tp)
 	if #tg>0 then
 		for tc in aux.Next(tg) do
 			tc:RegisterFlagEffect(id,RESET_CHAIN,0,1)

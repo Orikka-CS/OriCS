@@ -42,13 +42,14 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) then
+	if c:IsRelateToEffect(e) and Duel.SpecialSummonStep(c,0,tp,tp,false,false,POS_FACEUP) then
 		local e1=MakeEff(c,"S")
 		e1:SetCode(EFFECT_REMOVE_TYPE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		e1:SetValue(TYPE_TUNER)
 		c:RegisterEffect(e1)
+		Duel.SpecialSummonComplete()
 	end
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)

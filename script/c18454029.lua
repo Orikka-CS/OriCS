@@ -143,13 +143,14 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local sc=sg:Select(tp,1,1,nil):GetFirst()
 	if sc==c then
-		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+		Duel.SpecialSummonStep(c,0,tp,tp,false,false,POS_FACEUP)
 		local e1=MakeEff(c,"S")
 		e1:SetCode(EFFECT_REMOVE_TYPE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		e1:SetValue(TYPE_TUNER)
 		c:RegisterEffect(e1)
+		Duel.SpecialSummonComplete()
 	elseif sc:IsType(TYPE_FUSION) then
 		Fusion.CheckAdditional=s.tfun2
 		if sg21:IsContains(sc) and (sg22==nil or not sg22:IsContains(sc) or not Duel.SelectYesNo(tp,ce:GetDescription())) then
