@@ -92,7 +92,7 @@ function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 			and Duel.GetLocCount(tp,"S")>0
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
-	local g=Duel.STarget(tp,s.tfli4,tp,"GR",0,1,1,nil)
+	local g=Duel.STarget(tp,s.tfil4,tp,"GR",0,1,1,nil)
 end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

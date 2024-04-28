@@ -28,7 +28,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
-	local g=Duel.SMCard(tp,s.tfli1,tp,"D",0,1,1,nil)
+	local g=Duel.SMCard(tp,s.tfil1,tp,"D",0,1,1,nil)
 	local tc=g:GetFirst()
 	if tc then
 		local e1=MakeEff(c,"S")
