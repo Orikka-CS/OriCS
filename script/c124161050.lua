@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetRange(LOCATION_MZONE)
+	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
 	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
@@ -44,12 +44,16 @@ end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>1 and #g>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g+c,2,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsRelateToEffect(e) then
+	   if not Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) then return end
+	end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
