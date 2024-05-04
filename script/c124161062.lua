@@ -25,11 +25,8 @@ end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local un=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_ONFIELD,0,nil)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler()+un)
-	if chk==0 then return #un>0 and #g>0 end
+	if chk==0 then return #un>0 end
 	Duel.Remove(un,POS_FACEUP,REASON_COST)
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(sg,REASON_COST)	
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

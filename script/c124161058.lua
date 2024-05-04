@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate
-	aux.AddEquipProcedure(c)
+	aux.AddEquipProcedure(c,0)
 	--effect 1
 	c:SetUniqueOnField(LOCATION_ONFIELD,0,id)
 	--effect 2
@@ -48,7 +48,7 @@ function s.cst3filter(c)
 end
 
 function s.cst3(e,tp,eg,ep,ev,re,r,rp,chk)
-	local tg=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
+	local tg=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,0,nil,e)
 	if #tg>1 then tg=nil end
 	local g=Duel.GetMatchingGroup(s.cst3filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,tg)
 	if chk==0 then return #g>0 end
@@ -66,8 +66,8 @@ end
 
 function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.eqfilter(chkc) end
+	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,0,nil,e)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) end
 	if chk==0 then return c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP)
 	Duel.SetTargetCard(sg)

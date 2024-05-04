@@ -1,4 +1,4 @@
---Unendal Odr
+--Unendal Recursion
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate
@@ -8,66 +8,97 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_CANNOT_ATTACK_ANNOUNCE)
+	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetCategory(CATEGORY_EQUIP+CATEGORY_DISABLE)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_SZONE)
-	e1:SetTargetRange(0,LOCATION_MZONE)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCountLimit(1,id)
+	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
+	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	local e2=e1:Clone()
-	e2:SetCode(EFFECT_CANNOT_TRIGGER)
-	c:RegisterEffect(e2)
 	--effect 2
-	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_CONTROL)
-	e3:SetType(EFFECT_TYPE_QUICK_O)
-	e3:SetCode(EVENT_FREE_CHAIN)
-	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e3:SetRange(LOCATION_SZONE)
-	e3:SetCountLimit(1,id)
-	e3:SetCost(s.cst2)
-	e3:SetTarget(s.tg2)
-	e3:SetOperation(s.op2)
-	c:RegisterEffect(e3)
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(id,1))
+	e2:SetCategory(CATEGORY_TOHAND)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetRange(LOCATION_SZONE)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCountLimit(1,{id,1})
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
+	c:RegisterEffect(e2)
 end
 
 --effect 1
-function s.tg1filter(c,tp)
-	return c:IsCode(124161058) and c:IsControler(tp)
-end
-
-function s.tg1(e,c)
-	local tp=e:GetHandler():GetControler()
-	return c:GetEquipGroup():IsExists(s.tg1filter,1,nil,tp) and c:IsControler(1-tp)
-end
-
---effect 2
-function s.cst2filter(c)
-	return c:IsAbleToGraveAsCost() and not c:IsCode(124161058)
-end
-
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler())
+function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler())
+	if #mg==1 then
+		g=Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler()+mg)
+	end
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 	Duel.SendtoGrave(sg,REASON_COST)
 end
 
-function s.tg2filter(c,tp)
-	return c:IsFaceup() and c:IsAbleToChangeControler() and c:GetEquipGroup():IsExists(s.tg1filter,1,nil,tp)
+function s.unendalf(c)
+	return c:IsCode(124161058) and c:IsFaceup()
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+	local eg=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,124161058)
+	if chk==0 then return #mg>0 and #eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) end
+	local ch=Duel.GetCurrentChain()-1
+	local trig_p,trig_e=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_EFFECT)
+	if e:IsHasType(EFFECT_TYPE_ACTIVATE) and ch>0 and trig_p==1-tp and trig_e:IsMonsterEffect() and Duel.IsChainDisablable(ch)
+		then
+		e:SetLabel(1)
+	else
+		e:SetLabel(0)
+	end
+end
+
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+	local eg=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,124161058)
+	if #mg>0 and #eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then
+		local smg=aux.SelectUnselectGroup(mg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
+		local seg=aux.SelectUnselectGroup(eg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
+		Duel.Equip(tp,seg,smg)
+	end
+	local ch=Duel.GetCurrentChain()-1
+	if e:GetLabel()==1 then
+		Duel.NegateEffect(ch)
+	end
+end
+
+--effect 2
+function s.tg2filter(c,e,tp)
+	return c:IsSetCard(0xf23) and c:IsFaceup() and c:IsCanBeEffectTarget(e) 
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and s.tg2filter(chkc,tp) end
-	if chk==0 then return Duel.IsExistingTarget(s.tg2filter,tp,0,LOCATION_MZONE,1,nil,tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
-	local g=Duel.SelectTarget(tp,s.tg2filter,tp,0,LOCATION_MZONE,1,1,nil,tp)
-	Duel.SetOperationInfo(0,CATEGORY_CONTROL,g,1,tp,0)
+	local c=e:GetHandler()
+	local g1=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_ONFIELD,0,e:GetHandler(),e,tp)
+	local g2=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_SZONE,e:GetHandler(),e)
+	if chkc then return false end
+	if chk==0 then return #g1>0 and #g2>0 end
+	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+	if #sg1==0 then return end
+	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+	sg1:Merge(sg2)
+	Duel.SetTargetCard(sg1)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg1,2,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		Duel.GetControl(tc,tp)
+	local sg=Duel.GetTargetCards(e)
+	if #sg>0 and sg:FilterCount(Card.IsRelateToEffect,nil,e)>0 then
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 	end
 end

@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--effect 2
 	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_TOGRAVE)
+	e3:SetCategory(CATEGORY_DRAW)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_TO_GRAVE)
@@ -32,13 +32,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 	--effect 3
 	local e4=Effect.CreateEffect(c)
-	e4:SetCategory(CATEGORY_TOHAND+CATEGORY_EQUIP)
-	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e4:SetCode(EVENT_PHASE+PHASE_END)
+	e4:SetType(EFFECT_TYPE_FIELD)
+	e4:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e4:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
 	e4:SetRange(LOCATION_FZONE)
-	e4:SetCountLimit(1)
-	e4:SetTarget(s.tg3)
-	e4:SetOperation(s.op3)
+	e4:SetTargetRange(LOCATION_ONFIELD,0)
+	e4:SetTarget(function(e,_c) return _c:GetEquipGroup():IsExists(Card.IsCode,1,nil,124161058) or _c:IsCode(124161058) and c:IsFaceup() end)
+	e4:SetValue(aux.tgoval)
 	c:RegisterEffect(e4)
 end
 
@@ -64,28 +64,4 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(tp,1,REASON_EFFECT) 
-end
-
---effect 3
-function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_GRAVE,0,nil,124161058)
-	if chk==0 then return #g>0 end
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
-end
-
-function s.unendalf(c)
-	return c:IsCode(124161058) and c:IsFaceup()
-end
-
-function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	local u=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_GRAVE,0,nil,124161058)
-	if #u==0 then return end
-	local su=aux.SelectUnselectGroup(u,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SELECT):GetFirst()
-	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
-	if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
-	Duel.Equip(tp,su,sg)
-	else
-		Duel.SendtoHand(su,tp,REASON_EFFECT)
-	end
 end

@@ -36,37 +36,35 @@ function s.con1()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,2,REASON_COST) end
-	e:GetHandler():RemoveOverlayCard(tp,2,2,REASON_COST)
-end
-
-function s.tg1ffilter(c,tp)
-	return c:IsCode(124161058) and c:IsFaceup() and c:IsControler(tp)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler())
+	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) and #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+	Duel.SendtoGrave(sg,REASON_COST)
+	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
 
 function s.tg1filter(c,tp)
-	return c:GetEquipGroup():IsExists(s.tg1ffilter,1,nil,tp)
+	return c:GetAttack()<=Duel.GetFlagEffect(tp,124161058)*500 and c:IsFaceup()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,e:GetHandler(),tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,tp)
 	if chk==0 then return #g>0 end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,e:GetHandler(),tp)
-	local eq=Duel.GetMatchingGroup(s.tg1ffilter,tp,LOCATION_SZONE,0,nil,tp):GetFirst()
-	if #g>0 and c:IsRelateToEffect(e) then
-		if Duel.Equip(tp,eq,c) then
-			Duel.Overlay(c,g,true)
-		end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,tp)
+	if #g>0 and c:IsRelateToEffect(e) and c:IsType(TYPE_XYZ) then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL):GetFirst()
+		if sg:IsImmuneToEffect(e) then return end
+		Duel.Overlay(c,sg,true)
 	end
 end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsCode(124161058) and c:IsControler(tp)
+	return c:IsCode(124161058) and c:IsControler(tp) and c:GetEquipTarget():GetControler()==tp
 end
 
 function s.con2(e,tp,eg)
