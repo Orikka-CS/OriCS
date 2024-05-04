@@ -44,7 +44,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1filter(c,tp)
-	return c:GetAttack()<=Duel.GetFlagEffect(tp,124161058)*500 and c:IsFaceup()
+	return c:GetAttack()<=Duel.GetFlagEffect(tp,124161058)*500 and c:IsFaceup() and c:IsCanBeXyzMaterial()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
