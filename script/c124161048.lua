@@ -27,7 +27,7 @@ end
 
 --effect 1
 function s.con1filter(c,e,tp,re,r,rp)
-	return r==REASON_COST and re:IsActivated() and rp==tp and re:GetHandler():IsSetCard(0xf23) and c:IsControler(tp) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return r==REASON_COST and re:IsActivated() and rp==tp and re:GetHandler():IsSetCard(0xf23) and c:IsControler(tp) and c:IsAbleToHand()
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
@@ -37,16 +37,16 @@ end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=eg:Filter(s.con1filter,nil,e,tp,re,r,rp)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) end
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,tp,LOCATION_GRAVE)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
+		Duel.SendtoHand(tc,nil,REASON_EFFECT)
 	end
 end
 
