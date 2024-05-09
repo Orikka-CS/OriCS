@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetTarget(s.tg2)
@@ -34,7 +34,7 @@ function s.con1(e,tp,eg)
 end
 
 function s.tg1filter(c)
-	return c:IsSummonType(SUMMON_TYPE_SPECIAL) and c:IsFaceup()
+	return c:IsSummonType(SUMMON_TYPE_SPECIAL) and c:IsFaceup() and c:IsCanTurnSet()
 end
 
 function s.tg1revfilter(c)

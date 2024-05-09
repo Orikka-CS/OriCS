@@ -88,39 +88,51 @@ function s.tg2ifilter(c)
 	return c:IsPublic()
 end
 
-function s.tg2ofilter(c)
-	return c:IsAbleToGrave() and not c:IsPublic()
-end
-
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local gi=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_HAND,0,nil,e,tp)
-	local go=Duel.GetMatchingGroup(s.tg2ofilter,tp,0,LOCATION_HAND,nil,e,tp)
-	if chk==0 then return #gi>0 and #go>=#gi end
+	local go=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
+	if chk==0 then return #gi>0 and #go>0 end
 	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,1-tp,1)
-end
-
-function s.op2filter(c)
-	return c:IsPublic() and c:IsAbleToGrave()
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local gi=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_HAND,0,nil,e,tp)
-	local go=Duel.GetMatchingGroup(s.tg2ofilter,tp,0,LOCATION_HAND,nil,e,tp)
-	if #gi>#go then return end
-	local sg=go:RandomSelect(tp,#gi)
-	for tc in sg:Iter() do
-		local e1=Effect.CreateEffect(c)
-		e1:SetDescription(aux.Stringid(id,0))
-		e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_PUBLIC)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		tc:RegisterEffect(e1)
+	local go=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
+	if #gi==0 or #go==0 then return end
+	Duel.ConfirmCards(tp,go)
+	local sg=aux.SelectUnselectGroup(go,e,tp,1,#gi,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	Duel.Remove(sg,POS_FACEUP,REASON_EFFECT+REASON_TEMPORARY)
+	Duel.ShuffleHand(1-tp)
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(EVENT_PHASE+PHASE_END)
+	e1:SetCountLimit(1)
+	e1:SetLabelObject(sg)
+	e1:SetCondition(s.op2addcon)
+	e1:SetOperation(s.op2addop)
+	e1:SetReset(RESET_PHASE+PHASE_END,2)
+	Duel.RegisterEffect(e1,tp)
+	sg:KeepAlive()
+	local tc=sg:GetFirst()
+	for tc in aux.Next(sg) do
+		tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
 	end
-	Duel.BreakEffect()
-	local dg=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_HAND,nil,e,tp)
-	Duel.ConfirmCards(tp,sg)
-	local dsg=aux.SelectUnselectGroup(dg+sg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
-	Duel.SendtoGrave(dsg,REASON_EFFECT+REASON_DISCARD)
+end
+
+function s.op2addfilter(c)
+	return c:GetFlagEffect(id)>0
+end
+
+function s.op2addcon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()==tp and Duel.GetTurnCount()~=e:GetLabel()
+end
+
+function s.op2addop(e,tp,eg,ep,ev,re,r,rp)
+	local g=e:GetLabelObject()
+	local sg=g:Filter(s.op2addfilter,nil)
+	g:DeleteGroup()
+	if #sg>0 then
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+	end
 end

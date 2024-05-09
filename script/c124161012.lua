@@ -104,5 +104,6 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 		Duel.BreakEffect()
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,2,nil,1,tp,HINTMSG_CONFIRM)
 		Duel.ConfirmCards(1-tp,sg)
+		Duel.ShuffleHand(tp)
 	end
 end

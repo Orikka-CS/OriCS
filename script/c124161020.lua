@@ -8,6 +8,7 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
+	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -24,6 +25,12 @@ function s.initial_effect(c)
 end
 
 --effect 1
+function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return not c:IsPublic() end
+	Duel.ConfirmCards(1-tp,c)
+end
+
 function s.tg1filter(c,e,tp)
 	return c:IsSetCard(0xf21) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
@@ -52,6 +59,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetReset(RESET_PHASE+PHASE_END,2)
 	e1:SetLabel(Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM))
 	Duel.RegisterEffect(e1,tp)
+	Duel.ShuffleHand(tp)
 end
 
 --effect 2

@@ -38,6 +38,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
 	local sg=Duel.SelectMatchingCard(tp,s.cst1filter,tp,LOCATION_HAND,0,1,1,nil,type)
 	Duel.ConfirmCards(1-tp,sg)
+	Duel.ShuffleHand(tp)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
