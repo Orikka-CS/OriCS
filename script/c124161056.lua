@@ -70,8 +70,9 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local xg=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_GRAVE,0,nil)
 	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) and #xg>0 then
-		local sxg=aux.SelectUnselectGroup(xg,e,tp,1,2,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
+	local eq=Duel.GetFlagEffect(tp,124161058)
+	if sg:IsRelateToEffect(e) and #xg>0 and eq>0 then
+		local sxg=aux.SelectUnselectGroup(xg,e,tp,1,eq,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 		Duel.Overlay(sg,sxg,true)
 	end
 end

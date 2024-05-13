@@ -28,6 +28,14 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--effect 3
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_PUBLIC)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCondition(s.con3)
+	e3:SetTargetRange(0,LOCATION_HAND)
+	c:RegisterEffect(e3)
 end
 
 --effect 1
@@ -135,4 +143,10 @@ function s.op2addop(e,tp,eg,ep,ev,re,r,rp)
 	if #sg>0 then
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 	end
+end
+
+--effect 3
+function s.con3(e)
+	local tp=e:GetHandler():GetControler()
+	return Duel.GetMatchingGroupCount(s.tg2ifilter,tp,LOCATION_HAND,0,nil,e,tp)>0
 end
