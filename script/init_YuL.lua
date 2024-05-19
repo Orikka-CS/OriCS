@@ -968,3 +968,247 @@ else
 	YuL.random=YuL.Random
 	RegEff.sgref(function(e,c) if not YuL.RandomSeed then YuL.SetRandomSeed() end end)
 end
+--콜로서스: 만들고 있어요
+function Duel.GetHandLimit(player)
+	local hand_limit=6
+	local eset={Duel.GetPlayerEffect(player,EFFECT_HAND_LIMIT)}
+	for _,te in ipairs(eset) do
+		local val=te:GetValue()
+		if type(val)=="number" then
+			hand_limit=val
+		elseif type(val)=="function" then
+			hand_limit=val(te)
+		end
+	end
+	return hand_limit
+end
+
+if not EFFECT_UPDATE_HAND_LIMIT then
+
+EFFECT_UPDATE_HAND_LIMIT=99970881
+local cregeff=Card.RegisterEffect
+function Card.RegisterEffect(c,e,forced,...)
+	local code=c:GetOriginalCode()
+	local mt=_G["c"..code]
+	cregeff(c,e,forced,...)
+	if e:GetCode()==EFFECT_HAND_LIMIT then
+		local r0,r1=e:GetTargetRange()
+		local e0=e
+		local e1=e
+		if r0==1 and r1==1 then
+			e0:SetTargetRange(1,0)
+			e1=e0:Clone()
+			e1:SetTargetRange(0,1)
+			cregeff(c,e1,forced,...)
+		elseif r0==1 then
+			e1=nil
+		elseif r1==1 then
+			e0=nil
+		else
+			e0=nil
+			e1=nil
+		end
+		if e0 then
+			local val=e0:GetValue()
+			e0:SetValue(function()
+				local hand_limit
+				if type(val)=="number" then
+					hand_limit=val
+				elseif type(val)=="function" then
+					hand_limit=val(te)
+				end
+				local hp=e0:GetHandlerPlayer()
+				local eid=e0:GetFieldID()
+				local eset={Duel.GetPlayerEffect(hp,EFFECT_UPDATE_HAND_LIMIT)}
+				for _,te in ipairs(eset) do
+					if te:GetFieldID()>eid then
+						local tev=te:GetValue()
+						if type(tev)=="number" then
+							hand_limit=hand_limit+tev
+						elseif type(tev)=="function" then
+							hand_limit=hand_limit+tev(te,hp)
+						end
+					end
+				end
+				return hand_limit
+			end)
+		end
+		if e1 then
+			local val=e1:GetValue()
+			e1:SetValue(function()
+				local hand_limit
+				if type(val)=="number" then
+					hand_limit=val
+				elseif type(val)=="function" then
+					hand_limit=val(te)
+				end
+				local hp=e1:GetHandlerPlayer()
+				local eid=e1:GetFieldID()
+				local eset={Duel.GetPlayerEffect(1-hp,EFFECT_UPDATE_HAND_LIMIT)}
+				for _,te in ipairs(eset) do
+					if te:GetFieldID()>eid then
+						local tev=te:GetValue()
+						if type(tev)=="number" then
+							hand_limit=hand_limit+tev
+						elseif type(tev)=="function" then
+							hand_limit=hand_limit+tev(te,1-hp)
+						end
+					end
+				end
+				return hand_limit
+			end)
+		end
+	end
+end
+local dregeff=Duel.RegisterEffect
+function Duel.RegisterEffect(e,p,...)
+	dregeff(e,p,...)
+	if e:GetCode()==EFFECT_HAND_LIMIT then
+		local r0,r1=e:GetTargetRange()
+		local e0=e
+		local e1=e
+		if r0==1 and r1==1 then
+			e0:SetTargetRange(1,0)
+			e1=e0:Clone()
+			e1:SetTargetRange(0,1)
+			dregeff(e1,p,...)
+		elseif r0==1 then
+			e1=nil
+		elseif r1==1 then
+			e0=nil
+		else
+			e0=nil
+			e1=nil
+		end
+		if e0 then
+			local val=e0:GetValue()
+			e0:SetValue(function()
+				local hand_limit
+				if type(val)=="number" then
+					hand_limit=val
+				elseif type(val)=="function" then
+					hand_limit=val(te)
+				end
+				local hp=e0:GetHandlerPlayer()
+				local eid=e0:GetFieldID()
+				local eset={Duel.GetPlayerEffect(hp,EFFECT_UPDATE_HAND_LIMIT)}
+				for _,te in ipairs(eset) do
+					if te:GetFieldID()>eid then
+						local tev=te:GetValue()
+						if type(tev)=="number" then
+							hand_limit=hand_limit+tev
+						elseif type(tev)=="function" then
+							hand_limit=hand_limit+tev(te,hp)
+						end
+					end
+				end
+				return hand_limit
+			end)
+		end
+		if e1 then
+			local val=e1:GetValue()
+			e1:SetValue(function()
+				local hand_limit
+				if type(val)=="number" then
+					hand_limit=val
+				elseif type(val)=="function" then
+					hand_limit=val(te)
+				end
+				local hp=e1:GetHandlerPlayer()
+				local eid=e1:GetFieldID()
+				local eset={Duel.GetPlayerEffect(1-hp,EFFECT_UPDATE_HAND_LIMIT)}
+				for _,te in ipairs(eset) do
+					if te:GetFieldID()>eid then
+						local tev=te:GetValue()
+						if type(tev)=="number" then
+							hand_limit=hand_limit+tev
+						elseif type(tev)=="function" then
+							hand_limit=hand_limit+tev(te,1-hp)
+						end
+					end
+				end
+				return hand_limit
+			end)
+		end
+	end
+end
+
+end
+
+function YuL.AddColossusSummonProcedure(c)
+	local e1=MakeEff(c,"S")
+	e1:SetCode(EFFECT_LIMIT_SUMMON_PROC)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetCondition(YuL.ColossusSummonCondition)
+	e1:SetTarget(YuL.ColossusSummonTarget)
+	e1:SetOperation(YuL.ColossusSummonOperation)
+	e1:SetValue(SUMMON_TYPE_TRIBUTE)
+	c:RegisterEffect(e1)
+	local e2=MakeEff(c,"S")
+	e2:SetCode(EFFECT_LIMIT_SET_PROC)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e2:SetCondition(YuL.ColossusSummonCondition2)
+	c:RegisterEffect(e2)
+end
+function YuL.ColossusSummonCondition(e,c,minc,zone,relzone,exeff)
+	if c==nil then
+		return true
+	end
+	local tp=c:GetControler()
+	local mg=Duel.GetTributeGroup(c):Match(Auxiliary.IsZone,nil,relzone,tp)
+	local hand_limit=Duel.GetHandLimit(tp)
+	local min=3-hand_limit
+	if min<0 then
+		min=0
+	end
+	min=math.max(min,1-Duel.GetLocationCount(tp,LOCATION_MZONE))
+	return minc<=min and Duel.CheckTribute(c,min,3,mg,tp,zone)
+end
+function YuL.ColossusSummonTarget(e,tp,eg,ep,ev,re,r,rp,chk,c,minc,zone,relzone,exeff)
+	local mg=Duel.GetTributeGroup(c):Match(Auxiliary.IsZone,nil,relzone,tp)
+	local hand_limit=Duel.GetHandLimit(tp)
+	local min=3-hand_limit
+	if min<0 then
+		min=0
+	end
+	min=math.max(min,1-Duel.GetLocationCount(tp,LOCATION_MZONE))
+	local g=Duel.SelectTribute(tp,c,min,3,mg,tp,zone,Duel.IsSummonCancelable())
+	if g or min==0 then
+		if not g then
+			g=Group.CreateGroup()
+		end
+		g:KeepAlive()
+		e:SetLabelObject(g)
+		return true
+	end
+	return false
+end
+function YuL.ColossusSummonOperation(e,tp,eg,ep,ev,re,r,rp,c,minc,zone,relzone,exeff)
+	local g=e:GetLabelObject()
+	c:SetMaterial(g)
+	if #g>0 then
+		Duel.Release(g,REASON_SUMMON+REASON_MATERIAL)
+	end
+	local hand_limit=Duel.GetHandLimit(tp)
+	local e1=MakeEff(c,"F")
+	e1:SetCode(EFFECT_HAND_LIMIT)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetTR(1,0)
+	e1:SetValue(hand_limit)
+	Duel.RegisterEffect(e1,tp)
+	local e2=MakeEff(c,"F")
+	e2:SetCode(EFFECT_UPDATE_HAND_LIMIT)
+	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e2:SetReset(RESET_PHASE+PHASE_END)
+	e2:SetTR(1,0)
+	e2:SetValue(-(3-#g))
+	Duel.RegisterEffect(e2,tp)
+	g:DeleteGroup()
+end
+function YuL.ColossusSummonCondition2(e,c)
+	if c==nil then
+		return true
+	end
+	return false
+end
