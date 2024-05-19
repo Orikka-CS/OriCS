@@ -78,7 +78,7 @@ end
 
 function s.cst2filter(c)
 	local te=c:GetActivateEffect()
-	return (c:IsSetCard(0xf24) or (c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY))) and not c:IsPublic()
+	return ((c:IsSetCard(0xf24) and not c:IsType(TYPE_FIELD)) or (c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY))) and not c:IsPublic()
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
