@@ -1,4 +1,4 @@
---Tempetrix Shambles
+--Cyclassie Shambles
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate
@@ -20,14 +20,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--effect 2
 	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_DESTROY+CATEGORY_HANDES)
+	e3:SetCategory(CATEGORY_REMOVE)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_DESTROYED)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetCountLimit(1,id)
 	e3:SetCondition(s.con2)
-	e3:SetCost(s.cst2)
 	e3:SetTarget(s.tg2)
 	e3:SetOperation(s.op2)
 	c:RegisterEffect(e3)
@@ -76,31 +75,23 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.con2filter,1,nil,tp)
 end
 
-function s.cst2filter(c)
-	local te=c:GetActivateEffect()
-	return ((c:IsSetCard(0xf24) and not c:IsType(TYPE_FIELD)) or (c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY))) and not c:IsPublic()
-end
-
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil,e,tp)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.ShuffleHand(tp)
+function s.tg2filter(c)
+	return c:IsSetCard(0xf24) and not c:IsType(TYPE_FIELD)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,1-tp,1)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
+	local rg=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
+	if chk==0 then return #g>0 and rg>0 end
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_GRAVE)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
-	if #g==0 then return end
-	local sg=g:RandomSelect(1-tp,1)
-	Duel.Destroy(sg,REASON_EFFECT)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
+	local rg=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
+	if #g==0 or rg==0 then return end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,rg,nil,1,tp,HINTMSG_REMOVE)
+	Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 end
 
 --effect 3
