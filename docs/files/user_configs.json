@@ -10,8 +10,16 @@
 			"should_read": true
 		},
 		{
+			"url": "https://github.com/Orikka-CS/OriCS-procs",
+			"repo_name": "오리CS 프로시저",
+			"repo_path": "./repositories/OriCS-procs",
+			"script_path": "script",
+			"should_update": true,
+			"should_read": true
+		},
+		{
 			"url": "https://github.com/Orikka-CS/OriCS",
-			"repo_name": "오리CS",
+			"repo_name": "오리CS 카드",
 			"repo_path": "./repositories/OriCS",
 			"data_path": "",
 			"script_path": "script",
@@ -29,8 +37,8 @@
 		},
 		{
 			"url": "https://github.com/Orikka-CS/EMP-TY",
-			"repo_name": "Custom expansions",
-			"repo_path": "./repositories/expansions",
+			"repo_name": "커스텀 확장팩",
+			"repo_path": "./expansions-2",
 			"data_path": "",
 			"pics_path": "pics",
 			"script_path": "script",
@@ -44,18 +52,22 @@
 			"type": "field"
 		},
 		{
+			"url": "https://raw.githubusercontent.com/Orikka-CS/OriCS-pics/main/pics/field/{}.jpg",
+			"type": "field"
+		},
+		{
 			"url": "https://raw.githubusercontent.com/Orikka-CS/EMP-TY/main/pics/field/{}.png",
 			"type": "field"
 		}
 	],
 	"servers": [
 		{
-			"name": "오리CS 서버",
-			"address": "one.for-o.n-e.kr",
-			"duelport": 25252,
-			"roomaddress": "one.for-o.n-e.kr",
+			"name": "미카 서버",
+			"address": "ca.tsukasa.o-r.kr",
+			"duelport": 7911,
+			"roomaddress": "ca.tsukasa.o-r.kr",
 			"roomlistprotocol": "http",
-			"roomlistport": 29292
+			"roomlistport": 7922
 		}
 	]
 }
