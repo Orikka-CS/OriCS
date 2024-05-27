@@ -1,4 +1,4 @@
---Unendal Sorceress Eve
+--Unendal Witch Eve
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
@@ -37,27 +37,31 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoGrave(sg,REASON_COST)
 end
 
-function s.tg1filter(c,e,tp)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
+end
+
+function s.op1filter(c,e,tp)
 	return c:IsSetCard(0xf23) and not c:IsCode(id) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>1 and #g>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g+c,2,0,0)
+function s.op1cfilter(c,e,tp)
+	return c:IsSetCard(0xf23) and ((c:IsLocation(LOCATION_ONFIELD) and c:IsFaceup()) or c:IsLocation(LOCATION_GRAVE))
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_DECK,0,nil,e,tp)
+	local check=Duel.GetMatchingGroupCount(s.op1cfilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,c)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsRelateToEffect(e) then
-	   if not Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) then return end
-	end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
-		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and check>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
+			Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+		end
 	end
 end
 

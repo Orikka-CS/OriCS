@@ -15,7 +15,6 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_SZONE)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -34,17 +33,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler())
-	if #mg==1 then
-		g=Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler()+mg)
-	end
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(sg,REASON_COST)
-end
-
 function s.unendalf(c)
 	return c:IsCode(124161058) and c:IsFaceup()
 end
@@ -52,10 +40,10 @@ end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
 	local eg=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,124161058)
-	if chk==0 then return #mg>0 and #eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) end
+	if chk==0 then return #mg>0 and ((#eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0) or Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_SZONE,0,1,nil)) end
 	local ch=Duel.GetCurrentChain()-1
 	local trig_p,trig_e=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_EFFECT)
-	if e:IsHasType(EFFECT_TYPE_ACTIVATE) and ch>0 and trig_p==1-tp and trig_e:IsMonsterEffect() and Duel.IsChainDisablable(ch)
+	if ch>0 and trig_p==1-tp and trig_e:IsMonsterEffect() and Duel.IsChainDisablable(ch)
 		then
 		e:SetLabel(1)
 	else
@@ -66,9 +54,14 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
 	local eg=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,124161058)
-	if #mg>0 and #eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then
+	if #mg>0 and ((#eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0) or Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil)) then
+		local seg=nil
+		if Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then
+			seg=Duel.GetMatchingGroup(s.unendalf,tp,LOCATION_ONFIELD,0,nil):GetFirst() 
+		else
+			seg=aux.SelectUnselectGroup(eg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
+		end
 		local smg=aux.SelectUnselectGroup(mg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
-		local seg=aux.SelectUnselectGroup(eg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
 		Duel.Equip(tp,seg,smg)
 	end
 	local ch=Duel.GetCurrentChain()-1
