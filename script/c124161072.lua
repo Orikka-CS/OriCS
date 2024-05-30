@@ -57,13 +57,13 @@ end
 --count
 function s.cnt(e,tp,eg,ep,ev,re,r,rp)
 	for tc in eg:Iter() do
-		if tc:IsReason(REASON_EFFECT) then Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1) end
+		if tc:IsReason(REASON_EFFECT) then Duel.RegisterFlagEffect(0,id,RESET_PHASE+PHASE_END,0,1) end
 	end
 end
 
 --effect 1
 function s.val1(e)
-	return Duel.GetFlagEffect(e:GetHandler():GetControler(),id)*200
+	return Duel.GetFlagEffect(0,id)*200
 end
 
 --effect 2
