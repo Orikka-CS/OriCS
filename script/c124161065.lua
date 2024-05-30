@@ -1,4 +1,4 @@
---Tempetrix Carol
+--Cyclassie Carol
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

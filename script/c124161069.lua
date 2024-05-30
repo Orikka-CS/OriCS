@@ -1,4 +1,4 @@
---Tempetrix Succubus Sarah
+--Cyclassie Succubus Sarah
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

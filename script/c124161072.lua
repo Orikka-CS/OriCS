@@ -23,7 +23,7 @@ function s.initial_effect(c)
 	e3:SetCategory(CATEGORY_REMOVE)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_DESTROYED)
-	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetCountLimit(1,id)
 	e3:SetCondition(s.con2)
@@ -68,11 +68,15 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsReason(REASON_EFFECT) and c:IsPreviousLocation(LOCATION_ONFIELD) and c:GetPreviousControler()==1-tp
+	return c:IsReason(REASON_EFFECT) and c:IsPreviousLocation(LOCATION_ONFIELD) and c:GetPreviousControler()==1-tp and c:IsLocation(LOCATION_GRAVE)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.con2filter,1,nil,tp)
+end
+
+function s.tg2gfilter(c,e,tp)
+	return c:IsCanBeEffectTarget(e) and c:IsAbleToRemove() and c:IsReason(REASON_EFFECT) and c:IsPreviousLocation(LOCATION_ONFIELD) and c:GetPreviousControler()==1-tp and c:IsLocation(LOCATION_GRAVE)
 end
 
 function s.tg2filter(c)
@@ -80,18 +84,21 @@ function s.tg2filter(c)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) end
+	local g=eg:Filter(s.tg2gfilter,nil,e,tp)
 	local rg=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
 	if chk==0 then return #g>0 and rg>0 end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_GRAVE)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,rg,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,sg,#sg,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
-	local rg=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
-	if #g==0 or rg==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,rg,nil,1,tp,HINTMSG_REMOVE)
-	Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
+	local tc=tg:Filter(Card.IsRelateToEffect,nil,e)
+	if #tc>0 then
+		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
+	end
 end
 
 --effect 3

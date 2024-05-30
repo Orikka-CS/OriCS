@@ -1,4 +1,4 @@
---Tempetrix Betty
+--Cyclassie Betty
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
@@ -33,7 +33,7 @@ function s.con1(_,tp)
 end
 
 function s.tg1filter(c)
-	return c:IsSetCard(0xf24) and c:IsAbleToGrave()
+	return c:IsSetCard(0xf24) and c:IsDiscardable()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -41,7 +41,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chck:IsCanBeEffectTarget(e) end
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil,e)
 	local dg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,c)
-	if chk==0 then return #g>0 and #dg>0 end
+	if chk==0 then return #g>0 and #dg>0 and c:IsDiscardable() end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,sg,1,0,0)
@@ -51,9 +51,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local sg=Duel.GetFirstTarget()
 	local dg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,c)
-	if #dg==0 then return end
-	local sdg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	if Duel.SendtoGrave(c+sdg,REASON_EFFECT) and sg:IsRelateToEffect(e) then
+	if #dg==0 or not c:IsRelateToEffect(e) then return end
+	local sdg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
+	if Duel.SendtoGrave(c+sdg,REASON_EFFECT+REASON_DISCARD) and sg:IsRelateToEffect(e) then
 		Duel.Destroy(sg,REASON_EFFECT)
 	end
 end
