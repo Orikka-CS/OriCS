@@ -49,12 +49,14 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetReset(RESET_PHASE|PHASE_END|RESET_SELF_TURN,ct)
 		Duel.RegisterEffect(e1,tp)
 	end
-	local dg=Duel.GetMatchingGroup(s.op1fil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-	if #g>0 and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)~=0 and #dg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.BreakEffect()
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		local sg=dg:Select(tp,1,1,nil)
-		Duel.SendtoGrave(sg,REASON_EFFECT)
+	if #g>0 and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)~=0 then
+		local dg=Duel.GetMatchingGroup(s.op1fil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
+		if #dg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+			local sg=dg:Select(tp,1,1,nil)
+			Duel.SendtoGrave(sg,REASON_EFFECT)
+		end
 	end
 end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp)
