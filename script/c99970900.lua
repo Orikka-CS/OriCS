@@ -38,7 +38,7 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.thfilter(c)
-	return c:IsSetCard(0x5d6f) and c:IsAbleToHand()
+	return ((c:IsM() and c:IsSetCard(0x5d6f)) or c:IsCode(CARD_PESTILENCE)) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
