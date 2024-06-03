@@ -19,12 +19,16 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tar2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	local e3=Fusion.CreateSummonEff(c,aux.FilterBoolFunction(Card.IsSetCard,0xc00),nil,s.mg3,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,s.tar3)
+	local fusparams={fusfilter=aux.FilterBoolFunction(Card.IsSetCard,0xc00),extrafil=s.mg3,extratg=s.tar3}
+	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_BE_MATERIAL)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
 	e3:SetCountLimit(1,{id,1})
 	e3:SetCondition(s.con3)
+	e3:SetTarget(Fusion.SummonEffTG(fusparams))
+	e3:SetOperation(Fusion.SummonEffOP(fusparams))
 	c:RegisterEffect(e3)
 end
 s.listed_series={0xc00}
