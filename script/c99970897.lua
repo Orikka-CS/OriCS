@@ -19,7 +19,7 @@ function s.chcon(e,tp,eg,ep,ev,re,r,rp)
 	return rp==1-tp and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
 end
 function s.chtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsFaceup,rp,LOCATION_MZONE,0,1,nil,re:GetHandler()) end
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsFaceup,rp,LOCATION_MZONE,0,1,re:GetHandler()) end
 end
 function s.chop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Group.CreateGroup()
