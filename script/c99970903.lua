@@ -66,13 +66,13 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.tar2fil,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
 	Duel.SetTargetPlayer(tp)
 	local g=Duel.GetMatchingGroup(s.tar2fil,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
-	local ct=g:GetMaxGroup(Card.GetDefense):GetFirst():GetDefense()
+	local ct=g:GetMaxGroup(Card.GetDefense):GetFirst():GetDefense()/2
 	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,ct)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
 	local g=Duel.GetMatchingGroup(s.tar2fil,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
-	local ct=g:GetMaxGroup(Card.GetDefense):GetFirst():GetDefense()
+	local ct=g:GetMaxGroup(Card.GetDefense):GetFirst():GetDefense()/2
 	Duel.Recover(p,ct,REASON_EFFECT)
 end
 
