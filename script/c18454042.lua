@@ -39,7 +39,7 @@ function s.pfil1(c,lc,sumtype,tp)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) and ep==1-tp
-		and re:IsHasType(EFFECT_TYPE_ACTIVATE) and Duel.IsChainNegatable(ev) and Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)==0
+		and re:IsHasType(EFFECT_TYPE_ACTIVATE) and Duel.IsChainNegatable(ev)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then

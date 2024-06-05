@@ -70,6 +70,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		e3:SetValue(1)
 		e3:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET)
 		tc:RegisterEffect(e3)
+		Duel.AdjustInstantly(tc)
 		if tc:IsDisabled() then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 			local mg=Duel.SelectMatchingCard(tp,s.ofil21,tp,LOCATION_HAND+LOCATION_MZONE,0,0,1,nil,e,tp,att)
