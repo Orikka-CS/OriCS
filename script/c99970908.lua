@@ -42,7 +42,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetTargetCards(e)
 	if #g~=0 then
-		Duel.Remove(g,POS_FACEDOWN,REASON_EFFECT)
+		Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 	end
 end
 
