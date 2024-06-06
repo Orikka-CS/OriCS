@@ -71,28 +71,21 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsPreviousPosition(POS_FACEDOWN) and c:IsPreviousLocation(LOCATION_FZONE) and not c:IsLocation(LOCATION_DECK)
 end
-function s.tar1fil(c,e,tp,ft)
-	return c:IsSetCard(0x6d6f) and c:IsMonster() and c:IsFaceup() and (c:IsAbleToHand()
-		or (ft>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)))
+function s.tar1fil(c)
+	return c:IsSetCard(0x6d6f) and c:IsMonster() and c:IsAbleToHand()
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.tar1fil,tp,LOCATION_REMOVED|LOCATION_GRAVE,0,1,nil,e,tp,ft) end
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_REMOVED|LOCATION_GRAVE)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_REMOVED|LOCATION_GRAVE)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tar1fil,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE|LOCATION_REMOVED)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local sc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tar1fil),tp,LOCATION_REMOVED|LOCATION_GRAVE,0,1,1,nil,e,tp,ft):GetFirst()
-	if not sc then return end
-	aux.ToHandOrElse(sc,tp,
-		function()
-			return ft>0 and sc:IsCanBeSpecialSummoned(e,0,tp,false,false)
-		end,
-		function()
-			Duel.SpecialSummon(sc,0,tp,tp,false,false,POS_FACEUP)
-		end,
-		aux.Stringid(id,1)
-	)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,s.tar1fil,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,1,nil)
+	if #g==0 or Duel.SendtoHand(g,nil,REASON_EFFECT)==0 then return end
+	local tc=g:GetFirst()
+	Duel.ConfirmCards(1-tp,tc)
+	if tc:IsLevel(2) and tc:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+		Duel.BreakEffect()
+		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
+	end
 end

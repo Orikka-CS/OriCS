@@ -50,17 +50,18 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
-		local g=Duel.GetMatchingGroup(s.op1fil,tp,LOCATION_DECK,0,1,1,nil)
-		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+	if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0
+		and Duel.IsExistingMatchingCard(s.op1fil,tp,LOCATION_DECK,0,1,nil) then
+		local tc=Duel.GetFirstMatchingCard(s.op1fil,tp,LOCATION_DECK,0,nil)
+		if tc and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			Duel.SSet(tp,g)
+			Duel.SSet(tp,tc)
 		end
 	end
 end
 
 function s.tar2fil(c)
-	return c:IsFaceup() and c:IsDefenseAbove(0)
+	return c:IsFaceup() and c:GetAttack()>0
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.tar2fil,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end

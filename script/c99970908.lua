@@ -14,7 +14,7 @@ function s.initial_effect(c)
 	
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id)
@@ -50,7 +50,7 @@ function s.con2fil(c,tp)
 	return c:IsControler(tp) and c:IsCode(99970907)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2fil,1,nil,tp)
+	return eg:IsExists(s.con2fil,1,nil,tp) and aux.exccon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsSSetable() end

@@ -15,6 +15,7 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id)
+	e2:SetCondition(s.con2)
 	e2:SetCost(aux.bfgcost)
 	e2:SetTarget(s.tar2)
 	e2:SetOperation(s.op2)
@@ -86,6 +87,12 @@ function s.disop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
+function s.FacedownField()
+	return Duel.IsExistingMatchingCard(Card.IsFacedown,0,LOCATION_FZONE,LOCATION_FZONE,1,nil)
+end
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return s.FacedownField() and aux.exccon(e,tp,eg,ep,ev,re,r,rp)
+end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
 	Duel.SetTargetPlayer(tp)
