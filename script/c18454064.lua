@@ -71,7 +71,11 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local relate=c:IsRelateToEffect(e)
 	if relate then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		local g=Duel.SelectMatchingCard(tp,s.tfil2,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil,tp)
+		local exc=nil
+		if not c:IsAbleToGraveAsCost() then
+			exc=c
+		end
+		local g=Duel.SelectMatchingCard(tp,s.tfil2,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,exc,tp)
 		if #g>0 then
 			Duel.HintSelection(g)
 			Duel.SendtoGrave(g,REASON_EFFECT)
