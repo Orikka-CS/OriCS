@@ -56,7 +56,7 @@ function s.tfil2(c,tp)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then
-		return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.IsExistingTarget(s.tfil2,tp,LOCATION_DECK,0,1,nil,tp)
+		return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.IsExistingMatchingCard(s.tfil2,tp,LOCATION_DECK,0,1,nil,tp)
 	end
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
