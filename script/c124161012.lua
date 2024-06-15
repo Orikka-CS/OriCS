@@ -20,25 +20,25 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--effect 2
 	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DELAY)
-	e3:SetCode(EVENT_CONFIRM)
+	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TODECK)
+	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetCountLimit(1,id)
-	e3:SetCondition(s.con2)
+	e3:SetCost(s.cst2)
 	e3:SetTarget(s.tg2)
 	e3:SetOperation(s.op2)
 	c:RegisterEffect(e3)
 	--effect 3
 	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e4:SetProperty(EFFECT_FLAG_DELAY)
-	e4:SetCode(EVENT_CONFIRM)
-	e4:SetRange(LOCATION_HAND)
+	e4:SetType(EFFECT_TYPE_FIELD)
+	e4:SetCode(EFFECT_QP_ACT_IN_NTPHAND)
+	e4:SetRange(LOCATION_FZONE)
+	e4:SetTargetRange(LOCATION_HAND,0)
 	e4:SetTarget(s.tg3)
-	e4:SetOperation(s.op3)
 	c:RegisterEffect(e4)
+	local e5=e4:Clone()
+	e5:SetCode(EFFECT_TRAP_ACT_IN_HAND)
+	c:RegisterEffect(e5)
 end
 
 --effect 1
@@ -51,59 +51,49 @@ function s.val1(e,c)
 end
 
 --effect 2
-function s.con2filter(c,tp)
-	return c:IsSetCard(0xf20) and c:IsControler(tp) and c:IsLocation(LOCATION_HAND)
+
+function s.cst2ffilter(c,code)
+	return c:IsSetCard(0xf20) and not c:IsCode(code) and c:IsAbleToHand() and not c:IsType(TYPE_FIELD)
 end
 
-function s.con2(e,tp,eg)
-	return eg:IsExists(s.con2filter,1,nil,tp)
+function s.cst2filter(c,tp)
+	return not c:IsPublic() and c:IsSetCard(0xf20) and Duel.IsExistingMatchingCard(s.cst2ffilter,tp,LOCATION_DECK,0,1,nil,c:GetCode())
 end
+
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil,tp)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM):GetFirst()
+	Duel.ConfirmCards(1-tp,sg)
+	Duel.ShuffleHand(tp)
+	e:SetLabel(sg:GetCode())
+end
+
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>2 end
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-end
-
-function s.op2filter(c)
-	return c:IsSetCard(0xf20) and c:IsAbleToHand()
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_HAND)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	Duel.ConfirmDecktop(tp,3)
-	local dt=Duel.GetDecktopGroup(tp,3)
-	if #dt>0 and dt:IsExists(s.op2filter,1,nil)and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local sg=dt:FilterSelect(tp,s.op2filter,1,1,nil)
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
+	local code=e:GetLabel()
+	local hg=Duel.GetMatchingGroup(s.cst2ffilter,tp,LOCATION_DECK,0,nil,code)
+	if #hg>0 then
+		local shg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		if Duel.SendtoHand(shg,nil,REASON_EFFECT) then
+			Duel.ConfirmCards(1-tp,shg)
+			Duel.ShuffleDeck(tp)
+			Duel.BreakEffect()
+			Duel.DisableShuffleCheck()
+			local dg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,nil)
+			local sdg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+			Duel.SendtoDeck(sdg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+		end
 	end
-	Duel.ShuffleDeck(tp)
 end
 
 --effect 3
-function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not e:GetHandler():IsPublic() end
-end
-
-function s.op3filter(c)
-	return c:IsSetCard(0xf20) and not c:IsType(TYPE_FIELD) and not c:IsPublic() 
-end
-
-function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsPublic() or not c:IsRelateToEffect(e) then return end
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,1))
-	e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_PUBLIC)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
-	c:RegisterEffect(e1)
-	local g=Duel.GetMatchingGroup(s.op3filter,tp,LOCATION_HAND,0,c,e,tp)
-	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
-		Duel.BreakEffect()
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,2,nil,1,tp,HINTMSG_CONFIRM)
-		Duel.ConfirmCards(1-tp,sg)
-		Duel.ShuffleHand(tp)
-	end
+function s.tg3(e,c)
+	return c:IsPublic() and c:IsSetCard(0xf20)
 end

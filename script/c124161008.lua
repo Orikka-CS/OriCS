@@ -38,8 +38,8 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local gc=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_HAND,0,nil,e,tp)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,gc+1) end
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_HAND)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,gc+1)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,gc,tp,LOCATION_HAND)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)

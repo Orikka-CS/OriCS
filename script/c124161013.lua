@@ -71,8 +71,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetCode(EFFECT_PUBLIC)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 	c:RegisterEffect(e1)
-	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,c,e,tp)
-	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,nil,e,tp)
+	g=g+c
+	if #g>0 and Duel.IsPlayerCanDraw(tp) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.BreakEffect()
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,#g,nil,1,tp,HINTMSG_TODECK)
 		Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)

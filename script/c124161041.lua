@@ -63,7 +63,7 @@ end
 function s.tg2i(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_GRAVE,0,nil,e,tp)
 	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_GRAVE)
 end
 
 function s.op2i(e,tp,eg,ep,ev,re,r,rp)

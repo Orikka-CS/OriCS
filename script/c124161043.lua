@@ -42,6 +42,11 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 			return #og>0
 		end
 	end
+	if e:GetHandler():GetOwner()==tp then
+		Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,ig,1,tp,LOCATION_HAND+LOCATION_GRAVE)
+	else
+		Duel.SetOperationInfo(0,CATEGORY_REMOVE,og,1,0,0)
+	end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp,owner)

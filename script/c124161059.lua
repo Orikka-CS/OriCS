@@ -79,7 +79,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 and #un>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_EQUIP,nil,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -93,7 +93,7 @@ end
 
 --effect 3
 function s.con3filter(c,tp)
-	return c:IsCode(124161058) and c:IsControler(tp) and c:GetEquipTarget()==tp
+	return c:IsCode(124161058) and c:IsControler(tp) and c:GetEquipTarget():GetControler()==tp
 end
 
 function s.con3(e,tp,eg)

@@ -61,7 +61,7 @@ end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,e,tp)
 	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -100,7 +100,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local gi=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_HAND,0,nil,e,tp)
 	local go=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
 	if chk==0 then return #gi>0 and #go>0 end
-	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,1-tp,1)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,go,#gi,1-tp,LOCATION_HAND)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -146,7 +146,11 @@ function s.op2addop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 3
+function s.con3filter(c)
+	return c:IsPublic() and c:IsSetCard(0xf20)
+end
+
 function s.con3(e)
 	local tp=e:GetHandler():GetControler()
-	return Duel.GetMatchingGroupCount(s.tg2ifilter,tp,LOCATION_HAND,0,nil,e,tp)>0
+	return Duel.GetMatchingGroupCount(s.con3filter,tp,LOCATION_HAND,0,nil)>0
 end

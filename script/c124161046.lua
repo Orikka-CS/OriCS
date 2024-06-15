@@ -19,13 +19,6 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	aux.GlobalCheck(s,function()
-		local ge=Effect.CreateEffect(c)
-		ge:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		ge:SetCode(EVENT_SSET)
-		ge:SetOperation(s.tg1ocheck)
-		Duel.RegisterEffect(ge,0)
-	end)
 end
 
 --effect 1
@@ -34,15 +27,15 @@ function s.tg1ifilter(c)
 end
 
 function s.tg1ocheck(e,tp,eg,ep,ev,re,r,rp)
-	if (re and re:GetHandler():IsSetCard(0xf22) and re:GetHandler():GetOwner()==tp) then return end
+	if (re and re:GetHandler():IsSetCard(0xf22) and re:GetHandler():GetOwner()==1-tp) then return end
 	local sg=eg:Filter(Card.IsType,nil,TYPE_SPELL+TYPE_TRAP)
 	for ec in sg:Iter() do
-		ec:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+		ec:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD)
 	end
 end
 
-function s.tg1ofilter(c)
-	return c:IsFacedown() and c:IsSpellTrap() and c:IsAbleToDeck() and c:HasFlagEffect(id)
+function s.tg1ofilter(c,tp)
+	return c:IsFacedown() and c:IsSpellTrap() and c:IsAbleToDeck() and c:GetOwner()==tp 
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -55,6 +48,9 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 			local og=Duel.GetMatchingGroup(s.tg1ofilter,tp,LOCATION_STZONE,0,nil,tp)
 			return #og>0
 		end
+	end
+	if e:GetHandler():GetOwner()==1-tp then
+		Duel.SetOperationInfo(0,CATEGORY_TODECK,og,1,0,LOCATION_STZONE)
 	end
 end
 
@@ -75,7 +71,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp,owner)
 		local sig=aux.SelectUnselectGroup(ig,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
 		Duel.SSet(tp,sig,1-tp)
 	else
-		local og=Duel.GetMatchingGroup(s.tg1ofilter,tp,LOCATION_STZONE,0,nil)
+		local og=Duel.GetMatchingGroup(s.tg1ofilter,tp,LOCATION_STZONE,0,nil,tp)
 		if #og==0 then return end
 		local sog=aux.SelectUnselectGroup(og,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 		Duel.ConfirmCards(1-tp,sog)

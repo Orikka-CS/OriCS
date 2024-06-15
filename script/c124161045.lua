@@ -40,6 +40,9 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 			return true
 		end
 	end
+	if e:GetHandler():GetOwner()==tp then
+		Duel.SetOperationInfo(0,CATEGORY_DISABLE,nil,1,tp,LOCATION_MZONE)
+	end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp,owner)
@@ -60,7 +63,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp,owner)
 		local nsg=aux.SelectUnselectGroup(ng,e,tp,1,sg,aux.TRUE,1,tp,HINTMSG_NEGATE)
 		for tc in nsg:Iter() do
 			tc:NegateEffects(e:GetHandler(),RESET_PHASE+PHASE_END,true)
-		end	  
+		end   
 	else
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_FIELD)

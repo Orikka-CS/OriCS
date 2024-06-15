@@ -33,10 +33,15 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 			local ig=Duel.GetMatchingGroup(s.tg1ifilter,tp,LOCATION_DECK,0,nil,e,tp)
 			return #ig>0
 		else
-			e:SetCategory(CATEGORY_TODECK)	  
+			e:SetCategory(CATEGORY_TODECK)	
 			local og=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_HAND,0,nil,e,tp)
 			return #og>0
 		end
+	end
+	if e:GetHandler():GetOwner()==tp then
+		Duel.SetOperationInfo(0,CATEGORY_TOHAND,ig,1,tp,LOCATION_DECK)
+	else
+		Duel.SetOperationInfo(0,CATEGORY_TODECK,og,1,tp,LOCATION_HAND)
 	end
 end
 

@@ -24,6 +24,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local dis=Duel.SelectDisableField(tp,2,LOCATION_MZONE,0,0)
 	Duel.Hint(HINT_ZONE,tp,dis)
 	Duel.SetTargetParam(dis)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,2,tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
