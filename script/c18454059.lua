@@ -32,7 +32,7 @@ function s.ofil1(c)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.ofil1,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
+	local g=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.ofil1),tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
 	if #g>0 and Duel.SelectEffectYesNo(tp,c,95) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local sg=g:Select(tp,1,1,nil)
@@ -65,7 +65,7 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,s.tfil2,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil2),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)

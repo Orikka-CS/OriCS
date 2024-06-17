@@ -80,7 +80,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,s.tfil1,tp,LOCATION_EXTRA+LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil1),tp,LOCATION_EXTRA+LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
 	if #g>0 then
 		local tc=g:GetFirst()
 		if tc:IsLocation(LOCATION_EXTRA) then
