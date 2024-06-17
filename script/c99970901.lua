@@ -63,7 +63,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tar3fil(c)
-	return c:IsCode(99970907) and c:IsSSetable()
+	return c:IsCode(id+6) and c:IsSSetable()
 end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.tar3fil,tp,LOCATION_DECK|LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil) end
