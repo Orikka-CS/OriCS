@@ -27,6 +27,23 @@ end
 function c84320042.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-		Duel.Exile(tc,REASON_EFFECT)>0
+		if Duel.Exile then
+			if Duel.Exile(tc,REASON_EFFECT)>0 then
+				local chain=Duel.GetCurrentChain()
+				for i=1,chain-1 do
+					local ce=Duel.GetChainInfo(i,CHAININFO_TRIGGERING_EFFECT)
+					local cc=ce:GetHandler()
+					if tc==cc then
+						tc:ReleaseEffectRelation(ce)
+					end
+				end
+			end
+		elseif EFFECT_FUSION_MAT_RESTRICTION then
+			Duel.SendtoDeck(tc,nil,-2,REASON_EFFECT)
+		else
+			if not tc:IsImmuneToEffect(e) then
+				Duel.Delete(e,tc)
+			end
+		end
 	end
 end
