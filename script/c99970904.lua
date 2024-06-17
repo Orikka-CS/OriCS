@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	e4:SetRange(LOCATION_MZONE)
 	e4:SetTargetRange(0,LOCATION_MZONE)
 	e4:SetCode(EFFECT_DISABLE)
-	e4:SetCondition(function() return Duel.IsEnvironment(99970907) end)
+	e4:SetCondition(function() return Duel.IsEnvironment(id+3) end)
 	c:RegisterEffect(e4)
 	
 	local e2=Effect.CreateEffect(c)

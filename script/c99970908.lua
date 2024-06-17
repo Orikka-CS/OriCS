@@ -8,6 +8,7 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCondition(s.con1)
+	e1:SetCountLimit(1,{id,1},EFFECT_COUNT_CODE_OATH)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -47,7 +48,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.con2fil(c,tp)
-	return c:IsControler(tp) and c:IsCode(99970907)
+	return c:IsControler(tp) and c:IsCode(id-1)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.con2fil,1,nil,tp) and aux.exccon(e,tp,eg,ep,ev,re,r,rp)

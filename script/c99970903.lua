@@ -41,7 +41,7 @@ function s.initial_effect(c)
 end
 
 function s.op1fil(c)
-	return c:IsCode(99970907) and c:IsSSetable()
+	return c:IsCode(id+4) and c:IsSSetable()
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

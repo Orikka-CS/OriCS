@@ -6,6 +6,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCountLimit(1,{id,1},EFFECT_COUNT_CODE_OATH)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -64,7 +65,10 @@ function s.distg(e,c)
 	local ob=e:GetLabelObject()
 	local seq=ob:GetSequence()
 	if c:IsControler(1-e:GetHandlerPlayer()) then seq=4-seq end
-	return c:IsFaceup() and seq==c:GetSequence() and ob:GetFlagEffect(id)~=0
+	local cseq=c:GetSequence()
+	if cseq==5 then cseq=1
+	elseif cseq==6 then cseq=3 end
+	return c:IsFaceup() and seq==cseq and ob:GetFlagEffect(id)~=0
 end
 function s.disop(e,tp,eg,ep,ev,re,r,rp)
 	local ob=e:GetLabelObject()
@@ -74,6 +78,10 @@ function s.disop(e,tp,eg,ep,ev,re,r,rp)
 	if ob:GetFlagEffect(id)==0 or ob:IsControler(p) then return end
 	if loc&LOCATION_ONFIELD==0 or rc:IsControler(1-p) then
 		seq=rc:GetPreviousSequence()
+	end
+	if loc&LOCATION_MZONE>0 then
+		if seq==5 then seq=1
+		elseif seq==6 then seq=3 end
 	end
 	if loc&LOCATION_ONFIELD==0 then
 		local val=re:GetValue()
