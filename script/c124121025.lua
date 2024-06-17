@@ -37,6 +37,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return c:IsAbleToHand() or (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false))
 	end
+	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,c,1,0,0)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,c,1,0,0)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
@@ -57,7 +58,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		)
 		if res==1 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-			local g=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_HAND+LOCATION_GRAVE,0,0,1,nil,e,tp)
+			local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.ofil1),tp,LOCATION_HAND+LOCATION_GRAVE,0,0,1,nil,e,tp)
 			if #g>0 then
 				Duel.BreakEffect()
 				Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)

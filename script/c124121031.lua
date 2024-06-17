@@ -57,7 +57,7 @@ function s.ofil1(c)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-	local g=Duel.SelectMatchingCard(tp,s.tfil1,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil1),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
 	if #g>0 then
 		local tc=g:GetFirst()
 		local result=false
@@ -68,7 +68,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		end
 		if result then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-			local sg=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_GRAVE,0,0,1,nil)
+			local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.ofil1),tp,LOCATION_GRAVE,0,0,1,nil)
 			if #sg>0 then
 				Duel.BreakEffect()
 				Duel.SendtoHand(sg,nil,REASON_EFFECT)
