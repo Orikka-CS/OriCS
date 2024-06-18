@@ -108,7 +108,6 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	if #g<ct then
 		return
 	end
-	local 
 	local sg=aux.SelectUnselectGroup(g,e,tp,ct,ct,aux.dncheck,1,tp,HINTMSG_ATOHAND)
 	if sg then
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
