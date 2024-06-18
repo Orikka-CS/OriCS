@@ -81,7 +81,7 @@ function s.oop21(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,s.onfil21,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,3,nil)
 	if #g==3 then
 		Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
-		Duel.Recover(tp,3000,REASON_EFFECT)
+		Duel.Recover(tp,1500,REASON_EFFECT)
 		if g:IsExists(Card.IsCode,1,nil,id-5) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 			local sg=Duel.SelectMatchingCard(tp,s.oofil21,tp,LOCATION_REMOVED,0,0,1,nil)
