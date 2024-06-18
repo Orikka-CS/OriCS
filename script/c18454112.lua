@@ -62,6 +62,23 @@ end
 function s.ctar11(e,c,sump,sumtype,sumpos,targetp,se)
 	return c:GetTextAttack()~=3000
 end
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local rc=re:GetHandler()
+	if chk==0 then
+		return true
+	end
+	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
+	if rc:IsDestructable() and rc:IsRelateToEffect(re) then
+		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
+	end
+end
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	if Duel.NegateActivation(ev) and rc:IsRelateToEffect(re) then
+		Duel.Destroy(eg,REASON_EFFECT)
+	end
+end
+
 function s.tfil2(c)
 	return c:IsAbleToGrave() and (c:IsCode(18454056) or c:IsCode(18454109))
 end
