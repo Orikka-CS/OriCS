@@ -72,7 +72,8 @@ function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.PayLPCost(tp,1000)
 end
 function s.tfil2(c)
-	return c:IsType(TYPE_COUNTER) and c:IsSSetable() and c:IsFaceup()
+	return (c:IsCode(id+3) or c:IsCode(id+4) or c:IsCode(id+5))
+		and c:IsSSetable() and c:IsFaceup()
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
