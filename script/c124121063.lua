@@ -47,12 +47,12 @@ function s.con1(e,c)
 	end
 	local tp=c:GetControler()
 	local g=Duel.GetMatchingGroup(s.nfil1,tp,LOCATION_DECK,0,nil)
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and g:GetClassCount(Card.GetCode)>=3
+	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and g:GetClassCount(Card.GetCode)>=2
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,c)
 	local g=Duel.GetMatchingGroup(s.nfil1,tp,LOCATION_DECK,0,nil)
-	local sg=aux.SelectUnselectGroup(g,e,tp,3,3,aux.dncheck,1,tp,HINTMSG_REMOVE,nil,nil,true)
-	if sg and #sg==3 then
+	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_REMOVE,nil,nil,true)
+	if sg and #sg==2 then
 		sg:KeepAlive()
 		e:SetLabelObject(sg)
 		return true
