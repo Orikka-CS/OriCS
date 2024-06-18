@@ -116,7 +116,7 @@ function s.tfil4(c,e,tp,ec)
 	end
 	if c:IsLocation(LOCATION_EXTRA) then
 		return c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SYNCHRO,tp,false,false,POS_FACEUP_DEFENSE)
-			and Duel.GetLocationCountFromEx(tp,tp,c,ec)>0
+			and Duel.GetLocationCountFromEx(tp,tp,ec,c)>0
 	else
 		return (c:IsType(TYPE_SYNCHRO) or c:IsSetCard(0xc01))
 			and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
