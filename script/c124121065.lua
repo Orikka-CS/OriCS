@@ -106,7 +106,7 @@ function s.tar6(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op6(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tfil6,tp,LOCATION_DECK,0,nil)
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,5,aux.dncheck,1,tp,HINTMSG_REMOVE,nil,nil,false)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,3,aux.dncheck,1,tp,HINTMSG_REMOVE,nil,nil,false)
 	if sg and #sg>0 then
 		Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 	end
