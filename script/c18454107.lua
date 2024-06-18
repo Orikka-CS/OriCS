@@ -29,7 +29,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.IsExistingMatchingCard(s.nfil1,tp,LOCATION_ONFIELD,0,1,nil) then
 		return false
 	end
-	return Duel.IsChainNegatable(ev) and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))
+	return Duel.IsChainNegatable(ev) and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and rp~=tp
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
