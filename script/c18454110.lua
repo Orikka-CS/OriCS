@@ -34,7 +34,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then
 		return Duel.IsExistingTarget(s.tfil1,tp,LOCATION_REMOVED,0,1,nil)
 			and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-			and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0xc01,0x21,300,2500,9,RACE_FAIRY,ATTRIBUTE_LIGHT)
+			and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0xc01,0x21,3000,2500,9,RACE_FAIRY,ATTRIBUTE_LIGHT)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 	local g=Duel.SelectTarget(tp,s.tfil1,tp,LOCATION_REMOVED,0,1,1,nil)
@@ -48,7 +48,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(tc,nil,REASON_EFFECT)
 	end
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0xc01,0x21,300,2500,9,RACE_FAIRY,ATTRIBUTE_LIGHT) then
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0xc01,0x21,3000,2500,9,RACE_FAIRY,ATTRIBUTE_LIGHT) then
 		c:AddMonsterAttribute(TYPE_EFFECT)
 		c:AssumeProperty(ASSUME_RACE,RACE_FAIRY)
 		Duel.SpecialSummonStep(c,1,tp,tp,true,false,POS_FACEUP_DEFENSE)
