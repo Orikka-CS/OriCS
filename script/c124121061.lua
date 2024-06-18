@@ -101,7 +101,7 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_DECK,0,nil)
-	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,s.tfun3,1,tp,HINTMSG_REMOVE,nil,nil,true)
+	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,s.tfun3,1,tp,HINTMSG_REMOVE,nil,nil,false)
 	if sg and #sg==2 then
 		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 	end
