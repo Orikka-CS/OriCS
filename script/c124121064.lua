@@ -29,6 +29,17 @@ function s.initial_effect(c)
 	e3:SetTarget(s.tar3)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e4:SetProperty(EFFECT_FLAG_DELAY)
+	e4:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e4:SetCountLimit(1,id)
+	e4:SetCondition(s.con4)
+	e4:SetCost(s.cost3)
+	e4:SetTarget(s.tar3)
+	e4:SetOperation(s.op3)
+	c:RegisterEffect(e4)
 end
 function s.nfil2(c)
 	return c:IsType(TYPE_COUNTER) and c:IsAbleToRemoveAsCost()
@@ -97,4 +108,11 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
+end
+function s.nfil4(c)
+	return c:IsFaceup() and not c:IsRace(RACE_FAIRY)
+end
+function s.con4(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	return eg:IsExists(s.nfil4,1,c)
 end
