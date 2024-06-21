@@ -41,7 +41,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.tfil2(c,tp)
 	return c:IsFaceup() and c:IsControler(tp)
-		and c:IsSetCard("ġŲ") and not c:IsReason(REASON_REPLACE) and c:IsResason(REASON_BATTLE+REASON_EFFECT)
+		and c:IsSetCard("ġŲ") and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_BATTLE+REASON_EFFECT)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
