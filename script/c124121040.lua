@@ -73,8 +73,7 @@ end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return not c:IsStatus(STATUS_BATTLE_DESTROYED)
-		and re:IsSpellTrapEffect()
-		and Duel.IsChainNegatable(ev)
+		and re:IsSpellTrapEffect() and Duel.IsChainNegatable(ev)
 end
 function s.cost3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
