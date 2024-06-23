@@ -40,7 +40,8 @@ function s.con1(e,c,og)
 	end
 	Duel.SetSelectedCard(fg)
 	local gg=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_GRAVE,0,nil,TYPE_MONSTER)
-	return #gg==#mg and #mg>=3
+	return #gg==#mg and #mg>=3 and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_DELIGHT,tp,false,false)
+		and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp,c,sg,og)
 	local mg=Duel.GetMatchingGroup(Auxiliary.DelExtraFilter,tp,LOCATION_GRAVE,0,nil,nil,c)
