@@ -66,7 +66,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return not c:IsReason(REASON_DRAW)
 end
 function s.tfil3(c,e,tp)
-	return c:IsCode("마과학") and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard("마과학") and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and (c:IsLoc("G") or c:GetType()&(TYPE_SPELL+TYPE_CONTINUOUS)==(TYPE_SPELL+TYPE_CONTINUOUS))
 end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
