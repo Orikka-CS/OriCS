@@ -43,8 +43,8 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GMGroup(s.ofil1,tp,"D",0,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local sg=g:SelectSubGroup(tp,s.ofun1,false,2,2)
-	if #sg==2 then
+	local sg=g:SelectSubGroup(tp,s.ofun1,true,2,2)
+	if sg and #sg==2 then
 		Duel.SendtoGrave(sg,REASON_EFFECT)
 	end
 end
