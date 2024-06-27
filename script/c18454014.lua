@@ -1,7 +1,7 @@
 --파천마과학 로버트
 local s,id=GetID()
 function s.initial_effect(c)
-	c:EnableCounterPermit(0x2d7)
+	c:EnableCounterPermit(0x2d7,LSTN("O"))
 	local e1=MakeEff(c,"Qo","MS")
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
