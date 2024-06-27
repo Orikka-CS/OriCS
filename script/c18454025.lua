@@ -49,6 +49,7 @@ function s.gop1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	return #{c:IsHasEffect(EFFECT_TRAP_ACT_IN_SET_TURN)}>1 or not c:IsLoc("S") or not c:IsStatus(STATUS_SET_TURN)
 end
 function s.tfil1(c)
