@@ -74,7 +74,9 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-		if tc:IsLoc("S") and tc:IsControler(1-tp) then
+		if tc:IsLoc("F") and tc:IsControler(1-tp) then
+			Duel.MoveToField(tc,tp,tp,LSTN("F"),POS_FACEDOWN,true)
+		elseif tc:IsLoc("S") and tc:IsControler(1-tp) then
 			Duel.MoveToField(tc,tp,tp,LSTN("S"),POS_FACEDOWN,true)
 		else
 			Duel.SSet(tp,tc)
