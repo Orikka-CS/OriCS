@@ -42,7 +42,7 @@ end
 function s.tfil2(c)
 	return c:IsSetCard("¸¶°úÇÐ") and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsSSetable() and not c:IsCode(id)
 end
-function s.tar2(e,tp,eg,pe,ev,re,r,rp,chk)
+function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return Duel.IEMCard(s.tfil2,tp,"D",0,1,nil)
 	end
