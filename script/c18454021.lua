@@ -19,7 +19,7 @@ function s.initial_effect(c)
 	e3:SetCategory(CATEGORY_RECOVER)
 	e3:SetCL(1,{id,1})
 	WriteEff(e3,3,"N")
-	WriteEff(e3,3,"TO")
+	WriteEff(e3,2,"TO")
 	c:RegisterEffect(e3)
 end
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
