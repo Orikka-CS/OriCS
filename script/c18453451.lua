@@ -20,7 +20,9 @@ function cm.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 		return c:IsReleasable() and Duel.GetActivityCount(tp,ACTIVITY_SPSUMMON)==0
 	end
 	Duel.Release(c,REASON_COST)
-	c:CreateEffectRelation(e)
+	local te=Effect.CreateEffect(c)
+	e:SetLabelObject(te)
+	c:CreateEffectRelation(te)
 	local e1=MakeEff(c,"F")
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
@@ -36,7 +38,8 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then
+	local te=e:GetLabelObject()
+	if c:IsRelateToEffect(te) then
 		local loc=c:GetLocation()
 		local e1=MakeEff(c,"FC",loc)
 		e1:SetCode(EVENT_PHASE+PHASE_STANDBY)
@@ -66,7 +69,9 @@ function cm.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 		return c:IsAbleToRemoveAsCost() and Duel.GetActivityCount(tp,ACTIVITY_SPSUMMON)==0
 	end
 	Duel.Remove(c,POS_FACEUP,REASON_COST)
-	c:CreateEffectRelation(e)
+	local te=Effect.CreateEffect(c)
+	e:SetLabelObject(te)
+	c:CreateEffectRelation(te)
 	local e1=MakeEff(c,"F")
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
