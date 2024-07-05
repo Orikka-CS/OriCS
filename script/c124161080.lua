@@ -15,9 +15,9 @@ function s.initial_effect(c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetRange(LOCATION_MZONE)
+	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
+	e2:SetCost(aux.bfgcost)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -26,7 +26,7 @@ end
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	local ch=ev-1
-	if ch==0 or not ep==1-tp then return false end
+	if ch==0 or ep==tp then return false end
 	local ch_player,ch_eff=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_EFFECT)
 	local ch_c=ch_eff:GetHandler()
 	return ch_player==tp and ch_c:IsSetCard(0xf25)
@@ -53,17 +53,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2filter(c)
-	return c:IsSetCard(0xf25) and c:IsFaceup()
-end
-
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,c)
-	return g>0
-end
-
-
 function s.tg2filter(c)
 	return c:IsSetCard(0xf25) and c:IsSpell() and c:IsAbleToHand() 
 end

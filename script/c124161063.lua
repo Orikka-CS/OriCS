@@ -66,7 +66,6 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.BreakEffect()
 		Duel.ConfirmCards(1-tp,sg)
 	end
 end
