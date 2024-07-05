@@ -96,7 +96,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,s.tfil1,tp,LOCATION_DECK,0,1,1,nil,e,tp,lsc,rsc,ft)
 	local tc=g:GetFirst()
 	if tc then
-		if ft<=1 or not c:IsCanBeSpecialSummoned(e,0,tp,false,false) or Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if ft<=1 or not c:IsCanBeSpecialSummoned(e,0,tp,false,false) or
+			(tc:IsAbleToHand() and Duel.SelectYesNo(tp,aux.Stringid(id,0))) then
 			Duel.SendtoHand(tc,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,tc)
 		else
