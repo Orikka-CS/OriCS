@@ -57,6 +57,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			Duel.BreakEffect()
 			Duel.SSet(1-tp,sg)
 		end
+		Duel.ShuffleHand(1-tp)
 	end
 end
 
