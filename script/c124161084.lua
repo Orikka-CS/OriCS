@@ -10,6 +10,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_ATTACK_ANNOUNCE)
 	e1:SetRange(LOCATION_MZONE)
+	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
@@ -58,7 +59,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if ug~=dg then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_EXTRA_ATTACK)
+		e1:SetCode(EFFECT_EXTRA_ATTACK_MONSTER)
 		e1:SetValue(math.abs(ug-dg)-1)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		c:RegisterEffect(e1)
@@ -66,7 +67,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if tc~=nil then
 		local atk=tc:GetBaseAttack()
 		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
-		c:UpdateAttack(atk)
+		c:UpdateAttack(atk,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 	end
 end
 

@@ -82,10 +82,10 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local dg=Duel.GetMatchingGroup(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
 	local sg
 	if #ug+#dg>0 and #ug~=#dg then
-		if #ug>#dg then
+		if #dg>#ug and #ug>0 then
 			sg=aux.SelectUnselectGroup(ug,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
 		end
-		if #dg>#ug then
+		if #ug>#dg and #dg>0 then
 			sg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
 		end
 		Duel.Destroy(sg,REASON_EFFECT)
