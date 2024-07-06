@@ -55,7 +55,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		end
 		if sg:IsSpellTrap() and sg:IsSSetable() and Duel.GetLocationCount(1-tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			Duel.SSet(1-tp,sg)
+			Duel.SSet(tp,sg,1-tp)
 		end
 		Duel.ShuffleHand(1-tp)
 	end
