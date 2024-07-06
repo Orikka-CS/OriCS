@@ -3,6 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
@@ -42,20 +43,21 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1filter(c)
-	return c:IsSetCard(0xf25) and c:IsTrap() and c:IsSSetable()
+	return c:IsSetCard(0xf25) and c:IsSpellTrap() and c:IsAbleToHand()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 end
+	if chk==0 then return #g>0 end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
-		Duel.SSet(tp,sg) 
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
 	end
 end
 

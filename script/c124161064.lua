@@ -67,7 +67,6 @@ function s.con2(e,tp,eg)
 	return eg:IsExists(s.con2filter,1,nil,tp)
 end
 
-
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return c:IsAbleToHand() end
