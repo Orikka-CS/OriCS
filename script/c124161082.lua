@@ -7,7 +7,6 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -31,17 +30,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1filter(c,tp)
-	return c:IsSetCard(0xf25) and c:IsMonster() and not c:IsCode(id) and c:IsAbleToGraveAsCost()
-end
-
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(sg,REASON_COST)
-end
-
 function s.tg1filter(c)
 	return c:IsSetCard(0xf25) and c:IsSpellTrap() and c:IsAbleToHand()
 end
