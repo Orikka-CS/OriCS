@@ -45,7 +45,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local rc=re:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) then
+		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
 			Duel.NegateEffect(ev)
 		end
 	end

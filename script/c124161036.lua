@@ -49,7 +49,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Duel.GetFirstTarget()
 	if sg:IsRelateToEffect(e) then
-		Duel.Destroy(sg,REASON_EFFECT)
+		if not Duel.Destroy(sg,REASON_EFFECT)>0 then return end
 		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_DECK,0,nil,e,tp)
 		if sg:GetOwner()==tp and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			local spg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)

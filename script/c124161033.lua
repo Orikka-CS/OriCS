@@ -36,7 +36,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_DECK,0,nil,e)
 	if #g==0 then return end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
-	if Duel.SendtoGrave(sg,REASON_EFFECT) and Duel.IsPlayerCanDraw(tp,1) and sg:GetLocation()==LOCATION_GRAVE and sg:GetPreviousLocation()==LOCATION_HAND then
+	if Duel.SendtoGrave(sg,REASON_EFFECT)>0 and Duel.IsPlayerCanDraw(tp,1) and sg:GetLocation()==LOCATION_GRAVE and sg:GetPreviousLocation()==LOCATION_HAND then
 		Duel.BreakEffect()
 		Duel.Draw(tp,1,REASON_EFFECT)
 	end

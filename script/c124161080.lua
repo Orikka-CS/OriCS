@@ -42,10 +42,10 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp) 
 	local rc=re:GetHandler()
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) then
 		local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 		local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) and ug~=dg then
+		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and ug~=dg then
 			Duel.BreakEffect()
 			Duel.NegateEffect(ev)
 		end

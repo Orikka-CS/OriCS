@@ -50,7 +50,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) then
+		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
 			local g=Duel.GetFieldGroup(tp,0,LOCATION_SZONE)
 			if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 				Duel.BreakEffect()
