@@ -63,7 +63,7 @@ end
 --effect 2
 function s.con2filter(c,tp)
 	return c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousSetCard(0xf25)
-		and c:IsPreviousControler(tp) and c:GetReasonPlayer()==1-tp
+		and c:IsPreviousControler(tp) and c:GetReasonPlayer()==1-tp and c:IsPreviousLocation(LOCATION_MZONE)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
