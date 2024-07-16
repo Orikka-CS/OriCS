@@ -32,7 +32,7 @@ end
 
 --effect 1
 function s.cst1filter(c)
-	return c:IsSetCard(0xf25) and c:IsAbleToDeckOrExtraAsCost()
+	return c:IsSetCard(0xf25) and c:IsAbleToDeckOrExtraAsCost() and c:IsFaceup()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)

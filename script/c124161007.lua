@@ -59,7 +59,7 @@ end
 
 --effect 2
 function s.tg2filter(c,e,tp)
-	return c:IsSetCard(0xf20) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
+	return c:IsSetCard(0xf20) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand() and c:IsFaceup()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
