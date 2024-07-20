@@ -32,7 +32,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,500)
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,300)
 end
 
 function s.op1filter(c)
@@ -48,7 +48,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ConfirmCards(1-tp,sg)
 	Duel.BreakEffect()
 	local d=Duel.GetMatchingGroupCount(s.op1filter,tp,LOCATION_ONFIELD,0,nil)
-	Duel.Damage(1-tp,d*500,REASON_EFFECT)
+	Duel.Damage(1-tp,d*300,REASON_EFFECT)
 end
 
 --effect 2

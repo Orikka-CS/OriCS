@@ -35,7 +35,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SELECT)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,700)
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,600)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DESTROY,nil,1,0,LOCATION_ONFIELD)
 end
 
@@ -51,7 +51,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,tc:GetOverlayCount(),aux.TRUE,1,tp,HINTMSG_REMOVEXYZ)
 		local ssg=sg:FilterCount(s.op1filter,nil)
 		Duel.SendtoGrave(sg,REASON_EFFECT)
-		Duel.Damage(1-tp,#sg*700,REASON_EFFECT)
+		Duel.Damage(1-tp,#sg*600,REASON_EFFECT)
 		local dg=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
 		if ssg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			dsg=aux.SelectUnselectGroup(dg,e,tp,1,ssg,aux.TRUE,1,tp,HINTMSG_DESTROY)
