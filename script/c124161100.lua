@@ -86,26 +86,15 @@ end
 
 --effect 3
 function s.con3filter(c)
-	return c:IsType(TYPE_XYZ) and c:IsSetCard(0xf26)
+	return c:IsType(TYPE_XYZ) and c:IsFaceup()
 end
 
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	if not eg:IsExists(Card.IsSummonPlayer,1,nil,1-tp) then return false end
 	local g=Duel.GetMatchingGroup(s.con3filter,tp,LOCATION_MZONE,0,nil)
-	local x=0
-	if #g==0 then return 0 end
-	for tc in aux.Next(g) do
-		x=x+tc:GetOverlayCount()
-	end
-	return x>0
+	return #g>0
 end
 
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.con3filter,tp,LOCATION_MZONE,0,nil)
-	local x=0
-	if #g==0 then return 0 end
-	for tc in aux.Next(g) do
-		x=x+tc:GetOverlayCount()
-	end
-	Duel.Damage(1-tp,x*200,REASON_EFFECT)
+	Duel.Damage(1-tp,600,REASON_EFFECT)
 end
