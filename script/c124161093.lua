@@ -45,8 +45,9 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToDeckAsCost() end
-	Duel.SendtoDeck(e:GetHandler(),nil,SEQ_DECKSHUFFLE,REASON_COST)
+	local c=e:GetHandler()
+	if chk==0 then return c:IsDiscardable(REASON_COST) end
+	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
