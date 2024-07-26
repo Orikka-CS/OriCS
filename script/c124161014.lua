@@ -80,7 +80,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_ONFIELD,nil,e,tp)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
 		Duel.BreakEffect()
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_ATOHAND)
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_RTOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 	end
 end

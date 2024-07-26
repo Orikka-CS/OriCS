@@ -86,9 +86,9 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g2=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_SZONE,e:GetHandler(),e)
 	if chkc then return false end
 	if chk==0 then return #g1>0 and #g2>0 end
-	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
 	if #sg1==0 then return end
-	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
 	sg1:Merge(sg2)
 	Duel.SetTargetCard(sg1)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg1,2,0,0)
