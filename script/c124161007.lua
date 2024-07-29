@@ -42,15 +42,15 @@ function s.tg1revfilter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,e,tp)
-	local rg=Duel.GetMatchingGroup(s.tg1revfilter,tp,LOCATION_HAND,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil)
+	local rg=Duel.GetMatchingGroup(s.tg1revfilter,tp,LOCATION_HAND,0,nil)
 	if chk==0 then return #g>0 and #rg>0 end
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,1,1-tp,LOCATION_MZONE)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,e,tp)
-	local rg=Duel.GetMatchingGroup(s.tg1revfilter,tp,LOCATION_HAND,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil)
+	local rg=Duel.GetMatchingGroup(s.tg1revfilter,tp,LOCATION_HAND,0,nil)
 	if #g>0 and #rg>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,#rg,aux.TRUE,1,tp,HINTMSG_FACEDOWN)
 		Duel.ChangePosition(sg,POS_FACEDOWN_DEFENSE)
@@ -58,14 +58,14 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.tg2filter(c,e,tp)
+function s.tg2filter(c,e)
 	return c:IsSetCard(0xf20) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand() and c:IsFaceup()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg2filter(chkc,e,tp) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e,tp)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 	Duel.SetTargetCard(sg)

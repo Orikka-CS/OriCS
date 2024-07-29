@@ -47,8 +47,8 @@ end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,c,e,tp)
-	if chk==0 then return #g>0 and c:IsDiscardable() end
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,c)
+	if chk==0 then return #g>0 and c:IsDiscardable(REASON_COST) end
 	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)

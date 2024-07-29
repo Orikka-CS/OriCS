@@ -41,14 +41,14 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1filter(c,e,tp)
+function s.tg1filter(c,e)
 	return c:IsSetCard(0xf20) and not c:IsCode(id) and c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsAbleToHand() 
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e,tp)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
 	Duel.SetTargetCard(sg)
@@ -86,7 +86,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetCode(EFFECT_PUBLIC)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 	c:RegisterEffect(e1)
-	local g=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_GRAVE,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_GRAVE,nil
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.BreakEffect()
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_REMOVE)

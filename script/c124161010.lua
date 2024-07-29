@@ -36,7 +36,7 @@ end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,nil)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)
@@ -61,8 +61,8 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateSummon(eg)
 	Duel.Destroy(eg,REASON_EFFECT)
-	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_GRAVE,LOCATION_GRAVE,nil,e,tp)
-	local rg=Duel.GetMatchingGroup(s.op1revfilter,tp,LOCATION_HAND,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_GRAVE,LOCATION_GRAVE,nil)
+	local rg=Duel.GetMatchingGroup(s.op1revfilter,tp,LOCATION_HAND,0,nil)
 	if #g>0 and #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,#rg,aux.TRUE,1,tp,HINTMSG_TODECK)

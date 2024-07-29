@@ -66,24 +66,24 @@ function s.tg2filter(c)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_DECK)
 	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,tp,1)
 end
 
 function s.op2filter(c)
-	return c:IsDiscardable()
+	return c:IsAbleToGrave()
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		if Duel.SendtoHand(sg,nil,REASON_EFFECT) then
 			Duel.ConfirmCards(1-tp,sg)
 			Duel.BreakEffect()
-			local dg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,nil,e,tp)
+			local dg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,nil)
 			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 			Duel.SendtoGrave(dsg,REASON_EFFECT)
 		end

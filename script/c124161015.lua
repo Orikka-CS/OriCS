@@ -29,7 +29,7 @@ end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,nil)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)
@@ -41,12 +41,12 @@ function s.tg1filter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil)
 	if chk==0 then return #g>0 end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil)
 	if #g>0 then
 		local c=e:GetHandler()
 		for tc in g:Iter() do
@@ -87,7 +87,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetCode(EFFECT_PUBLIC)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 	c:RegisterEffect(e1)
-	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_POSCHANGE)

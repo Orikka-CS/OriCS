@@ -44,11 +44,11 @@ function s.con1(_,tp)
 end
 
 function s.cst1filter(c)
-	return c:IsDiscardable()
+	return c:IsDiscardable(REASON_COST)
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,c,e,tp)
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,nil)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
 	Duel.SendtoGrave(sg,REASON_COST+REASON_DISCARD)
@@ -59,13 +59,13 @@ function s.tg1filter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.tg1filter),tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.tg1filter),tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		if Duel.SendtoHand(sg,nil,REASON_EFFECT) then
@@ -86,7 +86,7 @@ end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)
@@ -97,7 +97,7 @@ function s.tg2ifilter(c)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local gi=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_HAND,0,nil,e,tp)
+	local gi=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_HAND,0,nil)
 	local go=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
 	if chk==0 then return #gi>0 and #go>0 end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,go,#gi,1-tp,LOCATION_HAND)
@@ -105,7 +105,7 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local gi=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_HAND,0,nil,e,tp)
+	local gi=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_HAND,0,nil)
 	local go=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
 	if #gi==0 or #go==0 then return end
 	Duel.ConfirmCards(tp,go)

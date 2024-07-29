@@ -36,14 +36,14 @@ function s.tg1filter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,2,tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if #g==0 then return end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)
 	Duel.SendtoHand(sg,nil,REASON_EFFECT)
@@ -60,7 +60,7 @@ function s.tg2xfilter(c,e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil,e)
 	local xg=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_GRAVE,0,nil)
 	local eq=Duel.GetFlagEffect(tp,124161058)

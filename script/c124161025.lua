@@ -52,26 +52,26 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1filter(c,tp)
+function s.cst1filter(c)
 	return c:IsSetCard(0xf21) and c:IsAbleToRemoveAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 
-function s.tg1filter(c,e,tp)
+function s.tg1filter(c,e)
 	return c:IsCanBeEffectTarget(e) and c:IsNegatable()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e,tp) and chkc:IsNegatable() end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD,nil,e,tp)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) and chkc:IsNegatable() end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_NEGATE)
 	Duel.SetTargetCard(sg)

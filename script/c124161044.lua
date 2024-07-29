@@ -58,7 +58,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp,owner)
 		end
 	end
 	if op==1 then
-		local ig=Duel.GetMatchingGroup(s.tg1ifilter,tp,LOCATION_MZONE,0,nil,e,tp,ft)
+		local ig=Duel.GetMatchingGroup(s.tg1ifilter,tp,LOCATION_MZONE,0,nil)
 		if #ig==0 then return end
 		for tc in ig:Iter() do
 			local e1=Effect.CreateEffect(e:GetHandler())

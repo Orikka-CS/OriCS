@@ -36,7 +36,7 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.Draw(tp,2,REASON_EFFECT) then return end
-	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 		Duel.BreakEffect()
@@ -71,7 +71,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetCode(EFFECT_PUBLIC)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 	c:RegisterEffect(e1)
-	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,nil)
 	g=g+c
 	if #g>0 and Duel.IsPlayerCanDraw(tp) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.BreakEffect()

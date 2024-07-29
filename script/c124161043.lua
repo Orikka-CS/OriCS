@@ -22,7 +22,7 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1ifilter(c,e,tp,ft) 
+function s.tg1ifilter(c,e,tp) 
 	return c:IsMonster() and c:IsSetCard(0xf22) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
@@ -34,7 +34,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		if e:GetHandler():GetOwner()==tp then
 			e:SetCategory(CATEGORY_SPECIAL_SUMMON)
-			local ig=Duel.GetMatchingGroup(s.tg1ifilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp,ft) 
+			local ig=Duel.GetMatchingGroup(s.tg1ifilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp) 
 			return #ig>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		else
 			e:SetCategory(CATEGORY_REMOVE)
@@ -61,7 +61,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp,owner)
 		end
 	end
 	if op==1 then
-		local ig=Duel.GetMatchingGroup(s.tg1ifilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp,ft)
+		local ig=Duel.GetMatchingGroup(s.tg1ifilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp)
 		if #ig==0 and Duel.GetLocationCount(tp,LOCATION_MZONE)<1 then return end
 		local sig=aux.SelectUnselectGroup(ig,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 		Duel.SpecialSummon(sig,0,tp,tp,false,false,POS_FACEUP)

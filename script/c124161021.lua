@@ -29,20 +29,20 @@ function s.con1(e,tp,eg)
 	return eg:IsExists(Card.IsControler,1,nil,1-tp)
 end
 
-function s.tg1filter(c,e,tp)
-	return c:IsSetCard(0xf21) and (c:IsLocation(LOCATION_HAND) or (c:IsLocation(LOCATION_ONFIELD) and c:IsFaceup())) and c:IsAbleToGrave()
+function s.tg1filter(c)
+	return c:IsSetCard(0xf21) and c:IsAbleToGrave()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)  
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,c,e,tp)   
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,c)   
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>1 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,1-tp) and #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,c,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,c)
 	if #g<=0 then return end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
 	if Duel.SendtoGrave(sg,REASON_EFFECT)>0 and sg:IsLocation(LOCATION_GRAVE) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsRelateToEffect(e) then

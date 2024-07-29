@@ -30,15 +30,15 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return (Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&LOCATION_ONFIELD)~=0 and rp==1-tp and Duel.IsChainNegatable(ev)
 end
 
-function s.tg1filter(c,e,tp)
+function s.tg1filter(c,e)
 	return c:IsSetCard(0xf21) and c:IsFaceup() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local rc=re:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e,tp)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e)
 	if chk==0 then return #g>0 and rc:IsAbleToRemove(tp) and Duel.IsPlayerCanRemove(tp) end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SELECT)
 	Duel.SetTargetCard(sg)

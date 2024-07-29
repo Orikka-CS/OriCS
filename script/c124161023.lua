@@ -35,14 +35,14 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.con1filter,1,nil,tp)
 end
 
-function s.tg1filter(c,e,tp)
+function s.tg1filter(c,e)
 	return c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_MMZONE+LOCATION_STZONE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e,tp) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MMZONE+LOCATION_STZONE,nil,e,tp)
+	if chkc then return chkc:IsLocation(LOCATION_MMZONE+LOCATION_STZONE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MMZONE+LOCATION_STZONE,nil,e)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 	Duel.SetTargetCard(sg)

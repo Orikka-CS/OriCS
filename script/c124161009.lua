@@ -40,14 +40,14 @@ function s.tg1filter(c)
 	return c:IsPublic(e)
 end
 
-function s.tg1desfilter(c,e,tp)
+function s.tg1desfilter(c,e)
 	return c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chkc then return chkc:IsOnField() and chkc:IsControler(1-tp) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil,e,tp)
-	local dg=Duel.GetMatchingGroup(s.tg1desfilter,tp,0,LOCATION_ONFIELD,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
+	local dg=Duel.GetMatchingGroup(s.tg1desfilter,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return #g>0 and #dg>0 end
 	local sg=aux.SelectUnselectGroup(dg,e,tp,1,#g,aux.TRUE,1,tp,HINTMSG_DESTROY)
 	Duel.SetTargetCard(sg)
@@ -63,7 +63,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=tg:Filter(Card.IsRelateToEffect,nil,e)
 	if #g>0 then
 		Duel.Destroy(g,REASON_EFFECT)
-		local rg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil,e,tp)
+		local rg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil)
 		if #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			local srg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)

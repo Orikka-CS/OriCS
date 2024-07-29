@@ -18,7 +18,7 @@ function s.tg1filter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	local ct=g:GetClassCount(Card.GetCode)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE,PLAYER_NONE,0)>1 and ct>=2 end
 	local dis=Duel.SelectDisableField(tp,2,LOCATION_MZONE,0,0)
@@ -29,7 +29,7 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	local ct=g:GetClassCount(Card.GetCode)
 	if 2>ct then return end
 	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)

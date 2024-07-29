@@ -55,7 +55,7 @@ end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,c,e,tp)
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,c)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)
@@ -112,7 +112,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	e3:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 	e3:SetValue(s.val3)
 	c:RegisterEffect(e3)
-	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_EXTRA,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_EXTRA,0,nil)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
 		Duel.BreakEffect()
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_SELECT):GetFirst()
