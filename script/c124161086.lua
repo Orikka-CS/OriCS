@@ -32,17 +32,27 @@ function s.initial_effect(c)
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_FIELD)
 	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e4:SetCode(EFFECT_CANNOT_ACTIVATE)
 	e4:SetRange(LOCATION_FZONE)
+	e4:SetCode(EFFECT_CANNOT_SUMMON)
+	e4:SetCondition(s.con3u)
 	e4:SetTargetRange(0,1)
-	e4:SetValue(s.val3)
+	e4:SetTarget(function(e,c) return c:IsLocation(LOCATION_HAND) end)
 	c:RegisterEffect(e4)
-	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e5:SetCode(EVENT_SSET)
-	e5:SetRange(LOCATION_FZONE)
-	e5:SetOperation(s.op3)
+	local e5=e4:Clone()
+	e5:SetCode(EFFECT_FORCE_SPSUMMON_POSITION)
+	e5:SetValue(POS_FACEDOWN_DEFENSE)
 	c:RegisterEffect(e5)
+	local e6=e4:Clone()
+	e6:SetCode(EFFECT_CANNOT_ACTIVATE)
+	e6:SetValue(s.val3)
+	c:RegisterEffect(e6)
+	local e7=e4:Clone()
+	e7:SetCode(EFFECT_CANNOT_SSET)
+	e7:SetCondition(s.con3d)
+	c:RegisterEffect(e7)
+	local e8=e7:Clone()
+	e8:SetCode(EFFECT_CANNOT_MSET)
+	c:RegisterEffect(e8)
 end
 
 --effect 1
@@ -93,20 +103,24 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 3
+function s.con3filter(c)
+	return c:IsSetCard(0xf25) and c:IsType(TYPE_LINK)
+end
+
+function s.con3u(e)
+	local tp=e:GetHandlerPlayer()
+	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
+	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
+	return ug>dg and Duel.GetMatchingGroupCount(s.con3filter,tp,LOCATION_MZONE,0,nil)>0
+end
+
+function s.con3d(e)
+	local tp=e:GetHandlerPlayer()
+	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
+	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
+	return dg>ug and Duel.GetMatchingGroupCount(s.con3filter,tp,LOCATION_MZONE,0,nil)>0
+end
+
 function s.val3(e,re,tp)
-	local c=re:GetHandler()
-	return c:GetFlagEffect(id)>0
-end
-
-function s.op3filter(c)
-	return c:IsSetCard(0xf25) and c:IsType(TYPE_LINK) and c:IsFaceup()
-end
-
-function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	local tc=eg:GetFirst()
-	local g=Duel.GetMatchingGroup(s.op3filter,tp,LOCATION_MZONE,0,nil)
-	if #g==0 then return end
-	for tc in aux.Next(eg) do
-		tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,2)
-	end
+	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsLocation(LOCATION_HAND)
 end

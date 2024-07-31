@@ -58,9 +58,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local xg=Duel.GetMatchingGroup(Card.IsCanBeXyzMaterial,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil)
 	if #xg==0 then return end
 	Duel.BreakEffect()
-	local xsg=aux.SelectUnselectGroup(xg,e,tp,1,ovc,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
+	local xsg=aux.SelectUnselectGroup(xg+rc,e,tp,1,ovc,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 	local x=xsg-xsg:Filter(Card.IsImmuneToEffect,nil,e)
 	Duel.Overlay(sg,x,true)
+	if rc:IsLocation(LOCATION_OVERLAY) then
+		rc:CancelToGrave()
+	end
 end 
 
 --effect 2

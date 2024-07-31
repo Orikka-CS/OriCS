@@ -21,8 +21,9 @@ function s.initial_effect(c)
 	--effect 2
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_DAMAGE)
-	e3:SetType(EFFECT_TYPE_IGNITION)
-	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
+	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetCountLimit(1,id)
 	e3:SetTarget(s.tg2)
@@ -30,16 +31,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 	--effect 3
 	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e4:SetCode(EVENT_SUMMON_SUCCESS)
-	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e4:SetType(EFFECT_TYPE_FIELD)
+	e4:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 	e4:SetRange(LOCATION_FZONE)
-	e4:SetCondition(s.con3)
-	e4:SetOperation(s.op3)
+	e4:SetTargetRange(LOCATION_MZONE,0)
+	e4:SetTarget(s.tg3)
+	e4:SetValue(1)
 	c:RegisterEffect(e4)
-	local e5=e4:Clone()
-	e5:SetCode(EVENT_SPSUMMON_SUCCESS)
-	c:RegisterEffect(e5)
 end
 
 --effect 1
@@ -85,16 +83,10 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 3
-function s.con3filter(c)
-	return c:IsType(TYPE_XYZ) and c:IsFaceup()
+function s.tg3filter(c)
+	return c:IsMonster() and c:IsSetCard(0xf26)
 end
 
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	if not eg:IsExists(Card.IsSummonPlayer,1,nil,1-tp) then return false end
-	local g=Duel.GetMatchingGroup(s.con3filter,tp,LOCATION_MZONE,0,nil)
-	return #g>0
-end
-
-function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Damage(1-tp,600,REASON_EFFECT)
+function s.tg3(e,c)
+	return c:IsType(TYPE_XYZ) and c:GetOverlayGroup():FilterCount(s.tg3filter,nil)>0
 end
