@@ -76,5 +76,5 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	for tc in aux.Next(g) do
 		x=x+tc:GetOverlayCount()
 	end
-	Duel.Damage(1-tp,x*300,REASON_EFFECT)
+	Duel.Damage(1-tp,x*200,REASON_EFFECT)
 end

@@ -32,11 +32,11 @@ function s.initial_effect(c)
 	--effect 3
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_FIELD)
-	e4:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+	e4:SetCode(EFFECT_CHANGE_BATTLE_DAMAGE)
 	e4:SetRange(LOCATION_FZONE)
-	e4:SetTargetRange(LOCATION_MZONE,0)
+	e4:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
 	e4:SetTarget(s.tg3)
-	e4:SetValue(1)
+	e4:SetValue(aux.ChangeBattleDamage(1,DOUBLE_DAMAGE))
 	c:RegisterEffect(e4)
 end
 
@@ -49,7 +49,7 @@ function s.val1(e,c)
 	for tc in aux.Next(g) do
 		x=x+tc:GetOverlayCount()
 	end
-	return x*200
+	return x*100
 end
 
 --effect 2
@@ -68,7 +68,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return #g>0 and #xg>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SELECT)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,sg:GetFirst():GetOverlayCount()*400)
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,sg:GetFirst():GetOverlayCount()*300)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -78,7 +78,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		local sxg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 		Duel.Overlay(sg,sxg,true)
 		Duel.BreakEffect()
-		Duel.Damage(1-tp,sg:GetOverlayCount()*400,REASON_EFFECT)
+		Duel.Damage(1-tp,sg:GetOverlayCount()*300,REASON_EFFECT)
 	end
 end
 
@@ -88,5 +88,5 @@ function s.tg3filter(c)
 end
 
 function s.tg3(e,c)
-	return c:IsType(TYPE_XYZ) and c:GetOverlayGroup():FilterCount(s.tg3filter,nil)>0
+	return c:IsType(TYPE_XYZ) and c:GetOverlayGroup():FilterCount(s.tg3filter,nil)>0 and c:GetBattleTarget()~=nil and c:GetBattleTarget():GetControler()==1-e:GetHandlerPlayer()
 end
