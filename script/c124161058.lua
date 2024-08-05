@@ -48,7 +48,7 @@ function s.cst3filter(c)
 end
 
 function s.cst3(e,tp,eg,ep,ev,re,r,rp,chk)
-	local tg=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,0,nil)
+	local tg=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,0,nil,e)
 	if #tg>1 then tg=nil end
 	local g=Duel.GetMatchingGroup(s.cst3filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,tg)
 	if chk==0 then return #g>0 end
