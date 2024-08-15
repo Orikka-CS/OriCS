@@ -28,7 +28,7 @@ end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_HAND+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_HAND+LOCATION_DECK)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 
