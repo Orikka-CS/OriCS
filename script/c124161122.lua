@@ -51,7 +51,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local g=Duel.GetMatchingGroup(Card.IsCode,rp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,cd)
 		if #g>0 then
 			Duel.BreakEffect()
-			Duel.Remove(g+re:GetHandler(),POS_FACEUP,REASON_EFFECT)
+			local rc=re:GetHandler()
+			if not rc:IsLocation(LOCATION_DECK) and not rc:IsLocation(LOCATION_EXTRA) then
+				g=g+rc
+			end
+			Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 		end
 	end
 end
