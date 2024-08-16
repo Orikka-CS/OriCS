@@ -61,22 +61,22 @@ end
 
 --effect 2
 function s.tg2filter(c)
-	return c:IsSetCard(0xf27) and c:IsAbleToRemove()
+	return c:IsAbleToRemove()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_ONFIELD,0,nil)
-	if chk==0 then return #g>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,tp,LOCATION_ONFIELD)
+	if chk==0 then return #g>1 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) end
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,2,tp,LOCATION_ONFIELD)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_ONFIELD,0,nil)
-	if #g==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	if #g<2 then return end
+	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
