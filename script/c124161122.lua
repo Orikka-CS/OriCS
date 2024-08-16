@@ -37,7 +37,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if e:GetHandler():IsPreviousLocation(LOCATION_REMOVED) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
 		e:SetLabel(1)
 		e:SetCategory(CATEGORY_NEGATE+CATEGORY_REMOVE)
-		Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,0,rp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_EXTRA)
+		Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,0,rp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE)
 	else
 		e:SetCategory(CATEGORY_NEGATE)
 		e:SetLabel(0)
@@ -48,7 +48,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) then
 		if e:GetLabel()==0 then return end
 		local cd=re:GetHandler():GetCode()
-		local g=Duel.GetMatchingGroup(Card.IsCode,rp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_EXTRA,0,nil,cd)
+		local g=Duel.GetMatchingGroup(Card.IsCode,rp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,cd)
 		if #g>0 then
 			Duel.BreakEffect()
 			Duel.Remove(g+re:GetHandler(),POS_FACEUP,REASON_EFFECT)
