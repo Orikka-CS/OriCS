@@ -72,7 +72,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local srg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE):GetFirst()
 	Duel.Remove(srg,POS_FACEUP,REASON_EFFECT)
 	local tg=Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,nil,REASON_EFFECT)
-	if sg:IsSpellTrap() and #tg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+	if sg:IsSpellTrap() and not sg:IsType(TYPE_FIELD) and #tg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		local stg=aux.SelectUnselectGroup(tg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
 		Duel.SendtoGrave(stg,REASON_EFFECT+REASON_DISCARD)
