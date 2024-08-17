@@ -43,17 +43,17 @@ end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	local rg=Duel.GetMatchingGroup(s.tg1rfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,c)
+	local rg=Duel.GetMatchingGroup(s.tg1rfilter,tp,LOCATION_HAND,0,c)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0
 	end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,rg,1,tp,LOCATION_HAND+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,rg,1,tp,LOCATION_HAND)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	local rg=Duel.GetMatchingGroup(s.tg1rfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,c)
+	local rg=Duel.GetMatchingGroup(s.tg1rfilter,tp,LOCATION_HAND,0,c)
 	if #rg==0 then return end
 	local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.Remove(rsg,POS_FACEUP,REASON_EFFECT)
