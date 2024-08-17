@@ -49,11 +49,11 @@ end
 
 --effect2
 function s.tg2ffilter(c,cd)
-	return c:IsSetCard(0xf27) and c:IsAbleToRemove() and not c:IsCode(cd)
+	return c:IsSetCard(0xf27) and c:IsAbleToRemove() and not c:IsCode(cd) and not c:IsType(TYPE_FIELD)
 end
 
 function s.tg2filter(c,e,tp)
-	return Duel.IsExistingMatchingCard(s.tg2ffilter,tp,LOCATION_DECK,0,1,nil,c:GetCode()) and c:IsCanBeEffectTarget(e) and c:IsFaceup() and c:IsSetCard(0xf27) and not c:IsType(TYPE_FIELD)
+	return Duel.IsExistingMatchingCard(s.tg2ffilter,tp,LOCATION_DECK,0,1,nil,c:GetCode()) and c:IsCanBeEffectTarget(e) and c:IsFaceup() and c:IsSetCard(0xf27)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
