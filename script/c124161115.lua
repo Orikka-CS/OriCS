@@ -6,29 +6,33 @@ function s.initial_effect(c)
 	Synchro.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_ROCK),1,1,Synchro.NonTuner(nil),1,99)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
 	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetCode(EVENT_PHASE+PHASE_END)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
 
 --effect 1
+function s.con1(_,tp)
+	return Duel.IsTurnPlayer(1-tp)
+end
+
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(2)
 	return true
@@ -65,6 +69,10 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.con2(_,tp)
+	return Duel.IsTurnPlayer(tp)
+end
+
 function s.tg2filter(c,e)
 	return c:IsSetCard(0xf27) and c:IsSpellTrap() and c:IsSSetable() and c:IsCanBeEffectTarget(e) and c:IsFaceup()
 end

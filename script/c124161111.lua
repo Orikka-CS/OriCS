@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_REMOVE)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TODECK)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_MZONE)
@@ -30,27 +30,32 @@ function s.tg1filter(c,e,tp)
 	return c:IsSetCard(0xf27) and not c:IsType(TYPE_SYNCHRO) and c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
+function s.tg1dfilter(c)
+	return c:IsSetCard(0xf27) and c:IsAbleToDeck() and c:IsFaceup() and c:IsMonster()
+end
+
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e,tp)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 end
+	local dg=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_REMOVED,0,nil)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 and #dg>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,sg,1,0,0)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,dg,1,tp,LOCATION_REMOVED)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 		local sg=Duel.GetFirstTarget()
 		if sg:IsRelateToEffect(e) then
-			Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
-			local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
-			if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
+			if Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)<1 then return end
+			local g=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_REMOVED,0,nil)
+			if #g>0 then
 				Duel.BreakEffect()
-				local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_REMOVE)
-				Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+				local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_TODECK)
+				Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 			end
 		end
 	end
