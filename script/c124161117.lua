@@ -43,8 +43,12 @@ function s.initial_effect(c)
 end
 
 --effect 1
+function s.val1filter(c)
+	return c:IsSummonLocation(LOCATION_REMOVED) or (c:IsPreviousLocation(LOCATION_REMOVED) and c:IsFacedown())
+end
+
 function s.val1(e,c)
-	return Duel.GetMatchingGroupCount(Card.IsPreviousLocation,e:GetHandlerPlayer(),LOCATION_ONFIELD,0,nil,LOCATION_REMOVED)*200
+	return Duel.GetMatchingGroupCount(s.val1filter,e:GetHandlerPlayer(),LOCATION_ONFIELD,0,nil)*200
 end
 
 --effect2
