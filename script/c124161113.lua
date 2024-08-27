@@ -63,7 +63,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg2filter(c,e)
-	return c:IsSpellTrap() and c:IsCanBeEffectTarget(e)
+	return c:IsSpellTrap() and c:IsCanBeEffectTarget(e) and c:IsAbleToRemove()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

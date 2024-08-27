@@ -27,7 +27,7 @@ end
 
 --effect 1
 function s.tg1filter(c,e)
-	return c:IsSetCard(0xf27) and c:IsCanBeEffectTarget(e)
+	return c:IsSetCard(0xf27) and c:IsCanBeEffectTarget(e) and c:IsAbleToRemove()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

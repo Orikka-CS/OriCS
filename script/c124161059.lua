@@ -104,13 +104,13 @@ function s.con3(e,tp,eg)
 	return eg:IsExists(s.con3filter,1,nil,tp)
 end
 
-function s.tg3filter(c,e,tp)
-	return c:IsCanBeEffectTarget(e)
+function s.tg3filter(c,e)
+	return c:IsCanBeEffectTarget(e) and c:IsAbleToRemove()
 end
 
 function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(1-tp) end
-	local g=Duel.GetMatchingGroup(s.tg3filter,tp,0,LOCATION_GRAVE,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg3filter,tp,0,LOCATION_GRAVE,nil,e)
 	local eq=Duel.GetFlagEffect(tp,124161058)
 	if chk==0 then return #g>0 and eq>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,eq,aux.TRUE,1,tp,HINTMSG_REMOVE)

@@ -34,11 +34,15 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return g>0
 end
 
+function s.tg1filter(c,e)
+	return c:IsAbleToRemove() and c:IsCanBeEffectTarget(e)
+end
+
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chkc then return chkc:IsOnField() and chkc:IsControler(1-tp) end
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-	local rg=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
+	local rg=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return math.abs(ug-dg)>0 and #rg>0 end
 	local sg=aux.SelectUnselectGroup(rg,e,tp,1,math.abs(ug-dg),aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.SetTargetCard(sg)
