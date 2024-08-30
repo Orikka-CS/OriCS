@@ -58,15 +58,15 @@ function s.tg2filter(c,e)
 end
 
 function s.tg2sfilter(c)
-	return c:IsContinuousTrap() and c:IsTrapMonster() and c:IsSSetable() and not c:IsPublic()
+	return c:IsContinuousTrap() and c:IsTrapMonster() and c:IsSSetable()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg2sfilter,tp,LOCATION_DECK,0,nil)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) end
-	local tg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e)
-	if chk==0 then return #tg>1 and #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.IsPlayerCanDraw(tp) end
-	local sg=aux.SelectUnselectGroup(tg,e,tp,2,2,aux.TRUE,1,tp,HINTMSG_TODECK)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) end
+	local tg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e)
+	if chk==0 then return #tg>2 and #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 end
+	local sg=aux.SelectUnselectGroup(tg,e,tp,3,3,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,#sg,0,0)
 end
