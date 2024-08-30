@@ -39,7 +39,7 @@ function s.con1filter(c,tp)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con1filter,1,nil,tp)
+	return eg:IsExists(s.con1filter,1,nil,tp) and not eg:IsContains(e:GetHandler())
 end
 
 function s.tg1filter(c,e,tp)
