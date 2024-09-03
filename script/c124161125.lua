@@ -4,8 +4,9 @@ function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetRange(LOCATION_HAND)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY)
+	e1:SetCode(EVENT_TO_HAND)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
@@ -23,13 +24,8 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1filter(c)
-	return (c:IsSetCard(0xf28) or c:IsTrapMonster())  and c:IsFaceup()
-end
-
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)
-	return g>0
+	return e:GetHandler():IsReason(REASON_EFFECT)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

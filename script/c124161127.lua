@@ -68,7 +68,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return (c:IsTrapMonster() or (c:IsType(TYPE_LINK) and c:IsSetCard(0xf28))) and c:IsControler(tp)
+	return c:IsType(TYPE_LINK) and c:IsSetCard(0xf28) and c:IsControler(tp)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
