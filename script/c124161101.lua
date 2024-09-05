@@ -25,7 +25,7 @@ end
 
 --effect 1
 function s.tg1filter(c)
-	return c:IsSetCard(0xf26) and c:IsMonster() and c:IsAbleToHand()
+	return c:IsSetCard(0xf26) and not c:IsCode(id) and c:IsAbleToHand()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

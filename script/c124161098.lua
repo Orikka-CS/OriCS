@@ -21,7 +21,7 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_DAMAGE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
@@ -60,8 +60,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --effect 2
+function s.con2filter(c,tp)
+	return c:IsControler(1-tp) and c:IsMonster()
+end
 function s.con2(e,tp,eg)
-	return eg:IsExists(Card.IsControler,1,nil,1-tp)
+	return eg:IsExists(s.con2filter,1,nil,tp)
 end
 
 function s.tg2filter(c,atk)
