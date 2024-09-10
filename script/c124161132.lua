@@ -45,7 +45,7 @@ end
 
 --effect 1
 function s.val1filter(c)
-	return c:IsTrapMonster() and c:IsFaceup()
+	return c:IsTrapMonster() and c:IsContinuousTrap() and c:IsFaceup()
 end
 
 function s.val1(e,c)
