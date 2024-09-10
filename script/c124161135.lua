@@ -40,7 +40,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1filter(c)
-	return c:IsFaceup() and (c:IsSetCard(0xf28) or c:IsTrapMonster())
+	return c:IsFaceup() and (c:IsSetCard(0xf28) or (c:IsTrapMonster() and c:IsContinuousTrap()))
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

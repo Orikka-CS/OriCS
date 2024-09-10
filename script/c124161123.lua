@@ -27,7 +27,7 @@ end
 
 --effect 1
 function s.con1filter(c,tp)
-	return c:IsFaceup() and (c:IsTrapMonster() or c:IsSetCard(0xf28)) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp)
+	return c:IsFaceup() and ((c:IsTrapMonster() and c:IsContinuousTrap()) or c:IsSetCard(0xf28)) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp)
 end
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	if rp==tp then return false end

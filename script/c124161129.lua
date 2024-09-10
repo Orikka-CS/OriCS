@@ -31,8 +31,11 @@ function s.initial_effect(c)
 end
 
 --link
+function s.linkffilter(c)
+	return c:IsTrapMonster() and c:IsContinuousTrap()
+end
 function s.linkfilter(g,lc,sumtype,tp)
-	return g:IsExists(Card.IsTrapMonster,1,nil,lc,sumtype,tp)
+	return g:IsExists(s.linkffilter,1,nil,lc,sumtype,tp)
 end
 
 --effect 1

@@ -70,10 +70,14 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.con2filter(c)
+	return c:IsTrapMonster() and c:IsContinuousTrap()
+end
+
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=c:GetMaterial()
-	return c:IsSummonType(SUMMON_TYPE_LINK) and g:FilterCount(Card.IsTrapMonster,nil)>0
+	return c:IsSummonType(SUMMON_TYPE_LINK) and g:FilterCount(s.con2filter,nil)>0
 end
 
 function s.tg2filter(c)

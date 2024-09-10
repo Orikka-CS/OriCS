@@ -28,7 +28,7 @@ function s.con1filter(c)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)>0 and Duel.IsChainNegatable(ev) and rp==1-tp
+	return Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)>0 and Duel.IsChainNegatable(ev) and rp==1-tp and re:IsActiveType(TYPE_MONSTER)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -36,8 +36,8 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	if e:GetHandler():IsPreviousLocation(LOCATION_REMOVED) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
 		e:SetLabel(1)
-		e:SetCategory(CATEGORY_NEGATE+CATEGORY_REMOVE)
-		Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,0,rp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE)
+		e:SetCategory(CATEGORY_NEGATE+CATEGORY_TOGRAVE)
+		Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,rp,LOCATION_HAND+LOCATION_DECK)
 	else
 		e:SetCategory(CATEGORY_NEGATE)
 		e:SetLabel(0)
@@ -48,14 +48,10 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) then
 		if e:GetLabel()==0 then return end
 		local cd=re:GetHandler():GetCode()
-		local g=Duel.GetMatchingGroup(Card.IsCode,rp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,cd)
+		local g=Duel.GetMatchingGroup(Card.IsCode,rp,LOCATION_HAND+LOCATION_DECK,0,nil,cd)
 		if #g>0 then
 			Duel.BreakEffect()
-			local rc=re:GetHandler()
-			if not rc:IsLocation(LOCATION_DECK) and not rc:IsLocation(LOCATION_EXTRA) then
-				g=g+rc
-			end
-			Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
+			Duel.SendtoGrave(g,REASON_EFFECT)
 		end
 	end
 end
@@ -82,7 +78,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
 	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,3,nil,1,tp,HINTMSG_REMOVE)
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_REMOVE)
 		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 	end
 end
