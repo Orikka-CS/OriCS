@@ -57,12 +57,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Duel.GetFirstTarget()
 	if sg:IsRelateToEffect(e) then
 		Duel.SSet(tp,sg)
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-		e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-		sg:RegisterEffect(e1)
 	end
 end
 

@@ -31,7 +31,7 @@ end
 
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return re:GetHandler():IsType(TYPE_TRAP) and re:GetHandler()~=e:GetHandler()
+	return re:GetHandler():IsType(TYPE_TRAP) and re:GetHandler()~=e:GetHandler() and rp==tp
 end
 
 function s.tg1filter(c,e,tp)
