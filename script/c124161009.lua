@@ -25,9 +25,6 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetValue(1)
 	c:RegisterEffect(e2)
-	local e3=e2:Clone()
-	e3:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-	c:RegisterEffect(e3)
 end
 
 --effect 1
