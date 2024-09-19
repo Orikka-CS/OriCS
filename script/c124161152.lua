@@ -27,7 +27,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,1000)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_ONFIELD)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,1-tp,LOCATION_ONFIELD)
 end
 
 function s.op1filter(c)
@@ -66,11 +66,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetOwnerPlayer(tp)
 		asg:RegisterEffect(e1)
 	end
-	ag=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD,nil,tp,POS_FACEDOWN)
+	ag=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,nil)
 	if #csg>3 and #ag>0 then
 		Duel.BreakEffect()
-		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-		Duel.Remove(asg,POS_FACEDOWN,REASON_EFFECT)
+		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+		Duel.SendtoDeck(asg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	end
 	if #csg>4 and c:IsSSetable(true) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
 		Duel.BreakEffect()
