@@ -76,7 +76,8 @@ end
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil)
-	local cg=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_MZONE,nil,#g)
+	local n=g:GetClassCount(Card.GetCode)
+	local cg=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_MZONE,nil,n)
 	if chk==0 then return #g>0 and #cg>0 end
 	local mg=cg:GetMinGroup(Card.GetAttack):GetFirst()
 	local sg=aux.SelectUnselectGroup(g,e,tp,mg:GetAttack()//700+1,5,aux.dncheck,1,tp,HINTMSG_CONFIRM)
