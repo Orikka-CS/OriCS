@@ -72,6 +72,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 		Duel.SendtoDeck(asg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	end
+	local c=e:GetHandler()
 	if #csg>4 and c:IsSSetable(true) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
 		Duel.BreakEffect()
 		c:CancelToGrave()
