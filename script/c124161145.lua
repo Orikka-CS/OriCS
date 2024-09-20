@@ -46,7 +46,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 		return Duel.IsExistingMatchingCard(s.tg1filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil)
 	end
 	e:SetLabel(0)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectMatchingCard(tp,s.tg1filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
 	local te,ceg,cep,cev,cre,cr,crp=g:GetFirst():CheckActivateEffect(false,true,true)
 	Duel.ConfirmCards(1-tp,g)
