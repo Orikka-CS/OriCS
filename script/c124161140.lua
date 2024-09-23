@@ -27,7 +27,7 @@ end
 
 --effect 1
 function s.con1filter(c,tp)
-	return c:IsSetCard(0xf29) and c:IsControler(tp)
+	return c:IsSetCard(0xf29) and c:IsControler(tp) and c:IsMonster()
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
