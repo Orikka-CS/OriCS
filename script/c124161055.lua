@@ -37,7 +37,7 @@ function s.initial_effect(c)
 	e4:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
 	e4:SetRange(LOCATION_FZONE)
 	e4:SetTargetRange(LOCATION_ONFIELD,0)
-	e4:SetTarget(function(e,_c) return _c:GetEquipGroup():IsExists(Card.IsCode,1,nil,124161058) or _c:IsCode(124161058) and c:IsFaceup() end)
+	e4:SetTarget(function(e,c) return (c:GetEquipGroup():IsExists(Card.IsCode,1,nil,124161058) or c:IsCode(124161058)) and c:IsFaceup() end)
 	e4:SetValue(aux.tgoval)
 	c:RegisterEffect(e4)
 end
