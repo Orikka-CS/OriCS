@@ -24,7 +24,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_GRAVE)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
 end
 
 function s.op1filter(c)
@@ -55,18 +55,18 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.BreakEffect()
 		Duel.Draw(tp,1,REASON_EFFECT)
 	end
-	ag=Duel.GetMatchingGroup(Card.IsDiscardable,tp,0,LOCATION_HAND,nil,REASON_EFFECT)
+	ag=Duel.GetMatchingGroup(Card.IsCanBeSpecialSummoned,tp,LOCATION_HAND,0,nil,e,0,tp,false,false,POS_FACEUP)
 	if #csg>2 and #ag>0 then
-		Duel.BreakEffect()
-		asg=ag:RandomSelect(tp,1)
-		Duel.SendtoGrave(asg,REASON_EFFECT+REASON_DISCARD)
-	end
-	ag=Duel.GetMatchingGroup(Card.IsCanBeSpecialSummoned,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,0,tp,false,false,POS_FACEUP)
-	if #csg>3 and #ag>0 then
 		Duel.BreakEffect()
 		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 		Duel.SpecialSummon(asg,0,tp,tp,false,false,POS_FACEUP)
 	end
+	ag=Duel.GetMatchingGroup(Card.IsDiscardable,tp,0,LOCATION_HAND,nil,REASON_EFFECT)
+	if #csg>3 and #ag>0 then
+		Duel.BreakEffect()
+		asg=ag:RandomSelect(tp,1)
+		Duel.SendtoGrave(asg,REASON_EFFECT+REASON_DISCARD)
+	end  
 	if #csg>4 and c:IsSSetable(true) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
 		Duel.BreakEffect()
 		c:CancelToGrave()
