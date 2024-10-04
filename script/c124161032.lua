@@ -3,6 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -39,6 +40,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 	Duel.SetTargetCard(sg)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,sg,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -50,6 +52,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		if sg:IsSetCard(0xf22) and sg:GetOwner()==tp and tg(e,1-tp,eg,ep,ev,re,r,rp,0) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			local op=eff:GetOperation()
 			if op then op(e,1-tp,eg,ep,ev,re,r,rp,2) end
+			Duel.SendtoGrave(sg,REASON_EFFECT)
 		end
 	end
 end
