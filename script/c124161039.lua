@@ -26,19 +26,6 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	--effect3
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e3:SetCode(EFFECT_CANNOT_BE_BATTLE_TARGET)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetCondition(s.con3)
-	e3:SetValue(aux.imval2)
-	c:RegisterEffect(e3)
-	local e4=e3:Clone()
-	e4:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
-	e4:SetValue(aux.tgoval)
-	c:RegisterEffect(e4)
 end
 
 --link
@@ -98,15 +85,4 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 	end
-end
-
---effect3
-function s.con3filter(c)
-	return c:IsFacedown() 
-end
-
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	local tp=e:GetHandler():GetControler()
-	local g=Duel.GetMatchingGroup(s.con3filter,tp,0,LOCATION_STZONE,nil)
-	return #g>0
 end

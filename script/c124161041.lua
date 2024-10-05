@@ -20,29 +20,32 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--effect 2
 	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(id,0))
-	e3:SetCategory(CATEGORY_TOHAND)
+	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_TOGRAVE)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_CHAINING)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetCountLimit(1,id)
-	e3:SetCondition(s.con2i)
-	e3:SetTarget(s.tg2i)
-	e3:SetOperation(s.op2i)
+	e3:SetCondition(s.con2)
+	e3:SetTarget(s.tg2)
+	e3:SetOperation(s.op2)
 	c:RegisterEffect(e3)
-	local e4=e3:Clone()
-	e4:SetDescription(aux.Stringid(id,1))
-	e4:SetCondition(s.con2o)
-	e4:SetTarget(s.tg2o)
-	e4:SetOperation(s.op2o)
-	c:RegisterEffect(e4)
 	--effect 3
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_FIELD)
+	e4:SetCode(EFFECT_CANNOT_SELECT_BATTLE_TARGET)
+	e4:SetRange(LOCATION_FZONE)
+	e4:SetTargetRange(0,LOCATION_MZONE)
+	e4:SetValue(s.tg3)
+	c:RegisterEffect(e4)
 	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e5:SetCode(EVENT_CHAINING)
+	e5:SetType(EFFECT_TYPE_FIELD)
+	e5:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
 	e5:SetRange(LOCATION_FZONE)
-	e5:SetOperation(s.op3)
+	e5:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e5:SetTargetRange(LOCATION_MZONE,0)
+	e5:SetTarget(s.tg3)
+	e5:SetValue(aux.tgoval)
 	c:RegisterEffect(e5)
 end
 
@@ -52,51 +55,39 @@ function s.val1(e,c)
 end
 
 --effect 2
-function s.con2i(e,tp,eg,ep,ev,re,r,rp)
-	return ep==tp and re:GetHandler():GetOwner()==tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsSetCard(0xf22) and not re:GetHandler():IsType(TYPE_FIELD) 
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return re:GetHandler():GetOwner()==tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsSetCard(0xf22) and not re:GetHandler():IsType(TYPE_FIELD) 
 end
 
-function s.tg2ifilter(c)
+function s.tg2filter(c)
 	return c:IsSetCard(0xf22) and c:IsMonster() and c:IsAbleToHand() 
 end
 
-function s.tg2i(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_GRAVE,0,nil)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetFieldGroup(ep,0,LOCATION_HAND)
 	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_HAND)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
 end
 
-function s.op2i(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_GRAVE,0,nil)
-	if #g<1 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-	Duel.SendtoHand(sg,nil,REASON_EFFECT)
-end
-
-function s.con2o(e,tp,eg,ep,ev,re,r,rp)
-	return ep==1-tp and re:GetHandler():GetOwner()==tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsSetCard(0xf22) and not re:GetHandler():IsType(TYPE_FIELD)
-end
-
-function s.tg2ofilter(c)
-	return c:IsSetCard(0xf22) and c:IsSSetable() and (c:IsType(TYPE_QUICKPLAY) or c:IsType(TYPE_TRAP)) 
-end
-
-function s.tg2o(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg2ofilter,tp,LOCATION_GRAVE,0,nil)
-	if chk==0 then return #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 end
-end
-
-function s.op2o(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg2ofilter,tp,LOCATION_GRAVE,0,nil)
-	if #g<1 and Duel.GetLocationCount(tp,LOCATION_SZONE)<1 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND):GetFirst()
-	Duel.SSet(tp,sg)
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetFieldGroup(ep,LOCATION_HAND,0)
+	if #g==0 then return end
+	local sg=aux.SelectUnselectGroup(g,e,ep,1,1,aux.TRUE,1,ep,HINTMSG_TOGRAVE):GetFirst()
+	Duel.SendtoGrave(sg,REASON_EFFECT)
+	local hg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
+	if sg:IsLocation(LOCATION_GRAVE) and #hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.BreakEffect()
+		local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(hsg,nil,REASON_EFFECT)
+	end
 end
 
 --effect 3
-function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	local rc=re:GetHandler()
-	if ep==1-tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) then
-		Duel.SetChainLimit(function(_e,_rp,_tp) return _tp==_rp end)
-	end
+function s.tg3filter(c,tp)
+	return c:IsFacedown() and c:IsLocation(LOCATION_SZONE) and c:IsControler(1-tp) 
+end
+
+function s.tg3(e,c)
+	return c:IsSetCard(0xf22) and c:GetColumnGroup():IsExists(s.tg3filter,1,nil,e:GetHandlerPlayer()) and c:IsFaceup()
 end
