@@ -54,7 +54,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	ag=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
 	if #csg>2 and #ag>0 then
 		Duel.BreakEffect()
-		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,nil,1,tp,HINTMSG_SELECT):GetFirst()
+		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,nil,1,tp,HINTMSG_FACEUP):GetFirst()
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetDescription(aux.Stringid(id,1))
 		e1:SetType(EFFECT_TYPE_SINGLE)

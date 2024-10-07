@@ -76,7 +76,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
 	if chk==0 then return #g>0 and ug~=dg end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,math.abs(ug-dg),aux.TRUE,1,tp,HINTMSG_FACEDOWN)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,math.abs(ug-dg),aux.TRUE,1,tp,HINTMSG_POSCHANGE)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,sg,#sg,0,0)
 end

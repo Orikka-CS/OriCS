@@ -52,7 +52,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil)
 	local rg=Duel.GetMatchingGroup(s.tg1revfilter,tp,LOCATION_HAND,0,nil)
 	if #g>0 and #rg>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,#rg,aux.TRUE,1,tp,HINTMSG_FACEDOWN)
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,#rg,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
 		Duel.ChangePosition(sg,POS_FACEDOWN_DEFENSE)
 	end
 end
