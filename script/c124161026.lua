@@ -97,5 +97,5 @@ end
 
 function s.val3(e,te)
 	local loc=Duel.GetChainInfo(0,CHAININFO_TRIGGERING_LOCATION)
-	return te:IsActivated() and te:IsActiveType(TYPE_MONSTER) and e:GetHandlerPlayer()==1-te:GetHandlerPlayer() and loc~=LOCATION_MZONE 
+	return te:IsActivated() and e:GetHandlerPlayer()==1-te:GetHandlerPlayer() and (loc==LOCATION_HAND or loc==LOCATION_GRAVE or loc==LOCATION_REMOVED or loc==LOCATION_EXTRA or loc==LOCATION_DECK) 
 end

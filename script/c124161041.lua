@@ -45,7 +45,7 @@ function s.initial_effect(c)
 	e5:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e5:SetTargetRange(LOCATION_MZONE,0)
 	e5:SetTarget(s.tg3)
-	e5:SetValue(aux.tgoval)
+	e5:SetValue(s.val3)
 	c:RegisterEffect(e5)
 end
 
@@ -90,4 +90,8 @@ end
 
 function s.tg3(e,c)
 	return c:IsSetCard(0xf22) and c:GetColumnGroup():IsExists(s.tg3filter,1,nil,e:GetHandlerPlayer()) and c:IsFaceup()
+end
+
+function s.val3(e,re,rp)
+	return aux.tgoval(e,re,rp) and re:IsActiveType(TYPE_MONSTER)
 end
