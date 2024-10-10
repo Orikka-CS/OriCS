@@ -31,6 +31,10 @@ function s.op1filter(c)
 	return c:IsSetCard(0xf29) and c:IsMonster() and not c:IsPublic()
 end
 
+function s.op1sfilter(c,e,tp)
+	return c:IsType(TYPE_TUNER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
@@ -55,7 +59,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.BreakEffect()
 		Duel.Draw(tp,1,REASON_EFFECT)
 	end
-	ag=Duel.GetMatchingGroup(Card.IsCanBeSpecialSummoned,tp,LOCATION_HAND,0,nil,e,0,tp,false,false,POS_FACEUP)
+	ag=Duel.GetMatchingGroup(s.op1sfilter,tp,LOCATION_GRAVE,0,nil,e,tp)
 	if #csg>2 and #ag>0 then
 		Duel.BreakEffect()
 		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
