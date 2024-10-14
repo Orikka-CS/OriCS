@@ -45,7 +45,7 @@ function s.initial_effect(c)
 	e5:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e5:SetTargetRange(LOCATION_MZONE,0)
 	e5:SetTarget(s.tg3)
-	e5:SetValue(s.val3)
+	e5:SetValue(aux.tgoval)
 	c:RegisterEffect(e5)
 end
 
@@ -56,11 +56,11 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return re:GetHandler():GetOwner()==tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsSetCard(0xf22) and not re:GetHandler():IsType(TYPE_FIELD) 
+	return re:GetHandler():GetOwner()==tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsSetCard(0xf22) and re:GetHandler()~=e:GetHandler()
 end
 
-function s.tg2filter(c)
-	return c:IsSetCard(0xf22) and c:IsMonster() and c:IsAbleToHand() 
+function s.tg2filter(c,cd)
+	return c:IsSetCard(0xf22) and c:IsAbleToHand() and not c:IsCode(cd) and not c:IsType(TYPE_FIELD)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -75,7 +75,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #g==0 then return end
 	local sg=aux.SelectUnselectGroup(g,e,ep,1,1,aux.TRUE,1,ep,HINTMSG_TOGRAVE):GetFirst()
 	Duel.SendtoGrave(sg,REASON_EFFECT)
-	local hg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
+	local hg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,re:GetHandler():GetCode())
 	if sg:IsLocation(LOCATION_GRAVE) and #hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
@@ -90,8 +90,4 @@ end
 
 function s.tg3(e,c)
 	return c:IsSetCard(0xf22) and c:GetColumnGroup():IsExists(s.tg3filter,1,nil,e:GetHandlerPlayer()) and c:IsFaceup()
-end
-
-function s.val3(e,re,rp)
-	return aux.tgoval(e,re,rp) and re:IsActiveType(TYPE_MONSTER)
 end
