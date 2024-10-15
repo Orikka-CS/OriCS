@@ -30,7 +30,7 @@ end
 
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return re:GetHandler():IsSetCard(0xf29) and not re:GetHandler():IsCode(id) and rp==tp
+	return re:GetHandler():IsSetCard(0xf29) and not re:GetHandler():IsCode(id) and rp==tp and re:GetHandler():IsMonster()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

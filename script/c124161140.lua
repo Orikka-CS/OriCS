@@ -27,7 +27,7 @@ end
 
 --effect 1
 function s.con1filter(c,tp)
-	return c:IsSetCard(0xf29) and c:IsControler(tp) and c:IsMonster()
+	return c:IsSetCard(0xf29) and c:IsControler(tp) and not c:IsCode(id) and c:IsMonster()
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
@@ -35,7 +35,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg1filter(c)
-	return c:IsSetCard(0xf29) and not c:IsCode(id) and c:IsAbleToGrave()
+	return c:IsSetCard(0xf29) and c:IsAbleToGrave()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
