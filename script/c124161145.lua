@@ -37,20 +37,19 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1filter(c)
-	return c:IsSpellTrap() and c:IsSetCard(0xf29) and c:IsAbleToDeckAsCost() and c:CheckActivateEffect(false,true,true)~=nil and c:IsFaceup()
+	return c:IsSpellTrap() and c:IsSetCard(0xf29) and c:CheckActivateEffect(false,true,true)~=nil and c:IsAbleToGraveAsCost()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then if e:GetLabel()==0 then return false end
 		e:SetLabel(0)
-		return Duel.IsExistingMatchingCard(s.tg1filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil)
+		return Duel.IsExistingMatchingCard(s.tg1filter,tp,LOCATION_DECK,0,1,nil)
 	end
 	e:SetLabel(0)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,s.tg1filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g=Duel.SelectMatchingCard(tp,s.tg1filter,tp,LOCATION_DECK,0,1,1,nil)
 	local te,ceg,cep,cev,cre,cr,crp=g:GetFirst():CheckActivateEffect(false,true,true)
-	Duel.ConfirmCards(1-tp,g)
-	Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_COST)
+	Duel.SendtoGrave(g,REASON_COST)
 	e:SetProperty(te:GetProperty())
 	local tg=te:GetTarget()
 	if tg then tg(e,tp,ceg,cep,cev,cre,cr,crp,1) end
@@ -82,6 +81,6 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetClassCount(Card.GetCode)>4 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,5,5,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 		Duel.ConfirmCards(1-tp,sg)
-		Duel.Win(tp,WIN_REASON_EXODIA)
+		Duel.Win(tp,0x01)
 	end  
 end
