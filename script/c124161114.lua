@@ -29,7 +29,7 @@ end
 
 --effect 1
 function s.cst1filter(c)
-	return (c:IsSetCard(0xf27) or c:IsRace(RACE_ROCK)) and c:GetAttack()>0 and c:IsAbleToRemoveAsCost()
+	return c:IsRace(RACE_ROCK) and c:GetAttack()>0 and c:IsAbleToRemoveAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -65,7 +65,7 @@ end
 
 --effect 2
 function s.cst2filter(c)
-	return c:IsSetCard(0xf27) and c:IsAbleToRemoveAsCost()
+	return c:IsSetCard(0xf27) and c:IsMonster() and c:IsAbleToRemoveAsCost()
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)

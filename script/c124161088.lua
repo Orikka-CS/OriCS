@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOGRAVE)
+	e1:SetCategory(CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -35,7 +35,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg1filter(c,e)
-	return c:IsAbleToGrave() and c:IsCanBeEffectTarget(e)
+	return c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -44,9 +44,9 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
 	local rg=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return math.abs(ug-dg)>0 and #rg>0 end
-	local sg=aux.SelectUnselectGroup(rg,e,tp,1,math.abs(ug-dg),aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+	local sg=aux.SelectUnselectGroup(rg,e,tp,1,math.abs(ug-dg),aux.TRUE,1,tp,HINTMSG_DESTROY)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,sg,#sg,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,sg,#sg,0,0)
 	if math.abs(ug-dg)>2 then
 		Duel.SetChainLimit(s.chlimit)
 	end
@@ -59,7 +59,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetTargetCards(e)
 	if #g>0 then
-		Duel.SendtoGrave(g,REASON_EFFECT)
+		Duel.Destroy(g,REASON_EFFECT)
 	end
 end
 

@@ -45,7 +45,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then return end
 	rc:CancelToGrave()
-	Duel.Remove(rc,POS_FACEUP,REASON_EFFECT)
+	if Duel.Remove(rc,POS_FACEUP,REASON_EFFECT)==0 then return end
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_CANNOT_ACTIVATE)
