@@ -51,7 +51,7 @@ end
 
 --effect 1
 function s.val1(e,c)
-	return Duel.GetMatchingGroupCount(Card.IsFacedown,e:GetHandlerPlayer(),LOCATION_STZONE,LOCATION_STZONE,nil)*200
+	return Duel.GetMatchingGroupCount(Card.IsFacedown,e:GetHandlerPlayer(),0,LOCATION_STZONE,nil)*300
 end
 
 --effect 2

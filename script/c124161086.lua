@@ -52,7 +52,7 @@ function s.val1(e,c)
 	if ug>dg then
 		dg=ug
 	end
-	return dg*200
+	return dg*100
 end
 
 --effect 2
