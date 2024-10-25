@@ -96,8 +96,8 @@ end
 
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) then
-		Duel.Destroy(sg,REASON_EFFECT)
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		Duel.Destroy(tg,REASON_EFFECT)
 	end
 end

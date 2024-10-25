@@ -86,11 +86,11 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
+	local tg=Duel.GetFirstTarget()
 	local un=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil,124161058)
-	if tc:IsRelateToEffect(e) and tc:IsFaceup() and #un>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then
+	if tg:IsRelateToEffect(e) and tg:IsFaceup() and #un>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then
 	local sg=aux.SelectUnselectGroup(un,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
-		Duel.Equip(tp,sg,tc)
+		Duel.Equip(tp,sg,tg)
 	end
 end
 
@@ -118,9 +118,8 @@ function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	local tc=tg:Filter(Card.IsRelateToEffect,nil,e)
-	if #tc>0 then
-		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)
 	end
 end

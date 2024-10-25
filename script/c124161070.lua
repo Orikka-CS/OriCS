@@ -85,8 +85,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	if Duel.Destroy(g,REASON_EFFECT)~=2 then
+	local tg=Duel.GetTargetCards(e)
+	if Duel.Destroy(tg,REASON_EFFECT)~=2 then
 		local g2=Duel.GetFieldGroup(tp,LOCATION_ONFIELD,LOCATION_ONFIELD)
 		if #g2>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 			Duel.BreakEffect()

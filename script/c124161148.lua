@@ -41,20 +41,20 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local sg=Duel.GetFirstTarget()
-	if not sg:IsRelateToEffect(e) then return end
+	local tg=Duel.GetFirstTarget()
+	if not tg:IsRelateToEffect(e) then return end
 	local cg=Duel.GetMatchingGroup(s.tg1ffilter,tp,LOCATION_HAND,0,nil)
-	if cg:GetClassCount(Card.GetCode)>=sg:GetLevel()//2 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local csg=aux.SelectUnselectGroup(cg,e,tp,sg:GetLevel()//2,sg:GetLevel()//2,aux.TRUE,1,tp,HINTMSG_CONFIRM)
+	if cg:GetClassCount(Card.GetCode)>=tg:GetLevel()//2 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+		local csg=aux.SelectUnselectGroup(cg,e,tp,tg:GetLevel()//2,tg:GetLevel()//2,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 		Duel.ConfirmCards(1-tp,csg)
 		Duel.ShuffleHand(tp)
-		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
 		e1:SetValue(aux.tgoval)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-		sg:RegisterEffect(e1)
+		tg:RegisterEffect(e1)
 	end
 end
 

@@ -55,9 +55,9 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local sg=Duel.GetTargetCards(e)
-	if #sg==2 then
-		if Duel.Destroy(sg,REASON_EFFECT)==0 then return end
+	local tg=Duel.GetTargetCards(e)
+	if #tg==2 then
+		if Duel.Destroy(tg,REASON_EFFECT)==0 then return end
 		local dis=0
 		local og=Duel.GetOperatedGroup()
 		local target=og:GetFirst()

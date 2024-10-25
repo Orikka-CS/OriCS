@@ -75,8 +75,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
 	end
 end

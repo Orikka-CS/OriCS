@@ -54,15 +54,15 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local sdg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
 	Duel.SendtoGrave(sdg,REASON_EFFECT+REASON_DISCARD)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local sg=Duel.GetFirstTarget()
-		if sg:IsRelateToEffect(e) and Duel.SpecialSummonStep(sg,0,tp,tp,false,false,POS_FACEUP) then
+		local tg=Duel.GetFirstTarget()
+		if tg:IsRelateToEffect(e) and Duel.SpecialSummonStep(tg,0,tp,tp,false,false,POS_FACEUP) then
 			local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
 			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 			e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
 			e1:SetValue(LOCATION_DECKBOT)
-			sg:RegisterEffect(e1)
+			tg:RegisterEffect(e1)
 			Duel.SpecialSummonComplete()
 		end
 	end
@@ -89,8 +89,8 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) then
-		Duel.Destroy(sg,REASON_EFFECT)
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		Duel.Destroy(tg,REASON_EFFECT)
 	end
 end

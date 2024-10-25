@@ -42,9 +42,9 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	c=e:GetHandler()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local sg=Duel.GetFirstTarget()
-		if sg:IsRelateToEffect(e) then
-			if Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP) then
+		local tg=Duel.GetFirstTarget()
+		if tg:IsRelateToEffect(e) then
+			if Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP) then
 				local e1=Effect.CreateEffect(c)
 				e1:SetType(EFFECT_TYPE_FIELD)
 				e1:SetRange(LOCATION_MZONE)
@@ -53,7 +53,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 				e1:SetOperation(function(e) return e:GetLabel() end)
 				e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 				e1:SetLabel(e:GetLabel())
-				sg:RegisterEffect(e1)
+				tg:RegisterEffect(e1)
 			end
 		end
 	end

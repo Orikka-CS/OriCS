@@ -51,9 +51,9 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)==0 then return end
-	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) then
-		Duel.SSet(tp,sg)
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		Duel.SSet(tp,tg)
 	end
 end
 

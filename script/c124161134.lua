@@ -49,9 +49,9 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetTargetCards(e)
-	if #g>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.SendtoHand(tg,nil,REASON_EFFECT)
 	end
 end
 

@@ -51,9 +51,9 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetTargetCards(e)
-	if #g>0 then
-		Duel.Destroy(g,REASON_EFFECT)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.Destroy(tg,REASON_EFFECT)
 	end
 end
 

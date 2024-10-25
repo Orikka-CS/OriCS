@@ -53,15 +53,15 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetTargetCards(e)
+	local tg=Duel.GetTargetCards(e)
 	local ct=Duel.GetLocationCount(1-tp,LOCATION_SZONE)
-	if #g>0 then
-		if #g>ct then
-			local gg=aux.SelectUnselectGroup(g,e,tp,#g-ct,#g-ct,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+	if #tg>0 then
+		if #tg>ct then
+			local gg=aux.SelectUnselectGroup(tg,e,tp,#tg-ct,#tg-ct,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 			Duel.SendtoGrave(gg,REASON_RULE,nil,PLAYER_NONE)
-			g=g-gg
+			tg=tg-gg
 		end
-		for tc in g:Iter() do
+		for tc in tg:Iter() do
 			Duel.MoveToField(tc,tp,1-tp,LOCATION_SZONE,POS_FACEUP,true)
 			local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetType(EFFECT_TYPE_SINGLE)

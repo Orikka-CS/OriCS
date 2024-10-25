@@ -85,19 +85,19 @@ end
 
 function s.op1(e,tc,tp,sg,chk)
 	local c=e:GetHandler()
-	local sg=Duel.GetFirstTarget()
-	if sg:IsNegatable() and sg:IsRelateToEffect(e) then
-		sg:NegateEffects(e:GetHandler(),nil,true)
-		if sg:IsMonster() then
+	local tg=Duel.GetFirstTarget()
+	if tg:IsNegatable() and tg:IsRelateToEffect(e) then
+		tg:NegateEffects(e:GetHandler(),nil,true)
+		if tg:IsMonster() then
 			local e1=Effect.CreateEffect(c)
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_SET_ATTACK_FINAL)
 			e1:SetValue(0)
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-			sg:RegisterEffect(e1)
+			tg:RegisterEffect(e1)
 			local e2=e1:Clone()
 			e2:SetCode(EFFECT_SET_DEFENSE_FINAL)
-			sg:RegisterEffect(e2)
+			tg:RegisterEffect(e2)
 		end
 	end
 end

@@ -51,7 +51,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local rc=re:GetHandler()
-	local sg=Duel.GetFirstTarget()
+	local tg=Duel.GetFirstTarget()
 	if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then return end
 	rc:CancelToGrave()
 	if Duel.Remove(rc,POS_FACEUP,REASON_EFFECT) then
@@ -74,7 +74,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 				e1:SetTargetRange(0,1)
 				e1:SetValue(s.op1fact)
 				e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-				sg:RegisterEffect(e1)
+				tg:RegisterEffect(e1)
 				local e2=Effect.CreateEffect(c)
 				e2:SetType(EFFECT_TYPE_FIELD)
 				e2:SetCode(EFFECT_CANNOT_SSET)
@@ -83,7 +83,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 				e2:SetTargetRange(0,1)
 				e2:SetTarget(s.op1fset)
 				e2:SetReset(RESET_EVENT+RESETS_STANDARD)
-				sg:RegisterEffect(e2)
+				tg:RegisterEffect(e2)
 			end
 		end
 		local e1=Effect.CreateEffect(c)

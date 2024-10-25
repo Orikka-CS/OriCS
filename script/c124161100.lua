@@ -73,12 +73,12 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local xg=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_DECK,0,nil)
-	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) and #xg>0 then
-		local sxg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
-		Duel.Overlay(sg,sxg,true)
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) and #xg>0 then
+		local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
+		Duel.Overlay(tg,xsg,true)
 		Duel.BreakEffect()
-		Duel.Damage(1-tp,sg:GetOverlayCount()*300,REASON_EFFECT)
+		Duel.Damage(1-tp,tg:GetOverlayCount()*300,REASON_EFFECT)
 	end
 end
 

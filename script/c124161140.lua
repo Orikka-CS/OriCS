@@ -73,10 +73,11 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetTargetCards(e)
-	if #g>0 then
-		Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-		if g:FilterCount(Card.IsCode,nil,124161138)>0 and Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+		local og=Duel.GetOperatedGroup()
+		if og:FilterCount(Card.IsCode,nil,124161138)>0 and Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.ShuffleDeck(tp)
 			Duel.Draw(tp,1,REASON_EFFECT)

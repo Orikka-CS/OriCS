@@ -49,18 +49,18 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,sg,1,0,0)
 end
 
-function s.op1(e,tc,tp,sg,chk)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) then
-		if Duel.SendtoGrave(sg,REASON_EFFECT) and sg:IsLocation(LOCATION_GRAVE) and c:IsRelateToEffect(e) then
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		if Duel.SendtoGrave(tg,REASON_EFFECT) and tg:IsLocation(LOCATION_GRAVE) and c:IsRelateToEffect(e) then
 			local dis=0
 			local og=Duel.GetOperatedGroup()
 			local target=og:GetFirst()
 			for target in aux.Next(og) do
 				dis=bit.replace(dis,0x1,target:GetPreviousSequence())
 			end
-			if sg:IsPreviousLocation(LOCATION_MZONE) then
+			if tg:IsPreviousLocation(LOCATION_MZONE) then
 				dis=dis*0x10000
 			else
 				dis=dis*0x1000000

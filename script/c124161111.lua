@@ -48,9 +48,9 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local sg=Duel.GetFirstTarget()
-		if sg:IsRelateToEffect(e) then
-			if Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)<1 then return end
+		local tg=Duel.GetFirstTarget()
+		if tg:IsRelateToEffect(e) then
+			if Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)<1 then return end
 			local g=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_REMOVED,0,nil)
 			if #g>0 then
 				Duel.BreakEffect()

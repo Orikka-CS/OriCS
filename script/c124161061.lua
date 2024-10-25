@@ -95,8 +95,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local sg=Duel.GetTargetCards(e)
-	if #sg>0 and sg:FilterCount(Card.IsRelateToEffect,nil,e)>0 then
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.SendtoHand(tg,nil,REASON_EFFECT)
 	end
 end

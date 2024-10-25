@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DESTROY)
+	e1:SetCategory(CATEGORY_DESTROY+CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_MZONE)
@@ -11,6 +11,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
@@ -33,7 +34,7 @@ function s.tg1filter(c,e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_STZONE) and s.tg1filter(chkc) end
+	if chkc then return chkc:IsLocation(LOCATION_STZONE) and s.tg1filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_STZONE,LOCATION_STZONE,nil,e)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
@@ -47,11 +48,11 @@ function s.op1filter(c,e,tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) then
-		if not Duel.Destroy(sg,REASON_EFFECT)>0 then return end
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		if Duel.Destroy(tg,REASON_EFFECT)<1 then return end
 		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_DECK,0,nil,e,tp)
-		if sg:GetOwner()==tp and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if tg:GetOwner()==tp and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			local spg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 			Duel.BreakEffect()
 			Duel.SpecialSummon(spg,0,tp,tp,false,false,POS_FACEUP)

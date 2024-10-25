@@ -58,8 +58,8 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) and Duel.SendtoHand(sg,nil,REASON_EFFECT)>0 and sg:IsLocation(LOCATION_HAND) and c:IsRelateToEffect(e) then
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) and Duel.SendtoHand(tg,nil,REASON_EFFECT)>0 and tg:IsLocation(LOCATION_HAND) and c:IsRelateToEffect(e) then
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 		Duel.BreakEffect()
 		Duel.ConfirmCards(1-tp,sg)

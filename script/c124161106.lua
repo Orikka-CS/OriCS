@@ -49,10 +49,10 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local rc=re:GetHandler()
-	local sg=Duel.GetFirstTarget()
-	local ov=sg:GetOverlayGroup()
-	local ovc=sg:GetOverlayCount()
-	if not sg:IsRelateToEffect(e) then return end
+	local tg=Duel.GetFirstTarget()
+	local ov=tg:GetOverlayGroup()
+	local ovc=tg:GetOverlayCount()
+	if not tg:IsRelateToEffect(e) then return end
 	Duel.SendtoGrave(ov,REASON_EFFECT)
 	if not Duel.NegateActivation(ev) then return end
 	local xg=Duel.GetMatchingGroup(Card.IsCanBeXyzMaterial,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil)
@@ -60,7 +60,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.BreakEffect()
 	local xsg=aux.SelectUnselectGroup(xg+rc,e,tp,1,ovc,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 	local x=xsg-xsg:Filter(Card.IsImmuneToEffect,nil,e)
-	Duel.Overlay(sg,x,true)
+	Duel.Overlay(tg,x,true)
 	if rc:IsLocation(LOCATION_OVERLAY) then
 		rc:CancelToGrave()
 	end
@@ -90,8 +90,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) then
-		Duel.SendtoDeck(sg,nil,SEQ_DECKTOP,REASON_EFFECT)
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		Duel.SendtoDeck(tg,nil,SEQ_DECKTOP,REASON_EFFECT)
 	end
 end

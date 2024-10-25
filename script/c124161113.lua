@@ -79,8 +79,8 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) then
-		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)
 	end
 end

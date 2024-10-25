@@ -44,8 +44,8 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local sg=Duel.GetFirstTarget()
-	if not (sg:IsRelateToEffect(e) and sg:IsFaceup()) then return end
+	local tg=Duel.GetFirstTarget()
+	if not (tg:IsRelateToEffect(e) and tg:IsFaceup()) then return end
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -55,15 +55,15 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 	e1:SetValue(s.op1imfilter)
 	e1:SetOwnerPlayer(tp)
-	sg:RegisterEffect(e1)
+	tg:RegisterEffect(e1)
 	if e:GetLabel()==0 then return end
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetCode(EFFECT_SET_ATTACK_FINAL)
 	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e2:SetValue(sg:GetAttack()*2)
+	e2:SetValue(tg:GetAttack()*2)
 	e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-	sg:RegisterEffect(e2)
+	tg:RegisterEffect(e2)
 end
 
 function s.op1imfilter(e,re)

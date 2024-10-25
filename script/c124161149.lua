@@ -73,9 +73,9 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		Duel.Damage(1-tp,tc:GetBaseAttack()//2,REASON_EFFECT)
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		Duel.Damage(1-tp,tg:GetBaseAttack()//2,REASON_EFFECT)
 		local g=Duel.GetFieldGroup(tp,0,LOCATION_SZONE)
 		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()

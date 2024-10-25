@@ -53,10 +53,9 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	local g=tg:Filter(Card.IsRelateToEffect,nil,e)
-	if c:IsRelateToEffect(e) and #g>0 then
-		Duel.Overlay(c,g,true)
+	local tg=Duel.GetTargetCards(e)
+	if c:IsRelateToEffect(e) and #tg>0 then
+		Duel.Overlay(c,tg,true)
 	end
 end
 --effect 2

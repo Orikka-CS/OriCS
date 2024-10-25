@@ -45,10 +45,10 @@ function s.op1filter(c)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local sg=Duel.GetFirstTarget()
-	if sg:IsRelateToEffect(e) then
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		if not sg:IsLocation(LOCATION_HAND+LOCATION_EXTRA) then return end
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		if Duel.SendtoHand(tg,nil,REASON_EFFECT)==0 then return end
+		if not tg:IsLocation(LOCATION_HAND+LOCATION_EXTRA) then return end
 		local hg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_GRAVE,LOCATION_MZONE,nil)
 		if #hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)

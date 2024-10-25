@@ -38,10 +38,10 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if not (tc:IsRelateToEffect(e) and tc:IsFaceup()) then return end
+	local tg=Duel.GetFirstTarget()
+	if not (tg:IsRelateToEffect(e) and tg:IsFaceup()) then return end
 	local c=e:GetHandler()
-	if not tc:IsImmuneToEffect(e) then
+	if not tg:IsImmuneToEffect(e) then
 		local e1=Effect.CreateEffect(c)
 		e1:SetDescription(aux.Stringid(id,0))
 		e1:SetType(EFFECT_TYPE_SINGLE)
@@ -50,14 +50,14 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetRange(LOCATION_MZONE)
 		e1:SetValue(s.op1imfilter)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		tc:RegisterEffect(e1)
+		tg:RegisterEffect(e1)
 		local e2=Effect.CreateEffect(c)
 		e2:SetType(EFFECT_TYPE_SINGLE)
 		e2:SetCode(EFFECT_EXTRA_ATTACK)
 		e2:SetCondition(s.op1con)
 		e2:SetValue(Duel.GetFlagEffect(tp,124161058)-1)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		tc:RegisterEffect(e2)
+		tg:RegisterEffect(e2)
 		local e3=Effect.CreateEffect(c)
 		e3:SetType(EFFECT_TYPE_SINGLE)
 		e3:SetCode(EFFECT_CHANGE_BATTLE_DAMAGE)
@@ -65,7 +65,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e3:SetTargetRange(0,1)
 		e3:SetValue(HALF_DAMAGE)
 		e3:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		tc:RegisterEffect(e3)
+		tg:RegisterEffect(e3)
 	end
 end
 
@@ -99,6 +99,6 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		Duel.SendtoHand(c,tp,REASON_EFFECT)	
+		Duel.SendtoHand(c,tp,REASON_EFFECT) 
 	end
 end

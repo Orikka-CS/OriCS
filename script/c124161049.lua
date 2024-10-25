@@ -39,12 +39,12 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if not tc and not tc:IsFaceup() and not tc:IsRelateToEffect(e) then return end
+	local tg=Duel.GetFirstTarget()
+	if not tg and not tg:IsFaceup() and not tg:IsRelateToEffect(e) then return end
 	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
 	if #mg==0 then return end
 	local msg=aux.SelectUnselectGroup(mg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
-	Duel.Equip(tp,tc,msg)
+	Duel.Equip(tp,tg,msg)
 end
 
 --effect 2

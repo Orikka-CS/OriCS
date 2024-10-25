@@ -44,11 +44,11 @@ function s.op1filter(c)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if not tc:IsRelateToEffect(e) then return end
-	if tc:GetOverlayCount()>0 then
-		local g=tc:GetOverlayGroup()
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,tc:GetOverlayCount(),aux.TRUE,1,tp,HINTMSG_REMOVEXYZ)
+	local tg=Duel.GetFirstTarget()
+	if not tg:IsRelateToEffect(e) then return end
+	if tg:GetOverlayCount()>0 then
+		local g=tg:GetOverlayGroup()
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,tg:GetOverlayCount(),aux.TRUE,1,tp,HINTMSG_REMOVEXYZ)
 		local ssg=sg:FilterCount(s.op1filter,nil)
 		Duel.SendtoGrave(sg,REASON_EFFECT)
 		Duel.Damage(1-tp,#sg*600,REASON_EFFECT)

@@ -56,9 +56,9 @@ function s.op1filter(c)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetTargetCards(e)
-	if #g>0 then
-		Duel.Destroy(g,REASON_EFFECT)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		if Duel.Destroy(tg,REASON_EFFECT)==0 then return end
 		local rg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil)
 		if #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()

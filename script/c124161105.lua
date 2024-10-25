@@ -48,17 +48,17 @@ function s.op1filter(c,tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if not tc:IsRelateToEffect(e) then return end
-	if tc:GetOverlayCount()>0 then
-		tc:RemoveOverlayCard(tp,1,1,REASON_EFFECT)
+	local tg=Duel.GetFirstTarget()
+	if not tg:IsRelateToEffect(e) then return end
+	if tg:GetOverlayCount()>0 then
+		tg:RemoveOverlayCard(tp,1,1,REASON_EFFECT)
 		local dg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_GRAVE,0,nil)
 		if #dg>0 then
 			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 			if Duel.SendtoDeck(dsg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 				local xg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_DECK,0,nil,tp)
 				local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
-				Duel.Overlay(tc,xsg,true)
+				Duel.Overlay(tg,xsg,true)
 			end
 		end
 	end

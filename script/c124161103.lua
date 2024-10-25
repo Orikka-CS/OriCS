@@ -45,14 +45,14 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local sg=Duel.GetFirstTarget()
-		if sg:IsRelateToEffect(e) then
-			Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+		local tg=Duel.GetFirstTarget()
+		if tg:IsRelateToEffect(e) then
+			Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
 			local xg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_GRAVE,0,nil)
-			if sg:IsType(TYPE_XYZ) and #xg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			if tg:IsType(TYPE_XYZ) and #xg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 				Duel.BreakEffect()
 				local xsg=aux.SelectUnselectGroup(xg,e,tp,1,2,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
-				Duel.Overlay(sg,xsg,true)
+				Duel.Overlay(tg,xsg,true)
 			end
 		end
 	end

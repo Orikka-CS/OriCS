@@ -72,9 +72,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local sg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	local g=sg:Filter(Card.IsRelateToEffect,nil,e)
-	if #g>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.SendtoHand(tg,nil,REASON_EFFECT)
 	end
 end

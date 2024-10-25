@@ -69,8 +69,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local sg=Duel.GetTargetCards(e)
-	if #sg>0 then
-		Duel.Destroy(sg,REASON_EFFECT)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.Destroy(tg,REASON_EFFECT)
 	end
 end

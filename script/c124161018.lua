@@ -42,9 +42,9 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.SendtoHand(c,nil,REASON_EFFECT)>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local sg=Duel.GetFirstTarget()
-		if sg:IsRelateToEffect(e) then
-			if Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)>0 and
+		local tg=Duel.GetFirstTarget()
+		if tg:IsRelateToEffect(e) then
+			if Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)>0 and
 			   Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 				Duel.BreakEffect()
 				local dis=Duel.SelectDisableField(tp,1,LOCATION_MZONE,0,0)
