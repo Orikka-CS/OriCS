@@ -62,7 +62,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if tg:IsRelateToEffect(e) and Duel.SendtoHand(tg,nil,REASON_EFFECT)>0 and tg:IsLocation(LOCATION_HAND) and c:IsRelateToEffect(e) then
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 		Duel.BreakEffect()
-		Duel.ConfirmCards(1-tp,sg)
+		Duel.ConfirmCards(1-tp,tg)
 	end
 end
 
