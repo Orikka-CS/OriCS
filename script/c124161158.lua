@@ -1,0 +1,91 @@
+--Agryhypalte Liderc
+local s,id=GetID()
+function s.initial_effect(c)
+	--xyz
+	c:EnableReviveLimit()
+	Xyz.AddProcedure(c,nil,6,2,s.ovfilter,aux.Stringid(id,0))
+	--effect 1
+	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY)
+	e1:SetCode(EVENT_FLIP)
+	e1:SetCountLimit(1,id)
+	e1:SetCost(aux.dxmcostgen(1,1,nil))
+	e1:SetTarget(s.tg1)
+	e1:SetOperation(s.op1)
+	c:RegisterEffect(e1)
+	local e2=e1:Clone()
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetCondition(function(e) return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ) end)
+	c:RegisterEffect(e2)
+	--effect 2
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_QUICK_O)
+	e3:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_CARD_TARGET)
+	e3:SetCode(EVENT_CHAINING)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCountLimit(1,{id,1})
+	e3:SetCondition(s.con2)
+	e3:SetCost(s.cst2)
+	e3:SetTarget(s.tg2)
+	e3:SetOperation(s.op2)
+	c:RegisterEffect(e3)
+end
+
+--xyz
+function s.ovfilter(c,tp,lc)
+	return c:IsFacedown() and c:IsCanBeXyzMaterial() and c:IsControler(tp) and c:IsLevel(6) and c:IsSetCard(0xf2a)
+end
+
+--effect 1
+function s.tg1filter(c)
+	return c:IsSetCard(0xf2a) and c:IsSpell() and c:IsAbleToHand() 
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return #g>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_DECK)
+end
+
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+	end
+end
+
+--effect 2
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	return rc:IsSetCard(0xf2a) and rp==tp
+end
+
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c:IsFacedown() end
+	Duel.ChangePosition(c,POS_FACEUP_DEFENSE)
+end
+
+
+function s.tg2filter(c,e)
+	return c:IsAbleToChangeControler() and c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanBeXyzMaterial()
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_MZONE,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
+	Duel.SetTargetCard(sg)
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tg=Duel.GetFirstTarget()
+	if c:IsRelateToEffect(e) and tg:IsRelateToEffect(e) then
+		Duel.Overlay(c,tg,true)
+	end
+end
