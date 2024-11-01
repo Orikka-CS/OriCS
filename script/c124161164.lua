@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
@@ -27,24 +27,26 @@ end
 --effect 1
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=6 end
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 
-function s.op1filter(c)
-	return c:IsSetCard(0xf2a) and c:IsAbleToHand()
+function s.op1filter(c,e,tp)
+	return c:IsSetCard(0xf2a) and ((c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0) or (c:IsSpellTrap() and c:IsSSetable() and Duel.GetLocationCount(tp,LOCATION_SZONE)>0))
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local ac=6
 	Duel.ConfirmDecktop(tp,ac)
 	local g=Duel.GetDecktopGroup(tp,ac)
-	g=g:Filter(s.op1filter,nil)
+	g=g:Filter(s.op1filter,nil,e,tp)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then	
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET,e,tp):GetFirst()
 		Duel.DisableShuffleCheck()
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
-		Duel.ShuffleHand(tp)
+		if sg:IsMonster() then
+			Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
+		else
+			Duel.SSet(tp,sg)
+		end
 		ac=ac-1
 	end
 	if ac>0 then
