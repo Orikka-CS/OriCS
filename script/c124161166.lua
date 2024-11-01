@@ -8,13 +8,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_CONTROL)
+	e1:SetCategory(CATEGORY_POSITION+CATEGORY_ATKCHANGE+CATEGORY_DISABLE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_SZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -33,38 +32,51 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1filter(c)
-	return c:IsFacedown() and c:IsType(TYPE_XYZ)
+function s.tg1ifilter(c,e)
+	return c:IsFacedown() and c:IsCanBeEffectTarget(e)
 end
 
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Group.CreateGroup()
-	local xg=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_MZONE,0,nil)
-	for tc in aux.Next(xg) do
-		g:Merge(tc:GetOverlayGroup())
-	end
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVEXYZ)
-	Duel.SendtoGrave(sg,REASON_COST)
-end
-
-function s.tg1filter(c,e)
-	return c:IsFaceup() and c:IsAbleToChangeControler() and c:IsCanBeEffectTarget(e)
+function s.tg1ofilter(c,e)
+	return c:IsFaceup() and c:IsType(TYPE_EFFECT) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,e)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
-	if chk==0 then return #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONTROL)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_CONTROL,sg,1,tp,0)
+	local c=e:GetHandler()
+	local g1=Duel.GetMatchingGroup(s.tg1ifilter,tp,LOCATION_MZONE,0,nil,e)
+	local g2=Duel.GetMatchingGroup(s.tg1ofilter,tp,0,LOCATION_MZONE,nil,e)
+	if chkc then return false end
+	if chk==0 then return #g1>0 and #g2>0 end
+	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEDOWN)
+	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP)
+	sg1:Merge(sg2)
+	Duel.SetTargetCard(sg1)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE,sg,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) then
-		Duel.GetControl(tg,tp)
+	local c=e:GetHandler()
+	local tg=Duel.GetTargetCards(e)
+	local sgr1=tg:Filter(Card.IsControler,nil,tp)
+	local sgr2=tg:Filter(Card.IsControler,nil,1-tp)
+	if #sgr1==0 or #sgr2==0 then return end
+	local sg1=sgr1:GetFirst()
+	local sg2=sgr2:GetFirst()
+	if sg1:IsFacedown() then
+		Duel.ChangePosition(tg,POS_FACEUP_ATTACK)
+		if sg2:IsFacedown() then return end
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
+		e1:SetValue(0)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		sg2:RegisterEffect(e1)
+		local e2=e1:Clone()
+		e2:SetCode(EFFECT_SET_DEFENSE_FINAL)
+		sg2:RegisterEffect(e2)
+		if sg1:IsType(TYPE_XYZ) then
+			sg2:NegateEffects(e:GetHandler(),nil,true)
+		end
 	end
 end
 
