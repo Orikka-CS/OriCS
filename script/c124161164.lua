@@ -40,7 +40,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetDecktopGroup(tp,ac)
 	g=g:Filter(s.op1filter,nil,e,tp)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then	
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET,e,tp):GetFirst()
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET):GetFirst()
 		Duel.DisableShuffleCheck()
 		if sg:IsMonster() then
 			Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
