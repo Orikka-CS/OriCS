@@ -51,7 +51,7 @@ end
 
 --effect 2
 function s.cst2filter(c)
-	return c:IsFacedown() and c:IsType(TYPE_XYZ)
+	return (c:IsFacedown() or c:IsSetCard(0xf2a)) and c:IsType(TYPE_XYZ)
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)

@@ -20,13 +20,15 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e2:SetCode(EFFECT_CANNOT_ACTIVATE)
+	e2:SetCategory(CATEGORY_TODECK)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_CARD_TARGET)
+	e2:SetCode(EVENT_FLIP)
 	e2:SetRange(LOCATION_SZONE)
+	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
-	e2:SetTargetRange(0,1)
-	e2:SetValue(s.val2)
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
 
@@ -67,15 +69,32 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2filter(c)
-	return c:IsType(TYPE_XYZ) and c:IsFaceup() and c:IsSetCard(0xf2a)
+function s.con2filter(c,tp)
+	return c:IsSetCard(0xf2a) and c:IsControler(tp)
 end
 
-function s.con2(e)
-	local tp=e:GetHandlerPlayer()
-	return Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_MZONE,0,nil)>0 and Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_MZONE,nil)==0
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.con2filter,1,nil,tp)
 end
 
-function s.val2(e,re,tp)
-	return re:GetActivateLocation()==LOCATION_MZONE  
+function s.tg2filter(c,e)
+	return c:IsCanBeEffectTarget(e) and c:IsAbleToDeck() and c:IsFaceup()
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_ONFIELD,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,1,0,0)
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		Duel.SendtoDeck(tg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+	end
 end

@@ -41,13 +41,13 @@ function s.tg1filter(c,tp)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD,nil)
 	local rg=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,tp)
 	if #g>0 then
 		sg=aux.SelectUnselectGroup(g,e,tp,1,rg+1,aux.TRUE,1,tp,HINTMSG_REMOVE)
