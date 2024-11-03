@@ -7,7 +7,6 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
 	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
@@ -25,19 +24,18 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1filter(c)
-	return c:IsSetCard(0xf24) and c:IsFaceup()
-end
-
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)
-	return g>0
+function s.cst1filter(c)
+	return c:IsSetCard(0xf24) and not c:IsPublic()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return c:IsDiscardable() end
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,c)
+	if chk==0 then return c:IsDiscardable() and #g>0 end
 	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
+	Duel.ConfirmCards(1-tp,sg)
+	Duel.ShuffleHand(tp)
 end
 
 function s.tg1sfilter(c)
