@@ -51,10 +51,8 @@ end
 
 --effect 2
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetDecktopGroup(tp,1):GetFirst()
-	if chk==0 then return g:IsAbleToGraveAsCost() end
-	Duel.DisableShuffleCheck()
-	Duel.SendtoGrave(g,REASON_COST)
+	if chk==0 then return Duel.CheckLPCost(tp,600) end
+	Duel.PayLPCost(tp,600)
 end
 
 function s.tg2filter(c,e,tp)
