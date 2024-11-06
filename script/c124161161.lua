@@ -24,7 +24,7 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetCountLimit(1,id)
-	e3:SetCost(s.cst2)
+	e3:SetCondition(s.con2)
 	e3:SetTarget(s.tg2)
 	e3:SetOperation(s.op2)
 	c:RegisterEffect(e3)
@@ -50,9 +50,9 @@ function s.val1(e,c)
 end
 
 --effect 2
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,600) end
-	Duel.PayLPCost(tp,600)
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,LOCATION_ONFIELD,0,nil)
+	return g>0
 end
 
 function s.tg2filter(c,e,tp)
