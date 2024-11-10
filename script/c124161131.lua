@@ -7,10 +7,9 @@ function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_TOGRAVE)
+	e1:SetCategory(CATEGORY_POSITION+CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
 	e1:SetTarget(s.tg1)
@@ -44,31 +43,28 @@ function s.linkfilter(g,lc,sumtype,tp)
 end
 
 --effect 1
-function s.tg1filter(c,e)
-	return c:IsContinuousTrap() and c:IsFaceup() and c:IsAbleToHand() and c:IsCanBeEffectTarget(e)
+function s.tg1filter(c)
+	return c:IsContinuousTrap() and c:IsFaceup() and c:IsCanTurnSet() and c:IsTrapMonster()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
-	local rg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_ONFIELD,0,nil,e)
+	local rg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,0,LOCATION_ONFIELD,nil)
-	if chk==0 then return #rg>0 and #g>0 end
-	local sg=aux.SelectUnselectGroup(rg,e,tp,1,#g,aux.TRUE,1,tp,HINTMSG_RTOHAND)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
+	local ct=math.min(Duel.GetLocationCount(tp,LOCATION_SZONE),#g)
+	if chk==0 then return #rg>0 and ct>0 end
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,rg,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e)
-	if #tg==0 then return end
+	local rg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,0,LOCATION_ONFIELD,nil)
-	Duel.SendtoHand(tg,nil,REASON_EFFECT)
-	local ct=tg:FilterCount(Card.IsLocation,nil,LOCATION_HAND)
-	if ct>0 and #g>=ct then
-		sg=aux.SelectUnselectGroup(g,e,tp,ct,ct,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-		Duel.SendtoGrave(sg,REASON_EFFECT)
-	end
+	local ct=math.min(Duel.GetLocationCount(tp,LOCATION_SZONE),#g)
+	if ct==0 then return end 
+	local rsg=aux.SelectUnselectGroup(rg,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_SET)
+	Duel.ChangePosition(rsg,POS_FACEDOWN_DEFENSE)
+	local sg=aux.SelectUnselectGroup(g,e,tp,#rsg,#rsg,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+	Duel.SendtoGrave(sg,REASON_EFFECT)
 end
 
 --effect 2
