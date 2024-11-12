@@ -74,6 +74,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET):GetFirst()
 	if sg:IsMonster() then
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
+		Duel.ConfirmCards(1-tp,sg)
 	else
 		Duel.SSet(tp,sg)
 	end
