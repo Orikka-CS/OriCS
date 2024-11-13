@@ -10,6 +10,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
@@ -42,7 +43,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
---effect2
+--effect 2
 function s.val2filter(c)
 	return c:IsFacedown()
 end

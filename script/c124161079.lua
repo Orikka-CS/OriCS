@@ -21,9 +21,9 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	local e3=e2:Clone()
-	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
-	c:RegisterEffect(e3)
+	local e2a=e2:Clone()
+	e2a:SetCode(EVENT_SPSUMMON_SUCCESS)
+	c:RegisterEffect(e2a)
 end
 
 --effect1

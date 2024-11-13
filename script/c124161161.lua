@@ -15,38 +15,53 @@ function s.initial_effect(c)
 	e1:SetTarget(function(_,c) return c:IsSetCard(0xf2a) end)
 	e1:SetValue(s.val1)
 	c:RegisterEffect(e1)
-	local e2=e1:Clone()
-	e2:SetCode(EFFECT_UPDATE_DEFENSE)
-	c:RegisterEffect(e2)
+	local e1a=e1:Clone()
+	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
+	c:RegisterEffect(e1a)
 	--effect 2
-	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_DRAW)
-	e3:SetType(EFFECT_TYPE_IGNITION)
-	e3:SetRange(LOCATION_FZONE)
-	e3:SetCountLimit(1,id)
-	e3:SetCondition(s.con2)
-	e3:SetTarget(s.tg2)
-	e3:SetOperation(s.op2)
-	c:RegisterEffect(e3)
+	local e2=Effect.CreateEffect(c)
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_DRAW)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetRange(LOCATION_FZONE)
+	e2:SetCountLimit(1,id)
+	e2:SetCondition(s.con2)
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
+	c:RegisterEffect(e2)
 	--effect 3
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_FIELD)
-	e4:SetCode(EFFECT_IMMUNE_EFFECT)
-	e4:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e4:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
-	e4:SetRange(LOCATION_FZONE)
-	e4:SetTarget(s.tg3)
-	e4:SetValue(s.val3)
-	c:RegisterEffect(e4)
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_IMMUNE_EFFECT)
+	e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
+	e3:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e3:SetRange(LOCATION_FZONE)
+	e3:SetTarget(s.tg3)
+	e3:SetValue(s.val3)
+	c:RegisterEffect(e3)
+	 --count
+	aux.GlobalCheck(s,function()
+		local cnt=Effect.CreateEffect(c)
+		cnt:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		cnt:SetCode(EVENT_CHANGE_POS)
+		cnt:SetOperation(s.cnt)
+		Duel.RegisterEffect(cnt,0)
+	end)
+end
+
+--count
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	local np
+	local pp
+	for tc in eg:Iter() do
+		np=tc:GetPosition()
+		pp=tc:GetPreviousPosition()
+		if np==POS_FACEDOWN_DEFENSE and pp~=np then Duel.RegisterFlagEffect(0,id,RESET_PHASE+PHASE_END,0,1) end
+	end
 end
 
 --effect 1
-function s.val1filter(c)
-	return c:IsFacedown()
-end
-
 function s.val1(e,c)
-	return Duel.GetMatchingGroupCount(s.val1filter,e:GetHandlerPlayer(),LOCATION_MZONE,LOCATION_MZONE,nil)*300
+	return Duel.GetFlagEffect(0,id)*200
 end
 
 --effect 2
