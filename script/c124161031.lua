@@ -94,7 +94,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetOperation(function(e) return e:GetLabel() end)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		e1:SetLabel(dis)
-		sg:RegisterEffect(e1)
+		tg:RegisterEffect(e1)
 	end 
 end
 
