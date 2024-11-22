@@ -77,6 +77,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local sg1=tg:Filter(Card.IsControler,nil,tp):GetFirst()
 	local sg2=tg:Filter(Card.IsControler,nil,1-tp):GetFirst()
 	if sg1 and sg2 then
+		sg2:CancelToGrave()
 		Duel.Overlay(sg1,sg2,true)
 	end
 end

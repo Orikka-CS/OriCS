@@ -63,7 +63,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local sg1=sgr1:GetFirst()
 	local sg2=sgr2:GetFirst()
 	if sg1:IsFacedown() then
-		Duel.ChangePosition(tg,POS_FACEUP_ATTACK)
+		Duel.ChangePosition(sg1,POS_FACEUP_ATTACK)
 		if sg2:IsFacedown() then return end
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
