@@ -41,8 +41,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 s.listed_series={0xc04}
+function s.nfil1(c)
+	return c:IsFacedown() or not c:IsSetCard(0xc04)
+end
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return not Duel.IsPlayerAffectedByEffect(tp,18454169)
+		and not Duel.IsExistingMatchingCard(s.nfil1,tp,LOCATION_MZONE,0,1,nil)
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -72,6 +76,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsPlayerAffectedByEffect(tp,18454169)
+		and not Duel.IsExistingMatchingCard(s.nfil1,tp,LOCATION_MZONE,0,1,nil)
 end
 function s.nfil4(c)
 	return c:IsSetCard(0xc04) and c:IsFaceup()
