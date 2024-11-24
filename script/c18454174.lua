@@ -40,7 +40,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		and tc:IsLocation(LOCATION_DECK+LOCATION_EXTRA)
 		and tc:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and ((tc:IsLocation(LOCATION_EXTRA) and  Duel.GetLocationCountFromEx(tp,tp,tc)>0)
-			or (tc:IsLocation(LOCATION_DECK) and  Duel.GetLocationCount(tp)>0))
+			or (tc:IsLocation(LOCATION_DECK) and  Duel.GetLocationCount(tp,LOCATION_MZONE)>0))
 		and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 	end
