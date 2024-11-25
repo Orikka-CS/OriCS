@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TOGRAVE)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetCost(s.cost1)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -21,7 +21,7 @@ function s.initial_effect(c)
 	local e3=e1:Clone()
 	e3:SetType(EFFECT_TYPE_QUICK_O)
 	e3:SetCode(EVENT_FREE_CHAIN)
-	e3:SetCondition(s.con3)
+	e3:SetCost(s.cost3)
 	c:RegisterEffect(e3)
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_QUICK_O)
@@ -35,8 +35,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 s.listed_series={0xc04}
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return not Duel.IsPlayerAffectedByEffect(tp,18454169)
+function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		return not Duel.IsPlayerAffectedByEffect(tp,18454169)
+	end
 end
 function s.tfil1(c)
 	return c:IsSetCard(0xc04) and c:IsType(TYPE_SPELL+TYPE_TRAP) and (c:IsAbleToHand() or c:IsAbleToGrave())
@@ -52,8 +54,10 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g:GetFirst()
 	aux.ToHandOrElse(tc,tp)
 end
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsPlayerAffectedByEffect(tp,18454169)
+function s.cost3(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		return Duel.IsPlayerAffectedByEffect(tp,18454169)
+	end
 end
 function s.cost4(e,tg,ep,ev,re,r,rp,chk)
 	e:SetLabel(10000)

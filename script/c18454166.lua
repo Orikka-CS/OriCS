@@ -22,7 +22,7 @@ function s.initial_effect(c)
 	local e3=e1:Clone()
 	e3:SetType(EFFECT_TYPE_QUICK_O)
 	e3:SetCode(EVENT_FREE_CHAIN)
-	e3:SetCondition(s.con3)
+	e3:SetCost(s.cost3)
 	c:RegisterEffect(e3)
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_IGNITION)
@@ -45,13 +45,12 @@ function s.nfil1(c)
 	return c:IsFacedown() or not c:IsSetCard(0xc04)
 end
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return not Duel.IsPlayerAffectedByEffect(tp,18454169)
-		and not Duel.IsExistingMatchingCard(s.nfil1,tp,LOCATION_MZONE,0,1,nil)
+	return not Duel.IsExistingMatchingCard(s.nfil1,tp,LOCATION_MZONE,0,1,nil)
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return not c:IsPublic()
+		return not c:IsPublic() and not Duel.IsPlayerAffectedByEffect(tp,18454169)
 	end
 end
 function s.tfil1(c,e,tp)
@@ -74,9 +73,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsPlayerAffectedByEffect(tp,18454169)
-		and not Duel.IsExistingMatchingCard(s.nfil1,tp,LOCATION_MZONE,0,1,nil)
+function s.cost3(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then
+		return not c:IsPublic() and Duel.IsPlayerAffectedByEffect(tp,18454169)
+	end
 end
 function s.nfil4(c)
 	return c:IsSetCard(0xc04) and c:IsFaceup()

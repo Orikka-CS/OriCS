@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCategory(CATEGORY_TODECK+CATEGORY_TOHAND)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetCost(s.cost1)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -23,7 +23,7 @@ function s.initial_effect(c)
 	local e3=e1:Clone()
 	e3:SetType(EFFECT_TYPE_QUICK_O)
 	e3:SetCode(EVENT_FREE_CHAIN)
-	e3:SetCondition(s.con3)
+	e3:SetCost(s.cost3)
 	c:RegisterEffect(e3)
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
@@ -44,8 +44,10 @@ s.listed_series={0xc04}
 function s.pfun1(g,lc,sumtype,tp)
 	return g:IsExists(Card.IsSetCard,1,nil,0xc04,lc,sumtype,tp)
 end
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return not Duel.IsPlayerAffectedByEffect(tp,18454169)
+function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		return not Duel.IsPlayerAffectedByEffect(tp,18454169)
+	end
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then
@@ -70,8 +72,10 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsPlayerAffectedByEffect(tp,18454169)
+function s.cost3(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		return Duel.IsPlayerAffectedByEffect(tp,18454169)
+	end
 end
 function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
