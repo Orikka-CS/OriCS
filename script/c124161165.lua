@@ -48,6 +48,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON):GetFirst()
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_DEFENSE)
+		if sg:IsFacedown() and sg:IsPreviousLocation(LOCATION_HAND) then
+			Duel.ConfirmCards(1-tp,sg)
+		end
 	end
 end
 
