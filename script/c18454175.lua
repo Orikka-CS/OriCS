@@ -23,15 +23,16 @@ function s.tfil1(c)
 	return c:IsSetCard(0xc04) and not c:IsCode(id) and c:IsAbleToGrave()
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
 	if chkc then
-		return chkc:IsOnField()
+		return chkc:IsOnField() and chkc~=c
 	end
 	if chk==0 then
-		return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
+		return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c)
 			and Duel.IsExistingMatchingCard(s.tfil1,tp,LOCATION_DECK,0,1,nil)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+	Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,c)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
