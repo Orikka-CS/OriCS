@@ -1,4 +1,4 @@
---Cyclassie Keres Rosalind
+--사이클래시 케레스 로잘린드
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

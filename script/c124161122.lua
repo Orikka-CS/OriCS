@@ -1,4 +1,4 @@
---Calapis Meltdown
+--캘라피스 멜트다운
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

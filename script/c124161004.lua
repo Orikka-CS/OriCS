@@ -1,4 +1,4 @@
---Lightshape-Leggero the Repentence
+--광형-회개의 레게로
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

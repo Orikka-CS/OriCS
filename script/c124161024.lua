@@ -1,4 +1,4 @@
---Pyrthirio Hydra
+--피르티리오 히드라
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

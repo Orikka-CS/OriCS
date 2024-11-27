@@ -1,4 +1,4 @@
---Umbrare Ena
+--엄브라레 에나
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

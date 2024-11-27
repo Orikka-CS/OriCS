@@ -1,4 +1,4 @@
---The One that Stands against Xerdial
+--제르디알에 저항하는 자
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

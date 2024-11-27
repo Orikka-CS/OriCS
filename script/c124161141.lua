@@ -1,4 +1,4 @@
---The One the Follows in Xerdial
+--제르디알을 계승하는 자
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---Naufrate Docent Dmitri
+--나우프라테 도슨트 드미트리
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

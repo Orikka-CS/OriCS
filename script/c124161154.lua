@@ -1,4 +1,4 @@
---Hypalte Noctis
+--휴프알테 녹티스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

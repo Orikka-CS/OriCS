@@ -1,4 +1,4 @@
---Pyrthirio Lion
+--피르티리오 라이온
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---Mepetra Ignition
+--캘라피스 이그니션
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

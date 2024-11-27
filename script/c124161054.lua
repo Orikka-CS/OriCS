@@ -1,4 +1,4 @@
---Unendal Despotes Helbert
+--언엔달 데스포티스 헬베르트
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

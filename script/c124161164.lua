@@ -1,4 +1,4 @@
---Hypalte Siesta
+--휴프알테 시에스타
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

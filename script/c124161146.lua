@@ -1,4 +1,4 @@
---Xerdial Mausoleum
+--제르디알 마우솔레움
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

@@ -1,4 +1,4 @@
---Unendal Ormr Jormungandr
+--언엔달 오름 요르문간드
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz
@@ -56,11 +56,10 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		local ug=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp)
 		Duel.ConfirmCards(1-tp,sg)
+		local ug=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp)	
 		if (Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) or Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,124161058)) and #ug>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			ug=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp)
 			local sug=aux.SelectUnselectGroup(ug,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 			Duel.SpecialSummon(sug,0,tp,tp,false,false,POS_FACEUP)
 		end

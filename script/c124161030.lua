@@ -1,4 +1,4 @@
---Pyrthirio Phelegethon
+--피르티리오 플레게톤
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

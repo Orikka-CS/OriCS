@@ -1,4 +1,4 @@
---Reborn Xerdial
+--리본 제르디알
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

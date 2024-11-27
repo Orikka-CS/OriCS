@@ -1,4 +1,4 @@
---Astaterea Guardian Scorpio
+--아스타테리아 가디언 스콜피오
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

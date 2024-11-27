@@ -1,4 +1,4 @@
---Naufrate Salvage
+--나우프라테 샐비지
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

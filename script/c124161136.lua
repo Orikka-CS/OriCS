@@ -1,4 +1,4 @@
---Naufrate Archive
+--나우프라테 아카이브
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

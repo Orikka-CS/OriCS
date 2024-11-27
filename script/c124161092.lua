@@ -1,4 +1,4 @@
---Poison Demon of Scale-Moth
+--린의 독훼귀-비아
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
@@ -18,6 +18,7 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCode(EVENT_DAMAGE)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)

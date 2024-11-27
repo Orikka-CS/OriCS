@@ -1,4 +1,4 @@
---Hypalte Shleep
+--휴프알테 슈리프
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

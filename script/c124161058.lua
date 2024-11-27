@@ -1,4 +1,4 @@
---Unendal, the Infinite Sword
+--무한검 언엔달
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

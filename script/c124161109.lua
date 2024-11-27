@@ -1,4 +1,4 @@
---Calapis Shale
+--캘라피스 셰일
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

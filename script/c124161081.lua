@@ -1,4 +1,4 @@
---Astaterea Bela
+--아스타테리아 벨라
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

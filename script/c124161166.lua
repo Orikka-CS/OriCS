@@ -1,4 +1,4 @@
---Hypalte Insomnia
+--휴프알테 인섬니아
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

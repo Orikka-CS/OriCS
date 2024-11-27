@@ -1,4 +1,4 @@
---Astaterea Judge Libra
+--아스타테리아 저지 리브라
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

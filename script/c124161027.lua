@@ -1,4 +1,4 @@
---Pyrthirio Theogonia
+--피르티리오 테오고니아
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

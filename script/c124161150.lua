@@ -1,4 +1,4 @@
---Xerdial Denouement
+--제르디알 데뉴먼트
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---Naufrate Staff Paulin
+--나우프라테 스태프 폴린
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

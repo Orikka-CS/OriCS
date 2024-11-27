@@ -1,4 +1,4 @@
---Defense Umbrare
+--디펜스 엄브라레
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

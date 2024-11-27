@@ -1,4 +1,4 @@
---AgryHypalte Quilin
+--아그리휴프알테 키린
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

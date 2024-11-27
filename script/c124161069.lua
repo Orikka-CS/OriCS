@@ -1,4 +1,4 @@
---Cyclassie Succubus Sarah
+--사이클래시 서큐버스 사라
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

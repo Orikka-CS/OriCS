@@ -1,4 +1,4 @@
---Astaterea Astrum
+--아스타테리아 아스트룸
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

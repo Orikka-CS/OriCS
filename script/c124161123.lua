@@ -1,4 +1,4 @@
---Naufrate Security Titan
+--나우프라테 시큐리티 타이탄
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

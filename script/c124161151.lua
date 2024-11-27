@@ -1,4 +1,4 @@
---Xerdial Recall
+--제르디알 리콜
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

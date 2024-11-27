@@ -1,4 +1,4 @@
---Unendal Vargr Fenrir
+--언엔달 바르그 펜리르
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

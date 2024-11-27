@@ -1,4 +1,4 @@
---MetaCalapis Marmav
+--메타캘라피스 마르마브
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

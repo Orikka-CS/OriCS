@@ -1,4 +1,4 @@
---Xerdial Breakspell
+--제르디알 브레이크스펠
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

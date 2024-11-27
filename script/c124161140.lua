@@ -1,4 +1,4 @@
---The One that Accords with Xerdial
+--제르디알과 동조하는 자
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---Eclipse Umbrare
+--이클립스 엄브라레
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

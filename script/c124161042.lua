@@ -1,4 +1,4 @@
---Prepare Umbrare
+--프리페어 엄브라레
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

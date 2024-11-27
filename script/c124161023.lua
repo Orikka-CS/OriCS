@@ -1,4 +1,4 @@
---Pyrthirio Cerberus
+--피르티리오 케르베로스
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

@@ -1,4 +1,4 @@
---Cyclassie Regeneration
+--사이클래시 리제너레이션
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

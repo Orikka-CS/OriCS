@@ -1,4 +1,4 @@
---Astaterea Pond
+--아스타테리아 폰드
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

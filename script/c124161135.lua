@@ -1,4 +1,4 @@
---Naufrate Curse
+--나우프라테 커스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

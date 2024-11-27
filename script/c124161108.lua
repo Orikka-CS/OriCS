@@ -1,4 +1,4 @@
---Calapis Sandy
+--캘라피스 샌디
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

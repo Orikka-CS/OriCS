@@ -1,4 +1,4 @@
---Astaterea Tutela
+--아스타테리아 투텔라
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

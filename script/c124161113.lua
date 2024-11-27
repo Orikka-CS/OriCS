@@ -1,4 +1,4 @@
---MetaCalapis Quartz
+--메타캘라피스 쿼츠
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

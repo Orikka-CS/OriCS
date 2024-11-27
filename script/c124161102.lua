@@ -1,4 +1,4 @@
---Possion Demon Arrow
+--고독훼귀살
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

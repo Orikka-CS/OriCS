@@ -1,4 +1,4 @@
---Hypalte Marely
+--휴프알테 메어리
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

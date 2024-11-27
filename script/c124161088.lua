@@ -1,4 +1,4 @@
---Astaterea Sagitta
+--아스타테리아 사지타
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

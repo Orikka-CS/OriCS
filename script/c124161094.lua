@@ -1,4 +1,4 @@
---Poison Demon of Thread-Spider
+--실의 독훼귀-지주
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

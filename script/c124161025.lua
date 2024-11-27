@@ -1,4 +1,4 @@
---Pyrthirio Chimera
+--피르티리오 키메라
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

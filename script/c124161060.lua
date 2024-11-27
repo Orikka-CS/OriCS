@@ -1,4 +1,4 @@
---Unendal Divergence
+--언엔달 디버전스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 2

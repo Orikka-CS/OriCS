@@ -1,4 +1,4 @@
---Poison Demon of Niddle-Wasp
+--침의 독훼귀-작봉
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

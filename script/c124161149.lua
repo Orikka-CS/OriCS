@@ -1,4 +1,4 @@
---Xerdial Sulfurain
+--제르디알 설퍼레인
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

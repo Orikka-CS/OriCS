@@ -1,4 +1,4 @@
---SunLightshape-Solarys the Prescience
+--일광형-혜안의 솔라리스
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

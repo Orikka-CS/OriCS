@@ -1,4 +1,4 @@
---ShiUmbrare Apepis
+--시엄브라레 아페피스
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

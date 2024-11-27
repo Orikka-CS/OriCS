@@ -1,4 +1,4 @@
---ShiUmbrare Rahu
+--시엄브라레 라후
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

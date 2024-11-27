@@ -1,4 +1,4 @@
---Cyclassie Emma
+--사이클래시 엠마
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

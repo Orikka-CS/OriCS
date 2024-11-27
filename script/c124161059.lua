@@ -1,4 +1,4 @@
---Unendal Eternity
+--언엔달 이터니티
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

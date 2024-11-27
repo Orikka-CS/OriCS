@@ -1,4 +1,4 @@
---Cyclassie Breeze
+--사이클래시 브리즈
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---Possion Demon Opening
+--독훼귀개전
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---StarLightshape's Charity
+--성광형의 자비
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

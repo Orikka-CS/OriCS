@@ -1,4 +1,4 @@
---Pyrthirio Athanasia
+--피르티리오 아타나시아
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

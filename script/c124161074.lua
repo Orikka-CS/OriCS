@@ -1,4 +1,4 @@
---Cyclassie Thunderstorm
+--사이클래시 썬더스톰
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

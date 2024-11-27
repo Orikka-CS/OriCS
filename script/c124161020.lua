@@ -1,4 +1,4 @@
---Pyrthirio Dog
+--피르티리오 도그
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

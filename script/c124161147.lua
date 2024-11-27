@@ -1,4 +1,4 @@
---Clavicula Xerdial
+--클라비쿨라 제르디알
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

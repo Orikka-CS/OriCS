@@ -1,4 +1,4 @@
---The Shadow of Xerdial
+--제르디알의 영도사
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

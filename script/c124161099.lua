@@ -1,4 +1,4 @@
---Posion Demon of Slime-Toad
+--진의 고독훼귀의-하마
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

@@ -1,4 +1,4 @@
---Pyrthirio Tartarus
+--피르티리오 타르타로스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
@@ -12,6 +12,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_REMOVE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)

@@ -1,4 +1,4 @@
---Cyclassie Faye
+--사이클래시 페이
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

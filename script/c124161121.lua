@@ -1,4 +1,4 @@
---Calapis Folium
+--캘라피스 폴리움
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

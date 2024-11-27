@@ -1,4 +1,4 @@
---Pyrthirio Snake
+--피르티리오 스네이크
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

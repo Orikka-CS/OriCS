@@ -1,4 +1,4 @@
---Pyrthirio Etna
+--피르티리오 에트나
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

@@ -1,4 +1,4 @@
---Naufrate the Abyss Museum
+--해저박물관 나우프라테
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

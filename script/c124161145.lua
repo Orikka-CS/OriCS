@@ -1,4 +1,4 @@
---Xeridal, the Evil King of Liberation
+--해의 마왕 제르디알
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

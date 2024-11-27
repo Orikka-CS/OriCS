@@ -1,4 +1,4 @@
---Cyclassie Rampage
+--사이클래시 램페이지
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---Calapis Basalt
+--캘라피스 바살트
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

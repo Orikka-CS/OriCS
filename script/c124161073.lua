@@ -1,4 +1,4 @@
---Cyclassie Absorption
+--사이클래시 트위스티리어
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

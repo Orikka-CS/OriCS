@@ -1,4 +1,4 @@
---Astaterea Levitas
+--아스타테리아 레비타스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---Agryhypalte Liderc
+--아그리휴프알테 리더르크
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

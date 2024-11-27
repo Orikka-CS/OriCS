@@ -1,4 +1,4 @@
---Astaterea Gravitas
+--아스타테리아 그라비타스
 local s,id=GetID()
 function s.initial_effect(c)
 	--hand active

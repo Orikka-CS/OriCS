@@ -1,4 +1,4 @@
---Hypalte Aion
+--휴프알테 아이온
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---Posion Demon of Fang-Snake
+--아의 고독훼귀-섬사
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

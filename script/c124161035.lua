@@ -1,4 +1,4 @@
---Umbrare Kage
+--엄브라레 카지
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---FlashLightshape's Seal
+--섬광형의 봉인
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

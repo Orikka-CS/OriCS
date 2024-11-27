@@ -1,4 +1,4 @@
---Lightshape-Qhana the Devotion
+--광형-헌신의 카나
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

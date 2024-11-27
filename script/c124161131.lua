@@ -1,4 +1,4 @@
---Naufrate Director Samuel
+--나우프라테 디렉터 사무엘
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

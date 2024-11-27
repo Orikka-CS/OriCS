@@ -1,4 +1,4 @@
---Posion Demon Closing
+--독훼귀문관
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

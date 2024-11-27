@@ -1,4 +1,4 @@
---The One that Brings to Xerdial
+--제르디알로 인도하는 자
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

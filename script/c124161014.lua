@@ -1,4 +1,4 @@
---ElectroLightshape's Strike
+--전광형의 일격
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

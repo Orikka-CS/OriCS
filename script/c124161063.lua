@@ -1,4 +1,4 @@
---Cyclassie Alice
+--사이클래시 앨리스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---The Blaze of Xerdial
+--제르디알의 홍일염
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

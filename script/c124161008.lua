@@ -1,4 +1,4 @@
---StarLightshape-Stella the Miracle
+--성광형-기적의 스텔라
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

@@ -1,4 +1,4 @@
---Calapis Pyra
+--캘라피스 파이라
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---Naufrate Educator Senora
+--나우프라테 에듀케이터 세뇨라
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

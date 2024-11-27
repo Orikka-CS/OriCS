@@ -1,4 +1,4 @@
---Unendal Grasp
+--언엔달 그라스프
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
@@ -11,6 +11,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetCode(EVENT_FREE_CHAIN)

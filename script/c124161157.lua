@@ -1,4 +1,4 @@
---Hypalte Vrikle
+--휴프알테 브리클
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---Astaterea Benel
+--아스타테리아 베넬
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

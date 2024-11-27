@@ -1,4 +1,4 @@
---Unendal Berserk
+--언엔달 베르세르크
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

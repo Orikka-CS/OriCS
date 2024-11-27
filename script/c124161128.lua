@@ -1,4 +1,4 @@
---Naufrate Designer Kate
+--나우프라테 디자이너 케이트
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

@@ -1,4 +1,4 @@
---Colosseum of Posion Demon
+--독훼귀투기명
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

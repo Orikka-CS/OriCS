@@ -1,4 +1,4 @@
---MetaCalapis Hornfels
+--메타캘라피스 혼펠스
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

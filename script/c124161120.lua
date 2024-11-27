@@ -1,4 +1,4 @@
---Calapis Tectonism
+--캘라피스 텍토니즘
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

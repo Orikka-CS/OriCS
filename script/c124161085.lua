@@ -1,4 +1,4 @@
---Astaterea Lady Virgo
+--아스타테리아 레이디 비르고
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

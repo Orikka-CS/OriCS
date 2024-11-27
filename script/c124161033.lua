@@ -1,4 +1,4 @@
---Umbrare Tila
+--엄브라레 틸라
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

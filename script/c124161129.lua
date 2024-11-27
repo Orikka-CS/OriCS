@@ -1,4 +1,4 @@
---Naufrate Conservator Vasa
+--나우프라테 컨서베이터 바사
 local s,id=GetID()
 function s.initial_effect(c)
 	--link
