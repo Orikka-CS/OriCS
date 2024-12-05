@@ -53,7 +53,7 @@ end
 
 --effect 2
 function s.con2filter(c)
-	return c:IsSetCard(0xf28) and c:IsSpellTrap() and c:IsFaceup()
+	return c:IsSetCard(0xf28) and c:IsFaceup()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
