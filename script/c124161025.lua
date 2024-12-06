@@ -83,7 +83,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_DISABLE,sg,1,0,0)
 end
 
-function s.op1(e,tc,tp,sg,chk)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetFirstTarget()
 	if tg:IsNegatable() and tg:IsRelateToEffect(e) then

@@ -45,7 +45,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(dis)
 end
 
-function s.op1(e,tc,tp,sg,chk)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	c=e:GetHandler()
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
