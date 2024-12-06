@@ -1,0 +1,88 @@
+--백연초의 시원 실베스트
+local s,id=GetID()
+function s.initial_effect(c)
+	--fusion
+	c:EnableReviveLimit()
+	Fusion.AddProcMix(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf2b),s.mfilter)
+	--effect 1
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetCategory(CATEGORY_DISABLE+CATEGORY_DAMAGE+CATEGORY_RECOVER)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCountLimit(1,id)
+	e1:SetCondition(function() return Duel.IsMainPhase() end)
+	e1:SetTarget(s.tg1)
+	e1:SetOperation(s.op1)
+	c:RegisterEffect(e1)
+	--effect 2
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(id,1))
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOKEN)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCountLimit(1,{id,1})
+	e2:SetCost(s.cst2)
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
+	c:RegisterEffect(e2)
+end
+
+--fusion
+function s.mfilter(c,sc,st,tp)
+	return c:IsRace(RACE_PLANT,sc,st,tp) and c:IsLevelAbove(5)
+end
+
+--effect 1
+function s.tg1filter(c,e)
+	return c:IsCanBeEffectTarget(e) and c:IsNegatable() and c:IsType(TYPE_EFFECT)
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) and chkc:IsNegatable() end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_NEGATE):GetFirst()
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE,sg,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,sg:GetAttack()/2)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,sg:GetAttack()/2)
+end
+
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tg=Duel.GetFirstTarget()
+	if tg:IsNegatable() and tg:IsRelateToEffect(e) then
+		tg:NegateEffects(c,nil,true)
+		if tg:GetAttack()>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+			Duel.BreakEffect()
+			Duel.Damage(1-tp,tg:GetAttack()/2,REASON_EFFECT)
+			Duel.Recover(tp,tg:GetAttack()/2,REASON_EFFECT)
+		end
+	end
+end
+
+--effect 2
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.CheckLPCost(tp,600) end
+	Duel.PayLPCost(tp,600)
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) and Duel.GetLocationCount(tp,LOCATION_MZONE)>1 and Duel.IsPlayerCanSpecialSummonMonster(tp,124161168,0xf2b,TYPES_TOKEN,300,300,1,RACE_PLANT,ATTRIBUTE_FIRE) end
+	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,2,tp,0)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,0)
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) or Duel.GetLocationCount(tp,LOCATION_MZONE)<2 
+		or not Duel.IsPlayerCanSpecialSummonMonster(tp,124161168,0xf2b,TYPES_TOKEN,300,300,1,RACE_PLANT,ATTRIBUTE_FIRE) then return end
+	for i=1,2 do
+		local token=Duel.CreateToken(tp,124161168)
+		Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP)
+	end
+	Duel.SpecialSummonComplete()
+end
