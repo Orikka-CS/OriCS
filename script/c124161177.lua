@@ -40,12 +40,11 @@ end
 --effect 1
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFlagEffect(tp,id)==0 end
-	Duel.PayLPCost(tp,Duel.GetLP(tp)//2)
 	Duel.RegisterFlagEffect(tp,id,RESET_CHAIN,0,1)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLP(tp)//2~=Duel.GetLP(1-tp) end
+	if chk==0 then return Duel.GetLP(tp)~=Duel.GetLP(1-tp) end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
