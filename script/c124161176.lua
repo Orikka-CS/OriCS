@@ -6,6 +6,7 @@ function s.initial_effect(c)
 	Fusion.AddProcMix(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf2b),s.mfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_DISABLE+CATEGORY_DAMAGE+CATEGORY_RECOVER)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -57,7 +58,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetFirstTarget()
 	if tg:IsNegatable() and tg:IsRelateToEffect(e) then
 		tg:NegateEffects(c,nil,true)
-		if tg:GetAttack()>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if tg:GetAttack()>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 			Duel.BreakEffect()
 			Duel.Damage(1-tp,tg:GetAttack(),REASON_EFFECT)
 			Duel.Recover(tp,tg:GetAttack(),REASON_EFFECT)
