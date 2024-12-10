@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
-	local params={aux.FilterBoolFunction(Card.IsSetCard,0xf2b)}
+	local params={fusfilter=aux.FilterBoolFunction(Card.IsSetCard,0xf2b)}
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
 	e1:SetType(EFFECT_TYPE_IGNITION)
@@ -10,7 +10,7 @@ function s.initial_effect(c)
 	e1:SetCountLimit(1,id)
 	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
-	e1:SetOperation(s.op1(Fusion.SummonEffTG(table.unpack(params)),Fusion.SummonEffOP(table.unpack(params))))
+	e1:SetOperation(s.op1(Fusion.SummonEffTG(params),Fusion.SummonEffOP(params)))
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
@@ -45,16 +45,16 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,tp,LOCATION_HAND)
 end
 
-function s.op1(oldtg,oldop)
+function s.op1(fustg,fusop)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		local c=e:GetHandler()
 		if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end 
 		local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil,e,tp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
-		if oldtg(e,tp,eg,ep,ev,re,r,rp,0) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if fustg(e,tp,eg,ep,ev,re,r,rp,0) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			oldop(e,tp,eg,ep,ev,re,r,rp)
+			fusop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end

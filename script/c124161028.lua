@@ -21,23 +21,22 @@ function s.extrafil(e,tp,mg)
 	local unu=10-Duel.GetLocationCount(tp,LOCATION_MZONE)-Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)+Duel.GetFieldGroupCount(tp,LOCATION_EMZONE,0)-Duel.GetLocationCount(tp,LOCATION_SZONE)-Duel.GetFieldGroupCount(tp,LOCATION_SZONE,0)+Duel.GetFieldGroupCount(tp,LOCATION_FZONE,0)
 	if unu>0 then
 		local sg=Duel.GetMatchingGroup(Fusion.IsMonsterFilter(Card.IsAbleToRemove),tp,LOCATION_GRAVE,0,nil)
-		if #sg>0 then
-			return sg,s.fcheck
-		end
-		return nil
+		return sg,s.fcheck
 	end
 end
 
 function s.fcheck(tp,sg,fc)
 	local unu=10-Duel.GetLocationCount(tp,LOCATION_MZONE)-Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)+Duel.GetFieldGroupCount(tp,LOCATION_EMZONE,0)-Duel.GetLocationCount(tp,LOCATION_SZONE)-Duel.GetFieldGroupCount(tp,LOCATION_SZONE,0)+Duel.GetFieldGroupCount(tp,LOCATION_FZONE,0)
-	if not fc:IsSetCard(0xf21) then return sg:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)<1 end
+	if not fc:IsSetCard(0xf21) then return sg:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)<=0 end
 	return sg:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)<=unu
 end
 
 function s.extraop(e,tc,tp,sg)
-	local g1=sg:Filter(Card.IsLocation,nil,LOCATION_GRAVE)
-	Duel.Remove(g1,POS_FACEUP,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
-	sg:Sub(g1)
+	local g=sg:Filter(Card.IsLocation,nil,LOCATION_GRAVE)
+	if #g>0 then
+		Duel.Remove(g,POS_FACEUP,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
+		sg:Sub(g)
+	end
 end
 
 function s.extratg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -54,7 +53,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	c=e:GetHandler()
+	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
 		Duel.SendtoHand(c,nil,REASON_EFFECT)
 	end

@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
-	local params={aux.FilterBoolFunction(Card.IsSetCard,0xf21),nil,nil,nil,Fusion.ForcedHandler,s.op1}
+	local params={fusfilter=aux.FilterBoolFunction(Card.IsSetCard,0xf21),gc=Fusion.ForcedHandler,stage2=s.stage2}
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
@@ -10,8 +10,8 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
-	e1:SetTarget(Fusion.SummonEffTG(table.unpack(params)))
-	e1:SetOperation(Fusion.SummonEffOP(table.unpack(params)))
+	e1:SetTarget(Fusion.SummonEffTG(params))
+	e1:SetOperation(Fusion.SummonEffOP(params))
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
@@ -32,7 +32,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsMainPhase()
 end
 
-function s.op1(e,tc,tp,sg,chk)
+function s.stage2(e,tc,tp,sg,chk)
 	local c=e:GetHandler()
 	if chk==1 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 		Duel.BreakEffect()
