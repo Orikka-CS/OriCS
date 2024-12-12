@@ -14,12 +14,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetCategory(CATEGORY_TOHAND)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetCode(EVENT_CHAINING)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(function(e,tp) return Duel.IsTurnPlayer(1-tp) end)
+	e2:SetCondition(s.con2)
 	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
@@ -60,29 +61,24 @@ function s.op1(fustg,fusop)
 end
 
 --efffect 2
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return re:GetHandler():IsSetCard(0xf2b) and rp==tp
+end
+
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckLPCost(tp,700) end
 	Duel.PayLPCost(tp,700)
 end
 
-function s.tg2filter(c)
-	return c:IsFaceup() and c:IsSetCard(0xf2b) and c:IsAbleToDeck()
-end
-
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,0,nil)
-	if chk==0 then return #g>0 and c:IsAbleToDeck() and Duel.IsPlayerCanDraw(tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,c,1,0,LOCATION_GRAVE)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	if chk==0 then return c:IsAbleToHand() end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,LOCATION_GRAVE)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,0,nil)
-	if #g>0 and c:IsRelateToEffect(e) then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
-		Duel.SendtoDeck(c+sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-		Duel.Draw(tp,1,REASON_EFFECT)
+	if c:IsRelateToEffect(e) then
+		Duel.SendtoHand(c,nil,REASON_EFFECT)
 	end
 end
