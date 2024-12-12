@@ -36,23 +36,23 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
-	local op1=Duel.IsChainNegatable(ev)
-	local op2=false
+	local b1=Duel.IsChainNegatable(ev)
+	local b2=false
 	if rc:GetOwner()==tp and rc:IsSetCard(0xf22) and rc:IsSpellTrap() and not rc:IsType(TYPE_FIELD) then
 		local eff=rc:GetActivateEffect()
-		local tg=eff:GetTarget()
-		if rc:GetControler()==tp and tg(e,1-tp,eg,ep,ev,re,r,rp,0) then
-			op2=true
-		elseif rc:GetControler()==1-tp and tg(e,tp,eg,ep,ev,re,r,rp,0) then
-			op2=true
+		local ta=eff:GetTarget()
+		if rc:GetControler()==tp and ta(e,1-tp,eg,ep,ev,re,r,rp,0) then
+			b2=true
+		elseif rc:GetControler()==1-tp and ta(e,tp,eg,ep,ev,re,r,rp,0) then
+			b2=true
 		else
-			op2=false
+			b2=false
 		end
 	end
-	if chk==0 then return op1 or op2 end
-	local op=Duel.SelectEffect(tp,{op1,aux.Stringid(id,0)},{op2,aux.Stringid(id,1)})
-	e:SetLabel(op)
-	if op==1 then
+	if chk==0 then return (b1 or b2) end
+	local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)})
+	e:SetLabel(b)
+	if b==1 then
 		e:SetCategory(CATEGORY_NEGATE)
 		Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	else
@@ -62,10 +62,10 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local op=e:GetLabel()
-	if op==1 then
+	local b=e:GetLabel()
+	if b==1 then
 		Duel.NegateActivation(ev)
-	elseif op==2 then
+	elseif b==2 then
 		local rc=re:GetHandler()
 		local eff=rc:GetActivateEffect()
 		if rc:GetControler()==tp then

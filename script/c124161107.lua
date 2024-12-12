@@ -71,13 +71,10 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local b1=true
 	local b2=c:IsLevelAbove(2)
 	local b3=c:IsLevelAbove(3)
-	local op=Duel.SelectEffect(tp,
-		{b1,aux.Stringid(id,0)},
-		{b2,aux.Stringid(id,1)},
-		{b3,aux.Stringid(id,2)}) 
-	if op==1 then return end
+	local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)},{b3,aux.Stringid(id,2)}) 
+	if b==1 then return end
 	local val
-	if op==2 then val=-1 else val=-2 end
+	if b==2 then val=-1 else val=-2 end
 	Duel.BreakEffect()
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
