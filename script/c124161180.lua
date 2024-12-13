@@ -6,14 +6,11 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_RECOVER+CATEGORY_DAMAGE)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCode(EVENT_DESTROYED)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
-	e2:SetCost(aux.bfgcost)
+	e2:SetCountLimit(1,id)
+	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -55,28 +52,42 @@ function s.extratg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 --effect 2
-function s.con2filter(c,e,tp)
-	return c:IsSetCard(0xf2b) and c:IsType(TYPE_FUSION) and c:IsPreviousControler(tp) and c:IsPreviousPosition(POS_FACEUP) and c:IsCanBeEffectTarget(e) and c:GetBaseAttack()>0 and c:GetBaseDefense()>0 and c:IsReason(REASON_BATTLE+REASON_EFFECT) 
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c:IsAbleToRemoveAsCost() and Duel.CheckLPCost(tp,800) end
+	Duel.Remove(c,POS_FACEUP,REASON_COST)
+	Duel.PayLPCost(tp,800)
 end
 
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:FilterCount(s.con2filter,nil,e,tp)>0
+function s.tg2filter(c,e)
+	return c:IsSetCard(0xf2b) and c:IsType(TYPE_FUSION) and c:IsFaceup() and c:IsCanBeEffectTarget(e)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local g=eg:Filter(s.con2filter,nil,e,tp)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) end
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil,e)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,1-tp,0)
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) then
-		Duel.Recover(tp,tg:GetBaseAttack(),REASON_EFFECT)
-		Duel.Damage(1-tp,tg:GetBaseDefense(),REASON_EFFECT)
+	if not (tg:IsRelateToEffect(e) and tg:IsFaceup()) then return end
+	local c=e:GetHandler()
+	if not tg:IsImmuneToEffect(e) then
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+		e1:SetCode(EFFECT_IMMUNE_EFFECT)
+		e1:SetRange(LOCATION_MZONE)
+		e1:SetValue(s.op2imfilter)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
+		tg:RegisterEffect(e1)
 	end
+end
+
+function s.op2imfilter(e,te)
+	return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() and te:IsActivated() and te:IsActiveType(TYPE_SPELL)
 end

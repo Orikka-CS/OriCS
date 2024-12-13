@@ -11,6 +11,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EFFECT_DESTROY_REPLACE)
@@ -61,8 +62,7 @@ end
 
 --effect 2
 function s.tg2filter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0xf21) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) 
-		and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT+REASON_BATTLE)
+	return c:IsFaceup() and c:IsSetCard(0xf21) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT+REASON_BATTLE)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

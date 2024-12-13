@@ -57,8 +57,7 @@ end
 
 --effect 2
 function s.tg2filter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0xf24) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) 
-		and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT)
+	return c:IsFaceup() and c:IsSetCard(0xf24) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

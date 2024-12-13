@@ -26,8 +26,7 @@ function s.initial_effect(c)
 end
 --effect 1
 function s.tg1filter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0xf27) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) 
-		and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT+REASON_BATTLE)
+	return c:IsFaceup() and c:IsSetCard(0xf27) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT+REASON_BATTLE)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
