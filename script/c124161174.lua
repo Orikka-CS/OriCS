@@ -39,12 +39,13 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,e,tp)
 	if chk==0 then return #g>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,e,tp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
@@ -70,7 +71,6 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local a,at=Duel.GetAttacker(),Duel.GetAttackTarget()
 	if a:IsControler(1-tp) then a,at=at,a end
 	if chk==0 then return a and at and a:IsSetCard(0xf2b) and a:IsFaceup() end
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,at,1,1-tp,LOCATION_MZONE)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp,chk)
