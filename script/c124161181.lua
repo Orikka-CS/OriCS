@@ -62,11 +62,11 @@ end
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chck:IsCanBeEffectTarget(e) end
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
-	local ct=Duel.GetFlagEffect(tp,124161180)
+	local ct=Duel.GetFlagEffect(tp,124161180)//2
 	if chk==0 then return #g>0 and ct>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_DESTROY)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,sg,#sg,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
