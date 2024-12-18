@@ -5,6 +5,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCategory(CATEGORY_TOHAND)
+	e1:SetCountLimit(1,{id,1})
 	e1:SetCost(s.cost1)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
@@ -57,7 +58,7 @@ function s.ofil1(c)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil1),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,s.tfil1,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
 	if #g>0 then
 		local tc=g:GetFirst()
 		local result=false
@@ -68,7 +69,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		end
 		if result then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-			local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.ofil1),tp,LOCATION_GRAVE,0,0,1,nil)
+			local sg=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_GRAVE,0,0,1,nil)
 			if #sg>0 then
 				Duel.BreakEffect()
 				Duel.SendtoHand(sg,nil,REASON_EFFECT)

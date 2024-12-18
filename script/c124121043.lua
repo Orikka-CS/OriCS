@@ -1,4 +1,4 @@
---트라이드나 하르카나
+--트리아드나 하르카나
 local s,id=GetID()
 function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
@@ -42,12 +42,7 @@ function s.gop1(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()
 	if ph&(PHASE_MAIN1+PHASE_MAIN2)>0 then
 		for tc in aux.Next(eg) do
-			if Duel.GetFlagEffect(0,id)>0 then
-				tc:RegisterFlagEffect(id,RESET_PHASE+ph,0,1)
-			end
-			if Duel.GetFlagEffect(1,id)>0 then
-				tc:RegisterFlagEffect(id+1,RESET_PHASE+ph,0,1)
-			end
+			tc:RegisterFlagEffect(id,(RESETS_STANDARD&~RESET_TURN_SET)+RESET_PHASE+ph,0,1)
 		end
 	end
 end
@@ -76,11 +71,7 @@ function s.con2(e)
 	return Duel.IsExistingMatchingCard(s.nfil2,tp,LOCATION_ONFIELD,0,1,nil)
 end
 function s.tar2(e,c)
-	local tp=e:GetHandlerPlayer()
-	if c:GetFlagEffect(id+tp)>0 then
-		Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
-	end
-	return c:GetFlagEffect(id+tp)>0
+	return c:GetFlagEffect(id)>0
 end
 function s.nfil3(c,tp)
 	return c:IsPreviousControler(tp)

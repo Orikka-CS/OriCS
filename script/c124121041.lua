@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
-	Synchro.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsCode,87979586),1,1,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_EARTH),1,99)
+	Synchro.AddProcedure(c,aux.FilterSummonCode(87979586),1,1,Synchro.NonTunerEx(Card.IsAttribute,ATTRIBUTE_EARTH),1,99)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
@@ -59,14 +59,14 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		else
 			Duel.SendtoGrave(sg,REASON_RULE)
 		end
-		Duel.BreakEffect()
 		Duel.ShuffleDeck(tp)
 	end
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return not c:IsStatus(STATUS_BATTLE_DESTROYED)
-		and re:IsMonsterEffect() and Duel.IsChainNegatable(ev)
+		and re:IsMonsterEffect()
+		and Duel.IsChainNegatable(ev)
 end
 function s.cost3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -87,9 +87,8 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then
-		return
+	if Duel.NegateActivation(ev) and rc:IsRelateToEffect(re) then
+		rc:CancelToGrave()
+		Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	end
-	rc:CancelToGrave()
-	Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 end

@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_LEAVE_FIELD)
 	e2:SetRange(LOCATION_MZONE+LOCATION_GRAVE)
-	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
 	e2:SetCost(s.cost2)
@@ -53,13 +53,13 @@ function s.tfil1(c)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.IsExistingMatchingCard(s.tfil1,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil)
+		return Duel.IsExistingMatchingCard(s.tfil1,tp,LOCATION_GRAVE,0,1,nil)
 	end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil1),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.tfil1,tp,LOCATION_GRAVE,0,1,1,nil)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
@@ -68,7 +68,7 @@ end
 function s.nfil2(c,tp,rp)
 	return c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousControler(tp) and
 		c:GetPreviousTypeOnField()&TYPE_FUSION~=0 and c:IsPreviousLocation(LOCATION_MZONE)
-		and c:IsPreviousSetCard(0xfa2) and (c:IsReason(REASON_BATTLE) or rp==1-tp)
+		and c:IsPreviousSetCard(0xfa2) and c:IsReason(REASON_EFFECT) and rp==1-tp
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

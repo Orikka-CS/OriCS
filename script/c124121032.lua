@@ -5,6 +5,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON)
+	e1:SetCountLimit(1,{id,1})
 	e1:SetCost(s.cost1)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
@@ -61,10 +62,24 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil1),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
-	if #g>0 and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)>0 then
+	local g=Duel.SelectMatchingCard(tp,s.tfil1,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
+	if #g>0 then 
+		local tc=g:GetFirst()
+		Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP)
+		--Return it to deck if it leaves the field
+		if tc:IsPreviousLocation(LOCATION_GRAVE) then
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetDescription(3301)
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
+			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
+			e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
+			e1:SetValue(LOCATION_DECKBOT)
+			tc:RegisterEffect(e1)
+		end
+		Duel.SpecialSummonComplete()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.ofil1),tp,LOCATION_GRAVE,0,0,1,nil)
+		local sg=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_GRAVE,0,0,1,nil)
 		if #sg>0 then
 			Duel.SendtoHand(sg,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,sg)

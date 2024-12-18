@@ -20,6 +20,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
+s.listed_names={CARD_POLYMERIZATION}
 function s.cfil1(c)
 	return c:IsType(TYPE_SPELL) and c:IsAbleToGraveAsCost() and c:IsSetCard(0x46)
 end
@@ -37,7 +38,6 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return c:IsAbleToHand() or (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false))
 	end
-	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,c,1,0,0)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,c,1,0,0)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
@@ -58,7 +58,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		)
 		if res==1 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-			local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.ofil1),tp,LOCATION_HAND+LOCATION_GRAVE,0,0,1,nil,e,tp)
+			local g=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_HAND+LOCATION_GRAVE,0,0,1,nil,e,tp)
 			if #g>0 then
 				Duel.BreakEffect()
 				Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
@@ -68,7 +68,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return not c:IsReason(REASON_DRAW)
+	return not c:IsReason(REASON_DRAW) and Duel.GetCurrentPhase()~=PHASE_DAMAGE 
 end
 function s.tfil2(c)
 	return c:IsCode(24094653) and c:CheckActivateEffect(true,true,false)~=nil

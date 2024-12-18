@@ -29,14 +29,14 @@ function s.initial_effect(c)
 	e5:SetRange(LOCATION_MZONE)
 	e5:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e5:SetCondition(s.con4)
-	e5:SetValue(1000)
+	e5:SetValue(s.val5)
 	c:RegisterEffect(e5)
 	local e6=Effect.CreateEffect(c)
 	e6:SetType(EFFECT_TYPE_QUICK_O)
 	e6:SetCode(EVENT_FREE_CHAIN)
 	e6:SetRange(LOCATION_MZONE)
 	e6:SetCategory(CATEGORY_REMOVE)
-	e6:SetCountLimit(1,id)
+	e6:SetCountLimit(1)
 	e6:SetCondition(Duel.IsMainPhase)
 	e6:SetCost(s.cost6)
 	e6:SetTarget(s.tar6)
@@ -47,26 +47,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if Duel.GetCurrentChain()==0 then
 		Duel.SetChainLimitTillChainEnd(s.clim1)
-	elseif Duel.GetCurrentChain()==1 then
+	else
 		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e1:SetCode(EVENT_CHAINING)
-		e1:SetOperation(s.oop11)
-		Duel.RegisterEffect(e1,tp)
-		local e2=e1:Clone()
-		e2:SetCode(EVENT_BREAK_EFFECT)
-		e2:SetReset(RESET_CHAIN)
-		Duel.RegisterEffect(e2,tp)
 	end
 end
 function s.clim1(e,rp,tp)
-	return tp==rp or not e:IsActiveType(TYPE_MONSTER)
-end
-function s.oop11(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	c:ResetFlagEffect(id)
-	e:Reset()
+	return tp==rp
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -77,43 +63,48 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.con4(e)
 	local c=e:GetHandler()
-	return c:GetOverlayGroup():IsExists(Card.IsCode,1,nil,id-4)
+	local g=c:GetMaterial()
+	return g:IsExists(Card.IsCode,1,nil,id-4) and c:IsSummonType(SUMMON_TYPE_XYZ)
 end
 function s.val4(e,te)
-	return te:IsMonsterEffect() and te:GetOwnerPlayer()==1-e:GetHandlerPlayer() and te:IsActivated()
+	return te:IsMonsterEffect() and te:GetOwnerPlayer()==1-e:GetHandlerPlayer()
+end
+function s.val5(e)
+	local c=e:GetHandler()
+	return 1000
 end
 function s.cost6(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		return (c:CheckRemoveOverlayCard(tp,1,REASON_COST)
-			or Duel.IsExistingMatchingCard(Card.IsAbleToRemoveAsCost,tp,LOCATION_HAND,0,1,nil))
-			and Duel.CheckLPCost(tp,1000)
+			or Duel.CheckLPCost(tp,1000))
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local ct=1
+	local sg=Group.CreateGroup()
 	if c:CheckRemoveOverlayCard(tp,1,REASON_COST) then
 		ct=0
-	end
-	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToRemoveAsCost,tp,LOCATION_HAND,0,ct,1,nil)
-	if #g>0 then
-		Duel.Remove(g,POS_FACEUP,REASON_COST)
+		sg=aux.SelectUnselectGroup(c:GetOverlayGroup(),e,tp,0,1,aux.TRUE,1,tp,HINTMSG_REMOVEXYZ)
+	end 
+	if ct==1 or #sg==0 then
+		Duel.PayLPCost(tp,1000)
 	else
-		c:RemoveOverlayCard(tp,1,1,REASON_COST)
+		Duel.SendtoGrave(sg,REASON_COST)
 	end
-	Duel.PayLPCost(tp,1000)
 end
 function s.tfil6(c)
 	return c:IsType(TYPE_COUNTER) and c:IsAbleToRemove()
 end
 function s.tar6(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tfil6,tp,LOCATION_DECK,0,nil)
 	if chk==0 then
-		return Duel.IsExistingMatchingCard(s.tfil6,tp,LOCATION_DECK,0,1,nil)
+		return aux.SelectUnselectGroup(g,e,tp,3,3,aux.dncheck,0)
 	end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK)
 end
 function s.op6(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tfil6,tp,LOCATION_DECK,0,nil)
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,3,aux.dncheck,1,tp,HINTMSG_REMOVE,nil,nil,false)
+	local sg=aux.SelectUnselectGroup(g,e,tp,3,3,aux.dncheck,1,tp,HINTMSG_REMOVE,nil,nil,false)
 	if sg and #sg>0 then
 		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 	end

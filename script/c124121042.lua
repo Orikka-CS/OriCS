@@ -1,4 +1,4 @@
---트라이드나 레인포린
+--트리아드나 레인포린
 local s,id=GetID()
 function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)

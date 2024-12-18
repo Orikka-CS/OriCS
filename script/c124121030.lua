@@ -29,6 +29,7 @@ function s.initial_effect(c)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
 end
+s.listed_names={CARD_POLYMERIZATION}
 function s.ofil1(c)
 	return c:IsSetCard(0xfa2) and c:IsType(TYPE_MONSTER)
 end

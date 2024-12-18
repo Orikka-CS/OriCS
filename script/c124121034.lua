@@ -2,12 +2,10 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetRange(LOCATION_GRAVE+LOCATION_MZONE)
-	e1:SetCategory(CATEGORY_TOHAND)
+	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetRange(LOCATION_GRAVE)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON+CATEGORY_DECKDES)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
 	e1:SetCost(s.cost1)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
@@ -22,6 +20,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
+s.listed_names={CARD_POLYMERIZATION}
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()&(PHASE_MAIN1+PHASE_MAIN2)~=0
 end
@@ -40,19 +39,39 @@ end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return c:IsAbleToHand()
+		return c:IsAbleToHand() or (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false))
 	end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,c,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
+end
+function s.ofil1(c)
+	return c:ListsCode(CARD_POLYMERIZATION) and c:IsMonster() and c:IsAbleToGrave()
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		Duel.SendtoHand(c,nil,REASON_EFFECT)
+		local res=aux.ToHandOrElse(c,tp,
+			function(sc)
+				return sc:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+			end,
+			function(sc)
+				return Duel.SpecialSummon(sc,0,tp,tp,false,false,POS_FACEUP)
+			end,
+			aux.Stringid(id,0)
+		)
+		if res==1 then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+			local g=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_HAND+LOCATION_DECK,0,0,1,nil)
+			if #g>0 then
+				Duel.BreakEffect()
+				Duel.SendtoGrave(g,REASON_EFFECT)
+			end
+		end
 	end
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return not c:IsReason(REASON_DRAW)
+	return not c:IsReason(REASON_DRAW) and Duel.GetCurrentPhase()~=PHASE_DAMAGE 
 end
 function s.tfil2(c)
 	return c:IsCode(24094653) and c:CheckActivateEffect(true,true,false)~=nil

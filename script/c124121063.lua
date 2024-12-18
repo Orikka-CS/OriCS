@@ -15,7 +15,6 @@ function s.initial_effect(c)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e2:SetCountLimit(1,id)
-	e2:SetCost(s.cost2)
 	e2:SetTarget(s.tar2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -64,12 +63,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp,c)
 	local g=e:GetLabelObject()
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 	g:DeleteGroup()
-end
-function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then
-		return Duel.CheckLPCost(tp,1000)
-	end
-	Duel.PayLPCost(tp,1000)
 end
 function s.tfil2(c)
 	return (c:IsCode(id+3) or c:IsCode(id+4) or c:IsCode(id+5))

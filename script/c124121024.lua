@@ -20,6 +20,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
+s.listed_names={CARD_POLYMERIZATION}
 function s.cfil1(c)
 	return c:IsType(TYPE_SPELL) and c:IsAbleToGraveAsCost() and c:IsSetCard(0x46)
 end
@@ -68,7 +69,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return not c:IsReason(REASON_DRAW)
+	return not c:IsReason(REASON_DRAW) and Duel.GetCurrentPhase()~=PHASE_DAMAGE 
 end
 function s.tfil2(c)
 	return c:IsCode(24094653) and c:CheckActivateEffect(true,true,false)~=nil
