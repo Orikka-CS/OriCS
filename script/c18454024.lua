@@ -64,10 +64,10 @@ function s.tar6(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		return chkc:IsLoc("OG") and s.tfil6(chkc,e,tp)
 	end
 	if chk==0 then
-		return Duel.IETarget(s.tfil6,tp,"OG",0,1,nil,e,tp)
+		return Duel.IETarget(s.tfil6,tp,"OG","OG",1,nil,e,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.STarget(tp,s.tfil6,tp,"OG",0,1,1,nil,e,tp)
+	local g=Duel.STarget(tp,s.tfil6,tp,"OG","OG",1,1,nil,e,tp)
 	Duel.SPOI(0,CATEGORY_REMOVE,g,1,0,0)
 	Duel.SPOI(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 end
