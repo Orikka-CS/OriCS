@@ -114,6 +114,7 @@ function s.tfil6(c,e,tp,ec)
 	return c:IsSetCard(0xc01) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE) and not c:IsCode(id)
 end
 function s.tar6(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
 	if chk==0 then
 		return Duel.GetMZoneCount(tp,c)>0
 			and Duel.IsExistingMatchingCard(s.tfil6,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp)

@@ -39,7 +39,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	return true
 end
 function s.ofil2(c)
-	return c:IsCode("가면") and c:IsAbleToHand()
+	return c:IsSetCard("가면") and c:IsAbleToHand() and not c:IsCode(id)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

@@ -112,7 +112,7 @@ function s.tfil6(c,tp)
 end
 function s.tar6(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.IEMCard(s.tfil6,tp,"H",0,1,nil,tp)
+		return Duel.IEMCard(s.tfil6,tp,"D",0,1,nil,tp)
 	end
 	Duel.SOI(0,CATEGORY_TOGRAVE,nil,1,tp,"D")
 end
@@ -122,8 +122,8 @@ function s.op6(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SMCard(tp,s.tfil6,tp,"H",0,1,1,nil,tp)
+	local g=Duel.SMCard(tp,s.tfil6,tp,"D",0,1,1,nil,tp)
 	if #g>0 then
-		Duel.SendtoGrave(g,nil,REASON_EFFECT)
+		Duel.SendtoGrave(g,REASON_EFFECT)
 	end
 end
