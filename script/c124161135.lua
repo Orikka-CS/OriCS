@@ -54,6 +54,7 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e)
+	tg=tg-tg:Filter(Card.IsImmuneToEffect,nil,e)
 	local ct=Duel.GetLocationCount(1-tp,LOCATION_SZONE)
 	if #tg>0 then
 		if #tg>ct then
