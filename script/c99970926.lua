@@ -43,7 +43,6 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and Duel.Destroy(tc,REASON_EFFECT)~=0 then
 		if tc:IsPreviousLocation(LOCATION_MZONE) and tc:IsType(TYPE_FUSION) then
-			Duel.BreakEffect()
             local e1=Effect.CreateEffect(e:GetHandler())
             e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
             e1:SetCode(EVENT_PHASE+PHASE_END)
