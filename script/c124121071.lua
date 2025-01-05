@@ -10,18 +10,16 @@ function s.initial_effect(c)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_DISABLE+CATEGORY_DESTROY)
+	e2:SetCategory(CATEGORY_DISABLE+CATEGORY_DESTROY+CATEGORY_TODECK)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetCode(EVENT_CHAINING)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCost(s.discost)
 	e2:SetCountLimit(1,id)
+	e2:SetCondition(s.discon)
 	e2:SetTarget(s.distg)
 	e2:SetOperation(s.disop)
 	c:RegisterEffect(e2)
-	local e3=e2:Clone()
-	e3:SetCode(EVENT_SUMMON_SUCCESS)
-	c:RegisterEffect(e3) 
 end
 
 function s.filter(c,ft,e,tp)
@@ -58,29 +56,34 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
-function s.costfilter(c)
-	return c:IsAbleToGraveAsCost() and c:IsSetCard(0x3b)
+function s.disfilter(c)
+	return c:IsSetCard(SET_RED_EYES) and c:IsFaceup()
 end
-function s.discost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.costfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler())
-	if chk==0 then return e:GetHandler():IsAbleToDeckAsCost() and #g>0 end
-	Duel.SendtoDeck(e:GetHandler(),nil,SEQ_DECKBOTTOM,REASON_COST)
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(sg,REASON_COST)
+function s.discon(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	return Duel.IsExistingMatchingCard(s.disfilter,tp,LOCATION_MZONE,0,1,nil)
+		and (rp~=tp or rc:IsSetCard(SET_RED_EYES)) and re:IsActiveType(TYPE_MONSTER)
 end
 function s.distg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
+		and c:IsAbleToDeck() end
 	Duel.SetOperationInfo(0,CATEGORY_DISABLE,nil,1,tp,LOCATION_ONFIELD)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,c,1,0,0)
 end
 function s.disop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.SelectMatchingCard(tp,Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
 	if #g==0 then return end
 	for tc in g:Iter() do
-		tc:NegateEffects(c,RESET_PHASE|PHASE_END,true)
-		if Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
-			Duel.BreakEffect()
+		if tc:NegateEffects(c,RESET_PHASE|PHASE_END,true) then
 			Duel.Destroy(tc,REASON_EFFECT)
 		end
+	end
+	if c:IsRelateToEffect(e) then
+		Duel.BreakEffect()
+		Duel.SendtoDeck(c,nil,1,REASON_EFFECT)
 	end
 end
