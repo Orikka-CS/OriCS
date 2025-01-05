@@ -78,7 +78,8 @@ function s.disop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
 	if #g==0 then return end
 	for tc in g:Iter() do
-		if tc:NegateEffects(c,RESET_PHASE|PHASE_END,true) then
+		tc:NegateEffects(c,RESET_PHASE|PHASE_END,true)
+		if tc:IsDisabled() then
 			Duel.Destroy(tc,REASON_EFFECT)
 		end
 	end
