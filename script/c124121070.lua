@@ -75,7 +75,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
 		e1:SetValue(600)
 		e1:SetReset(RESET_EVENT|RESETS_STANDARD)
-		tc:RegisterEffect(e1)
+		ec:RegisterEffect(e1)
 	end
 end
 function s.tfil31(c)
