@@ -17,6 +17,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id)
 	e2:SetCondition(s.discon)
+	e2:SetCost(s.discost)
 	e2:SetTarget(s.distg)
 	e2:SetOperation(s.disop)
 	c:RegisterEffect(e2)
@@ -64,28 +65,36 @@ function s.discon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(s.disfilter,tp,LOCATION_MZONE,0,1,nil)
 		and (rp~=tp or rc:IsSetCard(SET_RED_EYES)) and re:IsActiveType(TYPE_MONSTER)
 end
-function s.distg(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.discostfilter(c,tp)
+	return c:IsSetCard(SET_RED_EYES) and c:IsAbleToGraveAsCost()
+		and Duel.IsExistingTarget(Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c)
+end
+function s.discost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
-		and c:IsAbleToDeck() end
-	Duel.SetOperationInfo(0,CATEGORY_DISABLE,nil,1,tp,LOCATION_ONFIELD)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,c,1,0,0)
+	if chk==0 then
+		return c:IsAbleToRemoveAsCost()
+			and Duel.IsExistingMatchingCard(s.discostfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,nil,tp)
+	end
+	Duel.Remove(c,POS_FACEUP,REASON_COST)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g=Duel.SelectMatchingCard(tp,s.discostfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil,tp)
+	Duel.SendtoGrave(g,REASON_COST)
+end
+function s.distg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingTarget(Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+	local g=Duel.SelectTarget(tp,Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,1,0,0)
 end
 function s.disop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.SelectMatchingCard(tp,Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
-	if #g==0 then return end
-	for tc in g:Iter() do
+	local tc=Duel.GetFirstTarget()
+	if tc:IsRelateToEffect() and tc:IsNegatable() then
 		tc:NegateEffects(c,RESET_PHASE|PHASE_END,true)
 		Duel.AdjustInstantly(tc)
-		if tc:IsDisabled() then
+		if tc:IsDisabled() and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+			Duel.BreakEffect()
 			Duel.Destroy(tc,REASON_EFFECT)
 		end
-	end
-	if c:IsRelateToEffect(e) then
-		Duel.BreakEffect()
-		Duel.SendtoDeck(c,nil,1,REASON_EFFECT)
 	end
 end

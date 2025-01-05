@@ -60,6 +60,12 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		local tg=aux.SelectUnselectGroup(g,e,tp,1,2,s.rescon,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(tg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,tg)
+		Duel.ShuffleHand(tp)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
+		local dg=Duel.SelectMatchingCard(tp,aux.TRUE,tp,LOCATION_HAND,0,1,1,nil)
+		if #dg>0 then
+			Duel.SendtoGrave(dg,REASON_EFFECT+REASON_DISCARD)
+		end
 	end
 end
 function s.filter(c)
