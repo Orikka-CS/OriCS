@@ -79,6 +79,7 @@ function s.disop(e,tp,eg,ep,ev,re,r,rp)
 	if #g==0 then return end
 	for tc in g:Iter() do
 		tc:NegateEffects(c,RESET_PHASE|PHASE_END,true)
+		Duel.AdjustInstantly(tc)
 		if tc:IsDisabled() then
 			Duel.Destroy(tc,REASON_EFFECT)
 		end
