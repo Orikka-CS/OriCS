@@ -89,7 +89,7 @@ end
 function s.disop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect() and tc:IsNegatable() then
+	if tc:IsRelateToEffect(e) and tc:IsNegatable() then
 		tc:NegateEffects(c,RESET_PHASE|PHASE_END,true)
 		Duel.AdjustInstantly(tc)
 		if tc:IsDisabled() and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
