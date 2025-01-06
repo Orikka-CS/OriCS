@@ -259,6 +259,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	end
 	ae:SetLabelObject(e:GetLabelObject())
 	e:SetLabelObject(ae)
+	Duel.ClearOperationInfo(0)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local ae=e:GetLabelObject()
