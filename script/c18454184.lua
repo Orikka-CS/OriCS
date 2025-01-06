@@ -257,7 +257,13 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	e:SetLabelObject(ae)
 	Duel.ClearOperationInfo(0)
 end
+function s.ofil1(c)
+	return c:IsFaceup() and c:IsSetCard(0xc05) and not c:IsCode(id)
+end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	if not Duel.IsExistingMatchingCard(s.ofil1,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,1,nil) then
+		return
+	end
 	local ae=e:GetLabelObject()
 	if not ae then
 		return
