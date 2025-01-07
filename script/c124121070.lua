@@ -55,10 +55,27 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue(s.eqlimit)
 		c:RegisterEffect(e1)
 	end
-	if Duel.SpecialSummonComplete()==0 then return end
+	Duel.SpecialSummonComplete()
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+	e2:SetDescription(aux.Stringid(id,2))
+	e2:SetTargetRange(1,0)
+	e2:SetTarget(s.splimit)
+	e2:SetReset(RESET_PHASE+PHASE_END)
+	Duel.RegisterEffect(e2,tp)
+	--lizard check
+	aux.addTempLizardCheck(e:GetHandler(),tp,s.lizfilter)
 end
 function s.eqlimit(e,c)
 	return e:GetOwner()==c
+end
+function s.splimit(e,c)
+	return not c:IsRace(RACE_DRAGON) and not c:IsSetCard(0x3b) and c:IsLocation(LOCATION_EXTRA)
+end
+function s.lizfilter(e,c)
+	return not c:IsOriginalRace(RACE_DRAGON) and not c:IsOriginalSetCard(0x3b)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
