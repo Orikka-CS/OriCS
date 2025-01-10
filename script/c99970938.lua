@@ -62,9 +62,9 @@ function s.plop(e,tp,eg,ep,ev,re,r,rp,chk)
 		e1:SetValue(TYPE_SPELL|TYPE_CONTINUOUS)
 		e1:SetReset(RESET_EVENT|(RESETS_STANDARD&~RESET_TURN_SET))
 		tc:RegisterEffect(e1)
-	end
-	if e:GetHandler():IsRelateToEffect(e) then
-		Duel.BreakEffect()
-		Duel.SendtoDeck(e:GetHandler(),nil,1,REASON_EFFECT)
+		if e:GetHandler():IsRelateToEffect(e) then
+			Duel.BreakEffect()
+			Duel.SendtoDeck(e:GetHandler(),nil,1,REASON_EFFECT)
+		end
 	end
 end
