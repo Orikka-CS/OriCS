@@ -26,7 +26,8 @@ function s.initial_effect(c)
 	
 	if not s.global_check then
 		s.global_check=true
-		local ge1=MakeEff(c,"FC")
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		ge1:SetCode(EVENT_ADJUST)
 		ge1:SetOperation(s.gop1)
 		Duel.RegisterEffect(ge1,0)
