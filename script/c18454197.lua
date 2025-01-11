@@ -26,7 +26,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SOI(0,CATEGORY_HANDES,nil,0,tp,1)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISARD)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
 	local g=Duel.SMCard(tp,s.tfil1,tp,"H",0,1,1,nil)
 	if #g>0 and Duel.SendtoGrave(g,REASON_EFFECT+REASON_DISCARD)>0 then
 		Duel.Draw(tp,2,REASON_EFFECT)
