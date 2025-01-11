@@ -45,7 +45,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if not tg:IsRelateToEffect(e) then return end
 	local cg=Duel.GetMatchingGroup(s.tg1ffilter,tp,LOCATION_HAND,0,nil)
 	if cg:GetClassCount(Card.GetCode)>=tg:GetLevel()//2 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local csg=aux.SelectUnselectGroup(cg,e,tp,tg:GetLevel()//2,tg:GetLevel()//2,aux.TRUE,1,tp,HINTMSG_CONFIRM)
+		local csg=aux.SelectUnselectGroup(cg,e,tp,tg:GetLevel()//2,tg:GetLevel()//2,aux.dncheck,1,tp,HINTMSG_CONFIRM)
 		Duel.ConfirmCards(1-tp,csg)
 		Duel.ShuffleHand(tp)
 		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
