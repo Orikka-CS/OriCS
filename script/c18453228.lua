@@ -56,9 +56,9 @@ end
 function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) then
+	if tc:IsRelateToEffect(e) then
 		local th=tc:IsAbleToHand()
-		local sp=Duel.GetLocCount(tp,"M")>0 and tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
+		local sp=Duel.GetLocCount(tp,"M")>0 and tc:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		local op=0
 		if th and sp then
 			op=Duel.SelectOption(tp,1190,1152)
