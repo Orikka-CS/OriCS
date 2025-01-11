@@ -64,7 +64,7 @@ function s.tar5(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	end
 	if chk==0 then
 		return Duel.GetLocCount(tp,"M")>0
-			and Duel.IETarget(s.tfil5,tp,"G",0,1,nil,e,tp) and not c:IsStatus(STATUS_CHAININIG)
+			and Duel.IETarget(s.tfil5,tp,"G",0,1,nil,e,tp) and not c:IsStatus(STATUS_CHAINING)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.STarget(tp,s.tfil5,tp,"G",0,1,1,nil,e,tp)
@@ -80,7 +80,7 @@ function s.tar6(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		return Duel.GetLocCount(tp,"M")>0
-			and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsStatus(STATUS_CHAININIG)
+			and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsStatus(STATUS_CHAINING)
 	end
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
