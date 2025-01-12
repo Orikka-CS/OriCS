@@ -64,5 +64,6 @@ function s.op5(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SMCard(tp,s.tfil5,tp,"D",0,1,1,nil)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
 	end
 end
