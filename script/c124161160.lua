@@ -1,4 +1,4 @@
---아그리휴프알테 바쿠아
+--휴프알로 퀸 바쿠아
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

@@ -1,4 +1,4 @@
---휴프알테 나르콜렙시
+--휴프알로 나르콜렙시
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

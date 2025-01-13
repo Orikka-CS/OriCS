@@ -1,4 +1,4 @@
---휴프알테 굿나이트
+--휴프알로 굿나이트
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
