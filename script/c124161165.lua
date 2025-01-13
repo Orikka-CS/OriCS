@@ -1,4 +1,4 @@
---휴프알테 슬립워크
+--휴프알로 슬립워크
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

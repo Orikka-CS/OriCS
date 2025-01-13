@@ -1,4 +1,4 @@
---휴프알테 메어리
+--휴프알로 메어리
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

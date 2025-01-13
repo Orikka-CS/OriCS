@@ -1,4 +1,4 @@
---휴프알테 엘리시온
+--휴프알로 엘리시온
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

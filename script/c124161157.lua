@@ -1,4 +1,4 @@
---휴프알테 브리클
+--휴프알로 브리클
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

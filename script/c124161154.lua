@@ -1,4 +1,4 @@
---휴프알테 녹티스
+--휴프알로 녹티스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
