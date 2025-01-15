@@ -116,12 +116,12 @@ end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rg=Duel.GetMatchingGroup(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_ONFIELD,0,1,e:GetHandler())
-		and aux.SelectUnselectGroup(rg,e,tp,2,2,s.rescon,0) end
+		and aux.SelectUnselectGroup(rg,e,tp,2,2,s.rescon2,0) end
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,rg,2,0,0)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local rg=Duel.GetMatchingGroup(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-	local g=aux.SelectUnselectGroup(rg,e,tp,2,2,s.rescon,1,tp,HINTMSG_DESTROY)
+	local g=aux.SelectUnselectGroup(rg,e,tp,2,2,s.rescon2,1,tp,HINTMSG_DESTROY)
 	if #g==2 then
 		Duel.HintSelection(g,true)
 		Duel.Destroy(g,REASON_EFFECT)
