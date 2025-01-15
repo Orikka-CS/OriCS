@@ -111,6 +111,9 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCondition(cm.ocon31)
 		e1:SetOperation(cm.oop31)
 		c:RegisterEffect(e1)
+		local e2=e1:Clone()
+		e2:SetCode(EVENT_MOVE)
+		c:RegisterEffect(e2)
 	end
 end
 function cm.onfil31(c,e)
