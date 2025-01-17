@@ -41,31 +41,31 @@ function s.lvcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoGrave(e:GetHandler(),REASON_DISCARD)
 end
 function s.Level4Beast(c)
-	return c:IsLevelBelow(6) and c:IsSetCard(SET_RED_EYES)
+	return c:IsLevelBelow(6) and c:IsSetCard(SET_RED_EYES) and c:IsAbleToHand()
 end
 function s.spfilter(c)
-	return c:IsAbleToHand() and (s.Level4Beast(c) or c:IsCode(124121070))
+	return c:IsAbleToHand() and c:IsCode(124121070)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-end
-function s.rescon(sg,e,tp,mg)
-	return sg:FilterCount(Card.IsCode,nil,124121070)<=1
-		and sg:FilterCount(s.Level4Beast,nil)<=1
+	if chk==0 then return Duel.IsExistingMatchingCard(s.Level4Beast,tp,LOCATION_DECK,0,1,nil)
+		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.spfilter,tp,LOCATION_DECK,0,nil)
-	if #g>0 then
-		local tg=aux.SelectUnselectGroup(g,e,tp,1,2,s.rescon,1,tp,HINTMSG_ATOHAND)
-		Duel.SendtoHand(tg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,tg)
-		Duel.ShuffleHand(tp)
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
-		local dg=Duel.SelectMatchingCard(tp,aux.TRUE,tp,LOCATION_HAND,0,1,1,nil)
-		if #dg>0 then
-			Duel.SendtoGrave(dg,REASON_EFFECT+REASON_DISCARD)
-		end
+	if not (Duel.IsExistingMatchingCard(s.Level4Beast,tp,LOCATION_DECK,0,1,nil)
+		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil)) then
+		return
+	end
+	local tg=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_DECK,0,1,1,nil)
+	local g2=Duel.SelectMatchingCard(tp,s.Level4Beast,tp,LOCATION_DECK,0,1,1,nil)
+	tg:Merge(g2)
+	Duel.SendtoHand(tg,nil,REASON_EFFECT)
+	Duel.ConfirmCards(1-tp,tg)
+	Duel.ShuffleHand(tp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
+	local dg=Duel.SelectMatchingCard(tp,aux.TRUE,tp,LOCATION_HAND,0,1,1,nil)
+	if #dg>0 then
+		Duel.SendtoGrave(dg,REASON_EFFECT+REASON_DISCARD)
 	end
 end
 function s.filter(c)

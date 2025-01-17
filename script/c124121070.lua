@@ -35,15 +35,15 @@ function s.spfilter(c,e,tp)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,e,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE)
+		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,e:GetHandler(),1,0,0)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local tc=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil,e,tp):GetFirst()
+	local tc=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp):GetFirst()
 	if tc and Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP) then
 		Duel.Equip(tp,c,tc)
 		--Add Equip limit
@@ -99,21 +99,16 @@ function s.tfil31(c)
 	return c:IsSetCard(SET_RED_EYES) and c:IsAbleToHand() and c:IsType(TYPE_MONSTER)
 end
 function s.tfil32(c)
-	return not c:IsCode(id) and c:IsFaceup() and c:IsSetCard(SET_RED_EYES) and c:IsAbleToDeck()
+	return c:IsFaceup() and c:IsSetCard(SET_RED_EYES) and c:IsAbleToDeck()
 end
 function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
-	if chkc then
-		return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_GRAVE|LOCATION_REMOVED) and s.tfil32(chkc)
-	end
 	if chk==0 then
-		return c:IsAbleToDeck() and Duel.IsExistingTarget(s.tfil32,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,2,nil)
+		return c:IsAbleToDeck() and Duel.IsExistingMatchingCard(s.tfil32,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,2,nil)
 			and Duel.IsExistingMatchingCard(s.tfil31,tp,LOCATION_DECK,0,1,nil)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,s.tfil32,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,2,2,nil)
-	g:AddCard(c)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,3,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,c,3,tp,LOCATION_GRAVE|LOCATION_REMOVED)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
@@ -122,21 +117,14 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,s.tfil31,tp,LOCATION_DECK,0,1,1,nil)
 	if #g>0 and Duel.SendtoHand(g,nil,REASON_EFFECT)>0 then
 		Duel.ConfirmCards(1-tp,g)
-		local sg=Duel.GetTargetCards(e)
-		if c:IsRelateToEffect(e) then
+		if c:IsRelateToEffect(e)
+			and c:IsAbleToDeck() and Duel.IsExistingMatchingCard(s.tfil32,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,2,nil) then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+			local sg=Duel.SelectMatchingCard(tp,s.tfil32,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,2,2,nil)
 			sg:AddCard(c)
-		end
-		if #sg>0 then
+			Duel.HintSelection(sg)
 			Duel.BreakEffect()
-			Duel.SendtoDeck(sg,nil,0,REASON_EFFECT)
-			local og=Duel.GetOperatedGroup()
-			local ct=og:FilterCount(Card.IsLocation,nil,LOCATION_DECK)
-			if ct==0 then return end
-			Duel.SortDecktop(tp,tp,ct)
-			for i=1,ct do
-				local mg=Duel.GetDecktopGroup(tp,1)
-				Duel.MoveSequence(mg:GetFirst(),1)
-			end
+			Duel.SendtoDeck(sg,nil,2,REASON_EFFECT)
 		end
 	end
 end
