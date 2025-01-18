@@ -28,14 +28,13 @@ function s.tg1ffilter(c)
 end
 
 function s.tg1filter(c,e,tp)
-	return c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsRankAbove(4) and Duel.GetMatchingGroupCount(s.tg1ffilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,e:GetHandler())>=c:GetRank()-2
+	return c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsRankAbove(4) and Duel.GetMatchingGroupCount(s.tg1ffilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,e:GetHandler())>=c:GetRank()-2 and Duel.GetLocationCountFromEx(tp,tp,nil,c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_EXTRA,0,nil,e,tp)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0
-	end
+	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON):GetFirst()
 	Duel.ConfirmCards(1-tp,sg)
 	e:SetLabelObject(sg)
@@ -51,7 +50,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if #g>=rk-2 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,rk-2,rk-2,aux.TRUE,1,tp,HINTMSG_REMOVE)
 		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
-		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+		if Duel.GetLocationCountFromEx(tp,tp,nil,x) then
 			Duel.BreakEffect()
 			Duel.SpecialSummon(x,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)
 			x:CompleteProcedure()
