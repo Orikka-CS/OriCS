@@ -73,7 +73,7 @@ end
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return c:IsAbleToHand() end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,LOCATION_REMOVED)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
