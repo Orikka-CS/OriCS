@@ -18,6 +18,7 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetCategory(CATEGORY_EQUIP)
 	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(s.eqcon)
 	e2:SetCost(s.eqcost)
 	e2:SetTarget(s.eqtg)
 	e2:SetOperation(s.eqop)
@@ -58,6 +59,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp,chk)
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
 	end
+end
+function s.eqcon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()~=tp
 end
 function s.costfilter(c)
 	return c:IsFaceup() and not c:IsCode(id) and c:IsAbleToGraveAsCost()
