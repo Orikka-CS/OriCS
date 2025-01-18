@@ -60,7 +60,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return not c:IsSummonLocation(LOCATION_REMOVED) and c:IsAbleToRemove() and c:IsControler(1-tp)
+	return not c:IsSummonLocation(LOCATION_REMOVED) and c:IsAbleToRemove() and c:IsControler(1-tp) and c:IsLocation(LOCATION_MZONE)
 end
 
 function s.con2(e,tp,eg)
