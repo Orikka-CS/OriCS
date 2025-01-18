@@ -7,7 +7,6 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
 	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
@@ -25,15 +24,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1filter(c)
-	return c:IsSetCard(0xf2c) and c:IsFaceup()
-end
-
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_ONFIELD,0,nil)
-	return g>0
-end
-
 function s.cst1filter(c)
 	return c:IsSetCard(0xf2c) and c:IsAbleToRemoveAsCost()
 end
