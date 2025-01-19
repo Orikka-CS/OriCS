@@ -1,4 +1,4 @@
---블렌디아 셰이크
+--블렌?�아 ?�이??
 local m=47570021
 local cm=_G["c"..m]
 
@@ -23,7 +23,6 @@ function cm.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,m+1)
 	e1:SetCost(aux.bfgcost)
-	e1:SetCondition(cm.spcon)
 	e1:SetTarget(cm.sptg)
 	e1:SetOperation(cm.spop)
 	c:RegisterEffect(e1)
@@ -74,13 +73,10 @@ end
 function cm.eqlimit(e,c)
 	return e:GetLabelObject()==c
 end
-
-function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return aux.exccon(e)
-end
 function cm.spfilter(c,e,tp)
 	return c:IsSetCard(0xccd) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
+
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsExistingMatchingCard(cm.spfilter,tp,LOCATION_SZONE,0,1,nil,e,tp) end

@@ -5,17 +5,11 @@ local cm=_G["c"..m]
 
 function cm.initial_effect(c)
 
+	c:SetSPSummonOnce(m)
+
 	--link summon
 	aux.AddLinkProcedure(c,cm.mfilter,1,1)
 	c:EnableReviveLimit()
-
-	--spsummonlimit
-	local e99=Effect.CreateEffect(c)
-	e99:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
-	e99:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e99:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e99:SetOperation(cm.op1)
-	c:RegisterEffect(e99)
 
 	--equip
 	local e0=Effect.CreateEffect(c)
@@ -43,21 +37,6 @@ function cm.initial_effect(c)
 end
 function cm.mfilter(c)
 	return c:IsLinkSetCard(0xccd) and not c:IsLinkType(TYPE_LINK)
-end
-
-function cm.op1(e,tp,eg,ep,ev,re,r,rp)
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
-	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e1:SetTargetRange(1,0)
-	e1:SetTarget(cm.splimit)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e1,tp)
-end
-
-function cm.splimit(e,c,tp,sumtp,sumpos)
-	return c:IsType(TYPE_LINK)
 end
 
 function cm.tar11(e,c,sump,sumtype,sumpos,targetp,se)

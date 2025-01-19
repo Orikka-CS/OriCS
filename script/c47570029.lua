@@ -49,12 +49,14 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,cm.filter,tp,LOCATION_DECK,0,1,1,nil,ft,e,tp)
 	if #g>0 then
 		local th=g:GetFirst():IsAbleToHand()
+
 		local sp=ft>0 and g:GetFirst():IsCanBeSpecialSummoned(e,0,tp,false,false)
 		local op=-1
 
 		if th and sp then op=Duel.SelectOption(tp,aux.Stringid(m,0),aux.Stringid(m,1))
 		elseif th then op=0
 		else op=1 end
+
 		if op==0 then
 			Duel.SendtoHand(g,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,g)
@@ -73,16 +75,6 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 
 			local tc=tg:GetFirst()
 			Duel.SendtoGrave(tc,REASON_EFFECT)
-
-			local e2=Effect.CreateEffect(e:GetHandler())
-			e2:SetDescription(aux.Stringid(m,2))
-			e2:SetType(EFFECT_TYPE_FIELD)
-			e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-			e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
-			e2:SetTargetRange(1,0)
-			e2:SetTarget(cm.splimit)
-			e2:SetReset(RESET_PHASE+PHASE_END)
-			Duel.RegisterEffect(e2,tp)
 		end
 	end
 end
