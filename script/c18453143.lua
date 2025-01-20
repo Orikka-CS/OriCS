@@ -89,7 +89,7 @@ end
 function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) and tc:IsFaceup() and tc:IsType(TYPE_XYZ) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_OVERLAY)
+		Duel.Hint(HINT_SELECTMSG,tp,0)
 		local g=Duel.SMCard(tp,cm.tfil21,tp,"D",0,1,1,nil)
 		if #g>0 then
 			Duel.Overlay(tc,g)

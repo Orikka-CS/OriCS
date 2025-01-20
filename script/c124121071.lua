@@ -64,8 +64,7 @@ function s.disfilter(c)
 end
 function s.discon(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	return Duel.IsExistingMatchingCard(s.disfilter,tp,LOCATION_MZONE,0,1,nil)
-		and (rp~=tp or rc:IsSetCard(SET_RED_EYES)) and re:IsActiveType(TYPE_MONSTER)
+	return rp==tp and rc:IsSetCard(SET_RED_EYES) and re:IsActiveType(TYPE_MONSTER)
 end
 function s.discostfilter(c)
 	return c:IsSetCard(SET_RED_EYES) and (c:IsFaceup() or c:IsLocation(LOCATION_HAND))
