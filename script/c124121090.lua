@@ -28,17 +28,16 @@ function s.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e3:SetCode(EFFECT_DESTROY_REPLACE)
 	e3:SetTarget(s.reptg)
-	e3:SetOperation(s.repop)
 	c:RegisterEffect(e3)
 end
 s.listed_names={32566831,124121071}
 function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return not c:IsReason(REASON_REPLACE) end
-	return c:IsAbleToHand()
-end
-function s.repop(e,tp,eg,ep,ev,re,r,rp)
+	local ec=c:GetEquipTarget()
+	if chk==0 then return not ec:IsReason(REASON_REPLACE)
+		and c:IsAbleToHand() and not c:IsStatus(STATUS_DESTROY_CONFIRMED) end
 	Duel.SendtoHand(c,nil,REASON_EFFECT)
+	return true
 end
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
