@@ -23,6 +23,7 @@ function cm.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return c:IsAbleToDeckAsCost()
 	end
+	Duel.HintSelection(Group.FromCards(c))
 	Duel.SendtoDeck(c,nil,2,REASON_COST)
 end
 function cm.tfil11(c)
@@ -43,7 +44,7 @@ end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) and tc:IsFaceup() and tc:IsType(TYPE_XYZ) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_OVERLAY)
+		Duel.Hint(HINT_SELECTMSG,tp,0)
 		local g=Duel.SMCard(tp,cm.tfil11,tp,"D",0,1,1,nil)
 		if #g>0 then
 			Duel.Overlay(tc,g)
