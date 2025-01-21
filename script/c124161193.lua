@@ -68,7 +68,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.con2filter,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil)
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-	Duel.Remove(sg,POS_FACEUP,REASON_COST)
+	return Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 
 --effect 3
