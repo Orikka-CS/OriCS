@@ -2,22 +2,16 @@
 local s,id=GetID()
 function c642.initial_effect(c)
 	c:EnableReviveLimit()
-	local e1=Ritual.CreateProc(c,RITPROC_GREATER,aux.FilterBoolFunction(Card.IsSetCard,0x256a),nil,aux.Stringid(id,1),nil,nil,nil,nil,LOCATION_HAND+LOCATION_DECK)
+	local e1=Ritual.CreateProc({handler=c,filter=s.ritualfil,extrafil=s.extrafil,location=LOCATION_HAND|LOCATION_DECK,extratg=s.extratg})
 	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetRange(LOCATION_HAND+LOCATION_MZONE)
+	e1:SetRange(LOCATION_HAND|LOCATION_GRAVE)
+	e1:SetCountLimit(1,id)
 	e1:SetHintTiming(0,TIMING_MAIN_END)
 	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.rcon)
+	e1:SetCost(aux.bfgcost)
 	c:RegisterEffect(e1)
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_TOGRAVE)
-	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
-	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e2:SetCondition(s.spcon)
-	e2:SetTarget(s.tg)
-	e2:SetOperation(s.op)
-	c:RegisterEffect(e2)
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,2))
 	e3:SetCategory(CATEGORY_DISABLE)
@@ -26,7 +20,7 @@ function c642.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetHintTiming(0,TIMINGS_CHECK_MONSTER)
-	e3:SetCountLimit(1,id)
+	e3:SetCountLimit(1,{id,1})
 	e3:SetTarget(s.target)
 	e3:SetOperation(s.operation)
 	c:RegisterEffect(e3)
@@ -34,25 +28,22 @@ end
 s.listed_series={0x256a}
 s.listed_names={id}
 s.material_setcode=0x256a
+function s.ritualfil(c)
+	return c:IsSetCard(0x256a) and c:IsRitualMonster()
+end
+function s.mfilter(c)
+	return not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) and c:HasLevel() and c:IsSetCard(0x256a)
+		and c:IsType(TYPE_MONSTER) and c:IsAbleToRemove()
+end
+function s.extrafil(e,tp,eg,ep,ev,re,r,rp,chk)
+	return Duel.GetMatchingGroup(s.mfilter,tp,LOCATION_GRAVE,0,nil)
+end
+function s.extratg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_GRAVE)
+end
 function s.rcon(e,tp,eg,ep,ev,re,r,rp)
 	return (Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2)
-end
-function s.spcon(e)
-	return e:GetHandler():IsSummonType(SUMMON_TYPE_RITUAL)
-end
-function s.filter(c)
-	return c:IsFaceup() and c:IsSetCard(0x256a) and c:IsType(TYPE_MONSTER)
-end
-function s.tg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_REMOVED,0,1,nil) end
-	local g=Duel.GetMatchingGroup(s.filter,tp,LOCATION_REMOVED,0,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,#g,0,0)
-end
-function s.op(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.filter,tp,LOCATION_REMOVED,0,nil)
-	if #g>0 then
-		Duel.SendtoGrave(g,REASON_EFFECT+REASON_RETURN)
-	end
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(1-tp) and chkc:IsOnField() and chkc:IsNegatable() end

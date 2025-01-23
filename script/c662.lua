@@ -6,7 +6,7 @@ function c662.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCondition(s.spcon)
+	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
@@ -14,12 +14,6 @@ end
 s.listed_series={0x256a}
 s.listed_names={id}
 s.material_setcode=0x256a
-function s.cfilter(c)
-	return c:IsFacedown() or not c:IsSetCard(0x256a)
-end
-function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return not Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil)
-end
 function s.filter(c)
 	return c:IsSetCard(0x256a) and c:IsAbleToHand()
 end

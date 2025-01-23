@@ -2,7 +2,7 @@
 local s,id=GetID()
 function c644.initial_effect(c)
 	c:EnableReviveLimit()
-	Fusion.AddProcMixN(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,0x256a),2)
+	Fusion.AddProcMix(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,0x256a),aux.FilterBoolFunctionEx(Card.IsType,TYPE_EFFECT))
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -15,21 +15,13 @@ function c644.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetTargetRange(LOCATION_MZONE,0)
-	e2:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0x256a))
-	e2:SetValue(1)
-	c:RegisterEffect(e2)
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_INDESTRUCTABLE_COUNT)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetTargetRange(LOCATION_MZONE,0)
-	e3:SetCode(EFFECT_REFLECT_BATTLE_DAMAGE)
-	e3:SetTarget(s.reftg)
-	e3:SetValue(1)
+	e3:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0x256a))
+	e3:SetValue(function(_,_,r) return (r&REASON_BATTLE==REASON_BATTLE) and 1 or 0 end)
 	c:RegisterEffect(e3)
 end
 s.listed_series={0x256a}
@@ -49,7 +41,7 @@ function s.drcost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.espfilter(c,e,tp)
 	return c:IsSetCard(0x256a)
-		and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0 and c:IsCanBeSpecialSummoned(e,124,tp,true,false)
+		and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0 and c:IsCanBeSpecialSummoned(e,124,tp,false,false)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.espfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
@@ -59,9 +51,6 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,s.espfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	if #g>0 then
-		Duel.SpecialSummon(g,124,tp,tp,true,false,POS_FACEUP)
+		Duel.SpecialSummon(g,124,tp,tp,false,false,POS_FACEUP)
 	end
-end
-function s.reftg(e,c)
-	return c:IsSetCard(0x256a)
 end
