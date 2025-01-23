@@ -68,7 +68,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return ep~=tp
+	return eg:IsExists(Card.IsSummonPlayer,1,nil,1-tp)
 end
 function s.tfil2(c,e,tp)
 	return c:IsRace(RACE_DRAGON) and c:IsType(TYPE_LINK) and c:IsLink(1)

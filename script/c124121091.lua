@@ -41,7 +41,8 @@ end
 function s.val1(e,re,rp)
 	return re:IsMonsterEffect()
 end
-function s.tar2(e,c,tp,r)
+function s.tar2(e,c,rp,r)
+	local tp=e:GetHandlerPlayer()
 	return r==REASON_EFFECT and c:IsControler(tp) and c:IsLocation(LOCATION_PZONE|LOCATION_EMZONE) and c:IsFaceup()
 		and c:IsAttribute(ATTRIBUTE_DARK)
 end
