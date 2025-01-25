@@ -6,7 +6,7 @@ function cm.initial_effect(c)
 	
 	--module summon
 	c:EnableReviveLimit()
-	aux.AddModuleProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_MODULE),nil,2,10,nil)
+	aux.AddModuleProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_MODULE),nil,1,10,nil)
 
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
@@ -69,8 +69,8 @@ end
 
 function cm.eqtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0
-		and Duel.IsExistingMatchingCard(Card.IsType,tp,LOCATION_GRAVE,0,1,nil,TYPE_MONSTER) end
-	Duel.SetOperationInfo(0,CATEGORY_EQUIP,nil,1,tp,LOCATION_GRAVE)
+		and Duel.IsExistingMatchingCard(Card.IsType,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,TYPE_MONSTER) end
+	Duel.SetOperationInfo(0,CATEGORY_EQUIP,nil,1,tp,LOCATION_GRAVE+LOCATION_REMOVED)
 end
 
 function cm.eqop(e,tp,eg,ep,ev,re,r,rp)
@@ -79,7 +79,7 @@ function cm.eqop(e,tp,eg,ep,ev,re,r,rp)
 	if c:IsFacedown() or not c:IsRelateToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
 
-	local g=Duel.SelectMatchingCard(tp,Card.IsType,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,nil,TYPE_MONSTER)
+	local g=Duel.SelectMatchingCard(tp,Card.IsType,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,TYPE_MONSTER)
 	local tc=g:GetFirst()
 
 	if not Duel.Equip(tp,tc,c) then return end
