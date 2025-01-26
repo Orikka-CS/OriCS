@@ -34,7 +34,7 @@ function cm.spfilter(c,e,tp,check)
 end
 
 function cm.filter(c,tp)
-	return c:IsType(TYPE_FIELD) and c:IsType(TYPE_EFFECT) and (c:IsAbleToHand() or c:GetActivateEffect():IsActivatable(tp,true,true))
+	return c:IsType(TYPE_FIELD) and (c:IsAbleToHand() or c:GetActivateEffect():IsActivatable(tp,true,true))
 end
 
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
