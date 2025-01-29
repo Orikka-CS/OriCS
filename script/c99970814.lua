@@ -3,6 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
+	c:SetSPSummonOnce(id)
 	Fusion.AddProcMix(c,true,true,99970810,s.fil)
 	Fusion.AddContactProc(c,s.contactfil,s.contactop,s.splimit)
 	--Negate Normal Summon
