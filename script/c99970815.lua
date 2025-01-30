@@ -41,13 +41,13 @@ function s.nfil2(c)
 end
 function s.con2(e)
 	local tp=e:GetHandlerPlayer()
-	return Duel.IsExistingMatchingCard(s.nfil2,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
+	return Duel.IsExistingMatchingCard(s.nfil2,tp,LOCATION_ONFIELD,0,1,nil)
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	if e:GetHandler():IsStatus(STATUS_ACT_FROM_HAND) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		local g=Duel.SelectMatchingCard(tp,s.nfil2,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+		local g=Duel.SelectMatchingCard(tp,s.nfil2,tp,LOCATION_ONFIELD,0,1,1,nil)
 		Duel.SendtoGrave(g,REASON_COST)
 	end
 end
