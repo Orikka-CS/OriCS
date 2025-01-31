@@ -44,14 +44,15 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if g:GetClassCount(Card.GetCode)<2 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)
-	Duel.SendtoHand(sg,nil,REASON_EFFECT)
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.BreakEffect()
-	local dg=Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,nil)
-	local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
-	Duel.SendtoGrave(dsg,REASON_EFFECT+REASON_DISCARD)
+	if g:GetClassCount(Card.GetCode)>=2 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		Duel.BreakEffect()
+		local dg=Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,nil)
+		local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
+		Duel.SendtoGrave(dsg,REASON_EFFECT+REASON_DISCARD)
+	end
 end
 
 --effect 2

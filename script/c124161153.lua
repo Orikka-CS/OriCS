@@ -51,8 +51,8 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetFirstTarget()
-	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and tg:IsRelateToEffect(e) and tg:IsFaceup() then
-		Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)	   
+	if tg:IsRelateToEffect(e) and tg:IsFaceup() and Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)>0 and c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
 

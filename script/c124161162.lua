@@ -45,18 +45,20 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if #g==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-	Duel.SendtoHand(sg,nil,REASON_EFFECT)
-	Duel.ConfirmCards(1-tp,sg)
-	local dg=Duel.GetMatchingGroup(s.op1dfilter,tp,LOCATION_MZONE,0,nil)
-	local gg=Duel.GetMatchingGroup(s.op1gfilter,tp,LOCATION_DECK,0,nil)
-	if #dg>0 and #gg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.BreakEffect()
-		local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
-		Duel.ChangePosition(dsg,POS_FACEDOWN_DEFENSE)
-		local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-		Duel.SendtoGrave(gsg,REASON_EFFECT)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		local dg=Duel.GetMatchingGroup(s.op1dfilter,tp,LOCATION_MZONE,0,nil)
+		local gg=Duel.GetMatchingGroup(s.op1gfilter,tp,LOCATION_DECK,0,nil)
+		if #dg>0 and #gg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
+			if Duel.ChangePosition(dsg,POS_FACEDOWN_DEFENSE)>0 then
+				local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+				Duel.SendtoGrave(gsg,REASON_EFFECT)
+			end
+		end
 	end
 end
 

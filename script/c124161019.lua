@@ -41,21 +41,22 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end 
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
-	Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
-	Duel.BreakEffect()
-	local dis=Duel.SelectDisableField(tp,1,LOCATION_MZONE,0,0)
-	Duel.SetTargetParam(dis)
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_DISABLE_FIELD)
-	e1:SetOperation(function(e) return e:GetLabel() end)
-	e1:SetReset(RESET_PHASE+PHASE_END,2)
-	e1:SetLabel(Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM))
-	Duel.RegisterEffect(e1,tp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then   
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
+		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+		if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+		Duel.BreakEffect()
+		local dis=Duel.SelectDisableField(tp,1,LOCATION_MZONE,0,0)
+		Duel.SetTargetParam(dis)
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetCode(EFFECT_DISABLE_FIELD)
+		e1:SetOperation(function(e) return e:GetLabel() end)
+		e1:SetReset(RESET_PHASE+PHASE_END,2)
+		e1:SetLabel(Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM))
+		Duel.RegisterEffect(e1,tp)
+	end
 end
 
 --effect 2

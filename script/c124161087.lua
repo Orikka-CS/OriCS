@@ -35,17 +35,18 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	if #g==0 then return end
-	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)   
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,math.abs(ug-dg)+1,aux.dncheck,1,tp,HINTMSG_ATOHAND)
-	Duel.SendtoHand(sg,nil,REASON_EFFECT)
-	Duel.ConfirmCards(1-tp,sg)
-	if #sg==1 then return end
-	Duel.BreakEffect()
-	local hg=Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,e:GetHandler())
-	local shg=aux.SelectUnselectGroup(hg,e,tp,#sg-1,#sg-1,aux.TRUE,1,tp,HINTMSG_DISCARD)
-	Duel.SendtoGrave(shg,REASON_EFFECT+REASON_DISCARD)
+	if #g>0 then
+		local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
+		local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)   
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,math.abs(ug-dg)+1,aux.dncheck,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		if #sg==1 then return end
+		Duel.BreakEffect()
+		local hg=Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,e:GetHandler())
+		local shg=aux.SelectUnselectGroup(hg,e,tp,#sg-1,#sg-1,aux.TRUE,1,tp,HINTMSG_DISCARD)
+		Duel.SendtoGrave(shg,REASON_EFFECT+REASON_DISCARD)
+	end
 end
 
 --effect 2

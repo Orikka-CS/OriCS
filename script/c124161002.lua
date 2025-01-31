@@ -99,34 +99,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_HAND,nil)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.BreakEffect()
-		local sg=g:RandomSelect(tp,1):GetFirst()
-		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT+REASON_TEMPORARY)
-		sg:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
-		local e2=Effect.CreateEffect(e:GetHandler())
-		e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e2:SetCode(EVENT_PHASE+PHASE_END)
-		e2:SetCountLimit(1)
-		e2:SetLabelObject(sg)
-		e2:SetCondition(s.op2addcon)
-		e2:SetOperation(s.op2addop)
-		e2:SetReset(RESET_PHASE+PHASE_END)
-		Duel.RegisterEffect(e2,tp)
+		local sg=g:RandomSelect(1-tp,1)
+		aux.RemoveUntil(sg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
 	end
-end
-
-function s.op2addcon(e,tp,eg,ep,ev,re,r,rp)
-	local sg=e:GetLabelObject()
-	if sg:GetFlagEffect(id)==0 then
-		e:Reset()
-		return false
-	else
-		return true
-	end
-end
-
-function s.op2addop(e,tp,eg,ep,ev,re,r,rp)
-	local sg=e:GetLabelObject()
-	Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
 end
 
 --effect 3

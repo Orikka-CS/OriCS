@@ -42,23 +42,24 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if #g==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-	Duel.SendtoHand(sg,nil,REASON_EFFECT)
-	Duel.ConfirmCards(1-tp,sg)
-	local rg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
-	local og=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
-	if #rg>0 and #og>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.BreakEffect()
-		local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE):GetFirst()
-		if rsg:IsLocation(LOCATION_MZONE) then
-			aux.RemoveUntil(rsg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,aux.DefaultFieldReturnOp)
-		else
-			aux.RemoveUntil(rsg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
-		end
-		if rsg:IsLocation(LOCATION_REMOVED) then
-			local osg=og:RandomSelect(1-tp,1)
-			aux.RemoveUntil(osg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		local rg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
+		local og=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
+		if #rg>0 and #og>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE):GetFirst()
+			if rsg:IsLocation(LOCATION_MZONE) then
+				aux.RemoveUntil(rsg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,aux.DefaultFieldReturnOp)
+			else
+				aux.RemoveUntil(rsg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
+			end
+			if rsg:IsLocation(LOCATION_REMOVED) then
+				local osg=og:RandomSelect(1-tp,1)
+				aux.RemoveUntil(osg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
+			end
 		end
 	end
 end

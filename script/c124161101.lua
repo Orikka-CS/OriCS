@@ -42,13 +42,14 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if #g==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-	Duel.SendtoHand(sg,nil,REASON_EFFECT)
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.BreakEffect()
-	local d=Duel.GetMatchingGroupCount(s.op1filter,tp,LOCATION_ONFIELD,0,nil)
-	Duel.Damage(1-tp,d*400,REASON_EFFECT)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		Duel.BreakEffect()
+		local d=Duel.GetMatchingGroupCount(s.op1filter,tp,LOCATION_ONFIELD,0,nil)
+		Duel.Damage(1-tp,d*400,REASON_EFFECT)
+	end
 end
 
 --effect 2

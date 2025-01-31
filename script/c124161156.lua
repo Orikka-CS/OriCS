@@ -76,9 +76,8 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) and tg:IsFaceup() then
-		if Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)>0 and c:IsRelateToEffect(e) and c:IsFaceup() then
-			Duel.ChangePosition(c,POS_FACEDOWN_DEFENSE)
-		end
+	if tg:IsRelateToEffect(e) and tg:IsFaceup() and c:IsRelateToEffect(e) and c:IsFaceup() then
+		local dg=Group.FromCards(c,tg)
+		Duel.ChangePosition(dg,POS_FACEDOWN_DEFENSE)
 	end
 end
