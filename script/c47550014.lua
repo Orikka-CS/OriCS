@@ -70,7 +70,7 @@ function c47550014.thfilter2(c)
 	return c:IsSetCard(0xcc7) and c:IsAbleToHand() and not c:IsCode(47550014)
 end
 function c47550014.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)==0 and Duel.GetTurnPlayer()~=tp
+	return Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)<2 and Duel.GetTurnPlayer()~=tp
 end
 function c47550014.thtg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
