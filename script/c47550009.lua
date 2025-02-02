@@ -51,9 +51,7 @@ function c47550009.cofilter(c,e)
 end
 function c47550009.sscost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c47550009.cofilter,tp,LOCATION_HAND,0,1,e:GetHandler()) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,c47550009.cofilter,tp,LOCATION_HAND,0,1,1,e:GetHandler())
-	Duel.Discard(g,REASON_COST)
+	Duel.DiscardHand(tp,c47550009.cofilter,1,1,REASON_COST+REASON_DISCARD,e:GetHandler())
 end
 
 function c47550009.sscon(e,tp,eg,ep,ev,re,r,rp)
