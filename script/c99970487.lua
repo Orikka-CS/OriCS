@@ -32,7 +32,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g1=Duel.SelectMatchingCard(tp,s.tar1fil,tp,LOCATION_DECK,0,1,1,nil)
 	if #g1>0 and Duel.SendtoGrave(g1,REASON_EFFECT)>0 and g1:GetFirst():IsLocation(LOCATION_GRAVE) then
 		local g2=Duel.GetMatchingGroup(s.op1fil,tp,LOCATION_GRAVE,LOCATION_GRAVE,nil,e,tp)
-		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g2>0 then
+		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g2>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 			local tc=g2:Select(tp,1,1,nil):GetFirst()
 			Duel.BreakEffect()
