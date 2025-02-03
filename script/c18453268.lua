@@ -13,7 +13,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function cm.pfil1(c)
-	return c:IsSetCard(0x2eb) and c:IsType(TYPE_ORDER)
+	return c:IsSetCard(0x2eb) and c:IsCustomType(CUSTOMTYPE_ORDER)
 end
 function cm.tfil1(c,e,tp)
 	return c:IsSetCard(0x2eb) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsLevel(16)

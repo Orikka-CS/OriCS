@@ -178,8 +178,10 @@ function cm.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 			mg1:Merge(mg3)
 		end
 		aux.FCheckAdditional=cm.tfun22
+		Fusion.CheckAdditional=cm.tfun22
 		local res=Duel.IEMCard(cm.tfil24,tp,"E",0,1,nil,e,tp,mg1,nil,chkf)
 		aux.FCheckAdditional=nil
+		Fusion.CheckAdditional=nil
 		if not res then
 			local ce=Duel.GetChainMaterial(tp)
 			if ce then
@@ -210,6 +212,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 		mg1:Merge(mg3)
 	end
 	aux.FCheckAdditional=cm.tfun22
+	Fusion.CheckAdditional=cm.tfun22
 	local sg1=Duel.GMGroup(cm.tfil24,tp,"E",0,nil,e,tp,mg1,nil,chkf)
 	local mg4=nil
 	local sg2=nil
@@ -232,6 +235,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 			or not Duel.SelectYesNo(tp,ce:GetDescription())) then
 			local mat=Duel.SelectFusionMaterial(tp,tc,mg1,nil,chkf)
 			aux.FCheckAdditional=nil
+			Fusion.CheckAdditional=nil
 			tc:SetMaterial(mat)
 			local omat=mat:Filter(cm.ofil2,nil,1-tp)
 			mat:Sub(omat)

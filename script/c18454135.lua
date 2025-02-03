@@ -14,7 +14,7 @@ end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ct=#Duel.GMGroup(s.tfil1,tp,0,"M",nil)
 	if chk==0 then
-		return Duel.IsPlayerCanDraw(tp,ct) and Duel.IsPlayerCanDraw(1-tp,ct)
+		return ct>0 and Duel.IsPlayerCanDraw(tp,ct) and Duel.IsPlayerCanDraw(1-tp,ct)
 	end
 	Duel.SOI(0,CATEGORY_DRAW,nil,0,PLAYER_ALL,ct)
 end

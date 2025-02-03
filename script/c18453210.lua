@@ -56,6 +56,9 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	if not g or #g<1 then
 		return
 	end
+	if rp==tp then
+		return
+	end
 	local tg=g:Filter(cm.ofil3,nil,tp)
 	if #tg>0 and c:IsAbleToGrave() and Duel.SelectYesNo(tp,aux.Stringid(m,00)) then
 		local tc=tg:GetFirst()

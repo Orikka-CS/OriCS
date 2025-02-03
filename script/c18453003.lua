@@ -78,7 +78,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 		e3:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
 		e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e3:SetReset(RESET_EVENT+RESETS_REDIRECT)
-		e3:SetValue(LSTN("D"))
+		e3:SetValue(LOCATION_DECKSHF)
 		c:RegisterEffect(e3)
 		Duel.SpecialSummonComplete()
 	end

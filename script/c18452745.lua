@@ -8,8 +8,10 @@ function cm.initial_effect(c)
 	e2:SetCondition(cm.con2)
 	c:RegisterEffect(e2)
 	local e3=MakeEff(c,"E")
-	e3:SetCode(EFFECT_ADD_FUSION_SETCODE)
+	--e3:SetCode(EFFECT_ADD_FUSION_SETCODE)
+	e3:SetCode(EFFECT_ADD_SETCODE)
 	e3:SetCondition(cm.con3)
+	e3:SetOperation(cm.op3)
 	e3:SetValue(0x2d2)
 	c:RegisterEffect(e3)
 	local e4=MakeEff(c,"I","S")
@@ -33,6 +35,10 @@ function cm.con3(e)
 	local ec=c:GetEquipTarget()
 	return not ec:IsSetCard(0x2d2)
 end
+function cm.op3(sc,st,tp)
+	return (st&MATERIAL_FUSION)~=0
+end
+
 function cm.tfil4(c,e,tp,m,ec,f,chkf)
 	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x2d2) and (not f or f(c))
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
@@ -161,8 +167,10 @@ function cm.tar5(e,tp,eg,ep,ev,re,r,rp,chk)
 		mg1:Merge(mg2)
 		local g=Duel.GMFaceupGroup(nil,tp,"M","M",nil)
 		aux.FCheckAdditional=cm.tfun5
+		Fusion.CheckAdditional=cm.tfun5
 		local res=Duel.IEMCard(cm.tfil53,tp,"E",0,1,nil,e,tp,mg1,nil,chkf)
 		aux.FCheckAdditional=nil
+		Fusion.CheckAdditional=nil
 		if not res then
 			local ce=Duel.GetChainMaterial(tp)
 			if ce then
@@ -188,6 +196,7 @@ function cm.op5(e,tp,eg,ep,ev,re,r,rp)
 	local mg2=Duel.GMFaceupGroup(cm.tfil52,tp,"G","MG",nil)
 	mg1:Merge(mg2)
 	aux.FCheckAdditional=cm.tfun5
+	Fusion.CheckAdditional=cm.tfun5
 	local sg1=Duel.GMGroup(cm.tfil53,tp,"E",0,nil,e,tp,mg1,nil,chkf)
 	local mg3=nil
 	local sg2=nil
@@ -210,6 +219,7 @@ function cm.op5(e,tp,eg,ep,ev,re,r,rp)
 			or not Duel.SelectYesNo(tp,ce:GetDescription())) then
 			local mat=Duel.SelectFusionMaterial(tp,tc,mg1,nil,chkf)
 			aux.FCheckAdditional=nil
+			Fusion.CheckAdditional=nil
 			tc:SetMaterial(mat)
 			local omat=mat:Filter(cm.ofil5,nil,1-tp)
 			mat:Sub(omat)

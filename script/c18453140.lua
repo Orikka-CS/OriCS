@@ -53,6 +53,11 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local m=_G["c"..tc:GetCode()]
 	local te=m.todeck_effect
 	local tg=te:GetTarget()
+	if te:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then
+		e:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	else
+		e:SetProperty(0)
+	end
 	if tg then
 		tg(e,tp,eg,ep,ev,re,r,rp,1)
 	end
@@ -82,7 +87,7 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 		op(e,tp,eg,ep,ev,re,r,rp)
 	end
 	local g=Duel.GMGroup(cm.ofil1,tp,"E",0,nil,e,tp,c)
-	if c:IsRelateToEffect(e) and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL)
+	if c:IsRelateToEffect(e) --and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL)
 		and c:IsFaceup() and c:IsSummonType(SUMMON_TYPE_SYNCHRO) and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(m,00)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=g:Select(tp,1,1,nil)

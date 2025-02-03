@@ -60,7 +60,7 @@ function cm.cost4(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return c:IsAbleToRemoveAsCost(POS_FACEDOWN)
 	end
-	Duel.Reomve(c,POS_FACEDOWN,REASON_COST)
+	Duel.Remove(c,POS_FACEDOWN,REASON_COST)
 end
 function cm.tfil4(c)
 	return c:IsSetCard(0x2e7) and c:IsCustomType(CUSTOMTYPE_DELIGHT) and c:IsFaceup()

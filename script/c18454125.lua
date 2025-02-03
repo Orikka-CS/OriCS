@@ -57,7 +57,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp,c)
 	g:DeleteGroup()
 end
 function s.tar2(e,c)
-	return c:IsSetCard("¸£ºê¶û")
+	return c:IsSetCard("¸£ºí¶û")
 end
 function s.val2(e,c)
 	if not c then

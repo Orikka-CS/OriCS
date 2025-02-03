@@ -42,7 +42,7 @@ function c17290015.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c17290015.mat_filter(c)
-	return c:IsAttribute(ATTRIBUTE_WIND) or c:IsSetCard(0x8)
+	return c:IsRace(RACE_SPELLCASTER) or c:IsSetCard(0x8)
 end
 function c17290015.val4(e,te)
 	return te:IsActiveType(TYPE_SPELL)

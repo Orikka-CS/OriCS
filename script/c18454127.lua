@@ -79,7 +79,7 @@ function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 			and Duel.IETarget(Card.IsAbleToChangeControler,tp,0,"M",2,nil)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
-	local g=Duel.STarget(tp,Card.IsAbleToChangeControler,tp,0,"M",2,2,nil)
+	local g=Duel.STarget(tp,Card.IsAbleToChangeControler,tp,0,"M",2,2,c)
 	Duel.SOI(0,CATEGORY_CONTROL,g,2,0,0)
 end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)

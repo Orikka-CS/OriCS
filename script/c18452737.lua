@@ -31,7 +31,7 @@ function cm.val1(e,re)
 end
 function cm.con2(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
-	local d=Duel.GetBattleTarget()
+	local d=Duel.GetAttackTarget()
 	if not d then
 		return false
 	end

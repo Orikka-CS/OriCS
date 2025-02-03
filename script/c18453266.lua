@@ -12,7 +12,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function cm.pfil1(c)
-	return c:IsSetCard(0x2eb) and c:IsType(TYPE_ORDER)
+	return c:IsSetCard(0x2eb) and c:IsCustomType(CUSTOMTYPE_ORDER)
 end
 function cm.con1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

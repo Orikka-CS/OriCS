@@ -60,13 +60,13 @@ function s.tfil2(c)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.IEMCard(s.tfil3,tp,0,"HEOGR",1,nil)
+		return Duel.IEMCard(s.tfil2,tp,0,"HEOGR",1,nil)
 	end
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	local g=Duel.SMCard(tp,s.tfil3,tp,0,"HEOGR",1,1,nil)
+	local g=Duel.SMCard(tp,s.tfil2,tp,0,"HEOGR",1,1,nil)
 	local tc=g:GetFirst()
 	if tc then
 		local code=tc:GetOriginalCodeRule()

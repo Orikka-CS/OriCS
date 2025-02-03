@@ -41,6 +41,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 	local oc=g:RandomSelect(tp,1):GetFirst()
 	Duel.ConfirmCards(tp,oc)
+	Duel.ShuffleHand(1-tp)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
@@ -63,5 +64,6 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		Duel.BreakEffect()
 		local oc=g:RandomSelect(tp,1):GetFirst()
 		Duel.ConfirmCards(tp,oc)
+		Duel.ShuffleHand(1-tp)
 	end
 end

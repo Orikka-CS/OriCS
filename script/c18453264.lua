@@ -10,7 +10,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function cm.tfil1(c,e,tp)
-	return c:IsSetCard(0x2eb) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE) and c:IsType(TYPE_ORDER)
+	return c:IsSetCard(0x2eb) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE) and c:IsCustomType(CUSTOMTYPE_ORDER)
 end
 function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then

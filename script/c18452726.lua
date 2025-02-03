@@ -47,7 +47,7 @@ function cm.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 		a:SetStatus(STATUS_DESTROY_CONFIRMED,true)
 		return true
 	end
-	if d and a~=d and cm.tfil2(d,c) then
+	if d and d~=c and cm.tfil2(d,c) then
 		e:SetLabelObject(d)
 		d:SetStatus(STATUS_DESTROY_CONFIRMED,true)
 		return true

@@ -36,6 +36,7 @@ function cm.initial_effect(c)
 	WriteEff(e6,6,"NCTO")
 	c:RegisterEffect(e6)
 end
+cm.custom_type=CUSTOMTYPE_ORDER
 function cm.nfil1(c)
 	return c:IsCode(18453034) and (c:IsLoc("G") or c:IsFaceup())
 end

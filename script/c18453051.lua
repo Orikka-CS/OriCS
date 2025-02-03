@@ -22,7 +22,7 @@ function cm.pfun1(g)
 	return aux.IsFitSquare(g,st)
 end
 cm.square_mana={ATTRIBUTE_LIGHT,ATTRIBUTE_DARK}
-cm.custom_type=CUSTOMTYPE_SQUARE
+cm.custom_type=CUSTOMTYPE_SQUARE|CUSTOMTYPE_ORDER|CUSTOMTYPE_ORDER
 cm.CardType_Order=true
 function cm.val1(e,c)
 	local g=c:GetMaterial()
@@ -30,7 +30,7 @@ function cm.val1(e,c)
 	if g:IsExists(Card.IsType,1,nil,TYPE_EFFECT) then
 		label=label+1
 	end
-	if g:IsExists(Card.IsType,1,nil,TYPE_ORDER) then
+	if g:IsExists(Card.IsCustomType,1,nil,CUSTOMTYPE_ORDER) then
 		label=label+2
 	end
 	if g:IsExists(Card.IsCustomType,1,nil,CUSTOMTYPE_SQUARE) then

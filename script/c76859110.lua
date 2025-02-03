@@ -1,6 +1,7 @@
 --Angel Notes - ¸á·Îµð
 function c76859110.initial_effect(c)
 	local e1=aux.AddEquipProcedure(c,nil,aux.FilterBoolFunction(Card.IsSetCard,0x2c8),nil,nil,nil,c76859110.op1)
+	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_EQUIP)
 	e1:SetCountLimit(1,EFFECT_COUNT_CODE_OATH+76859110)
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_EQUIP)

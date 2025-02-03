@@ -1,4 +1,4 @@
---(카드명 미정)
+--초록 실시간 클락 인터럽트
 local s,id=GetID()
 function s.initial_effect(c)
 	--Link Summon

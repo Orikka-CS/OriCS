@@ -13,6 +13,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 cm.CardType_Order=true
+cm.custom_type=CUSTOMTYPE_ORDER
 function cm.pfil1(c)
 	return c:IsSetCard(0x2eb) and c:IsCustomType(CUSTOMTYPE_DIFFUSION)
 end

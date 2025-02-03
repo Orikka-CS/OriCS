@@ -30,7 +30,7 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then
 		return true
 	end
-	if Duel.IETarget(cm.tfil1,tp,"G",0,1,nil,e,tp) and Duel.SelectYesNo(tp,aux.Stringid(m,00)) then
+	if Duel.IETarget(cm.tfil1,tp,"G",0,1,nil,e,tp) and Duel.SelectYesNo(tp,aux.Stringid(m,0)) then
 		e:SetProperty(EFFECT_FLAG_CARD_TARGET)
 		e:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOHAND)
 		e:SetOperation(cm.op1)
@@ -48,7 +48,7 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) then
-		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tc:IsCanBeSpecialSummoned(e,0,tp,false,false)
+		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
 			and (not tc:IsAbleToHand() or Duel.SelectOption(tp,1190,1152)==1) then
 			Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 		else

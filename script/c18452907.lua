@@ -60,7 +60,7 @@ function c18452907.thop(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		if g:IsExists(Card.IsSetCard,1,nil,0x2da) then
 			if g:IsExists(c18452907.thfilter,1,nil,e,tp) and Duel.SelectYesNo(tp,aux.Stringid(18452907,2)) then
-				Duel.Hint(HINT_SELECTMSG,p,HINTMSG_ATOHAND)
+				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 				local sg=g:FilterSelect(tp,c18452907.thfilter,1,1,nil,e,tp)
 				local sc=sg:GetFirst()
 				local off=1

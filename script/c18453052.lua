@@ -24,7 +24,7 @@ function cm.pfun1(g)
 	return aux.IsFitSquare(g,st)
 end
 cm.square_mana={ATTRIBUTE_LIGHT,ATTRIBUTE_WIND}
-cm.custom_type=CUSTOMTYPE_SQUARE
+cm.custom_type=CUSTOMTYPE_SQUARE|CUSTOMTYPE_ORDER
 cm.CardType_Order=true
 function cm.con1(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and Duel.GetCurrentPhase()&(PHASE_MAIN1+PHASE_MAIN2)>0

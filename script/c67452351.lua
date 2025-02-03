@@ -47,6 +47,7 @@ function c67452351.initial_effect(c)
 	e5:SetOperation(c67452351.op5)
 	c:RegisterEffect(e5)
 end
+c67452351.listed_names={13839120}
 function c67452351.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_DECK,0,1,nil,13839120)

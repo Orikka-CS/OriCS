@@ -47,6 +47,7 @@ function c67452354.initial_effect(c)
 	e5:SetOperation(c67452354.op5)
 	c:RegisterEffect(e5)
 end
+c67452354.listed_names={41172955}
 function c67452354.tfil1(c)
 	return c:IsSetCard(0x51) and c:IsType(TYPE_SPELL)
 end

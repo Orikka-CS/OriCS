@@ -46,6 +46,7 @@ function c67452357.initial_effect(c)
 	e5:SetOperation(c67452357.op5)
 	c:RegisterEffect(e5)
 end
+c67452357.listed_names={86445415}
 function c67452357.tfil1(c)
 	return c:IsSetCard(0x51) and c:IsType(TYPE_TRAP)
 end
@@ -141,7 +142,7 @@ function c67452357.tar5(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return Duel.IsExistingMatchingCard(c67452357.tfil5,tp,LOCATION_DECK,0,1,nil)
 	end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRVE,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 function c67452357.op5(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)

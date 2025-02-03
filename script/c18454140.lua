@@ -42,7 +42,7 @@ function s.con4(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local rc=re:GetHandler()
 	local p,loc,seq=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_CONTROLER,CHAININFO_TRIGGERING_LOCATION,CHAININFO_TRIGGERING_SEQUENCE)
-	return not rc:IsSetCard("¸£ºí¶û") and c:IsColumn(seq,p,LSTN("S"))
+	return not rc:IsSetCard("¸£ºí¶û") and c:IsColumn(seq,p,LSTN("S")) and Duel.IEMCard(s.nfil3,tp,"O","O",1,nil)
 end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateEffect(ev)

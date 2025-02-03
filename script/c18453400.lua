@@ -18,7 +18,7 @@ function cm.pfun1(g)
 	return aux.IsFitSquare(g,st)
 end
 cm.square_mana={ATTRIBUTE_WATER,ATTRIBUTE_FIRE}
-cm.custom_type=CUSTOMTYPE_SQUARE
+cm.custom_type=CUSTOMTYPE_SQUARE|CUSTOMTYPE_ORDER
 cm.CardType_Order=true
 function cm.tfil1(c,tp)
 	return c:IsSetCard(0x2d8) and c:IsType(TYPE_SPELL+TYPE_TRAP) and (Duel.GetLocCount(tp,"S")>0 or c:IsType(TYPE_FIELD))

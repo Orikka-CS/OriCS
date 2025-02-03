@@ -40,6 +40,7 @@ function cm.pop1(e,tp,chk)
 	local g=Duel.SMCard(tp,cm.pofil1,tp,"H",0,1,1,nil)
 	Duel.ConfirmCards(1-tp,g)
 	Duel.ShuffleHand(tp)
+	return true
 end
 function cm.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
