@@ -29,11 +29,11 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local lo=e:GetLabelObject()
 	if chk==0 then
-		lo:SetLabel(0)
+		lo:SetLabel(10000)
 		return true
 	end
 	if lo:GetLabel()~=0 then
-		lo:SetLabel(0)
+		lo:SetLabel(10000)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 		local g=Duel.SMCard(tp,s.cfil1,tp,"HO",0,1,1,c,tp)
 		local tc=g:GetFirst()
@@ -67,6 +67,10 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local b1=Duel.CheckLPCost(tp,1000) and Duel.IEMCard(s.tfil1,tp,"H",0,1,nil,e,1)
 	local b2=Duel.CheckLPCost(tp,2000) and Duel.IEMCard(s.tfil1,tp,"H",0,1,nil,e,2)
 	if chk==0 then
+		if e:GetLabel()~=10000 then
+			return false
+		end
+		e:SetLabel(0)
 		return (b1 or b2)
 	end
 	local op=Duel.SelectEffect(tp,
