@@ -100,7 +100,7 @@ function cm.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 			and Duel.IEMCard(Card.IsAbleToDeck,tp,0,"H",1,nil)
 			and Duel.IEMCard(Card.IsAbleToDeck,tp,0,"G",1,nil)
 	end
-	Duel.SOI(0,CATEGORY_DECK,nil,3,0,"OHG")
+	Duel.SOI(0,CATEGORY_TODECK,nil,3,0,"OHG")
 end
 function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	local g1=Duel.GMGroup(Card.IsAbleToDeck,tp,0,"H",nil)
