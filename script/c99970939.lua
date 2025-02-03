@@ -53,7 +53,7 @@ function s.initial_effect(c)
 end
 
 function s.gop1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_SZONE,0,nil,TYPE_SPELL+TYPE_TRAP)
+	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_SZONE,LOCATION_SZONE,nil,TYPE_SPELL+TYPE_TRAP)
 	local tc=g:GetFirst()
 	local eventg=Group.CreateGroup()
 	while tc do
