@@ -21,9 +21,10 @@ function s.initial_effect(c)
 	WriteEff(e3,3,"NCTO")
 	c:RegisterEffect(e3)
 end
-function s.cfil1(c,tp)
+function s.cfil1(c,e,tp)
 	return c:IsSetCard("¹¦Á¦") and (c:IsAbleToGraveAsCost() or c:IsAbleToRemoveAsCost())
-		and Duel.IEMCard(s.tfil1,tp,"H",0,1,c)
+		and ((Duel.CheckLPCost(tp,1000) and Duel.IEMCard(s.tfil1,tp,"H",0,1,c,e,1))
+			or (Duel.CheckLPCost(tp,2000) and Duel.IEMCard(s.tfil1,tp,"H",0,1,c,e,2)))
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -35,7 +36,7 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if lo:GetLabel()~=0 then
 		lo:SetLabel(10000)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		local g=Duel.SMCard(tp,s.cfil1,tp,"HO",0,1,1,c,tp)
+		local g=Duel.SMCard(tp,s.cfil1,tp,"HO",0,1,1,c,e,tp)
 		local tc=g:GetFirst()
 		if tc:IsAbleToGraveAsCost() and (not tc:IsAbleToRemoveAsCost() or Duel.SelectYesNo(tp,aux.Stringid(id,1))) then
 			Duel.SendtoGrave(tc,REASON_COST)
@@ -115,7 +116,7 @@ end
 function s.con2(e)
 	local c=e:GetHandler()
 	local tp=e:GetHandlerPlayer()
-	return Duel.IEMCard(s.cfil1,tp,"HO",0,1,c,tp)
+	return Duel.IEMCard(s.cfil1,tp,"HO",0,1,c,e,tp)
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
