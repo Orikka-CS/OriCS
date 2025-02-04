@@ -48,5 +48,5 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.rmlimit(e,c,p)
-	return c:IsLocation(LOCATION_GRAVE) and c:IsSetCard(0xe0a) and c:IsMonster()
+	return c:IsSetCard(0xe0a) and c:IsMonster() and c:IsControler(e:GetHandlerPlayer())
 end
