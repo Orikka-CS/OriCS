@@ -37,7 +37,7 @@ function s.con1(e,c,minc)
 	local tp=c:GetControler()
 	return minc==0 and Duel.IEMCard(s.nfil1,tp,"HO",0,1,c,tp)
 end
-function s.tar1(e,tp,eg,ep,ev,re,r,rp,c)
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,c)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SMCard(tp,s.nfil1,tp,"HO",0,0,1,c,tp)
 	if #g>0 then
