@@ -24,6 +24,7 @@ function s.initial_effect(c)
 	e9:SetRange(LOCATION_SZONE)
 	e9:SetCode(EVENT_CUSTOM+id)
 	e9:SetCountLimit(1)
+	e9:SetCondition(s.con9)
 	e9:SetTarget(s.tar9)
 	e9:SetOperation(s.op9)
 	c:RegisterEffect(e9)
@@ -75,6 +76,9 @@ function s.atkval(e,c)
 	return 100*Duel.GetMatchingGroupCount(aux.FaceupFilter(Card.IsSetCard,0xcd6f),e:GetHandlerPlayer(),LOCATION_ONFIELD,0,nil)
 end
 
+function s.con9(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(Card.IsControler,1,nil,tp)
+end
 function s.tar9(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsLinkSummonable,tp,LOCATION_EXTRA,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
