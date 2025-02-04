@@ -70,7 +70,7 @@ function s.tfil2(c,e)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetCondition(s.tfcon21)
 	c:RegisterEffect(e1)
-	local res=c:IsSetCard("功力") and (mi==1 or ma==1) and c:IsSummonable(true,nil)
+	local res=c:IsSetCard("功力") and (mi==1 or ma==1) and c:IsSummonable(true,nil) and not c:IsCode(18454249)
 	e1:Reset()
 	return res
 end

@@ -42,7 +42,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,c)
 	local g=Duel.SMCard(tp,s.nfil1,tp,"HO",0,0,1,c,tp)
 	if #g>0 then
 		g:KeepAlive()
-		e:SetLabelObject()
+		e:SetLabelObject(g)
 		return true
 	else
 		return false
