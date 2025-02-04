@@ -147,6 +147,7 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetTargetCards(e)
 	local tc=g:GetFirst()
 	while tc do
+		Duel.HintSelection(Group.FromCards(tc))
 		if tc:IsLoc("G") then
 			if tc:IsAbleToDeck() and (not tc:IsAbleToRemove() or Duel.SelectYesNo(tp,aux.Stringid(id,1))) then
 				Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)
