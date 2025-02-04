@@ -49,7 +49,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local b1=tc:IsAbleToHand() and Duel.GetFlagEffect(tp,id-10000)==0
 	local b2=tc:IsAbleToGrave() and Duel.GetFlagEffect(tp,id-20000)==0
 	local b3=tc:IsAbleToRemove() and Duel.GetFlagEffect(tp,id-30000)==0
-	local op=Duel.SelectEffect(tp,{b1,aux.Stringid(id,1)},{b1,aux.Stringid(id,2)},{b1,aux.Stringid(id,3)})
+	local op=Duel.SelectEffect(tp,{b1,aux.Stringid(id,1)},{b2,aux.Stringid(id,2)},{b3,aux.Stringid(id,3)})
 	if op==1 then
 		Duel.RegisterFlagEffect(tp,id-10000,RESET_PHASE+PHASE_END,0,1)
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
