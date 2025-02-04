@@ -32,7 +32,8 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		e:SetLabel(10000)
 		lo:SetLabel(0)
-		return true
+		return Duel.IEMCard(s.cfil1,tp,"HO",0,1,c,e,tp) or not c:IsLoc("H")
+			or #{c:IsHasEffect(EFFECT_TRAP_ACT_IN_HAND)}>1
 	end
 	if lo:GetLabel()~=0 then
 		lo:SetLabel(0)
@@ -117,7 +118,7 @@ end
 function s.con2(e)
 	local c=e:GetHandler()
 	local tp=e:GetHandlerPlayer()
-	return Duel.IEMCard(s.cfil1,tp,"HO",0,1,c,e,tp)
+	return true
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
