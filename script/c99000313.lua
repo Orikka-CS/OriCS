@@ -16,7 +16,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.destg)
 	e1:SetOperation(s.desop)
 	c:RegisterEffect(e1)
-	--이 카드를 포함하는 자신 필드의 몬스터를 오더 소재로서 오더 소환한다.
+	--이 카드를 포함하는 자신 필드의 몬스터를 소재로서 오더 소환을 실행한다.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)

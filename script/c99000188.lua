@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e0:SetCondition(s.xyzcon)
 	e0:SetValue(1)
 	c:RegisterEffect(e0)
-	--패의 몬스터 1장을 상대에게 보여주고, 보여준 몬스터와 같은 종족 / 속성의 몬스터 1장을 덱에서 패에 넣는다. 그 후, 보여준 몬스터를 주인의 덱으로 되돌린다.
+	--패의 몬스터 1장을 상대에게 보여주고, 보여준 몬스터와 같은 속성의 통상 소환 가능한 몬스터 1장을 덱에서 패에 넣는다. 그 후, 보여준 몬스터를 주인의 덱으로 되돌린다.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,1))
 	e1:SetCategory(CATEGORY_TODECK+CATEGORY_SEARCH)
