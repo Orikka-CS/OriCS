@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	WriteEff(e4,4,"N")
 	c:RegisterEffect(e4)
 end
-function s.nfil1(c)
+function s.nfil1(c,tp)
 	return (c:IsAbleToGraveAsCost() or c:IsAbleToRemoveAsCost()) and Duel.GetMZoneCount(tp,c)>0
 end
 function s.con1(e,c,minc)
@@ -35,11 +35,11 @@ function s.con1(e,c,minc)
 		return true
 	end
 	local tp=c:GetControler()
-	return minc==0 and Duel.IEMCard(s.nfil1,tp,"HO",0,1,nil,tp)
+	return minc==0 and Duel.IEMCard(s.nfil1,tp,"HO",0,1,c,tp)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,c)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SMCard(tp,s.nfil1,tp,"HO",0,0,1,nil,tp)
+	local g=Duel.SMCard(tp,s.nfil1,tp,"HO",0,0,1,c,tp)
 	if #g>0 then
 		g:KeepAlive()
 		e:SetLabelObject()
