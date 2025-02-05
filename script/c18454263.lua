@@ -88,6 +88,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp,c)
 	local e9=e1:Clone()
 	e9:SetCode(EFFECT_UNRELEASABLE_SUM)
 	Duel.RegisterEffect(e9,tp)
+	local ea=e1:Clone()
+	ea:SetCode(EFFECT_CANNOT_BE_XYZ_MATERIAL)
+	Duel.RegisterEffect(ea,tp)
 end
 function s.oval11(e,c)
 	if not c then
