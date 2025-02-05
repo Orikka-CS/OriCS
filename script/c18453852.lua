@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 s.listed_names={30914564}
-function s.tfil1(c)
+function s.tfil1(c,e,tp)
 	return c:IsCode(30914564) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
