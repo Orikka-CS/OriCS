@@ -44,7 +44,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
 	aux.ToHandOrElse(tc,tp)
 	local c=e:GetHandler()
-	--이 턴 중에 자신이 "세레나데" 엑시즈 몬스터의 특수 소환에 성공하지 않았을 경우,
+	--이 턴 중에 자신이 "세레나데" 엑시즈 몬스터를 특수 소환하지 않았을 경우,
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
