@@ -1,4 +1,4 @@
---ê³¨ë„ì´ë“œ ì—í…Œë¥´ë‚ 
+--°ñµµÀÌµå ¿¡Å×¸£³¯
 local s,id=GetID()
 function s.initial_effect(c)
 	local e1=MakeEff(c,"F","H")
@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	e2:SetCL(1,{id,1})
 	WriteEff(e2,2,"TO")
 	c:RegisterEffect(e2)
-	local e3=MakeEff(c,"I","M")
+	local e3=MakeEff(c,"I","G")
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetCL(1,{id,2})
 	e3:SetCost(aux.bfgcost)
@@ -118,7 +118,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.tfil3(c)
-	return c:IsFaceup() and c:IsSetCard("ê³¨ë„ì´ë“œ") and c:HasLevel()
+	return c:IsFaceup() and c:IsSetCard("°ñµµÀÌµå") and c:HasLevel()
 end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then
