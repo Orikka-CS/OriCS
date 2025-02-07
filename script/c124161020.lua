@@ -44,7 +44,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil,e,tp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then	
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then 
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
 		if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
@@ -81,7 +81,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-		if Duel.SendtoHand(sg,nil,REASON_EFFECT) then
+		if Duel.SendtoHand(sg,nil,REASON_EFFECT)>0 then
 			Duel.ConfirmCards(1-tp,sg)
 			Duel.BreakEffect()
 			local dg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,nil)

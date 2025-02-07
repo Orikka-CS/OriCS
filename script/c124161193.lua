@@ -1,4 +1,4 @@
---페더록스 필드
+--페더록스 파라
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

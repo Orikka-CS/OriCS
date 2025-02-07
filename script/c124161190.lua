@@ -65,7 +65,6 @@ function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(sg:GetCode())
 end
 
-
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
