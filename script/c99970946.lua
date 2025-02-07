@@ -74,10 +74,8 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	local pos=POS_FACEUP
 	if tc:IsRelateToEffect(e) then
-		if tc:IsControler(1-tp) then pos=POS_FACEDOWN end
-		Duel.Remove(tc,pos,REASON_EFFECT)
+		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
 	end
 end
 
