@@ -46,9 +46,9 @@ function s.con3(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,2,PLAYER_ALL,LOCATION_ONFIELD)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,2,PLAYER_ALL,LOCATION_MZONE)
 end
 function s.check(sg,e,tp,mg)
 	return sg:GetClassCount(Card.GetControler)==#sg
@@ -58,8 +58,8 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	if re:GetHandler():IsCode(99970946) then isLuci=POS_FACEDOWN end
 	
 	if e:GetHandler():IsRelateToEffect(e) and Duel.SpecialSummon(e:GetHandler(),0,tp,tp,false,false,POS_FACEUP)~=0 then
-		local g1=Duel.GetFieldGroup(tp,LOCATION_ONFIELD,0)
-		local g2=Duel.GetFieldGroup(tp,0,LOCATION_ONFIELD)
+		local g1=Duel.GetFieldGroup(tp,LOCATION_MZONE,0)
+		local g2=Duel.GetFieldGroup(tp,0,LOCATION_MZONE)
 		if #g1>0 and #g2>0 then
 			Duel.BreakEffect()
 			g1=g1:Select(tp,1,1,nil)
