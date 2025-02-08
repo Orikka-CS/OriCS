@@ -60,7 +60,7 @@ function s.pop1(e,tp,chk,mc)
 	g:Merge(s[tp])
 	g:Merge(s[1-tp])
 	Duel.SendtoGrave(g,REASON_COST)
-	Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
+	Duel.RegisterFlagEffect(tp,id-10000,RESET_PHASE+PHASE_END,0,1)
 	return true
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
