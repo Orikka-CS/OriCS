@@ -27,18 +27,33 @@ function s.initial_effect(c)
 	aux.GlobalCheck(s,function()
 		local ge1=Effect.CreateEffect(c)
 		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		ge1:SetCode(EVENT_CHAIN_SOLVED)
-		ge1:SetOperation(s.cnt)
+		ge1:SetCode(EVENT_CHAINING)
+		ge1:SetCondition(s.cntcon)
+		ge1:SetOperation(s.cntop1)
 		Duel.RegisterEffect(ge1,0)
-	end) 
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_CHAIN_NEGATED)
+		ge2:SetCondition(s.cntcon)
+		ge2:SetOperation(s.cntop2)
+		Duel.RegisterEffect(ge2,0)
+	end)
 end
 
 --count
-function s.cnt(e,tp,eg,ep,ev,re,r,rp)
-	local rc=re:GetHandler()
-	local loc=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)
-	if re:IsMonsterEffect() and rc:IsRelateToEffect(re) and loc==LOCATION_MZONE then
-		rc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+function s.cntcon(e,tp,eg,ep,ev,re,r,rp)
+	return re:GetHandler():IsOnField()
+end
+
+function s.cntop1(e,tp,eg,ep,ev,re,r,rp)
+	re:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+end
+
+function s.cntop2(e,tp,eg,ep,ev,re,r,rp)
+	local ct=re:GetHandler():GetFlagEffect(id)
+	re:GetHandler():ResetFlagEffect(id)
+	for i=1,ct-1 do
+		re:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
 	end
 end
 
