@@ -69,8 +69,7 @@ function s.check(sg,e,tp,mg)
 	return sg:GetClassCount(Card.GetControler)==#sg
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	local isLuci=POS_FACEUP
-	if re:GetHandler():IsCode(99970946) then isLuci=POS_FACEDOWN end
+	local isLuci=re:GetHandler():IsCode(99970946)
 	
 	if e:GetHandler():IsRelateToEffect(e) and Duel.SpecialSummon(e:GetHandler(),0,tp,tp,false,false,POS_FACEUP)~=0 then
 		local g=Duel.GetMatchingGroup(s.tar3fil,tp,LOCATION_GRAVE,0,nil)
