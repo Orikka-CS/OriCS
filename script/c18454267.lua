@@ -77,7 +77,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp,c)
 	Duel.RegisterEffect(e1,tp)
 end
 function s.otar11(e,c)
-	return c:GetAttack()%2500~=0 and c:GetDefense()%2500~=0
+	return c:GetAttack()%2500~=0 and (c:IsType(TYPE_LINK) or c:GetDefense()%2500~=0)
 end
 function s.tfil2(c)
 	return c:IsAbleToGrave() and (c:IsSetCard("음유사신") or c:IsSetCard(SET_REGENESIS)) and not c:IsCode(id)
