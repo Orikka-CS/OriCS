@@ -35,6 +35,9 @@ function s.ofil1(c,e,tp)
 		or c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE))
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocCount(tp,"M")<=0 then
+		return
+	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SMCard(tp,s.ofil1,tp,"D",0,0,1,nil,e,tp)
 	if #g>0 then
