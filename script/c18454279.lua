@@ -17,6 +17,9 @@ function s.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e3:SetTarget(s.tar3)
 	c:RegisterEffect(e3)
+	local e4=e2:Clone()
+	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
+	c:RegisterEffect(e4)
 	if not s.global_check then	
 		s.global_check=true
 		local ge1=MakeEff(c,"FC")
