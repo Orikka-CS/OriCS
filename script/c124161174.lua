@@ -83,13 +83,5 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp,chk)
 		e1:SetValue(e:GetLabel())
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		a:RegisterEffect(e1)
-		local e2=Effect.CreateEffect(e:GetHandler())
-		e2:SetType(EFFECT_TYPE_FIELD)
-		e2:SetCode(EFFECT_CHANGE_BATTLE_DAMAGE)
-		e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-		e2:SetTargetRange(0,1)
-		e2:SetValue(DOUBLE_DAMAGE)
-		e2:SetReset(RESET_PHASE+PHASE_DAMAGE)
-		Duel.RegisterEffect(e2,tp)
 	end
 end

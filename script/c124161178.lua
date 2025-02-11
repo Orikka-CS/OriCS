@@ -1,4 +1,4 @@
---백연초의 정원-니코티아나
+--백연초가 피어오르는 숲
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate
@@ -34,24 +34,13 @@ function s.initial_effect(c)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_AVOID_BATTLE_DAMAGE)
+	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e3:SetCode(EFFECT_CANNOT_ACTIVATE)
 	e3:SetRange(LOCATION_FZONE)
-	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET) 
-	e3:SetTargetRange(1,0)
 	e3:SetCondition(s.con3)
+	e3:SetTargetRange(0,1)
+	e3:SetValue(s.val3)
 	c:RegisterEffect(e3)
-	local e3a=Effect.CreateEffect(c)
-	e3a:SetType(EFFECT_TYPE_FIELD)
-	e3a:SetCode(EFFECT_CHANGE_DAMAGE)
-	e3a:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e3a:SetRange(LOCATION_FZONE)
-	e3a:SetTargetRange(1,0)
-	e3a:SetCondition(s.con3)
-	e3a:SetValue(s.val3)
-	c:RegisterEffect(e3a)
-	local e3b=e3a:Clone()
-	e3b:SetCode(EFFECT_NO_EFFECT_DAMAGE)
-	c:RegisterEffect(e3b)
 end
 
 --effect 1
@@ -83,7 +72,7 @@ end
 
 --effect 3
 function s.con3filter(c)
-	return c:IsSetCard(0xf2b) and c:IsType(TYPE_FUSION) and c:IsFaceup()
+	return c:IsSetCard(0xf2b) and c:IsFaceup()
 end
 
 function s.con3(e)
@@ -91,7 +80,8 @@ function s.con3(e)
 	return g>0
 end
 
-function s.val3(e,re,val,r,rp,rc)
-	if (r&REASON_EFFECT)~=0 then return 0 end
-	return val
+function s.val3(e,re,tp)
+	local tp=e:GetHandlerPlayer()
+	local lp=math.min(Duel.GetLP(tp),Duel.GetLP(1-tp))
+	return re:GetHandler():IsAttackAbove(lp) and re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsLocation(LOCATION_HAND)
 end

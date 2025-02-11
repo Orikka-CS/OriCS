@@ -35,9 +35,19 @@ function s.initial_effect(c)
 	e3:SetCode(EFFECT_CHANGE_BATTLE_DAMAGE)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e3:SetCondition(function(e) return Duel.GetFieldGroup(e:GetHandlerPlayer(),0,LOCATION_MZONE)>Duel.GetFieldGroup(e:GetHandlerPlayer(),LOCATION_MZONE,0) end)
 	e3:SetTarget(s.tg3)
 	e3:SetValue(aux.ChangeBattleDamage(1,DOUBLE_DAMAGE))
 	c:RegisterEffect(e3)
+	local e3a=Effect.CreateEffect(c)
+	e3a:SetType(EFFECT_TYPE_FIELD)
+	e3a:SetCode(EFFECT_CHANGE_DAMAGE)
+	e3a:SetRange(LOCATION_FZONE)
+	e3a:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e3a:SetCondition(function(e) return Duel.GetFieldGroup(e:GetHandlerPlayer(),0,LOCATION_MZONE)>Duel.GetFieldGroup(e:GetHandlerPlayer(),LOCATION_MZONE,0) end)
+	e3a:SetTargetRange(0,1)
+	e3a:SetValue(s.val3)
+	c:RegisterEffect(e3a)
 end
 
 --effect 1
@@ -88,5 +98,15 @@ function s.tg3filter(c)
 end
 
 function s.tg3(e,c)
-	return c:IsType(TYPE_XYZ) and c:GetOverlayGroup():FilterCount(s.tg3filter,nil)>0 and c:GetBattleTarget()~=nil and c:GetBattleTarget():GetControler()==1-e:GetHandlerPlayer()
+	return c:IsType(TYPE_XYZ) and c:GetOverlayGroup():FilterCount(s.tg3filter,nil)>0
+end
+
+function s.val3(e,re,val,r,rp)
+	if r&REASON_EFFECT==REASON_EFFECT and re and re:IsActiveType(TYPE_MONSTER) then
+		local rc=re:GetHandler()
+		if rc:IsFaceup() and rc:IsType(TYPE_XYZ) and rc:GetOverlayGroup():FilterCount(s.tg3filter,nil)>0 then
+			return val*2
+		end
+	end
+	return val
 end
