@@ -16,6 +16,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local e1=MakeEff(c,"F")
 	e1:SetCode(EFFECT_CANNOT_INACTIVATE)
 	e1:SetReset(RESET_PHASE+PHASE_END)
