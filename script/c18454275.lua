@@ -21,7 +21,7 @@ function s.initial_effect(c)
 		local ge1=MakeEff(c,"FC")
 		ge1:SetCode(EVENT_PHASE_START+PHASE_DRAW)
 		ge1:SetOperation(s.gop1)
-		Duel.RegisterEffect(e1,0)
+		Duel.RegisterEffect(ge1,0)
 	end
 end
 function s.gop1(e,tp,eg,ep,ev,re,r,rp)
