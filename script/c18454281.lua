@@ -87,6 +87,14 @@ function s.oop11(e,tp,eg,ep,ev,re,r,rp)
 		end
 		if ev~=amount then
 			Duel.ChangeBattleDamage(tp,amount)
+			local sum=0
+			local eset={Duel.GetPlayerEffect(tp,EFFECT_SHIELD)}
+			for _,te in ipairs(eset) do
+				local val=te:GetValue()
+				sum=sum+val
+			end
+			Duel.Hint(HINT_NUMBER,tp,sum)
+			Duel.Hint(HINT_NUMBER,1-tp,sum)
 		end
 	end
 end
@@ -118,5 +126,13 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	e2:SetTR(1,0)
 	e2:SetValue(4000)
 	Duel.RegisterEffect(e2,tp)
+	local sum=0
+	local eset={Duel.GetPlayerEffect(tp,EFFECT_SHIELD)}
+	for _,te in ipairs(eset) do
+		local val=te:GetValue()
+		sum=sum+val
+	end
+	Duel.Hint(HINT_NUMBER,tp,sum)
+	Duel.Hint(HINT_NUMBER,1-tp,sum)
 	return true
 end

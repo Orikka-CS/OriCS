@@ -116,6 +116,14 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	e3:SetTR(1,0)
 	e3:SetValue(2750)
 	Duel.RegisterEffect(e3,tp)
+	local sum=0
+	local eset={Duel.GetPlayerEffect(tp,EFFECT_SHIELD)}
+	for _,te in ipairs(eset) do
+		local val=te:GetValue()
+		sum=sum+val
+	end
+	Duel.Hint(HINT_NUMBER,tp,sum)
+	Duel.Hint(HINT_NUMBER,1-tp,sum)
 	return true
 end
 function s.tcon32(e,tp,eg,ep,ev,re,r,rp)
@@ -150,6 +158,14 @@ function s.top31(e,tp,eg,ep,ev,re,r,rp)
 		end
 		if ev~=amount then
 			Duel.ChangeBattleDamage(tp,amount)
+			local sum=0
+			local eset={Duel.GetPlayerEffect(tp,EFFECT_SHIELD)}
+			for _,te in ipairs(eset) do
+				local val=te:GetValue()
+				sum=sum+val
+			end
+			Duel.Hint(HINT_NUMBER,tp,sum)
+			Duel.Hint(HINT_NUMBER,1-tp,sum)
 		end
 	end
 end
