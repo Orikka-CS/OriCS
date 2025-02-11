@@ -17,21 +17,31 @@ function s.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e3:SetTarget(s.tar3)
 	c:RegisterEffect(e3)
-	local e4=e2:Clone()
-	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
-	c:RegisterEffect(e4)
 	if not s.global_check then	
 		s.global_check=true
 		local ge1=MakeEff(c,"FC")
 		ge1:SetCode(EVENT_MSET)
 		ge1:SetOperation(s.gop1)
 		Duel.RegisterEffect(ge1,0)
+		local ge2=MakeEff(c,"FC")
+		ge2:SetCode(EVENT_SPSUMMON_SUCCESS)
+		ge2:SetOperation(s.gop2)
+		Duel.RegisterEffect(ge2,0)
 	end
 end
 function s.gop1(e,tp,eg,ep,ev,re,r,rp)
 	local tc=eg:GetFirst()
 	while tc do
 		Duel.RaiseSingleEvent(tc,id,e,r,rp,ep,ev)
+		tc=eg:GetNext()
+	end
+end
+function s.gop2(e,tp,eg,ep,ev,re,r,rp)
+	local tc=eg:GetFirst()
+	while tc do
+		if tc:IsPosition(POS_FACEDOWN_DEFENSE) then
+			Duel.RaiseSingleEvent(tc,id,e,r,rp,ep,ev)
+		end
 		tc=eg:GetNext()
 	end
 end
