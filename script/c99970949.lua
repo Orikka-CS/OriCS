@@ -22,14 +22,17 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if ct>3 then ct=3 end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local rg=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_MZONE,0,1,ct,nil)
+	e:SetLabel(rg:FilterCount(Card.IsCode,nil,99970946))
 	Duel.Remove(rg,POS_FACEUP,REASON_COST)
 	Duel.SetTargetParam(#rg)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,dg,#rg,0,0)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local pos=POS_FACEUP
+	if e:GetLabel()>0 then pos=POS_FACEDOWN end
 	local ct=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,ct,ct,nil)
 	Duel.HintSelection(g)
-	Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
+	Duel.Remove(g,pos,REASON_EFFECT)
 end
