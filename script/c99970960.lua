@@ -46,14 +46,13 @@ function s.tgfilter(c,ec)
 	return c:IsFaceup() and ec:CheckEquipTarget(c)
 end
 function s.eqtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.eqfilter,tp,LOCATION_DECK,0,1,nil,tp) end
+	local ft=0
+	if e:GetHandler():IsLocation(LOCATION_HAND) then ft=1 end
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)<=ft and Duel.IsExistingMatchingCard(s.eqfilter,tp,LOCATION_DECK,0,1,nil,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,nil,1,tp,LOCATION_DECK)
 end
 function s.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local ft=0
-	if c:IsLocation(LOCATION_HAND) then ft=1 end
-	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=ft then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
 	local ec=Duel.SelectMatchingCard(tp,s.eqfilter,tp,LOCATION_DECK,0,1,1,nil,tp):GetFirst()
 	if not ec then return end
