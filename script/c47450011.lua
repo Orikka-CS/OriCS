@@ -98,7 +98,7 @@ function cm.eqlimit(e,c)
   return e:GetOwner()==c
 end
 
-function cm.tgfilter(c)
+function cm.tgfilter(c,e)
 	local atk=e:GetHandler():GetAttack()
 	return c:IsType(TYPE_MONSTER) and c:IsAttackBelow(atk)
 end
