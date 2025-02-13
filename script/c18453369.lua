@@ -121,7 +121,7 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then
 		return Duel.IETarget(s.tfil3,tp,"M",0,1,nil,eg)
 	end
-	Duel.Hint(HINT_SELECMTSG,tp,HINTMSG_FACEUP)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	Duel.STarget(tp,s.tfil3,tp,"M",0,1,1,nil,eg)
 end
 function s.ofil3(c,atk)
