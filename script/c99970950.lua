@@ -63,7 +63,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.SpecialSummonComplete()==1 and cc>1 then
 		local cp=Duel.GetChainInfo(cc-1,CHAININFO_TRIGGERING_PLAYER)
 		if cp~=tp then
-			Duel.NegateActivation(cc-1)
+			Duel.NegateEffect(cc-1)
 		end
 	end
 end
