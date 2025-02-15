@@ -48,6 +48,7 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 		return true
 	end
 	Duel.SOI(0,CATEGORY_NEGATE,eg,1,0,0)
+	local rc=re:GetHandler()
 	if rc:IsDestructable() and rc:IsRelateToEffect(re) then
 		Duel.SOI(0,CATEGORY_DESTROY,eg,1,0,0)
 	end
