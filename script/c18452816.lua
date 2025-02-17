@@ -39,7 +39,7 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp,c)
 	e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 	e1:SetReset(RESET_EVENT+0xfe0000)
-	e1:SetValue(LSTN("D"))
+	e1:SetValue(LOCATION_DECKSHF)
 	c:RegisterEffect(e1)
 end
 function cm.cfil31(c,tp)
