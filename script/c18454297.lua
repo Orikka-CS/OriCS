@@ -47,7 +47,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) and rc:IsRelateToEffect(re) then
 		Duel.Destroy(eg,REASON_EFFECT)
 	end
-	if e:GetLabel()==1 and c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) and tc:IsSSetable() then
+	if e:GetLabel()==1 and c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) and tc:IsSSetable()
+		and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		c:CancelToGrave()
 		Duel.ChangePosition(c,POS_FACEDOWN)
 		Duel.SSet(tp,tc)
