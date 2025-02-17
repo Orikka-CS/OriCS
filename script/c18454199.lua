@@ -23,7 +23,7 @@ function s.nfil1(c)
 end
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return (re:IsHasType(EFFECT_TYPE_ACTIVATE) or re:IsActiveType(TYPE_MONSTER)) and Duel.IsChainNegatable(ev)
-		and Duel.IEMCard(s.nfil1,tp,"O","O",1,nil)
+		and Duel.IEMCard(s.nfil1,tp,"O","O",1,nil) and rp~=tp
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()

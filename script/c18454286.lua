@@ -44,7 +44,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.con4(e,tp,eg,ep,ev,re,r,rp)
 	return (re:IsHasType(EFFECT_TYPE_ACTIVATE) or re:IsActiveType(TYPE_MONSTER)) and Duel.IsChainNegatable(ev)
-		and Duel.IEMCard(s.nfil1,tp,"O",0,1,nil)
+		and Duel.IEMCard(s.nfil1,tp,"O",0,1,nil) and rp~=tp
 end
 function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()

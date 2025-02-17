@@ -27,7 +27,7 @@ function s.gop1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsChainNegatable(ev) and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))
+	return Duel.IsChainNegatable(ev) and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and rp~=tp
 end
 function s.cfil1(c)
 	return c:IsLevelAbove(5) and c:IsFaceup() and c:GetFlagEffect(id-10000)~=0
