@@ -119,7 +119,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		for i=1,ct do
 			local token=Duel.CreateToken(tp,18454306)
 			Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
-			if not (Duel.GetLocCount(tp,"M")>0
+			if i==ct or not (Duel.GetLocCount(tp,"M")>0
 				and Duel.IsPlayerCanSpecialSummonMonster(tp,18454306,0,TYPES_TOKEN,0,0,1,RACE_PLANT,ATTRIBUTE_WATER))
 				or not Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 				break
