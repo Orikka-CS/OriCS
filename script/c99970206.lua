@@ -32,14 +32,14 @@ function s.initial_effect(c)
 end
 
 
-function s.cost1fil(c)
-	return c:IsSetCard(0x6d70) and c:IsAttribute(ATT_D) and (c:IsFaceup() or c:IsLocation(LOCATION_DECK)) and c:IsAbleToGraveAsCost()
+function s.cost1fil(c,tp)
+	return c:IsSetCard(0x6d70) and c:IsAttribute(ATT_D) and (c:IsFaceup() or c:IsLocation(LOCATION_DECK)) and c:IsAbleToGraveAsCost() and Duel.GetMZoneCount(tp,c)>0
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cost1fil,tp,LOCATION_DECK,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.cost1fil,tp,LOCATION_DECK+LOCATION_MZONE,0,1,nil,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.cost1fil,tp,LOCATION_DECK,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.cost1fil,tp,LOCATION_DECK+LOCATION_MZONE,0,1,1,nil,tp)
 	Duel.SendtoGrave(g,REASON_COST)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
