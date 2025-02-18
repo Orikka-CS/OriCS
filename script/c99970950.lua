@@ -103,13 +103,15 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 			local tc=Duel.SelectMatchingCard(tp,s.op3fil,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
 			Duel.SSet(tp,tc)
-			local e1=Effect.CreateEffect(e:GetHandler())
-			e1:SetDescription(aux.Stringid(id,0))
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
-			tc:RegisterEffect(e1)
+			if isLuci then
+				local e1=Effect.CreateEffect(e:GetHandler())
+				e1:SetDescription(aux.Stringid(id,0))
+				e1:SetType(EFFECT_TYPE_SINGLE)
+				e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+				e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+				e1:SetReset(RESET_EVENT|RESETS_STANDARD)
+				tc:RegisterEffect(e1)
+			end
 		end
 	end
 end
