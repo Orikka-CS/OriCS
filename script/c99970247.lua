@@ -16,6 +16,7 @@ function s.initial_effect(c)
 	e2:SetCL(1,id)
 	e2:SetTarget(s.mattg)
 	e2:SetOperation(s.matop)
+	e2:SetCost(aux.SelfBanishCost)
 	c:RegisterEffect(e2)
 	
 end
