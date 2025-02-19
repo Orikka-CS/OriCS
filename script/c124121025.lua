@@ -98,6 +98,7 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	te:SetLabelObject(e:GetLabelObject())
 	e:SetLabelObject(te)
 	Duel.ClearOperationInfo(0)
+	e:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local te=e:GetLabelObject()
