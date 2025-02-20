@@ -41,7 +41,7 @@ function cm.nfil2(c)
 	return c:IsSetCard("½ºÇÃ¸´") and c:IsFaceup() and c:IsType(TYPE_TRAP) and c:IsType(TYPE_CONTINUOUS)
 end
 function cm.con2(e)
-	local tp=e:GetHandler()
+	local tp=e:GetHandlerPlayer()
 	return Duel.IEMCard(cm.nfil2,tp,"O",0,1,nil)
 end
 function cm.con4(e,tp,eg,ep,ev,re,r,rp)
