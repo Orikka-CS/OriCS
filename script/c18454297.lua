@@ -49,6 +49,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 	if e:GetLabel()==1 and c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) and tc:IsSSetable()
 		and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		local fid=c:GetFieldID()
 		c:CancelToGrave()
 		Duel.ChangePosition(c,POS_FACEDOWN)
 		Duel.SSet(tp,tc)
@@ -67,5 +68,21 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		c:RegisterEffect(e3)
 		local e4=e3:Clone()
 		tc:RegisterEffect(e4)
+		c:RegisterFlagEffect(id,RESET_TOFIELD,0,0,fid)
+		tc:RegisterFlagEffect(id,RESET_TOFIELD,0,0,fid)
+		local e5=MakeEff(c,"FC")
+		e5:SetCode(EVENT_TO_DECK)
+		e5:SetLabel(fid)
+		e5:SetOperation(s.oop15)
+		Duel.RegisterEffect(e5,tp)
+	end
+end
+function s.oofil15(c,fid)
+	return c:GetFlagEffectLabel(id)==fid
+end
+function s.oop15(e,tp,eg,ep,ev,re,r,rp)
+	local fid=e:GetLabel()
+	if eg:IsExists(s.oofil15,1,nil,fid) then
+		Duel.ShuffleDeck(tp)
 	end
 end
