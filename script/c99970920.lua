@@ -59,6 +59,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_MZONE)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	if Duel.IsPlayerAffectedByEffect(1-tp,30459350) then return end
 	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,1-tp,LOCATION_MZONE,0,nil,POS_FACEUP,REASON_RULE)
 	if #g>0 then
