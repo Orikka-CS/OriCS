@@ -57,7 +57,8 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RegisterEffect(e0,tp)
 	end
 	if e:GetLabel()>0 and Duel.GetLocCount(tp,"M")>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0x0,0x11,2300,0,4,RACE_MACHINE,ATTRIBUTE_FIRE) then
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0x0,0x11,2300,0,4,RACE_MACHINE,ATTRIBUTE_FIRE)
+		and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		c:AddMonsterAttribute(TYPE_NORMAL)
 		Duel.SpecialSummonStep(c,0,tp,tp,true,false,POS_FACEUP)

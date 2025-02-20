@@ -64,7 +64,8 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 	local sc=c:GetFirstCardTarget()
 	if e:GetLabel()>0 and Duel.GetLocCount(tp,"M")>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0x0,0x11,2400,600,4,RACE_WINGEDBEAST,ATTRIBUTE_WIND) then
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0x0,0x11,2400,600,4,RACE_WINGEDBEAST,ATTRIBUTE_WIND)
+		and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		c:AddMonsterAttribute(TYPE_NORMAL+TYPE_TRAPMONSTER)
 		Duel.SpecialSummonStep(c,0,tp,tp,true,false,POS_FACEUP)

@@ -37,7 +37,8 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.ChangeChainOperation(ev,s.oco21(re))
 	if e:GetLabel()>0 and Duel.GetLocCount(tp,"M")>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0x0,0x11,2200,700,4,RACE_FAIRY,ATTRIBUTE_WIND) then
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0x0,0x11,2200,700,4,RACE_FAIRY,ATTRIBUTE_WIND)
+		and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		c:AddMonsterAttribute(TYPE_NORMAL)
 		Duel.SpecialSummonStep(c,0,tp,tp,true,false,POS_FACEUP)
