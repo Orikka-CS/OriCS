@@ -113,7 +113,7 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	if tc then
 		local te=tc:CheckActivateEffect(false,false,false)
 		local b1=tc:IsAbleToHand()
-		local b2=te:IsActivatable(tp,true,true)
+		local b2=te and te:IsActivatable(tp,true,true)
 		if b1 and (not b2 or Duel.SelectYesNo(tp,aux.Stringid(m,0))) then
 			Duel.SendtoHand(tc,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,tc)
