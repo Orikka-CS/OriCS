@@ -78,7 +78,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.oofil15(c,fid)
-	return c:GetFlagEffectLabel(id)==fid
+	return c:GetFlagEffectLabel(id)==fid and c:IsReason(REASON_REDIRECT)
 end
 function s.oop15(e,tp,eg,ep,ev,re,r,rp)
 	local fid=e:GetLabel()
