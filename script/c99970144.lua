@@ -62,6 +62,10 @@ function s.op99(e,tp,eg,ep,ev,re,r,rp)
 	c:RegisterEffect(e2)
 end
 
+function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return e:GetHandler():IsPosition(POS_FACEUP_ATTACK) end
+	Duel.ChangePosition(e:GetHandler(),POS_FACEUP_DEFENSE)
+end
 function s.tar1fil(c,e,tp)
 	return (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsSetCard(0x9d70) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
