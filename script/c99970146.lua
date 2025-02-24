@@ -1,111 +1,87 @@
---운명의 좌 「욕망」
-local m=99970146
-local cm=_G["c"..m]
-function cm.initial_effect(c)
+--[ The Throne of Destiny ]
+local s,id=GetID()
+function s.initial_effect(c)
 
-	--링크 소환
-	c:EnableReviveLimit()
-	aux.AddLinkProcedure(c,cm.matfilter,2,nil,cm.spcheck)
+	local e99=MakeEff(c,"FC","M")
+	e99:SetCode(EVENT_ADJUST)
+	WriteEff(e99,99,"NO")
+	c:RegisterEffect(e99)
 	
-	--가챠는 나쁜 문명!
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e1:SetCode(EVENT_ADJUST)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCondition(cm.con1)
-	e1:SetOperation(cm.op1)
+	local e1=MakeEff(c,"STo")
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e1:SetCode(EVENT_SUMMON_SUCCESS)
+	e1:SetCL(1,id)
+	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
-	
-	--표시 형식 변경
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(m,0))
-	e2:SetCategory(CATEGORY_POSITION)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1)
-	e2:SetHintTiming(0,TIMING_END_PHASE)
-	e2:SetTarget(cm.postg)
-	e2:SetOperation(cm.posop)
+	local e2=e1:Clone()
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e2)
-
-	--특수 소환
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(m,1))
-	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e3:SetType(EFFECT_TYPE_QUICK_O)
-	e3:SetCode(EVENT_FREE_CHAIN)
-	e3:SetRange(LOCATION_GRAVE)
-	e3:SetHintTiming(0,TIMING_END_PHASE)
-	e3:SetCost(aux.bfgcost)
-	e3:SetTarget(cm.sptg)
-	e3:SetOperation(cm.spop)
+	local e3=e1:Clone()
+	e3:SetCode(EVENT_FLIP)
 	c:RegisterEffect(e3)
 	
+	local ex=MakeEff(c,"S","M")
+	ex:SetCode(EFFECT_UPDATE_ATTACK)
+	ex:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	ex:SetCondition(s.atkcon)
+	ex:SetValue(function(e,c) return YuL.Random(0,2000) end)
+	c:RegisterEffect(ex)
+	
+	local e0=ex:Clone()
+	local e00=MakeEff(c,"FG","M")
+	e00:SetTargetRange(LOCATION_MZONE,0)
+	e00:SetCondition(s.lv3con)
+	e00:SetTarget(function(e,c) return c:IsSetCard(0x9d70) and c~=e:GetHandler() end)
+	e00:SetLabelObject(e0)
+	c:RegisterEffect(e00)
+	
 end
 
---가챠는 좋은 문명!
-function cm.con1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c:GetFlagEffect(m)==0
+function s.lv3con(e)
+	return e:GetHandler():IsLevelAbove(3)
 end
-function cm.op1(e,tp,eg,ep,ev,re,r,rp)
+
+function s.con99(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	c:RegisterFlagEffect(m,RESET_EVENT+0x1fe0000,0,1)
-	Duel.Hint(HINT_CARD,0,m)
-	local atk=YuL.random(1500,4000)
-	Duel.Hint(HINT_NUMBER,tp,atk)
-	Duel.Hint(HINT_NUMBER,1-tp,atk)
+	return c:GetFlagEffect(id)==0
+end
+function s.op99(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+		Duel.Hint(HINT_CARD,0,id)
+		local atk=YuL.Random(0,4000)
+		Duel.Hint(HINT_NUMBER,tp,atk)
+		Duel.Hint(HINT_NUMBER,1-tp,atk)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_SET_BASE_ATTACK)
-	e1:SetReset(RESET_EVENT+0x1fe0000)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 	e1:SetValue(atk)
 	c:RegisterEffect(e1)
+	local e2=e1:Clone()
+	e2:SetCode(EFFECT_UPDATE_LEVEL)
+	e2:SetValue(math.floor(atk/1000))
+	c:RegisterEffect(e2)
 end
 
---링크 소환
-function cm.matfilter(c,lc,sumtype,tp)
-	return c:IsSetCard(0xd3b,lc,sumtype,tp) and not c:IsType(TYPE_XYZ+TYPE_LINK)
+function s.tar1fil(c)
+	return c:IsSetCard(0x9d70) and c:IsAbleToHand()
 end
-function cm.spcheck(g,lc,tp)
-	return g:GetClassCount(Card.GetLevel,lc,SUMMON_TYPE_LINK,tp)>1
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tar1fil,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
-
---표시 형식 변경
-function cm.filter(c,g)
-	return c:IsFaceup() and c:IsCanTurnSet() and g:IsContains(c)
-end
-function cm.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local lg=e:GetHandler():GetLinkedGroup()
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and cm.filter(chkc,lg) end
-	if chk==0 then return Duel.IsExistingTarget(cm.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,lg) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	Duel.SelectTarget(tp,cm.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,2,nil,lg)
-end
-function cm.posop(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
-	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
-	if g:GetCount()>0 and Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)~=0 then
-		Duel.ChangePosition(g,POS_FACEUP_ATTACK)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tar1fil),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
+	if #g>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
 	end
 end
 
---특수 소환
-function cm.spfilter(c,e,tp)
-	return c:IsSetCard(0xd3b) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-end
-function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1
-		and Duel.IsExistingMatchingCard(cm.spfilter,tp,LOCATION_HAND,0,1,nil,e,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
-end
-function cm.spop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,cm.spfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp)
-	if g:GetCount()>0 then
-		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
-	end
+function s.atkcon(e)
+	local bc=Duel.GetAttackTarget()
+	return Duel.IsPhase(PHASE_DAMAGE_CAL) and e:GetHandler()==Duel.GetAttacker() and bc and bc:IsControler(1-e:GetHandlerPlayer())
 end

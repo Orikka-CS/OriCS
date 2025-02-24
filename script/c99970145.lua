@@ -1,102 +1,100 @@
---운명의 좌 「마력」
-local m=99970145
-local cm=_G["c"..m]
-function cm.initial_effect(c)
+--[ The Throne of Destiny ]
+local s,id=GetID()
+function s.initial_effect(c)
+
+	local e99=MakeEff(c,"FC","M")
+	e99:SetCode(EVENT_ADJUST)
+	WriteEff(e99,99,"NO")
+	c:RegisterEffect(e99)
 	
-	--가챠는 나쁜 문명!
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e1:SetCode(EVENT_ADJUST)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCondition(cm.con1)
-	e1:SetOperation(cm.op1)
+	local e1=MakeEff(c,"STo")
+	e1:SetCategory(CATEGORY_DESTROY)
+	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e1:SetCode(EVENT_SUMMON_SUCCESS)
+	e1:SetCL(1,id)
+	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
-	
-	--서치 + 샐비지
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(m,0))
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
+	local e2=e1:Clone()
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e2:SetCountLimit(1,m)
-	e2:SetTarget(cm.thtg)
-	e2:SetOperation(cm.thop)
 	c:RegisterEffect(e2)
-	local e4=e2:Clone()
-	e4:SetCode(EVENT_SUMMON_SUCCESS)
-	c:RegisterEffect(e4)
-	local e5=e2:Clone()	e5:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
-	c:RegisterEffect(e5)
-	
-	--드로우
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(m,1))
-	e3:SetCategory(CATEGORY_DRAW)
-	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
-	e3:SetCode(EVENT_BATTLE_DAMAGE)
-	e3:SetTarget(cm.drtg)
-	e3:SetOperation(cm.drop)
+	local e3=e1:Clone()
+	e3:SetCode(EVENT_FLIP)
 	c:RegisterEffect(e3)
+	
+	local e0=MakeEff(c,"F","HG")
+	e0:SetD(id,0)
+	e0:SetCL(1,{id,1})
+	e0:SetCode(EFFECT_SPSUMMON_PROC)
+	e0:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	WriteEff(e0,0,"NO")
+	c:RegisterEffect(e0)
 	
 end
 
---가챠는 좋은 문명!
-function cm.con1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c:GetFlagEffect(m)==0
+function s.lv3con(e)
+	return e:GetHandler():IsLevelAbove(3)
 end
-function cm.op1(e,tp,eg,ep,ev,re,r,rp)
+
+function s.con99(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	c:RegisterFlagEffect(m,RESET_EVENT+0x1fe0000,0,1)
-	Duel.Hint(HINT_CARD,0,m)
-	local atk=YuL.random(0,4000)
-	Duel.Hint(HINT_NUMBER,tp,atk)
-	Duel.Hint(HINT_NUMBER,1-tp,atk)
+	return c:GetFlagEffect(id)==0
+end
+function s.op99(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+		Duel.Hint(HINT_CARD,0,id)
+		local atk=YuL.Random(0,4000)
+		Duel.Hint(HINT_NUMBER,tp,atk)
+		Duel.Hint(HINT_NUMBER,1-tp,atk)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_SET_BASE_ATTACK)
-	e1:SetReset(RESET_EVENT+0x1fe0000)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 	e1:SetValue(atk)
 	c:RegisterEffect(e1)
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
+	local e2=e1:Clone()
 	e2:SetCode(EFFECT_UPDATE_LEVEL)
-	e2:SetReset(RESET_EVENT+0x1fe0000)
 	e2:SetValue(math.floor(atk/1000))
 	c:RegisterEffect(e2)
 end
 
---서치 + 샐비지
-function cm.thfilter(c)
-	return c:IsSetCard(0xd3b) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local ct=e:GetHandler():GetLevel()-1
+	local dg=Duel.GetMatchingGroup(nil,tp,0,LOCATION_ONFIELD,nil)
+	if chk==0 then return ct>0 and #dg>0 end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,dg,1,0,0)
 end
-function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,LOCATION_GRAVE+LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE+LOCATION_DECK)
-end
-function cm.thop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(cm.thfilter),tp,LOCATION_GRAVE+LOCATION_DECK,0,1,1,nil)
-	if g:GetCount()>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,g)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
+	local ct=c:GetLevel()-1
+	if ct>0 then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+		local dg=Duel.SelectMatchingCard(tp,nil,tp,0,LOCATION_ONFIELD,1,ct,nil)
+		if #dg==0 then return end
+		Duel.HintSelection(dg,true)
+		Duel.Destroy(dg,REASON_EFFECT)
 	end
 end
 
---드로우
-function cm.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	local c=e:GetHandler()
-	local ct=1 if c:IsLevelAbove(3) then ct=2 end
-	Duel.SetTargetPlayer(tp)
-	Duel.SetTargetParam(ct)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,ct)
+function s.con0fil(c)
+	return c:IsSetCard(0x9d70) and c:IsFaceup()
 end
-function cm.drop(e,tp,eg,ep,ev,re,r,rp)
+function s.con0(e,c)
+	if c==nil then return true end
+	local tp=c:GetControler()
+	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsExistingMatchingCard(s.con0fil,tp,LOCATION_MZONE,0,1,nil)
+end
+function s.op0(e,tp,eg,ep,ev,re,r,rp,c)
 	local c=e:GetHandler()
-	local ct=1 if c:IsLevelAbove(3) then ct=2 end
-	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
-	Duel.Draw(p,ct,REASON_EFFECT)
+	if c:IsLocation(LOCATION_GRAVE) then 
+		local e1=Effect.CreateEffect(c)
+		e1:SetDescription(3300)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
+		e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
+		e1:SetValue(LOCATION_REMOVED)
+		c:RegisterEffect(e1,true)
+	end
 end

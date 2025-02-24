@@ -1,89 +1,82 @@
---운명의 좌 「망령」
-local m=99970144
-local cm=_G["c"..m]
-function cm.initial_effect(c)
+--[ The Throne of Destiny ]
+local s,id=GetID()
+function s.initial_effect(c)
+
+	local e99=MakeEff(c,"FC","M")
+	e99:SetCode(EVENT_ADJUST)
+	WriteEff(e99,99,"NO")
+	c:RegisterEffect(e99)
 	
-	--가챠는 나쁜 문명!
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e1:SetCode(EVENT_ADJUST)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCondition(cm.con1)
-	e1:SetOperation(cm.op1)
+	local e1=MakeEff(c,"I","M")
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e1:SetCondition(aux.NOT(s.lv3con))
+	e1:SetCL(1,id)
+	WriteEff(e1,1,"CTO")
 	c:RegisterEffect(e1)
-	
-	--특수 소환
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(m,0))
-	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_SUMMON_SUCCESS)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetTarget(cm.sptg)
-	e2:SetOperation(cm.spop)
+	local e2=e1:Clone()
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetCondition(s.lv3con)
 	c:RegisterEffect(e2)
 	
-	--효과 파괴 내성
-	YuL.ind_eff(c,LOCATION_MZONE,0)
+	local ex=MakeEff(c,"S","M")
+	ex:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+	ex:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	ex:SetValue(1)
+	c:RegisterEffect(ex)
 	
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_FIELD)
-	e4:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetTargetRange(LOCATION_MZONE,0)
-	e4:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xd3b))
-	e4:SetCondition(cm.levelcon)
-	e4:SetValue(1)
-	c:RegisterEffect(e4)
+	local e0=ex:Clone()
+	local e00=MakeEff(c,"FG","M")
+	e00:SetTargetRange(LOCATION_MZONE,0)
+	e00:SetCondition(s.lv3con)
+	e00:SetTarget(function(e,c) return c:IsSetCard(0x9d70) and c~=e:GetHandler() end)
+	e00:SetLabelObject(e0)
+	c:RegisterEffect(e00)
 	
 end
 
---가챠는 좋은 문명!
-function cm.con1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c:GetFlagEffect(m)==0
+function s.lv3con(e)
+	return e:GetHandler():IsLevelAbove(3)
 end
-function cm.op1(e,tp,eg,ep,ev,re,r,rp)
+
+function s.con99(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	c:RegisterFlagEffect(m,RESET_EVENT+0x1fe0000,0,1)
-	Duel.Hint(HINT_CARD,0,m)
-	local atk=YuL.random(0,4000)
-	Duel.Hint(HINT_NUMBER,tp,atk)
-	Duel.Hint(HINT_NUMBER,1-tp,atk)
+	return c:GetFlagEffect(id)==0
+end
+function s.op99(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+		Duel.Hint(HINT_CARD,0,id)
+		local atk=YuL.Random(0,4000)
+		Duel.Hint(HINT_NUMBER,tp,atk)
+		Duel.Hint(HINT_NUMBER,1-tp,atk)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_SET_BASE_ATTACK)
-	e1:SetReset(RESET_EVENT+0x1fe0000)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 	e1:SetValue(atk)
 	c:RegisterEffect(e1)
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
+	local e2=e1:Clone()
 	e2:SetCode(EFFECT_UPDATE_LEVEL)
-	e2:SetReset(RESET_EVENT+0x1fe0000)
 	e2:SetValue(math.floor(atk/1000))
 	c:RegisterEffect(e2)
 end
 
---특수 소환
-function cm.filter(c,e,tp)
-	return c:IsSetCard(0xd3b) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function s.tar1fil(c,e,tp)
+	return (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsSetCard(0x9d70) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and cm.filter(chkc,e,tp) end
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingTarget(cm.filter,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectTarget(tp,cm.filter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
+		and Duel.IsExistingMatchingCard(s.tar1fil,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,e,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE+LOCATION_REMOVED)
 end
-function cm.spop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tar1fil),tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,e,tp)
+	local tc=g:GetFirst()
+	if tc then
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
 
---효과 파괴 내성
-function cm.levelcon(e)
-   return e:GetHandler():GetLevel()>=3
-end
