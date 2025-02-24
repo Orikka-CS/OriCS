@@ -58,10 +58,20 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if tc and Duel.ChangePosition(tc,POS_FACEDOWN_DEFENSE)~=0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		if Duel.ChangePosition(tc,POS_FACEUP_ATTACK)~=0 then
-			Duel.RaiseEvent(Group.CreateGroup(),EVENT_ADJUST,e,REASON_EFFECT,tp,tp,0)
-			Duel.Readjust()
-			Debug.Message(tc:GetLevel())
-			Debug.Message(tc:IsLevelAbove(3))
+			local eset={tc:GetOwnEffects()}
+			local ce=nil
+			for _,te in ipairs(eset) do
+				if te:GetCode()==EVENT_ADJUST then
+					ce=te
+					break
+				end
+			end
+			local e1=ce:Clone()
+			e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+			e1:SetCode(EVENT_CUSTOM+id)
+			tc:RegisterEffect(e1)
+			Duel.RaiseSingleEvent(tc,EVENT_CUSTOM+id,e,REASON_EFFECT,tp,tp,0)
+			e1:Reset()
 			if tc:IsLevelAbove(3) and Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 				Duel.Draw(tp,1,REASON_EFFECT)
 			end
