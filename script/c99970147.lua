@@ -17,6 +17,13 @@ function s.initial_effect(c)
 	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
 
+	local e2=MakeEff(c,"Qo","G")
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetCondition(function(_,tp) return Duel.IsTurnPlayer(1-tp) end)
+	WriteEff(e2,2,"CTO")
+	c:RegisterEffect(e2)
+	
 end
 
 function s.matfilter(c,lc,stype,tp)
@@ -40,7 +47,6 @@ function s.op99(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 	e1:SetValue(atk)
 	c:RegisterEffect(e1)
-	
 end
 
 function s.tar1fil(c)
@@ -76,5 +82,27 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 				Duel.Draw(tp,1,REASON_EFFECT)
 			end
 		end
+	end
+end
+
+function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c:IsAbleToExtraAsCost() end
+	Duel.SendtoDeck(c,nil,2,REASON_COST)
+end
+function s.tar2fil(c,e,tp)
+	return c:IsSetCard(0x9d70) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(s.tar2fil,tp,LOCATION_HAND,0,1,nil,e,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
+end
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,s.tar2fil,tp,LOCATION_HAND,0,1,1,nil,e,tp)
+	if #g>0 then
+		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
