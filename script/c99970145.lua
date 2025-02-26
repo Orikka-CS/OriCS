@@ -59,7 +59,7 @@ function s.op99(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=e:GetHandler():GetLevel()-1
+	local ct=e:GetHandler():GetLevel()-2
 	local dg=Duel.GetMatchingGroup(nil,tp,0,LOCATION_ONFIELD,nil)
 	if chk==0 then return ct>0 and #dg>0 end
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,dg,1,0,0)
@@ -67,7 +67,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
-	local ct=c:GetLevel()-1
+	local ct=c:GetLevel()-2
 	if ct>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 		local dg=Duel.SelectMatchingCard(tp,nil,tp,0,LOCATION_ONFIELD,1,ct,nil)
