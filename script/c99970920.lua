@@ -54,19 +54,19 @@ function s.op1fil(c)
 	return c:IsFaceup() and c:IsCanAddCounter(COUNTER_SPELL,2)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,1-tp,LOCATION_MZONE,0,nil,POS_FACEUP,REASON_RULE)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,1-tp,LOCATION_MZONE,0,nil,POS_FACEDOWN,REASON_RULE)
 	if chk==0 then return not Duel.IsPlayerAffectedByEffect(1-tp,30459350) and #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_MZONE)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if Duel.IsPlayerAffectedByEffect(1-tp,30459350) then return end
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,1-tp,LOCATION_MZONE,0,nil,POS_FACEUP,REASON_RULE)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,1-tp,LOCATION_MZONE,0,nil,POS_FACEDOWN,REASON_RULE)
 	if #g>0 then
 		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_REMOVE)
 		local sg=g:Select(1-tp,1,1,nil)
 		Duel.HintSelection(sg)
-		if Duel.Remove(sg,POS_FACEUP,REASON_RULE,PLAYER_NONE,1-tp)>0 and not c:IsStatus(STATUS_SET_TURN) then
+		if Duel.Remove(sg,POS_FACEDOWN,REASON_RULE,PLAYER_NONE,1-tp)>0 and not c:IsStatus(STATUS_SET_TURN) then
 			local cg=Duel.SelectMatchingCard(tp,s.op1fil,tp,LOCATION_MZONE,0,1,1,nil)
 			if #cg>0 then
 				Duel.BreakEffect()
