@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon
-	aux.AddOrderProcedure(c,"L",nil,aux.FilterBoolFunction(Card.IsSummonType,SUMMON_TYPE_SPECIAL),aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_FIRE))
+	aux.AddOrderProcedure(c,"L",nil,s.ordfil1,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_FIRE))
 	Pendulum.AddProcedure(c,false)
 	c:EnableReviveLimit()
 	--이 카드는 오더 소환 및 펜듈럼 소환으로만 엑스트라 덱에서 특수 소환할 수 있다.
@@ -58,6 +58,9 @@ function s.initial_effect(c)
 	e5:SetTarget(s.extg)
 	e5:SetOperation(s.exop)
 	c:RegisterEffect(e5)
+end
+function s.ordfil1(c)
+	return c:IsSummonLocation(LOCATION_HAND|LOCATION_EXTRA) and c:IsSummonType(SUMMON_TYPE_SPECIAL)
 end
 function s.splimit(e,se,sp,st)
 	return (st&SUMMON_TYPE_ORDER)==SUMMON_TYPE_ORDER or (st&SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM

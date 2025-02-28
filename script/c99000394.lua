@@ -16,6 +16,7 @@ function s.initial_effect(c)
 	eb:SetCountLimit(1,id+EFFECT_COUNT_CODE_OATH)
 	eb:SetRange(LOCATION_EXTRA)
 	eb:SetCondition(s.sprcon)
+	eb:SetTarget(s.sprtg)
 	eb:SetOperation(s.sprop)
 	c:RegisterEffect(eb)
 	Duel.AddCustomActivityCounter(id,ACTIVITY_CHAIN,s.chainfilter)
@@ -57,9 +58,18 @@ function s.sprcon(e,c)
 	return (Duel.GetCustomActivityCount(id,tp,ACTIVITY_CHAIN)~=0 or Duel.GetCustomActivityCount(id,1-tp,ACTIVITY_CHAIN)~=0)
 		and Duel.IsExistingMatchingCard(s.sprfilter,tp,LOCATION_HAND,0,1,nil,tp,c)
 end
-function s.sprop(e,tp,eg,ep,ev,re,r,rp,c)
+function s.sprtg(e,tp,eg,ep,ev,re,r,rp,chk,c)
+	local g=Duel.GetMatchingGroup(s.sprfilter,tp,LOCATION_HAND,0,nil,tp,c)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,s.sprfilter,tp,LOCATION_HAND,0,1,1,nil,tp,c)
+	local tc=Group.Select(g,tp,1,1,Duel.IsSummonCancelable())
+	if not tc then return false end
+	tc:KeepAlive()
+	e:SetLabelObject(tc)
+	return true
+end
+function s.sprop(e,tp,eg,ep,ev,re,r,rp,c)
+	local g=e:GetLabelObject()
+	if not g then return end
 	Duel.SendtoDeck(g,nil,2,REASON_COST)
 end
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
@@ -85,47 +95,111 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.cfilter(c,p)
-	return c:IsControler(p) and c:IsReason(REASON_EFFECT)
+	return c:IsControler(p)
 end
 function s.mikocon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.cfilter,1,nil,1-tp)
 end
 function s.mikoop(e,tp,eg,ep,ev,re,r,rp)
 	local opt=Duel.SelectOption(tp,aux.Stringid(id,2),aux.Stringid(id,3))+1
+	local reset,reset_ct=0,0
+	local reset2,reset_ct2=0,0
+	if Duel.GetTurnPlayer()==tp and Duel.GetCurrentPhase()<=PHASE_STANDBY then
+		reset,reset_ct=RESET_PHASE+PHASE_STANDBY+RESET_SELF_TURN,2
+	else
+		reset=RESET_PHASE+PHASE_STANDBY+RESET_SELF_TURN
+	end
+	if Duel.GetCurrentPhase()<=PHASE_STANDBY then
+		reset2,reset_ct2=RESET_PHASE+PHASE_STANDBY+RESET_OPPO_TURN,2
+	else
+		reset2=RESET_PHASE+PHASE_STANDBY+RESET_OPPO_TURN
+	end
 	if opt==1 then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_FIELD)
 		e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE+EFFECT_FLAG_IGNORE_IMMUNE)
 		e1:SetCode(EFFECT_TO_GRAVE_REDIRECT)
-		e1:SetTargetRange(0xfe,0xff)
+		e1:SetTargetRange(0,0xff)
 		e1:SetValue(LOCATION_REMOVED)
-		e1:SetTarget(s.redtg)
-		e1:SetReset(RESET_PHASE+PHASE_END)
+		e1:SetTarget(s.rmtg)
+		e1:SetReset(reset,reset_ct)
 		Duel.RegisterEffect(e1,tp)
+		local eff1=Effect.CreateEffect(e:GetHandler())
+		eff1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+		eff1:SetTargetRange(0,1)
+		eff1:SetDescription(aux.Stringid(id,2))
+		eff1:SetReset(reset,reset_ct)
+		Duel.RegisterEffect(eff1,tp)
+		if tp~=Duel.GetTurnPlayer() then
+			local e2=Effect.CreateEffect(e:GetHandler())
+			e2:SetType(EFFECT_TYPE_FIELD)
+			e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE+EFFECT_FLAG_IGNORE_IMMUNE)
+			e2:SetCode(EFFECT_TO_GRAVE_REDIRECT)
+			e2:SetTargetRange(0xff,0)
+			e2:SetValue(LOCATION_REMOVED)
+			e2:SetTarget(s.rmtg2)
+			e2:SetReset(reset2,reset_ct2)
+			Duel.RegisterEffect(e2,tp)
+			local eff2=Effect.CreateEffect(e:GetHandler())
+			eff2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+			eff2:SetTargetRange(1,0)
+			eff2:SetDescription(aux.Stringid(id,2))
+			eff2:SetReset(reset2,reset_ct2)
+			Duel.RegisterEffect(eff2,tp)
+		end
 	elseif opt==2 then
-		local e2=Effect.CreateEffect(e:GetHandler())
-		e2:SetType(EFFECT_TYPE_FIELD)
-		e2:SetCode(EFFECT_CANNOT_REMOVE)
-		e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-		e2:SetTargetRange(0,1)
-		e2:SetValue(1)
-		e2:SetReset(RESET_PHASE+PHASE_END)
-		Duel.RegisterEffect(e2,tp)
-	end
-	if tp~=Duel.GetTurnPlayer() then
 		local e3=Effect.CreateEffect(e:GetHandler())
 		e3:SetType(EFFECT_TYPE_FIELD)
-		e3:SetCode(EFFECT_CANNOT_ACTIVATE)
+		e3:SetCode(EFFECT_CANNOT_REMOVE)
 		e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-		e3:SetTargetRange(1,0)
-		e3:SetValue(s.aclimit)
-		e3:SetReset(RESET_PHASE+PHASE_END)
+		e3:SetTargetRange(0,1)
+		e3:SetValue(1)
+		e3:SetReset(reset,reset_ct)
 		Duel.RegisterEffect(e3,tp)
+		local eff3=Effect.CreateEffect(e:GetHandler())
+		eff3:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+		eff3:SetTargetRange(0,1)
+		eff3:SetDescription(aux.Stringid(id,3))
+		eff3:SetReset(reset,reset_ct)
+		Duel.RegisterEffect(eff3,tp)
+		--30459350 chk
+		local e4=Effect.CreateEffect(e:GetHandler())
+		e4:SetType(EFFECT_TYPE_FIELD)
+		e4:SetCode(30459350)
+		e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+		e4:SetTargetRange(0,1)
+		e4:SetReset(reset,reset_ct)
+		Duel.RegisterEffect(e4,tp)
+		if tp~=Duel.GetTurnPlayer() then
+			local e5=Effect.CreateEffect(e:GetHandler())
+			e5:SetType(EFFECT_TYPE_FIELD)
+			e5:SetCode(EFFECT_CANNOT_REMOVE)
+			e5:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+			e5:SetTargetRange(1,0)
+			e5:SetValue(1)
+			e5:SetReset(reset2,reset_ct2)
+			Duel.RegisterEffect(e5,tp)
+			local eff5=Effect.CreateEffect(e:GetHandler())
+			eff5:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+			eff5:SetTargetRange(1,0)
+			eff5:SetDescription(aux.Stringid(id,3))
+			eff5:SetReset(reset2,reset_ct2)
+			Duel.RegisterEffect(eff5,tp)
+			--30459350 chk
+			local e6=Effect.CreateEffect(e:GetHandler())
+			e6:SetType(EFFECT_TYPE_FIELD)
+			e6:SetCode(30459350)
+			e6:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+			e6:SetTargetRange(1,0)
+			e6:SetReset(reset2,reset_ct2)
+			Duel.RegisterEffect(e6,tp)
+		end
 	end
 end
-function s.redtg(e,c)
-	return c:GetOwner()~=e:GetHandlerPlayer()
+function s.rmtg(e,c)
+	return c:GetOwner()~=e:GetHandlerPlayer() and Duel.IsPlayerCanRemove(e:GetHandlerPlayer(),c)
 end
-function s.aclimit(e,re,tp)
-	return re:GetActivateLocation()==LOCATION_HAND
+function s.rmtg2(e,c)
+	local tp=e:GetHandlerPlayer()
+	return c:GetOwner()==tp and Duel.IsPlayerCanRemove(tp,c)
 end

@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon
-	aux.AddOrderProcedure(c,"R",nil,aux.FilterBoolFunction(Card.IsType,TYPE_EFFECT),aux.NOT(aux.FilterBoolFunctionEx(Card.IsType,TYPE_TOKEN)))
+	aux.AddOrderProcedure(c,"R",nil,aux.FilterBoolFunction(Card.IsType,TYPE_EFFECT),aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER))
 	c:EnableReviveLimit()
 	--그 상대 몬스터의 공격력 / 수비력은 데미지 계산시에만 절반이 된다.
 	local e1=Effect.CreateEffect(c)
