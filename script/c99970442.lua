@@ -80,8 +80,15 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
 		Duel.Hint(HINT_CARD,0,id)
 		local atk=YuL.Random(-2000,2000)
-		Duel.Hint(HINT_NUMBER,tp,atk)
-		Duel.Hint(HINT_NUMBER,1-tp,atk)
+		if atk>0 then
+			Duel.Hint(HINT_OPSELECTED,tp,aux.Stringid(id,0))
+			Duel.Hint(HINT_OPSELECTED,1-tp,aux.Stringid(id,0))
+		elseif atk<0 then
+			Duel.Hint(HINT_OPSELECTED,tp,aux.Stringid(id,1))
+			Duel.Hint(HINT_OPSELECTED,1-tp,aux.Stringid(id,1))
+		end
+		Duel.Hint(HINT_NUMBER,tp,math.abs(atk))
+		Duel.Hint(HINT_NUMBER,1-tp,math.abs(atk))
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_EQUIP)
 	e1:SetCode(EFFECT_UPDATE_ATTACK)
