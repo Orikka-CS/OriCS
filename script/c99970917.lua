@@ -17,7 +17,8 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 	e2:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-	e2:SetValue(function(e,c) e:SetLabel(1) end)
+	e2:SetLabelObject(e1)
+	e2:SetValue(function(e,c) return e:GetLabelObject():SetLabel(1) end)
 	e2:SetCondition(function(e) return Duel.IsCanRemoveCounter(e:GetHandlerPlayer(),1,0,COUNTER_SPELL,3,REASON_COST) end)
 	c:RegisterEffect(e2)
 	e1:SetLabelObject(e2)
@@ -36,10 +37,9 @@ end
 s.counter_place_list={COUNTER_SPELL}
 
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local label_obj=e:GetLabelObject()
-	if chk==0 then label_obj:SetLabel(0) return true end
-	if label_obj:GetLabel()>0 then
-		label_obj:SetLabel(0)
+	if chk==0 then e:SetLabel(0) return true end
+	if e:GetLabel()>0 then
+		e:SetLabel(0)
 		Duel.RemoveCounter(tp,1,0,COUNTER_SPELL,3,REASON_COST)
 	end
 end
@@ -69,6 +69,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			return Duel.SpecialSummon(sc,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
 		end,
 		aux.Stringid(id,2))
+	if res==1 and sc:IsLocation(LOCATION_MZONE) and sc:IsPosition(POS_FACEDOWN_DEFENSE) then Duel.ConfirmCards(1-tp,sc) end
 	if res==1 and not c:IsStatus(STATUS_SET_TURN) then
 		local g=Duel.SelectMatchingCard(tp,s.op1fil,tp,LOCATION_MZONE,0,1,1,nil)
 		if #g>0 then

@@ -17,7 +17,8 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 	e2:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-	e2:SetValue(function(e,c) e:SetLabel(1) end)
+	e2:SetLabelObject(e1)
+	e2:SetValue(function(e,c) return e:GetLabelObject():SetLabel(1) end)
 	e2:SetCondition(function(e) return Duel.IsCanRemoveCounter(e:GetHandlerPlayer(),1,0,COUNTER_SPELL,3,REASON_COST) end)
 	c:RegisterEffect(e2)
 	e1:SetLabelObject(e2)
@@ -40,14 +41,13 @@ function s.cost1fil(c)
 	return c:IsSetCard(0x9d6f) and c:IsAbleToGraveAsCost()
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local label_obj=e:GetLabelObject()
-	if chk==0 then label_obj:SetLabel(0) return Duel.IsExistingMatchingCard(s.cost1fil,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,nil) end
-	if label_obj:GetLabel()>0 then
-		label_obj:SetLabel(0)
+	if chk==0 then e:SetLabel(0) return Duel.IsExistingMatchingCard(s.cost1fil,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,e:GetHandler()) end
+	if e:GetLabel()>0 then
+		e:SetLabel(0)
 		Duel.RemoveCounter(tp,1,0,COUNTER_SPELL,3,REASON_COST)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.cost1fil,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.cost1fil,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,e:GetHandler())
 	Duel.SendtoGrave(g,REASON_COST)
 end
 function s.op1fil(c)
