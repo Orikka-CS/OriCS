@@ -1,87 +1,67 @@
---백연초가 피어오르는 숲
+--백연초영소
 local s,id=GetID()
 function s.initial_effect(c)
-	--activate
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_ACTIVATE)
-	e0:SetCode(EVENT_FREE_CHAIN)
-	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetRange(LOCATION_FZONE)
-	e1:SetTargetRange(LOCATION_MZONE,0)
-	e1:SetTarget(function(_,c) return c:IsSetCard(0xf2b) end)
-	e1:SetValue(s.val1)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TOGRAVE)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCountLimit(1,id)
+	e1:SetCost(s.cst1)
+	e1:SetTarget(s.tg1)
+	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	local e1a=e1:Clone()
-	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
-	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOKEN+CATEGORY_SPECIAL_SUMMON)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetRange(LOCATION_FZONE)
-	e2:SetCode(EVENT_PAY_LPCOST)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCountLimit(1,id)
-	e2:SetCondition(s.con2)
-	e2:SetCost(s.cst2)
+	e2:SetCategory(CATEGORY_RECOVER)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetRange(LOCATION_GRAVE)
+	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(function(e,tp) return Duel.IsTurnPlayer(tp) end)
+	e2:SetCost(aux.bfgcost)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	--effect 3
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e3:SetCode(EFFECT_CANNOT_ACTIVATE)
-	e3:SetRange(LOCATION_FZONE)
-	e3:SetCondition(s.con3)
-	e3:SetTargetRange(0,1)
-	e3:SetValue(s.val3)
-	c:RegisterEffect(e3)
 end
 
 --effect 1
-function s.val1(e,c)
-	return Duel.GetFlagEffect(e:GetHandlerPlayer(),124161180)*300
+function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.CheckLPCost(tp,1000) end
+	Duel.PayLPCost(tp,1000)
+end
+
+function s.tg1filter(c)
+	return c:IsSetCard(0xf2b) and not c:IsCode(id) and c:IsAbleToHand()
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return g:GetClassCount(Card.GetCode)>1 end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,tp,1)
+end
+
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	if g:GetClassCount(Card.GetCode)>=2 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.dncheck,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		Duel.BreakEffect()
+		local dg=Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,nil)
+		local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
+		Duel.SendtoGrave(dsg,REASON_EFFECT+REASON_DISCARD)
+	end
 end
 
 --effect 2
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return ep==tp and re and re:IsActivated() and re:GetHandler():IsSetCard(0xf2b) and not re:GetHandler():IsType(TYPE_FIELD)
-end
-
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,300) end
-	Duel.PayLPCost(tp,300)
-end
-
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsPlayerCanSpecialSummonMonster(tp,124161168,0xf2b,TYPES_TOKEN,300,300,1,RACE_PLANT,ATTRIBUTE_FIRE) end
-	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,0)
+	if chk==0 then return Duel.GetMatchingGroupCount(Card.IsSetCard,tp,LOCATION_GRAVE,0,e:GetHandler(),0xf2b)>0 end
+	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,500)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 or not Duel.IsPlayerCanSpecialSummonMonster(tp,124161168,0xf2b,TYPES_TOKEN,300,300,1,RACE_PLANT,ATTRIBUTE_FIRE) then return end
-	local token=Duel.CreateToken(tp,124161168)
-	Duel.SpecialSummon(token,0,tp,tp,false,false,POS_FACEUP)
-end
-
---effect 3
-function s.con3filter(c)
-	return c:IsSetCard(0xf2b) and c:IsFaceup()
-end
-
-function s.con3(e)
-	local g=Duel.GetMatchingGroupCount(s.con3filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)
-	return g>0
-end
-
-function s.val3(e,re,tp)
-	local tp=e:GetHandlerPlayer()
-	local lp=math.min(Duel.GetLP(tp),Duel.GetLP(1-tp))
-	return re:GetHandler():IsAttackAbove(lp) and re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsLocation(LOCATION_HAND)
+	local ct=Duel.GetMatchingGroupCount(Card.IsSetCard,tp,LOCATION_GRAVE,0,e:GetHandler(),0xf2b)
+	Duel.Recover(tp,ct*500,REASON_EFFECT)
 end
