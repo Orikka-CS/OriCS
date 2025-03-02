@@ -30,11 +30,12 @@ function s.initial_effect(c)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
 	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e3:SetCode(EFFECT_CANNOT_ACTIVATE)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetTargetRange(0,1)
-	e3:SetValue(s.val3)
+	e3:SetCondition(s.con3)
+	e3:SetTarget(s.tg3)
 	c:RegisterEffect(e3)
 end
 
@@ -63,8 +64,17 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 3
-function s.val3(e,re,tp)
+function s.con3filter(c)
+	return c:IsSetCard(0xf2b)
+end
+
+function s.con3(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroupCount(s.con3filter,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil)
+	return g>0
+end
+
+function s.tg3(e,c,sump,sumtype,sumpos,targetp)
 	local tp=e:GetHandlerPlayer()
 	local lp=math.min(Duel.GetLP(tp),Duel.GetLP(1-tp))
-	return re:GetHandler():IsAttackAbove(lp) and re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsLocation(LOCATION_HAND)
+	return c:GetAttack()+c:GetDefense()>=lp and c:IsLocation(LOCATION_HAND)
 end
