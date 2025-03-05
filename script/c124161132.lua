@@ -49,7 +49,7 @@ function s.val1filter(c)
 end
 
 function s.val1(e,c)
-	return Duel.GetMatchingGroupCount(s.val1filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)*300
+	return Duel.GetMatchingGroupCount(s.val1filter,e:GetHandlerPlayer(),LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)*100
 end
 
 --effect 2

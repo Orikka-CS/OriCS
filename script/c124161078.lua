@@ -76,12 +76,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
 	if ug~=dg then
-		Duel.SetChainLimit(s.chlimit)
+		Duel.SetChainLimit(function(e,ep,tp) return ep==tp end)
 	end
-end
-
-function s.chlimit(e,ep,tp)
-	return tp==ep
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)

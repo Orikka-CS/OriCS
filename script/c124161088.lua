@@ -48,12 +48,8 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,sg,#sg,0,0)
 	if math.abs(ug-dg)>2 then
-		Duel.SetChainLimit(s.chlimit)
+		Duel.SetChainLimit(function(e,ep,tp) return ep==tp end)
 	end
-end
-
-function s.chlimit(e,ep,tp)
-	return tp==ep
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)

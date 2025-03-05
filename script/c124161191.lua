@@ -7,8 +7,8 @@ function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_REMOVE)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_FREE_CHAIN)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_REMOVE)
 	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
@@ -73,11 +73,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,eg,#eg,tp,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,eg,#eg,1-tp,LOCATION_REMOVED)
-	Duel.SetChainLimit(s.chlimit)
-end
-
-function s.chlimit(e,ep,tp)
-	return tp==ep
+	Duel.SetChainLimit(function(e,ep,tp) return ep==tp end)
 end
 
 function s.op2filter(c,e,tp)

@@ -43,7 +43,7 @@ end
 
 --effect 2
 function s.tg2filter(c)
-	return (c:IsSetCard(0xf28) or c:IsContinuousTrap()) and c:IsDiscardable(REASON_EFFECT)
+	return (c:IsSetCard(0xf28) or (c:IsContinuousTrap() and c:IsTrapMonster())) and c:IsDiscardable(REASON_EFFECT)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

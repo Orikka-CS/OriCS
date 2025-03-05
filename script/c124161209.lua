@@ -90,10 +90,6 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	local mg=rc:GetMaterial()
 	if rc:IsType(TYPE_LINK) and #mg>0 and #mg~=mg:FilterCount(Card.IsType,nil,TYPE_EFFECT) and re:IsActiveType(TYPE_MONSTER) and re:GetOwnerPlayer()==tp then
-		Duel.SetChainLimit(s.chainlm)
+		Duel.SetChainLimit(function(e,ep,tp) return ep==tp or not e:IsActiveType(TYPE_MONSTER) end)
 	end
-end
-
-function s.chainlm(e,rp,tp)
-	return tp==rp
 end

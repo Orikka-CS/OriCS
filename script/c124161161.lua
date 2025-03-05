@@ -61,7 +61,7 @@ end
 
 --effect 1
 function s.val1(e,c)
-	return Duel.GetFlagEffect(0,id)*200
+	return Duel.GetFlagEffect(0,id)*300
 end
 
 --effect 2

@@ -23,12 +23,12 @@ end
 
 --effect 1
 function s.tg1filter(c)
-	return c:IsSetCard(0xf2d) and c:IsMonster() and c:IsFaceup()
+	return c:IsSetCard(0xf2d) and c:IsFaceup()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,nil)
-	local ct=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
+	local ct=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_ONFIELD,0,e:GetHandler())
 	if chk==0 then return #g>0 and ct>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
@@ -37,7 +37,7 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,nil)
-	local ct=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
+	local ct=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_ONFIELD,0,e:GetHandler())
 	if #g>0 and ct>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_TODECK)
 		Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)

@@ -38,8 +38,8 @@ end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return c:IsDiscardable(REASON_COST) end
-	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
+	if chk==0 then return c:IsAbleToGraveAsCost() end
+	Duel.SendtoGrave(c,REASON_COST)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
