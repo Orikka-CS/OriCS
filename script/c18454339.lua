@@ -17,13 +17,14 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
 	if chkc then
 		return chkc:IsOnField() and chkc:IsFaceup()
 	end
 	if chk==0 then
-		return Duel.IETarget(Card.IsFaceup,tp,"O","O",1,nil)
+		return Duel.IETarget(Card.IsFaceup,tp,"O","O",1,c)
 	end
-	Duel.STarget(tp,Card.IsFaceup,tp,"O","O",1,1,nil)
+	Duel.STarget(tp,Card.IsFaceup,tp,"O","O",1,1,c)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
