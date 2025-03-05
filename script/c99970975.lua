@@ -26,6 +26,7 @@ function s.initial_effect(c)
 	
 end
 
+s.roll_dice=true
 s.listed_names={CARD_CYCLONE_DICE}
 
 function s.con0fil(c)
