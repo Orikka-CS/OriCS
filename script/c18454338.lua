@@ -33,7 +33,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local b1=Duel.GetLocCount(tp,"M")>0 and tc:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		local b2=tc:IsAbleToGrave()
 		local res=nil
-		local op=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b1,aux.Stringid(id,1)})
+		local op=Duel.SelectEffect(tp,{b1,aux.Stringid(id,1)},{b1,aux.Stringid(id,2)})
 		if op==1 then
 			res=Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 		elseif op==2 then
@@ -59,7 +59,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local e1=MakeEff(c,"F")
 	e1:SetCode(EFFECT_UPDATE_ATTACK)
 	e1:SetTR("M",0)
-	e1:SetReset(RESET_PHASE+PHSAE_END)
+	e1:SetReset(RESET_PHASE+PHASE_END)
 	e1:SetTarget(s.otar21)
 	e1:SetValue(1250)
 	Duel.RegisterEffect(e1,tp)
