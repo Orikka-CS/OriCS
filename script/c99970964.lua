@@ -53,11 +53,14 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
+function s.tar3fil(c,tp)
+	return c:IsAbleToHand() and Duel.GetMZoneCount(tp,c)>0
+end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsOnField() and chkc:IsAbleToHand() and chkc:IsControler(tp) end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsAbleToHand,tp,LOCATION_ONFIELD,0,1,nil) end
+	if chkc then return chkc:IsOnField() and s.tar3fil(chkc,tp) and chkc:IsControler(tp) end
+	if chk==0 then return Duel.IsExistingTarget(s.tar3fil,tp,LOCATION_ONFIELD,0,1,nil,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
-	local g=Duel.SelectTarget(tp,Card.IsAbleToHand,tp,LOCATION_ONFIELD,0,1,1,nil)
+	local g=Duel.SelectTarget(tp,s.tar3fil,tp,LOCATION_ONFIELD,0,1,1,nil,tp)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,tp,0)
 end
