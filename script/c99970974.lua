@@ -27,7 +27,7 @@ end
 s.listed_names={CARD_CYCLONE_DOUBLE}
 
 function s.op99(e,tp,eg,ep,ev,re,r,rp)
-	if not re:IsActivated() or not re:GetHandler():IsCode(CARD_CYCLONE_DOUBLE) or rp~=tp then return end
+	if not re or not re:IsActivated() or not re:GetHandler():IsCode(CARD_CYCLONE_DOUBLE) or rp~=tp then return end
 	Duel.Hint(HINT_CARD,0,id)
 	Duel.BreakEffect()
 	Duel.Draw(tp,#eg,REASON_EFFECT)
