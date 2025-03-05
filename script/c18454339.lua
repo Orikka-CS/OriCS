@@ -44,11 +44,43 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			e2:SetValue(s.oval12)
 			e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 			tc:RegisterEffect(e2)
+		else
+			local e3=MakeEff(c,"S")
+			e3:SetCode(EFFECT_DISABLE)
+			e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+			e3:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+			e3:SetLabel(tp)
+			e3:SetCondition(s.ocon13)
+			tc:RegisterEffect(e3)
+			local e4=MakeEff(c,"S")
+			e4:SetCode(EFFECT_DISABLE_EFFECT)
+			e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+			e4:SetValue(RESET_TURN_SET)
+			e4:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+			e4:SetLabel(tp)
+			e4:SetCondition(s.ocon13)
+			tc:RegisterEffect(e4)
+			if tc:IsType(TYPE_TRAPMONSTER) then
+				local e5=MakeEff(c,"S")
+				e5:SetCode(EFFECT_DISABLE_TRAPMONSTER)
+				e5:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+				e5:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+				e5:SetLabel(tp)
+				e5:SetCondition(s.ocon13)
+				tc:RegisterEffect(e5)
+			end
 		end
 	end
 end
 function s.oval12(e,re)
 	return e:GetHandlerPlayer()~=re:GetOwnerPlayer()
+end
+function s.onfil13(c)
+	return c:IsFaceup() and c:IsType(TYPE_MONSTER) and (c:GetBaseAttack()==2500 or c:GetBaseDefense()==2500)
+end
+function s.ocon13(e)
+	local tp=e:GetLabel()
+	return Duel.IEMCard(s.onfil13,tp,"MG",0,1,nil)
 end
 function s.tfil2(c,e,tp)
 	return c:IsSetCard("∆€Ω∫∆Æƒı≈Õ") and c:IsAbleToHand()
