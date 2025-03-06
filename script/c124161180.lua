@@ -59,7 +59,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return ep==tp and re and re:IsActivated() and e:GetHandler()~=re:GetHandler()
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chck:IsCanBeEffectTarget(e) end
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
 	local ct=Duel.GetFlagEffect(tp,124161179)//2

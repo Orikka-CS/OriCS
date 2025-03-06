@@ -43,8 +43,7 @@ function s.tg1hfilter(c)
 	return c:IsSetCard(0xf2c) and c:IsMonster() and c:IsAbleToHand() 
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and s.tg1filter(chkc,e,tp) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil,e,tp)
 	local hg=Duel.GetMatchingGroup(s.tg1hfilter,tp,LOCATION_DECK,0,nil)
@@ -95,8 +94,7 @@ function s.tg2filter(c,e,tp)
 	return c:IsType(TYPE_XYZ) and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e,tp) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e,tp)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 end

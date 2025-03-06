@@ -71,7 +71,7 @@ function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_GRAVE,0,nil)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
-	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
+	Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_COST)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
@@ -84,12 +84,19 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DESTROY,nil,1,PLAYER_ALL,LOCATION_ONFIELD)
 end
 
+function s.op2filter(c)
+	return c:IsSetCard(0xf24) and c:IsAbleToRemove()
+end
+
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.NegateActivation(ev) then return end
 	local c=e:GetHandler()
 	local g=Duel.GetFieldGroup(tp,0,LOCATION_ONFIELD)
+	local rg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_GRAVE,0,nil)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
+		local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+		Duel.Remove(rsg,POS_FACEUP,REASON_EFFECT)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
 		Duel.Destroy(sg,REASON_EFFECT)
 	end

@@ -32,9 +32,8 @@ function s.tg1dfilter(c,e)
 	return c:IsRace(RACE_PLANT) and c:IsFaceup() and c:IsCanBeEffectTarget(e)
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and chck:IsCanBeEffectTarget(e) end
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg1dfilter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e,tp)
 	local dg=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_MZONE,0,nil,e)
 	if chk==0 then return #g>0 and #dg>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 end

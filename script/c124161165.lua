@@ -64,10 +64,9 @@ function s.tg2ofilter(c,e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local c=e:GetHandler()
-	local g1=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_MZONE,0,nil,e)
-	local g2=Duel.GetMatchingGroup(s.tg2ofilter,tp,0,LOCATION_ONFIELD,nil,e)
 	if chkc then return false end
+	local g1=Duel.GetMatchingGroup(s.tg2ifilter,tp,LOCATION_MZONE,0,nil,e)
+	local g2=Duel.GetMatchingGroup(s.tg2ofilter,tp,0,LOCATION_ONFIELD,nil,e)	
 	if chk==0 then return #g1>0 and #g2>0 end
 	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEDOWN)
 	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)

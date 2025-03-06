@@ -35,8 +35,8 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.con1filter(chkc,e,tp,re,r,rp) end
 	local g=eg:Filter(s.con1filter,nil,e,tp,re,r,rp)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) end
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 	Duel.SetTargetCard(sg)

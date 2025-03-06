@@ -61,9 +61,9 @@ function s.tg2sfilter(c)
 	return c:IsContinuousTrap() and c:IsTrapMonster() and c:IsSSetable()
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2sfilter,tp,LOCATION_DECK,0,nil)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) end
 	local tg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e)
 	if chk==0 then return #tg>2 and #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 end
 	local sg=aux.SelectUnselectGroup(tg,e,tp,3,3,aux.TRUE,1,tp,HINTMSG_TODECK)

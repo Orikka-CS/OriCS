@@ -64,8 +64,7 @@ function s.tg2filter(c,e)
 	return c:IsType(TYPE_TUNER) and c:IsCanBeEffectTarget(e) 
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil,e,tp)
 	if chk==0 then return #g>0 end

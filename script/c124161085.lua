@@ -6,12 +6,11 @@ function s.initial_effect(c)
 	Link.AddProcedure(c,nil,2,4,s.linkfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TODECK)
+	e1:SetCategory(CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -31,27 +30,18 @@ function s.linkfilter(g,lc,sumtype,tp)
 end
 
 --effect 1
-function s.cst1filter(c)
-	return c:IsSetCard(0xf25) and c:IsAbleToDeckOrExtraAsCost() and c:IsFaceup()
-end
-
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil) 
-	local diff=math.abs(ug-dg)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
-	if chk==0 then return #g>=diff end
-	local sg=aux.SelectUnselectGroup(g,e,tp,diff,diff,aux.TRUE,1,tp,HINTMSG_TODECK)
-	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
+function s.tg1filter(c)
+	return c:IsSetCard(0xf25) and c:IsAbleToDeck()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil) 
 	local diff=math.abs(ug-dg)
-	if chk==0 then return diff>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,diff,0,LOCATION_ONFIELD)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil)
+	if chk==0 then return diff>0 and #g>=diff end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,diff,0,LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,diff,0,LOCATION_ONFIELD)
 	if ug>dg then
 		Duel.SetChainLimit(s.chlimitu)
 	end
@@ -72,17 +62,22 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local ug=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-	local dg=Duel.GetMatchingGroup(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil) 
-	local sg
+	local dg=Duel.GetMatchingGroup(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
 	local diff=math.abs(#ug-#dg)
 	if diff==0 then return end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil)
+	if #g>=diff then
+		local sg=aux.SelectUnselectGroup(g,e,tp,diff,diff,aux.TRUE,1,tp,HINTMSG_TODECK)
+		Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+		local gsg
 		if #ug>#dg then
-			sg=aux.SelectUnselectGroup(ug,e,tp,diff,diff,aux.TRUE,1,tp,HINTMSG_TODECK)
+			gsg=aux.SelectUnselectGroup(ug,e,tp,diff,diff,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 		end
 		if #dg>#ug then
-			sg=aux.SelectUnselectGroup(dg,e,tp,diff,diff,aux.TRUE,1,tp,HINTMSG_TODECK)
+			gsg=aux.SelectUnselectGroup(dg,e,tp,diff,diff,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 		end
-	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+		Duel.SendtoGrave(gsg,REASON_EFFECT)
+	end
 end
 
 --effect 2

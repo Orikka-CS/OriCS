@@ -29,9 +29,9 @@ function s.tg1filter(c,e)
 	return c:IsCode(124161058) and c:IsCanBeEffectTarget(e) and c:GetEquipTarget()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)   
+	if chkc then return chkc:IsLocation(LOCATION_SZONE) and chkc:IsControler(tp) and s.tg1filter(chck,e) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_SZONE,0,nil,e)
-	if chkc then return false end
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP)
 	Duel.SetTargetCard(sg)

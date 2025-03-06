@@ -33,8 +33,7 @@ function s.rescon(sg,e,tp,mg)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_REMOVED) end
+	if chkc then return false end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_REMOVED,0,nil,e)
 	if chk==0 then return #g>0 end
 	local ag=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,LOCATION_REMOVED,LOCATION_REMOVED,nil,e)

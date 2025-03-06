@@ -30,9 +30,9 @@ function s.tg1filter(c)
 	return c:IsSetCard(0xf24) and c:IsMonster() and not c:IsCode(id) and c:IsAbleToHand() 
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(tp) and chkc:IsCanBeEffectTarget(e) end
 	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(tp) and chck:IsCanBeEffectTarget(e) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	local dg=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,LOCATION_MZONE,0,nil,e)
 	if chk==0 then return #g>0 and #dg>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false) end

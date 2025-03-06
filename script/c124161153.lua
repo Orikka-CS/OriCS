@@ -36,9 +36,9 @@ function s.tg1filter(c,e,tp,dx)
 	return c:IsFaceup() and c:IsCanTurnSet() and c:IsCanBeEffectTarget(e) and (c:IsControler(tp) or dx) 
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tg1filter(chkc,e) end
+	local c=e:GetHandler()
 	local dx=Duel.GetMatchingGroupCount(s.tg1dxfilter,tp,LOCATION_MZONE,0,nil)>0
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e,tp,dx)
 	if chk==0 then return #g>0 end

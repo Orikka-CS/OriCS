@@ -40,10 +40,9 @@ function s.tg1clfilter(c)
 	return c:IsSetCard(0xf2d) and c:IsType(TYPE_LINK)
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e,cl) end
 	local cl=Duel.GetMatchingGroupCount(s.tg1clfilter,tp,LOCATION_MZONE,0,nil)>0
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e,cl) and chkc:IsNegatable() end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD,nil,e,cl)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_NEGATE)
