@@ -74,8 +74,7 @@ function s.tg2filter(c,e,tp)
 	return c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and s.tg2filter(chkc,e,tp) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,LOCATION_REMOVED,nil,e,tp)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 end

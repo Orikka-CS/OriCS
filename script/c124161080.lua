@@ -54,7 +54,7 @@ end
 
 --effect 2
 function s.con2filter(c)
-	return c:IsSetCard(0xf25) and c:IsFaceup()
+	return c:IsSetCard(0xf25) and c:IsType(TYPE_LINK) and c:IsFaceup()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)

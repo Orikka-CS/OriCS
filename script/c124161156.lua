@@ -63,9 +63,9 @@ function s.tg2filter(c,e)
 	return c:IsFaceup() and c:IsCanTurnSet() and c:IsCanBeEffectTarget(e)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return eg:IsContains(chkc) and s.tg2filter(chkc,e) end
 	local c=e:GetHandler()
-	if chkc then return s.tg2filter(check,e) end
 	local g=eg:Filter(s.tg2filter,nil,e)
 	if chk==0 then return #g>0 and c:IsCanTurnSet() end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_POSCHANGE)

@@ -41,8 +41,8 @@ function s.tg1desfilter(c,e)
 	return c:IsCanBeEffectTarget(e)
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chkc then return chkc:IsOnField() and chkc:IsControler(1-tp) end
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chck:IsCanBeEffectTarget(e) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
 	local dg=Duel.GetMatchingGroup(s.tg1desfilter,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return #g>0 and #dg>0 end

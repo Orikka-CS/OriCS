@@ -54,7 +54,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return rp==tp and rc:IsRace(RACE_PLANT) and rc:IsType(TYPE_FUSION)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chck:IsCanBeEffectTarget(e) end
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return #g>0 end

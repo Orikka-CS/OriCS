@@ -26,14 +26,13 @@ function s.initial_effect(c)
 	
 end
 
-s.roll_dice=true
 s.listed_names={CARD_CYCLONE_DICE}
 
 function s.con0fil(c)
 	return c:IsPreviousLocation(LOCATION_ONFIELD) and c:IsReason(REASON_EFFECT)
 end
 function s.con0(e,tp,eg,ep,ev,re,r,rp)
-	return re and re:IsSpellEffect() and re:GetHandler():IsOriginalType(TYPE_SPELL)
+	return re and re:IsSpellEffect()
 		and eg:IsExists(s.con0fil,1,nil)
 end
 function s.tar0(e,tp,eg,ep,ev,re,r,rp,chk)

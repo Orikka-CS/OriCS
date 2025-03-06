@@ -62,8 +62,7 @@ function s.tg2filter(c,e)
 	return c:IsSetCard(0xf20) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand() and c:IsFaceup()
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e)
 	if chk==0 then return #g>0 end

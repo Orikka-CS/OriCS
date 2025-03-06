@@ -55,7 +55,7 @@ function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.RemoveOverlayCard(tp,1,0,1,2,REASON_COST)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
@@ -86,7 +86,7 @@ function s.tg3xfilter(c,e)
 end
 
 function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,0,nil,e)
 	local xg=Duel.GetMatchingGroup(s.tg3xfilter,tp,LOCATION_GRAVE,0,nil)
 	if chk==0 then return #g>0 and #xg>0 end

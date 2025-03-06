@@ -63,8 +63,8 @@ function s.tg2filter(c,e)
 	return c:IsSetCard(0xf2c) and c:IsCanBeEffectTarget(e) and c:IsAbleToDeck() and c:IsFaceup()
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chkc then return chkc:IsControler(tp) end
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,0,e:GetHandler(),e)
 	if chk==0 then return #g>3 and Duel.IsPlayerCanDraw(tp,1) end
 	local sg=aux.SelectUnselectGroup(g,e,tp,4,4,aux.TRUE,1,tp,HINTMSG_TODECK)

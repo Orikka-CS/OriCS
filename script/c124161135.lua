@@ -43,8 +43,8 @@ function s.tg1filter(c)
 	return c:IsFaceup() and (c:IsSetCard(0xf28) or (c:IsTrapMonster() and c:IsContinuousTrap()))
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chkc then return chkc:IsOnField() and chkc:IsControler(1-tp) end
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and chkc:IsCanBeEffectTarget(e) end
 	local ct=math.min(Duel.GetLocationCount(1-tp,LOCATION_SZONE),Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_MZONE,0,nil))
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_MZONE,nil,e)
 	if chk==0 then return ct>0 and #g>0 end

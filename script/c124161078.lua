@@ -43,19 +43,29 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) and #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c+g,2,tp,LOCATION_HAND+LOCATION_DECK)
+	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
+	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
+	if ug~=dg then
+		e:SetLabel(1)
+	else
+		e:SetLabel(0)
+	end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if not c:IsRelateToEffect(e) or Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then return end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
+	if not c:IsRelateToEffect(e) or Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) or #g==0 then return end
 	if Duel.SpecialSummonStep(c,0,tp,tp,false,false,POS_FACEUP) and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sc=Duel.SelectMatchingCard(tp,s.tg1filter,tp,LOCATION_DECK,0,1,1,nil,e,tp):GetFirst()
-		if sc then
-			Duel.SpecialSummonStep(sc,0,tp,1-tp,false,false,POS_FACEDOWN_DEFENSE)
-		end
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON):GetFirst()
+		Duel.SpecialSummonStep(sg,0,tp,1-tp,false,false,POS_FACEDOWN_DEFENSE)
 	end
 	Duel.SpecialSummonComplete()
+	local gg=Duel.GetOperatedGroup():Filter(Card.IsControler,nil,1-tp)
+	if e:GetLabel()==1 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.BreakEffect()
+		Duel.SendtoGrave(gg,REASON_EFFECT)
+	end
 end
 
 --effect 2
@@ -73,11 +83,6 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,tp,LOCATION_DECK)
-	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-	if ug~=dg then
-		Duel.SetChainLimit(function(e,ep,tp) return ep==tp end)
-	end
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)

@@ -36,9 +36,9 @@ function s.tg1filter(c)
 	return c:IsSetCard(0xf24) and c:IsDiscardable()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)  
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chkc:IsCanBeEffectTarget(e) end
 	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chck:IsCanBeEffectTarget(e) end
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil,e)
 	local dg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,c)
 	if chk==0 then return #g>0 and #dg>0 and c:IsDiscardable() end

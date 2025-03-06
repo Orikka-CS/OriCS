@@ -34,8 +34,7 @@ function s.tg1dfilter(c)
 	return c:IsSetCard(0xf27) and c:IsAbleToDeck() and c:IsFaceup() and c:IsMonster()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e,tp)
 	local dg=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_REMOVED,0,nil)

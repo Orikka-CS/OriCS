@@ -42,6 +42,7 @@ function s.tg1g2filter(c,e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chck then return false end
 	local c=e:GetHandler()
 	local g1=Duel.GetMatchingGroup(s.tg1g1filter,tp,LOCATION_MZONE,0,nil,e)
 	local g2=Duel.GetMatchingGroup(s.tg1g2filter,tp,0,LOCATION_MZONE,nil,e)

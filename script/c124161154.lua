@@ -30,7 +30,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.ShuffleHand(tp)
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 end
 
@@ -65,8 +65,7 @@ function s.tg2filter(c,e,tp)
 	return c:IsFaceup() and c:IsSetCard(0xf2a) and c:IsCanBeEffectTarget(e) and Duel.GetMatchingGroupCount(s.tg2ffilter,tp,LOCATION_DECK,0,nil,c:GetCode())>0 and c:IsCanTurnSet()
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e,tp) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil,e,tp)
 	if chk==0 then return #g>0 end

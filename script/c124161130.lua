@@ -46,8 +46,8 @@ function s.tg1filter(c,e)
 	return c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)   
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) end
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)   
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and s.tg1filter(chkc,e) end
 	local gg=Duel.GetMatchingGroup(s.tg1gfilter,tp,LOCATION_DECK,0,nil)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,e:GetHandler(),e)
 	if chk==0 then return #gg>0 and #g>0 and e:GetHandler():GetLinkedGroupCount()>0 end
@@ -73,8 +73,7 @@ function s.tg2filter(c,e)
 	return c:IsSetCard(0xf28) and c:IsSpellTrap() and c:IsCanBeEffectTarget(e) and c:IsAbleToHand() and c:IsFaceup()
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e)
 	if chk==0 then return #g>0 end

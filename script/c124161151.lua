@@ -29,8 +29,7 @@ function s.tg1filter(c,e)
 	return c:IsSetCard(0xf29) and c:IsMonster() and c:IsCanBeEffectTarget(e) and c:IsAbleToHand() and c:IsFaceup()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE+LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE+LOCATION_REMOVED,0,nil,e)
 	if chk==0 then return #g>0 end
