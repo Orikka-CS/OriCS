@@ -72,7 +72,7 @@ function s.atkval(e,c)
 end
 
 function s.op99(e,tp,eg,ep,ev,re,r,rp)
-	if not re:IsActivated() or rp~=tp 
+	if not re or not re:IsActivated() or rp~=tp 
 		or not re:GetHandler():IsCode(CARD_CYCLONE,CARD_CYCLONE_GALAXY,CARD_CYCLONE_COSMIC,CARD_CYCLONE_DOUBLE,CARD_CYCLONE_DICE) then return end
 	Duel.BreakEffect()
 	local g=eg:Filter(Card.IsControler,nil,1-tp)

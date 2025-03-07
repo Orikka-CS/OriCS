@@ -79,8 +79,8 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 		and Duel.IsExistingMatchingCard(s.tar1fil,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE)
 end
-function s.op1fil(c,class)
-	return c:IsSpell() and class.listed_names and c:IsCode(table.unpack(class.listed_names)) and c:IsAbleToHand()
+function s.op1fil(c,tc)
+	return c:IsSpell() and tc:ListsCode(c:GetCode()) and c:IsAbleToHand()
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end

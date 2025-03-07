@@ -41,12 +41,12 @@ function s.efil(e,re)
 	return e:GetOwnerPlayer()~=re:GetOwnerPlayer()
 end
 
-function s.tar2fil(c,e,tp,code)
+function s.op2fil(c,e,tp,code)
 	return c:ListsCode(code) and c:IsSetCard(0xcd70) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function s.cfilter(c,e,tp)
+function s.tar2fil(c,e,tp)
 	return c:IsCode(CARD_CYCLONE,CARD_CYCLONE_GALAXY,CARD_CYCLONE_COSMIC,CARD_CYCLONE_DOUBLE,CARD_CYCLONE_DICE)
-		and c:IsAbleToRemoveAsCost() and Duel.IsExistingMatchingCard(s.tar2fil,tp,LOCATION_DECK,0,1,nil,e,tp,c:GetCode())
+		and c:IsAbleToRemoveAsCost() and Duel.IsExistingMatchingCard(s.op2fil,tp,LOCATION_DECK,0,1,nil,e,tp,c:GetCode())
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(100)
@@ -56,22 +56,21 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		if e:GetLabel()~=100 then e:SetLabel(0) return false end
-		return c:IsAbleToRemoveAsCost() and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_GRAVE,0,1,c,e,tp)
+		return c:IsAbleToRemoveAsCost() and Duel.IsExistingMatchingCard(s.tar2fil,tp,LOCATION_GRAVE,0,1,c,e,tp)
 			and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_GRAVE,0,1,1,c,e,tp)
-	local sg=g:AddCard(c)
-	Duel.Remove(sg,POS_FACEUP,REASON_COST)
-	g:KeepAlive()
+	local g=Duel.SelectMatchingCard(tp,s.tar2fil,tp,LOCATION_GRAVE,0,1,1,c,e,tp)
 	e:SetLabelObject(g:GetFirst())
+	g:AddCard(c)
+	Duel.Remove(g,POS_FACEUP,REASON_COST)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local code=e:GetLabelObject():GetCode()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,s.tar2fil,tp,LOCATION_DECK,0,1,1,nil,e,tp,code)
+	local g=Duel.SelectMatchingCard(tp,s.op2fil,tp,LOCATION_DECK,0,1,1,nil,e,tp,code)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
