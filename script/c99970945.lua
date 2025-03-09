@@ -16,7 +16,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	
 	local e3=MakeEff(c,"Qf","R")
-	e3:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_REMOVE+CATEGORY_DRAW)
+	e3:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_REMOVE+CATEGORY_TOHAND)
 	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
 	e3:SetCode(EVENT_CHAINING)
 	e3:SetCL(1,{id,1})
