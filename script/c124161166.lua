@@ -43,14 +43,14 @@ end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
 	local g1=Duel.GetMatchingGroup(s.tg1ifilter,tp,LOCATION_MZONE,0,nil,e)
-	local g2=Duel.GetMatchingGroup(s.tg1ofilter,tp,0,LOCATION_MZONE,nil,e)	
+	local g2=Duel.GetMatchingGroup(s.tg1ofilter,tp,0,LOCATION_MZONE,nil,e)  
 	if chk==0 then return #g1>0 and #g2>0 end
 	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEDOWN)
 	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP)
 	sg1:Merge(sg2)
 	Duel.SetTargetCard(sg1)
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,sg,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DISABLE,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,sg1,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE,sg2,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
