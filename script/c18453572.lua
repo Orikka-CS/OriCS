@@ -74,6 +74,8 @@ function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return c:IsAbleToExtraAsCost()
 	end
+	Duel.ConfirmCards(1-tp,c)
+	Duel.HintSelection(Group.FromCards(c))
 	Duel.SendtoDeck(c,nil,2,REASON_COST)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)

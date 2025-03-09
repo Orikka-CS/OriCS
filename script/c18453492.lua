@@ -140,12 +140,15 @@ function cm.tfil3(c)
 	return c:IsFacedown() and c:IsAbleToDeck()
 end
 function cm.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and cm.tfil3(chkc) and chkc~=e:GetHandler() end
-	if chk==0 then return e:GetHandler():IsAbleToExtra()
-		and Duel.IsExistingTarget(cm.tfil3,tp,LOCATION_REMOVED,LOCATION_REMOVED,1,e:GetHandler()) end
+	local c=e:GetHandler()
+	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and cm.tfil3(chkc) and chkc~=c end
+	if chk==0 then return c:IsAbleToExtra()
+		and Duel.IsExistingTarget(cm.tfil3,tp,LOCATION_REMOVED,LOCATION_REMOVED,1,c) end
+	Duel.ConfirmCards(1-tp,c)
+	Duel.HintSelection(Group.FromCards(c))
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,cm.tfil3,tp,LOCATION_REMOVED,LOCATION_REMOVED,1,1,e:GetHandler())
-	g:AddCard(e:GetHandler())
+	local g=Duel.SelectTarget(tp,cm.tfil3,tp,LOCATION_REMOVED,LOCATION_REMOVED,1,1,c)
+	g:AddCard(c)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,2,0,0)
 end
 function cm.tdop(e,tp,eg,ep,ev,re,r,rp)
