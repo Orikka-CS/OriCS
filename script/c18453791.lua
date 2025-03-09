@@ -63,7 +63,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp,c,sg,og)
 			c:SetStatus(STATUS_EFFECT_ENABLED,false)
 			sg:AddCard(c)
 		end
-		aux.DelayByTurn(c,tp,#mg)
+		aux.DelayByTurn(c,tp,#mg,ELABEL_IS_DELIGHT_SUMMONING)
 		if e:GetLabel()==10000 then
 			Duel.MoveToField(c,tp,tp,LOCATION_MZONE,POS_FACEUP,false)
 			if Duel.HintSpSummon then
