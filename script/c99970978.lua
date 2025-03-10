@@ -23,7 +23,7 @@ function s.initial_effect(c)
 	e4:SetCategory(CATEGORY_SEARCH_CARD+CATEGORY_TODECK)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e4:SetCode(EVENT_LEAVE_FIELD)
-	e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL+EFFECT_FLAG_DELAY)
+	e4:SetProperty(EFFECT_FLAG_DELAY)
 	WriteEff(e4,4,"NTO")
 	c:RegisterEffect(e4)
 	
@@ -119,6 +119,7 @@ function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return c:IsAbleToDeck() end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,c,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK|LOCATION_GRAVE)
 end
 function s.op4fil(c)
 	return c:IsSetCard(0xcd70) and c:IsAbleToHand()
@@ -126,7 +127,7 @@ end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		if Duel.SendtoDeck(c,nil,0,REASON_EFFECT)~=0 and c:IsLocation(LOCATION_DECK) then
+		if Duel.SendtoDeck(c,nil,2,REASON_EFFECT)~=0 and c:IsLocation(LOCATION_DECK) then
 			local g=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.op4fil),tp,LOCATION_DECK|LOCATION_GRAVE,0,nil)
 			if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
