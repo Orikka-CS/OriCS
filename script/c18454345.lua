@@ -54,10 +54,10 @@ function s.cfil24(c)
 	return c:IsSetCard(0xc06) and c:IsRitualSpell()
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cfil21,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)
 	if chk==0 then
-		if e:GetLabel()==1 then
-			e:SetLabel(0)
+		if c:IsLocation(LOCATION_HAND) and #{c:IsHasEffect(EFFECT_TRAP_ACT_IN_HAND)}==1 then
 			return aux.SelectUnselectGroup(g,e,tp,3,3,s.cfun2,0)
 		end
 		return true

@@ -47,7 +47,11 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return #eg==1 and Duel.GetCurrentChain(true)==0 and ep~=tp
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
 	local label=e:GetLabel()
+	if c:IsLocation(LOCATION_HAND) and #{c:IsHasEffect(EFFECT_TRAP_ACT_IN_HAND)}==1 then
+		label=1
+	end
 	local tc=eg:GetFirst()
 	e:SetLabel(0)
 	local g=Duel.GetMatchingGroup(s.cfil2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_EXTRA+LOCATION_GRAVE,0,nil)

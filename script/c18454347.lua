@@ -38,7 +38,7 @@ end
 function s.cfun2(sg,e,tp,mg)
 	return sg:IsExists(Card.IsRace,1,nil,s.race) and sg:IsExists(Card.IsAttribute,1,nil,s.attribute)
 end
-function s.tfil2(c,label,g)
+function s.tfil2(c,label,g,e,tp)
 	s.race=c:GetRace()
 	s.attribute=c:GetAttribute()
 	local res=c:IsNegatableMonster() and (label~=1 or aux.SelectUnselectGroup(g,e,tp,1,2,s.cfun2,0))
@@ -47,17 +47,21 @@ function s.tfil2(c,label,g)
 	return res
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
 	local label=e:GetLabel()
+	if c:IsLocation(LOCATION_HAND) and #{c:IsHasEffect(EFFECT_TRAP_ACT_IN_HAND)}==1 then
+		label=1
+	end
 	e:SetLabel(0)
 	local g=Duel.GetMatchingGroup(s.cfil2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_EXTRA+LOCATION_GRAVE,0,nil)
 	if chkc then
 		return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and chkc:IsNegatableMonster()
 	end
 	if chk==0 then
-		return Duel.IsExistingTarget(s.tfil2,tp,0,LOCATION_MZONE,1,nil,label,g)
+		return Duel.IsExistingTarget(s.tfil2,tp,0,LOCATION_MZONE,1,nil,label,g,e,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	local sg=Duel.SelectTarget(tp,s.tfil2,tp,0,LOCATION_MZONE,1,1,nil,label,g)
+	local sg=Duel.SelectTarget(tp,s.tfil2,tp,0,LOCATION_MZONE,1,1,nil,label,g,e,tp)
 	if label==1 then
 		local tc=sg:GetFirst()
 		s.race=tc:GetRace()
