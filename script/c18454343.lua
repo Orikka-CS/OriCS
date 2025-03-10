@@ -53,6 +53,9 @@ function s.pop1(mat,e,tp,eg,ep,ev,re,r,rp,tc)
 	e2:SetDescription(3066)
 	e2:SetValue(aux.indoval)
 	tc:RegisterEffect(e2,true)
+	if not e:IsHasType(EFFECT_TYPE_ACTIVATE) then
+		return
+	end
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
 	e3:SetCode(EFFECT_CANNOT_ACTIVATE)

@@ -89,6 +89,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetReset(RESETS_STANDARD_PHASE_END)
 		tc:RegisterEffect(e2)
 	end
+	if not e:IsHasType(EFFECT_TYPE_ACTIVATE) then
+		return
+	end
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_CANNOT_ACTIVATE)

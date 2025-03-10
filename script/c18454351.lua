@@ -80,6 +80,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.NegateSummon(eg)
 	Duel.Destroy(eg,REASON_EFFECT)
+	if not e:IsHasType(EFFECT_TYPE_ACTIVATE) then
+		return
+	end
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_CANNOT_ACTIVATE)
