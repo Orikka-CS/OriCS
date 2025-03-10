@@ -50,7 +50,7 @@ function s.pop1(mat,e,tp,eg,ep,ev,re,r,rp,tc)
 	tc:RegisterEffect(e1,true)
 	local e2=e1:Clone()
 	e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-	e2:SetDescription(3066)
+	e2:SetDescription(3060)
 	e2:SetValue(aux.indoval)
 	tc:RegisterEffect(e2,true)
 	if not e:IsHasType(EFFECT_TYPE_ACTIVATE) then
