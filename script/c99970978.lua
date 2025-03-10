@@ -122,7 +122,7 @@ function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK|LOCATION_GRAVE)
 end
 function s.op4fil(c)
-	return c:IsSetCard(0xcd70) and c:IsAbleToHand()
+	return c:IsSetCard(0xcd70) and not c:IsCode(id) and c:IsAbleToHand()
 end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

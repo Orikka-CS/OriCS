@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 
 	local e99=MakeEff(c,"FC","MG")
-	e99:SetCode(EVENT_DESTROYED)
+	e99:SetCode(EVENT_CHAIN_SOLVED)
 	e99:SetOperation(s.op99)
 	c:RegisterEffect(e99)
 	
@@ -27,10 +27,10 @@ end
 s.listed_names={CARD_CYCLONE_DOUBLE}
 
 function s.op99(e,tp,eg,ep,ev,re,r,rp)
-	if not re or not re:IsActivated() or not re:GetHandler():IsCode(CARD_CYCLONE_DOUBLE) or rp~=tp then return end
+	if not re:IsActivated() or not re:GetHandler():IsCode(CARD_CYCLONE_DOUBLE) or rp~=tp then return end
 	Duel.Hint(HINT_CARD,0,id)
 	Duel.BreakEffect()
-	Duel.Draw(tp,#eg,REASON_EFFECT)
+	Duel.Draw(tp,1,REASON_EFFECT)
 end
 
 function s.con0fil(c)

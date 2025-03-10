@@ -59,10 +59,10 @@ end
 function s.op0(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
-		if Duel.IsExistingMatchingCard(s.op0fil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil,c,tp)
+		if Duel.IsExistingMatchingCard(s.op0fil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c,c,tp)
 			and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATTACH)
-			local g=Duel.SelectMatchingCard(tp,s.op0fil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil,c,tp)
+			local g=Duel.SelectMatchingCard(tp,s.op0fil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,c,c,tp)
 			if #g==0 then return end
 			Duel.HintSelection(g,true)
 			Duel.BreakEffect()
