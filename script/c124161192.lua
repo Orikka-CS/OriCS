@@ -60,7 +60,7 @@ function s.tg2xfilter(c,e)
 	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsCanBeEffectTarget(e)
 end
 
-function s.tg2gfilter2(c,e)
+function s.tg2gfilter(c,e)
 	return c:IsSetCard(0xf2c) and not c:IsType(TYPE_FIELD) and c:IsCanBeEffectTarget(e) and (c:IsAbleToHand() or c:IsCanBeXyzMaterial())
 end
 
