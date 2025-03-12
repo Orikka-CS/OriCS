@@ -75,7 +75,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsControler(tp) and (c:IsSetCard(0xf27) or c:IsRace(RACE_ROCK))
+	return c:IsControler(tp) and c:IsSetCard(0xf27)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)

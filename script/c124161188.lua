@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOGRAVE)
+	e1:SetCategory(CATEGORY_TODECK)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_MZONE)
@@ -25,7 +25,7 @@ end
 
 --effect 1
 function s.tg1filter(c,e)
-	return c:IsSetCard(0xf2c) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsFaceup()
+	return c:IsSetCard(0xf2c) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsFaceup() and c:IsAbleToDeck()
 end
 
 function s.rescon(sg,e,tp,mg)
@@ -37,16 +37,16 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_REMOVED,0,nil,e)
 	if chk==0 then return #g>0 end
 	local ag=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,LOCATION_REMOVED,LOCATION_REMOVED,nil,e)
-	local sg=aux.SelectUnselectGroup(ag,e,tp,1,3,s.tg1con,1,tp,HINTMSG_TOGRAVE)
+	local sg=aux.SelectUnselectGroup(ag,e,tp,1,3,s.tg1con,1,tp,HINTMSG_TODECK)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,sg,#sg,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,#sg,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e)
 	if #tg>0 then
-		Duel.SendtoGrave(tg,REASON_EFFECT+REASON_RETURN)	   
+		Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)	   
 	end
 end
 

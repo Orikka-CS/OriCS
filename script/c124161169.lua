@@ -17,8 +17,8 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCode(EVENT_CHAINING)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetRange(LOCATION_GRAVE)  
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
 	e2:SetCost(s.cst2)
@@ -61,8 +61,12 @@ function s.op1(fustg,fusop)
 end
 
 --efffect 2
+function s.con2filter(c,tp)
+	return c:IsAttribute(ATTRIBUTE_FIRE) and c:IsFaceup() and c:IsControler(tp)
+end
+
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return re:GetHandler():IsSetCard(0xf2b) and rp==tp
+	return eg:IsExists(s.con2filter,1,nil,tp)
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)

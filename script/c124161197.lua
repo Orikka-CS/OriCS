@@ -19,12 +19,11 @@ function s.initial_effect(c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e2:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e2:SetCode(EFFECT_CANNOT_REMOVE)
 	e2:SetRange(LOCATION_SZONE)
-	e2:SetTargetRange(LOCATION_GRAVE,0)
-	e2:SetTarget(function(e,c) return c:IsSetCard(0xf2c) end)
-	e2:SetValue(aux.tgoval)
+	e2:SetTargetRange(0,1)
+	e2:SetTarget(s.tg2filter)
 	c:RegisterEffect(e2)
 end
 
@@ -61,4 +60,9 @@ function s.op1op(e,tp,eg,ep,ev,re,r,rp)
 			Duel.ReturnToField(rsg)
 		end
 	end
+end
+
+--effect 2
+function s.tg2filter(e,c,tp,r)
+	return c:IsSetCard(0xf2c) and c:IsLocation(LOCATION_GRAVE) and c:IsControler(e:GetHandlerPlayer()) and r&REASON_EFFECT>0
 end

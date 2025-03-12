@@ -31,10 +31,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1zxfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayCount()==0
-end
-
 function s.tg1filter(c,e,tp)
 	return c:IsFaceup() and c:IsAbleToRemove() and c:IsCanBeEffectTarget(e)
 end
@@ -83,7 +79,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD) and c:IsType(TYPE_XYZ)
+	return c:IsControler(tp) and c:IsType(TYPE_XYZ)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)

@@ -57,6 +57,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.tg2filter(e,c)
-	return ((c:IsTrapMonster() and c:IsContinuousTrap()) or c:IsType(TYPE_LINK)) and c:IsFaceup() and c:IsLocation(LOCATION_MZONE) and c:IsControler(e:GetHandlerPlayer())
+function s.tg2filter(e,c,tp,r)
+	return ((c:IsTrapMonster() and c:IsContinuousTrap()) or c:IsType(TYPE_LINK)) and c:IsFaceup() and c:IsLocation(LOCATION_MZONE) and c:IsControler(e:GetHandlerPlayer()) and r&REASON_EFFECT>0
 end

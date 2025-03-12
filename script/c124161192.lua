@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND)
+	e2:SetCategory(CATEGORY_REMOVE)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -57,42 +57,35 @@ end
 
 --effect 2
 function s.tg2xfilter(c,e)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsCanBeEffectTarget(e)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayCount()>0 and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2gfilter(c,e)
-	return c:IsSetCard(0xf2c) and not c:IsType(TYPE_FIELD) and c:IsCanBeEffectTarget(e) and (c:IsAbleToHand() or c:IsCanBeXyzMaterial())
+	return c:IsSetCard(0xf2c) and not c:IsType(TYPE_FIELD) and c:IsCanBeEffectTarget(e) and c:IsFaceup()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
 	local g1=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_MZONE,0,nil,e)
-	local g2=Duel.GetMatchingGroup(s.tg2gfilter,tp,LOCATION_GRAVE,0,nil,e)
+	local g2=Duel.GetMatchingGroup(s.tg2gfilter,tp,LOCATION_REMOVED,0,nil,e)
 	if chk==0 then return #g1>0 and #g2>0 end
 	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
-	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
+	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 	sg1:Merge(sg2)
 	Duel.SetTargetCard(sg1)
-	if sg1:GetFirst():GetOverlayCount()>0 then
-		Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg2,1,0,0)
-	end
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e)
 	if #tg~=2 then return end
 	local tg1=tg:Filter(Card.IsLocation,nil,LOCATION_MZONE):GetFirst()
-	local tg2=tg:Filter(Card.IsLocation,nil,LOCATION_GRAVE):GetFirst()
-	if tg1:GetOverlayCount()==0 then
-		if tg2:IsCanBeXyzMaterial(tg1,tp) then
-			Duel.Overlay(tg1,tg2)
-		end
-	else
+	local tg2=tg:Filter(Card.IsLocation,nil,LOCATION_REMOVED):GetFirst()
+	if Duel.SendtoGrave(tg2,REASON_EFFECT+REASON_RETURN)>0 then
 		local og=tg1:GetOverlayGroup()
 		if #og>0 then
-			Duel.SendtoGrave(og,REASON_EFFECT)
+			Duel.Remove(og,POS_FACEUP,REASON_EFFECT)
 		end
-		Duel.SendtoHand(tg2,nil,REASON_EFFECT)
 	end
 end
 

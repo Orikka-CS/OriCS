@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOGRAVE)
+	e2:SetCategory(CATEGORY_TODECK)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetCountLimit(1,id)
@@ -69,11 +69,11 @@ function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,nil)
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
 	if chk==0 then return #g>2 and ug~=dg end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -82,12 +82,12 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local sg
 	if #ug+#dg>0 and #ug~=#dg then
 		if #dg>#ug and #ug>0 then
-			sg=aux.SelectUnselectGroup(ug,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+			sg=aux.SelectUnselectGroup(ug,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 		end
 		if #ug>#dg and #dg>0 then
-			sg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+			sg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 		end
-		Duel.SendtoGrave(sg,REASON_EFFECT)
+		Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	end
 end
 
