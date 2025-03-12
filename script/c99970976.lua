@@ -66,7 +66,7 @@ function s.op0(e,tp,eg,ep,ev,re,r,rp)
 			if #g==0 then return end
 			Duel.HintSelection(g,true)
 			Duel.BreakEffect()
-			Duel.Overlay(c,g)
+			Duel.Overlay(c,g,true)
 		end
 	end
 end
