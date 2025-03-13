@@ -33,7 +33,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 	if Duel.SpecialSummonComplete()>0 and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 then
 		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_SPSUMMON)
-		local g=Duel.SelectMatchingCard(1-tp,s.filter,1-tp,LOCATION_HAND,0,1,1,nil,e,1-tp,false,false)
+		local g=Duel.SelectMatchingCard(1-tp,Card.IsCanBeSpecialSummoned,1-tp,LOCATION_HAND,0,1,1,nil,e,1-tp,false,false)
 		local tc=g:GetFirst()
 		if tc and Duel.SpecialSummonStep(tc,0,1-tp,1-tp,false,false,POS_FACEUP) then
 			local e2=Effect.CreateEffect(e:GetHandler())
