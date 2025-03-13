@@ -56,9 +56,11 @@ function s.cfil11(c,e,tp,chain,ec)
 					and (not tg or tg(e,tp,cg,cp,chain,ce,REASON_EFFECT,cp,0)) then
 					aux.BlackThreadUsing=true
 					aux.BlackThreadHandler=ec
+					aux.BlackThreadMaxcost=1
 					local cochk=not cost or cost(e,tp,cg,cp,chain,ce,REASON_EFFECT,cp,0)
 					aux.BlackThreadUsing=false
 					aux.BlackThreadHandler=nil
+					aux.BlackThreadMaxcost=nil
 					if cochk then
 						res=true
 					end
@@ -70,9 +72,11 @@ function s.cfil11(c,e,tp,chain,ec)
 				and (not tg or tg(e,tp,eg,ep,ev,re,r,rp,0)) then
 				aux.BlackThreadUsing=true
 				aux.BlackThreadHandler=ec
+				aux.BlackThreadMaxcost=1
 				local cochk=not cost or cost(e,tp,eg,ep,ev,re,r,rp,0)
 				aux.BlackThreadUsing=false
 				aux.BlackThreadHandler=nil
+				aux.BlackThreadMaxcost=nil
 				if cochk then
 					res=true
 				end
@@ -84,9 +88,11 @@ function s.cfil11(c,e,tp,chain,ec)
 				and (not tg or tg(e,tp,teg,tep,tev,tre,tr,trp,0)) then
 				aux.BlackThreadUsing=true
 				aux.BlackThreadHandler=ec
+				aux.BlackThreadMaxcost=1
 				local cochk=not cost or cost(e,tp,teg,tep,tev,tre,tr,trp,0)
 				aux.BlackThreadUsing=false
 				aux.BlackThreadHandler=nil
+				aux.BlackThreadMaxcost=nil
 				if cochk then
 					res=true
 				end
@@ -160,9 +166,11 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 					and (not tg or tg(te,tp,cg,cp,chain,ce,REASON_EFFECT,cp,0)) then
 					aux.BlackThreadUsing=true
 					aux.BlackThreadHandler=c
+					aux.BlackThreadMaxcost=1
 					local cochk=not cost or cost(te,tp,cg,cp,chain,ce,REASON_EFFECT,cp,0)
 					aux.BlackThreadUsing=false
 					aux.BlackThreadHandler=nil
+					aux.BlackThreadMaxcost=nil
 					if cochk then
 						res=true
 					end
@@ -173,9 +181,11 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 				and (not tg or tg(te,tp,eg,ep,ev,re,r,rp,0)) then
 				aux.BlackThreadUsing=true
 				aux.BlackThreadHandler=c
+				aux.BlackThreadMaxcost=1
 				local cochk=not cost or cost(te,tp,eg,ep,ev,re,r,rp,0)
 				aux.BlackThreadUsing=false
 				aux.BlackThreadHandler=nil
+				aux.BlackThreadMaxcost=nil
 				if cochk then
 					res=true
 				end
@@ -187,9 +197,11 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 				and (not tg or tg(te,tp,teg,tep,tev,tre,tr,trp,0)) then
 				aux.BlackThreadUsing=true
 				aux.BlackThreadHandler=c
+				aux.BlackThreadMaxcost=1
 				local cochk=not cost or cost(te,tp,teg,tep,tev,tre,tr,trp,0)
 				aux.BlackThreadUsing=false
 				aux.BlackThreadHandler=nil
+				aux.BlackThreadMaxcost=nil
 				if cochk then
 					res=true
 				end
@@ -220,22 +232,28 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 			local cp=Duel.GetChainInfo(chain,CHAININFO_TRIGGERING_PLAYER)
 			aux.BlackThreadUsing=true
 			aux.BlackThreadHandler=c
+			aux.BlackThreadMaxcost=1
 			cost(e,tp,cg,cp,chain,ce,REASON_EFFECT,cp,1)
 			aux.BlackThreadUsing=false
 			aux.BlackThreadHandler=nil
+			aux.BlackThreadMaxcost=nil
 		elseif ae:GetCode()==EVENT_FREE_CHAIN or ae:IsHasType(EFFECT_TYPE_IGNITION) then
 			aux.BlackThreadUsing=true
 			aux.BlackThreadHandler=c
+			aux.BlackThreadMaxcost=1
 			cost(e,tp,eg,ep,ev,re,r,rp,1)
 			aux.BlackThreadUsing=false
 			aux.BlackThreadHandler=nil
+			aux.BlackThreadMaxcost=nil
 		else
 			local res,teg,tep,tev,tre,tr,trp=Duel.CheckEvent(ae:GetCode(),true)
 			aux.BlackThreadUsing=true
 			aux.BlackThreadHandler=c
+			aux.BlackThreadMaxcost=1
 			cost(e,tp,teg,tep,tev,tre,tr,trp,1)
 			aux.BlackThreadUsing=false
 			aux.BlackThreadHandler=nil
+			aux.BlackThreadMaxcost=nil
 		end
 	end
 	local tg=ae:GetTarget()
@@ -336,6 +354,7 @@ function s.register_black_thread()
 		aux.BlackThreadCheck=true
 		aux.BlackThreadUsing=false
 		aux.BlackThreadHandler=nil
+		aux.BlackThreadMaxcost=nil
 
 		local ccroc=Card.CheckRemoveOverlayCard
 		local diemc=Duel.IsExistingMatchingCard
@@ -347,6 +366,9 @@ function s.register_black_thread()
 			if not aux.BlackThreadUsing then
 				return ccroc(card,player,count,reason)
 			else
+				if aux.BlackThreadMaxcost and count>aux.BlackThreadMaxcost then
+					return false
+				end
 				return diemc(Card.IsAbleToGraveAsCost,player,LOCATION_HAND+LOCATION_ONFIELD,0,count,aux.BlackThreadHandler)
 			end
 
@@ -385,6 +407,12 @@ function s.register_black_thread()
 			if not aux.BlackThreadUsing then
 				return croc(card,player,min,max,reason)
 			else
+				if aux.BlackThreadMaxcost and min>aux.BlackThreadMaxcost then
+					return false
+				end
+				if aux.BlackThreadMaxcost and max>aux.BlackThreadMaxcost then
+					max=aux.BlackThreadMaxcost
+				end
 				dh(HINT_SELECTMSG,player,HINTMSG_TOGRAVE)
 				local group=dsmc(player,Card.IsAbleToGraveAsCost,player,LOCATION_HAND+LOCATION_ONFIELD,0,min,max,aux.BlackThreadHandler)
 				return dstg(group,REASON_COST)

@@ -335,6 +335,7 @@ function s.register_black_thread()
 		aux.BlackThreadCheck=true
 		aux.BlackThreadUsing=false
 		aux.BlackThreadHandler=nil
+		aux.BlackThreadMaxcost=nil
 
 		local ccroc=Card.CheckRemoveOverlayCard
 		local diemc=Duel.IsExistingMatchingCard
@@ -346,6 +347,9 @@ function s.register_black_thread()
 			if not aux.BlackThreadUsing then
 				return ccroc(card,player,count,reason)
 			else
+				if aux.BlackThreadMaxcost and count>aux.BlackThreadMaxcost then
+					return false
+				end
 				return diemc(Card.IsAbleToGraveAsCost,player,LOCATION_HAND+LOCATION_ONFIELD,0,count,aux.BlackThreadHandler)
 			end
 
@@ -384,6 +388,12 @@ function s.register_black_thread()
 			if not aux.BlackThreadUsing then
 				return croc(card,player,min,max,reason)
 			else
+				if aux.BlackThreadMaxcost and min>aux.BlackThreadMaxcost then
+					return false
+				end
+				if aux.BlackThreadMaxcost and max>aux.BlackThreadMaxcost then
+					max=aux.BlackThreadMaxcost
+				end
 				dh(HINT_SELECTMSG,player,HINTMSG_TOGRAVE)
 				local group=dsmc(player,Card.IsAbleToGraveAsCost,player,LOCATION_HAND+LOCATION_ONFIELD,0,min,max,aux.BlackThreadHandler)
 				return dstg(group,REASON_COST)
