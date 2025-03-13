@@ -20,11 +20,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_REMOVE)
-	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetRange(LOCATION_FZONE)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCode(EVENT_REMOVE)
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e2:SetCountLimit(1,id)
+	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -56,37 +57,51 @@ function s.val1(e,c)
 end
 
 --effect 2
-function s.tg2xfilter(c,e)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayCount()>0 and c:IsCanBeEffectTarget(e)
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(Card.IsControler,1,nil,tp)
 end
 
-function s.tg2gfilter(c,e)
-	return c:IsSetCard(0xf2c) and not c:IsType(TYPE_FIELD) and c:IsCanBeEffectTarget(e) and c:IsFaceup()
+function s.tg2filter(c,e)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayCount()==0 and not c:HasFlagEffect(id) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return false end
-	local g1=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_MZONE,0,nil,e)
-	local g2=Duel.GetMatchingGroup(s.tg2gfilter,tp,LOCATION_REMOVED,0,nil,e)
-	if chk==0 then return #g1>0 and #g2>0 end
-	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
-	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	sg1:Merge(sg2)
-	Duel.SetTargetCard(sg1)
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,0,0)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
+	Duel.SetTargetCard(sg)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e)
-	if #tg~=2 then return end
-	local tg1=tg:Filter(Card.IsLocation,nil,LOCATION_MZONE):GetFirst()
-	local tg2=tg:Filter(Card.IsLocation,nil,LOCATION_REMOVED):GetFirst()
-	if Duel.SendtoGrave(tg2,REASON_EFFECT+REASON_RETURN)>0 then
-		local og=tg1:GetOverlayGroup()
-		if #og>0 then
-			Duel.Remove(og,POS_FACEUP,REASON_EFFECT)
-		end
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) then
+		local e1=Effect.CreateEffect(tg)
+		e1:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+		e1:SetCode(EFFECT_OVERLAY_REMOVE_REPLACE)
+		e1:SetRange(LOCATION_MZONE)
+		e1:SetCondition(s.op2xcon)
+		e1:SetOperation(s.op2xop)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		tg:RegisterEffect(e1,true)
+		tg:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
 	end
+end
+
+function s.xconfilter(c)
+	return c:IsSetCard(0xf2c) and not c:IsType(TYPE_FIELD) and c:IsAbleToRemoveAsCost()
+ end
+
+function s.op2xcon(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	local g=Duel.GetMatchingGroupCount(s.xconfilter,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil)
+	return g>0 and (r&REASON_COST)~=0 and re:IsActivated() and re:IsActiveType(TYPE_XYZ) and e:GetHandler()==re:GetHandler()
+end
+ 
+function s.op2xop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.xconfilter,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 
 --effect 3

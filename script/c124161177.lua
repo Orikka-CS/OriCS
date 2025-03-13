@@ -11,6 +11,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_UPDATE_ATTACK)
 	e1:SetRange(LOCATION_FZONE)
+	e1:SetLabelObject(e1)
 	e1:SetTargetRange(LOCATION_MZONE,0)
 	e1:SetTarget(function(_,c) return c:IsSetCard(0xf2b) end)
 	e1:SetValue(s.val1)
@@ -18,6 +19,18 @@ function s.initial_effect(c)
 	local e1a=e1:Clone()
 	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
 	c:RegisterEffect(e1a)
+	local e1b=Effect.CreateEffect(c)
+	e1b:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1b:SetCode(EVENT_PAY_LPCOST)
+	e1b:SetRange(LOCATION_FZONE)
+	e1b:SetLabelObject(e1)
+	e1b:SetOperation(s.regop)
+	c:RegisterEffect(e1b)
+	local e1c=e1b:Clone()
+	e1c:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e1c:SetCode(EVENT_LEAVE_FIELD_P)
+	e1c:SetOperation(function(e) e:GetLabelObject():SetLabel(0) end)
+	c:RegisterEffect(e1c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -45,7 +58,14 @@ end
 
 --effect 1
 function s.val1(e,c)
-	return Duel.GetFlagEffect(e:GetHandlerPlayer(),124161180)*300
+	return e:GetLabelObject():GetLabel()*100
+end
+
+function s.regop(e,tp,eg,ep,ev,re,r,rp)
+	if ep==tp then
+		local val=e:GetLabelObject():GetLabel()
+		e:GetLabelObject():SetLabel(val+1)
+	end
 end
 
 --effect 2
@@ -57,10 +77,6 @@ end
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckLPCost(tp,100) end
 	Duel.PayLPCost(tp,100)
-end
-
-function s.tg2filter(c,e,tp)
-	return c:IsRace(RACE_PLANT) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
