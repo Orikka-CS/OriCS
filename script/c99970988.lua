@@ -101,6 +101,7 @@ end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local rc=re:GetHandler()
+	local def=c:GetDefense()
 	if chk==0 then return c:CheckRemoveOverlayCard(tp,1,REASON_COST) or s.cost2chk(rc,def) end
 	if not s.cost2chk(rc,def) or Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
 		c:RemoveOverlayCard(tp,1,1,REASON_COST)
