@@ -57,6 +57,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
 	if chkc then return chkc:IsOnField() and chkc:IsAbleToHand() and chkc:IsControler(tp) end
 	if chk==0 then return Duel.IsExistingTarget(Card.IsAbleToHand,tp,LOCATION_ONFIELD,0,1,nil)
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) or c:IsAbleToHand() end
