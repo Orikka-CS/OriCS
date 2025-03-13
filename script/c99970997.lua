@@ -19,6 +19,9 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 		and Duel.IsExistingMatchingCard(s.tar1fil,tp,LOCATION_HAND|LOCATION_DECK|LOCATION_GRAVE,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_DECK|LOCATION_GRAVE)
 end
+function s.op1fil(c,e,tp)
+	return c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
@@ -33,7 +36,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 	if Duel.SpecialSummonComplete()>0 and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 then
 		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_SPSUMMON)
-		local g=Duel.SelectMatchingCard(1-tp,Card.IsCanBeSpecialSummoned,1-tp,LOCATION_HAND,0,1,1,nil,e,1-tp,false,false)
+		local g=Duel.SelectMatchingCard(1-tp,s.op1fil,1-tp,LOCATION_HAND,0,1,1,nil,e,1-tp)
 		local tc=g:GetFirst()
 		if tc and Duel.SpecialSummonStep(tc,0,1-tp,1-tp,false,false,POS_FACEUP) then
 			local e2=Effect.CreateEffect(e:GetHandler())
