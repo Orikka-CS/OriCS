@@ -30,18 +30,19 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return rp~=tp and Duel.IsChainNegatable(ev)
 		and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))
 end
-function s.cfil1(c)
-	return (c:IsSetCard(0xc01) or (c:IsType(TYPE_SYNCHRO) and c:IsAttack(3000)))
+function s.cfil1(c,tp)
+	return ((c:IsControler(tp) and (c:IsSetCard(0xc01) or (c:IsType(TYPE_SYNCHRO) and c:IsAttack(3000))))
+		or c:IsHasEffect(18454353))
 		and c:IsAbleToGraveAsCost()
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		return Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0
-			and Duel.IsExistingMatchingCard(s.cfil1,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,c)
+			and Duel.IsExistingMatchingCard(s.cfil1,tp,LOCATION_HAND+LOCATION_ONFIELD,LOCATION_HAND+LOCATION_ONFIELD,1,c,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.cfil1,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,c)
+	local g=Duel.SelectMatchingCard(tp,s.cfil1,tp,LOCATION_HAND+LOCATION_ONFIELD,LOCATION_HAND+LOCATION_ONFIELD,1,1,c,tp)
 	Duel.SendtoGrave(g,REASON_COST)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)

@@ -65,18 +65,19 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetReset(RESET_EVENT|(RESETS_STANDARD|RESET_DISABLE)&~(RESET_TOFIELD|RESET_LEAVE))
 	c:RegisterEffect(e1)
 end
-function s.cfil4(c)
-	return c:IsSetCard(0xc01) and c:IsType(TYPE_MONSTER) and c:IsAbleToGraveAsCost()
+function s.cfil4(c,tp)
+	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or c:IsHasEffect(18454353))
+		and c:IsType(TYPE_MONSTER) and c:IsAbleToGraveAsCost()
 end
 function s.cost4(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		return Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0
 			and c:IsAbleToGraveAsCost()
-			and Duel.IsExistingMatchingCard(s.cfil4,tp,LOCATION_HAND+LOCATION_MZONE,0,1,c)
+			and Duel.IsExistingMatchingCard(s.cfil4,tp,LOCATION_HAND+LOCATION_MZONE,LOCATION_HAND+LOCATION_MZONE,1,c,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.cfil4,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,c)
+	local g=Duel.SelectMatchingCard(tp,s.cfil4,tp,LOCATION_HAND+LOCATION_MZONE,LOCATION_HAND+LOCATION_MZONE,1,1,c,tp)
 	g:AddCard(c)
 	Duel.SendtoGrave(g,REASON_COST)
 	local e1=Effect.CreateEffect(c)
@@ -98,7 +99,7 @@ end
 function s.ctar41(e,c,sump,sumtype,sumpos,targetp,se)
 	return c:GetTextAttack()~=3000
 end
-s.white_thread_codes={18454052,112603057,59765225,84815190,81160070,81020646,124121040,124121041,27548199,50954680,9464441}
+s.white_thread_codes={18454052,18454353,112603057,59765225,84815190,81160070,81020646,124121040,124121041,27548199,50954680,9464441}
 function s.tfil4(c,e,tp,ec)
 	if not c:IsAttack(3000) then
 		return false

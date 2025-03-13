@@ -27,13 +27,17 @@ end
 function s.afil1(c)
 	return c:GetTextAttack()==3000
 end
+function s.cfil2(c,tp)
+	return (c:IsControler(tp) or c:IsHasEffect(18454353))
+		and c:IsAbleToGraveAsCost()
+end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return Duel.IsExistingMatchingCard(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,c)
+		return Duel.IsExistingMatchingCard(s.cfil2,tp,LOCATION_HAND+LOCATION_ONFIELD,LOCATION_HAND+LOCATION_ONFIELD,1,c,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToGraveAsCost,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,c)
+	local g=Duel.SelectMatchingCard(tp,s.cfil2,tp,LOCATION_HAND+LOCATION_ONFIELD,LOCATION_HAND+LOCATION_ONFIELD,1,1,c,tp)
 	Duel.SendtoGrave(g,REASON_COST)
 end
 function s.tfil2(c)
@@ -58,9 +62,8 @@ function s.cost3(e,tp,eg,ep,ev,re,r,rp,chk)
 	return true
 end
 function s.cfil3(c)
-	return not c:IsCode(id) and c:IsType(TYPE_SPELL)
-		and c:IsSetCard(0xc01) and c:IsAbleToRemoveAsCost()
-		and c:CheckActivateEffect(false,true,true)~=nil
+	return not c:IsCode(id) and c:IsType(TYPE_SPELL) and c:IsAbleToRemoveAsCost()
+		and c:IsSetCard(0xc01) and c:CheckActivateEffect(false,true,true)~=nil
 end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

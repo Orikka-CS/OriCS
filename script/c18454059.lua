@@ -40,17 +40,18 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,sg)
 	end
 end
-function s.cfil2(c)
-	return c:IsSetCard(0xc01) and c:IsAbleToGraveAsCost() and c:IsType(TYPE_SPELL)
+function s.cfil2(c,tp)
+	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or c:IsHasEffect(18454353))
+		and c:IsAbleToGraveAsCost() and c:IsType(TYPE_SPELL)
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		return c:IsAbleToGraveAsCost()
-			and Duel.IsExistingMatchingCard(s.cfil2,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,c)
+			and Duel.IsExistingMatchingCard(s.cfil2,tp,LOCATION_HAND+LOCATION_ONFIELD,LOCATION_HAND+LOCATION_ONFIELD,1,c,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.cfil2,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,c)
+	local g=Duel.SelectMatchingCard(tp,s.cfil2,tp,LOCATION_HAND+LOCATION_ONFIELD,LOCATION_HAND+LOCATION_ONFIELD,1,1,c,tp)
 	g:AddCard(c)
 	Duel.SendtoGrave(g,REASON_COST)
 end

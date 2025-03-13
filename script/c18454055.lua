@@ -73,13 +73,17 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetReset(RESET_EVENT|(RESETS_STANDARD|RESET_DISABLE)&~(RESET_TOFIELD|RESET_LEAVE))
 	c:RegisterEffect(e1)
 end
+function s.cfil4(c,tp)
+	return (c:IsControler(tp) or c:IsHasEffect(18454353))
+		and c:IsAbleToGraveAsCost()
+end
 function s.cost4(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return Duel.IsExistingMatchingCard(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,nil)
+		return Duel.IsExistingMatchingCard(s.cfil4,tp,LOCATION_HAND,LOCATION_HAND,1,nil,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.cfil4,tp,LOCATION_HAND,0,1,1,nil,tp)
 	Duel.SendtoGrave(g,REASON_COST)
 end
 function s.tfil4(c,e,tp,ec)

@@ -15,17 +15,18 @@ end
 function s.afil1(c)
 	return c:GetTextAttack()==3000
 end
-function s.cfil1(c)
-	return c:IsSetCard(0xc01) and c:IsType(TYPE_SPELL) and c:IsAbleToRemoveAsCost()
+function s.cfil1(c,tp)
+	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or c:IsHasEffect(18454353))
+		and c:IsType(TYPE_SPELL) and c:IsAbleToRemoveAsCost()
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		return Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0
-			and Duel.IsExistingMatchingCard(s.cfil1,tp,LOCATION_GRAVE,0,2,nil)
+			and Duel.IsExistingMatchingCard(s.cfil1,tp,LOCATION_GRAVE,LOCATION_GRAVE,2,nil,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,s.cfil1,tp,LOCATION_GRAVE,0,2,2,nil)
+	local g=Duel.SelectMatchingCard(tp,s.cfil1,tp,LOCATION_GRAVE,LOCATION_GRAVE,2,2,nil,tp)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
@@ -46,7 +47,7 @@ end
 function s.ctar11(e,c,sump,sumtype,sumpos,targetp,se)
 	return c:GetTextAttack()~=3000
 end
-s.white_thread_codes={18454052,112603057,59765225,84815190,81160070,81020646,124121040,124121041,27548199,50954680,9464441}
+s.white_thread_codes={18454052,18454353,112603057,59765225,84815190,81160070,81020646,124121040,124121041,27548199,50954680,9464441}
 function s.tfil1(c,e,tp,ec)
 	if not c:IsAttack(3000) then
 		return false

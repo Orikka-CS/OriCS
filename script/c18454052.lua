@@ -41,16 +41,17 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return rp~=tp and not c:IsStatus(STATUS_BATTLE_DESTROYED) and Duel.IsChainNegatable(ev)
 		and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))
 end
-function s.cfil2(c)
-	return c:IsAttack(3000) and c:IsType(TYPE_SYNCHRO) and c:IsAbleToGraveAsCost()
+function s.cfil2(c,tp)
+	return ((c:IsControler(tp) and c:IsAttack(3000) and c:IsType(TYPE_SYNCHRO)) or c:IsHasEffect(18454353))
+		and c:IsAbleToGraveAsCost()
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return c:IsAbleToGraveAsCost()
-			and Duel.IsExistingMatchingCard(s.cfil2,tp,LOCATION_MZONE,0,1,c)
+			and Duel.IsExistingMatchingCard(s.cfil2,tp,LOCATION_MZONE,LOCATION_MZONE,1,c,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.cfil2,tp,LOCATION_MZONE,0,1,1,c)
+	local g=Duel.SelectMatchingCard(tp,s.cfil2,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,c,tp)
 	g:AddCard(c)
 	Duel.SendtoGrave(g,REASON_COST)
 end

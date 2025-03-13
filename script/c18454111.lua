@@ -76,8 +76,9 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 		op(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
-function s.cfil4(c)
-	return c:IsSetCard(0xc01) and c:IsAbleToRemoveAsCost() and c:IsType(TYPE_TRAP)
+function s.cfil4(c,tp)
+	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or c:IsHasEffect(18454353))
+		and c:IsAbleToRemoveAsCost() and c:IsType(TYPE_TRAP)
 end
 function s.tfil4(c)
 	return c:IsSetCard(0xc01) and c:IsAbleToHand() and not c:IsType(TYPE_TRAP)
@@ -96,7 +97,7 @@ function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	local sg=Group.FromCards(c)
 	if ct>1 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local rg=Duel.SelectMatchingCard(tp,s.cfil4,tp,LOCATION_GRAVE,0,0,1,c)
+		local rg=Duel.SelectMatchingCard(tp,s.cfil4,tp,LOCATION_GRAVE,LOCATION_GRAVE,0,1,c,tp)
 		sg:Merge(rg)
 	end
 	e:SetLabel(#sg)
