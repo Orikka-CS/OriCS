@@ -1,4 +1,4 @@
---초록 실과 텔레포트 좌표계
+--초록 실개방형 시스템 아키텍처
 local s,id=GetID()
 function s.initial_effect(c)
 	Pendulum.AddProcedure(c)
@@ -12,6 +12,19 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_SUMMON_SUCCESS)
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e2:SetCountLimit(1,{id,1})
+	e2:SetCost(s.cost1)
+	e2:SetTarget(s.tar2)
+	e2:SetOperation(s.op2)
+	c:RegisterEffect(e2)
+	local e3=e2:Clone()
+	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
+	c:RegisterEffect(e3)
 end
 function s.afil1(c)
 	return c:IsAttribute(ATTRIBUTE_WIND)
@@ -46,10 +59,9 @@ function s.ctar11(e,c,sump,sumtype,sumpos,targetp,se)
 end
 function s.tfil1(c,e,tp,lsc,rsc,ft)
 	local lv=c:GetLevel()
-	return c:IsSetCard(0xc03) and c:IsAttribute(ATTRIBUTE_WIND)
+	return c:IsRace(RACE_FAIRY) and c:IsAttribute(ATTRIBUTE_WIND)
 		and c:HasLevel() and lv>lsc and lv<rsc
 		and ((ft>1 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP)) or c:IsAbleToHand())
-		and not c:IsCode(id)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -109,4 +121,31 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummonStep(c,0,tp,tp,false,false,POS_FACEUP)
 	end
 	Duel.SpecialSummonComplete()
+end
+function s.tfil2(c,e,tp,b1,b2)
+	return c:IsSetCard(0xc03) and c:IsType(TYPE_PENDULUM) and c:IsType(TYPE_NORMAL) and not c:IsForbidden()
+		and (b1 or (b2 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)))
+end
+function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local b1=Duel.CheckPendulumZones(tp)
+	local b2=Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+	if chk==0 then
+		return Duel.IsExistingMatchingCard(s.tfil2,tp,LOCATION_DECK,0,1,nil,e,tp,b1,b2)
+	end
+	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
+end
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local b1=Duel.CheckPendulumZones(tp)
+	local b2=Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,s.tfil2,tp,LOCATION_DECK,0,1,1,nil,e,tp,b1,b2)
+	local tc=g:GetFirst()
+	if not tc then
+		return
+	end
+	if b1 and (not b2 or not tc:IsCanBeSpecialSummoned(e,0,tp,false,false) or Duel.SelectYesNo(tp,aux.Stringid(id,1))) then
+		Duel.MoveToField(tc,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
+	else
+		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
+	end
 end
