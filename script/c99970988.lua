@@ -76,7 +76,7 @@ function s.op99(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tar1fil(c,tp)
-	return c:IsFaceup() and c:IsAbleToRemove(tp,POS_FACEDOWN,REASON_EFFECT)
+	return c:IsAbleToRemove(tp,POS_FACEDOWN,REASON_EFFECT)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(1-tp) and chkc:IsOnField() and s.tar1fil(chkc,tp) end
