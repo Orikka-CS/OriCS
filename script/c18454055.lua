@@ -106,17 +106,18 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,SUMMON_TYPE_SYNCHRO,tp,tp,false,false,POS_FACEUP_DEFENSE)
 	end
 end
-function s.cfil6(c)
-	return c:IsSetCard(0xc01) and c:IsType(TYPE_MONSTER) and c:IsAbleToRemoveAsCost()
+function s.cfil6(c,tp)
+	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or c:IsHasEffect(18454353))
+		and c:IsType(TYPE_MONSTER) and c:IsAbleToRemoveAsCost()
 end
 function s.cost6(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		return c:IsAbleToRemoveAsCost()
-			and Duel.IsExistingMatchingCard(s.cfil6,tp,LOCATION_GRAVE,0,1,c)
+			and Duel.IsExistingMatchingCard(s.cfil6,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,c,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,s.cfil6,tp,LOCATION_GRAVE,0,1,1,c)
+	local g=Duel.SelectMatchingCard(tp,s.cfil6,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,c,tp)
 	g:AddCard(c)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
