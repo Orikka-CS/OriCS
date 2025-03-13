@@ -21,7 +21,7 @@ function s.initial_effect(c)
 	local e2=MakeEff(c,"I","M")
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetCL(1)
-	WriteEff(e2,2,"NTO")
+	WriteEff(e2,2,"TO")
 	c:RegisterEffect(e2)
 	
 	local e3=MakeEff(c,"FC","M")
