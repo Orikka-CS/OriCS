@@ -1,4 +1,4 @@
---¸Í¾àÀÇ½ÄÀÇ ÁıÇàÀÚ ¾Æ±×³ª
+--ë§¹ì•½ì˜ì‹ì˜ ì§‘í–‰ì ì•„ê·¸ë‚˜
 local s,id=GetID()
 function s.initial_effect(c)
 	--order type
@@ -11,13 +11,13 @@ function s.initial_effect(c)
 	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e0:SetValue(aux.FALSE)
 	c:RegisterEffect(e0)
-	--ÀÌ ÅÏ¿¡, »ó´ë´Â ÇÊµå¿¡¼­ ¹ßµ¿ÇÏ´Â È¿°ú¸¦ ¹ßµ¿ÇÒ ¼ö ¾ø´Ù.
+	--ì´ í„´ì—, ìƒëŒ€ëŠ” í•„ë“œì—ì„œ ë°œë™í•˜ëŠ” íš¨ê³¼ë¥¼ ë°œë™í•  ìˆ˜ ì—†ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e1:SetOperation(s.sumsuc)
 	c:RegisterEffect(e1)
-	--±× È¿°ú¸¦ ÅÏ Á¾·á½Ã±îÁö ¹«È¿·Î ÇÑ´Ù.
+	--ê·¸ íš¨ê³¼ë¥¼ í„´ ì¢…ë£Œì‹œê¹Œì§€ ë¬´íš¨ë¡œ í•œë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_DISABLE)
@@ -37,7 +37,7 @@ function s.initial_effect(c)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetOperation(s.alop)
 	c:RegisterEffect(e3)
-	--±× °ø°İ ´ë»óÀº ÀÚ½ÅÀÌ ¼±ÅÃÇÑ´Ù.
+	--ê·¸ ê³µê²© ëŒ€ìƒì€ ìì‹ ì´ ì„ íƒí•œë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_FIELD)
 	e4:SetRange(LOCATION_MZONE)

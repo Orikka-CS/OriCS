@@ -1,4 +1,4 @@
---ΎΖΘ© »ύΈνΐΗ Ώ©Ώμ
+--μ•„ν™‰ μƒλª…μ μ—¬μ°
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon

@@ -1,7 +1,7 @@
---¼¼·¹³ªµ¥ "µîºÒ"
+--ì„¸ë ˆë‚˜ë° "ë“±ë¶ˆ"
 local s,id=GetID()
 function s.initial_effect(c)
-	--ÀÌ Ä«µå¸¦ ÆĞ¿¡¼­ Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù. ±× ÈÄ, µ¦¿¡¼­ "¼¼·¹³ªµ¥ "µîºÒ"" ÀÌ¿ÜÀÇ "¼¼·¹³ªµ¥" ¸ó½ºÅÍ 1ÀåÀ» ÆĞ¿¡ ³Ö´Â´Ù.
+	--ì´ ì¹´ë“œë¥¼ íŒ¨ì—ì„œ íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤. ê·¸ í›„, ë±ì—ì„œ "ì„¸ë ˆë‚˜ë° "ë“±ë¶ˆ"" ì´ì™¸ì˜ "ì„¸ë ˆë‚˜ë°" ëª¬ìŠ¤í„° 1ì¥ì„ íŒ¨ì— ë„£ëŠ”ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_SEARCH+CATEGORY_TOHAND)
@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-	--ÀÌ Ä«µå¸¦ ÆĞ¿¡ ³Ö´Â´Ù.
+	--ì´ ì¹´ë“œë¥¼ íŒ¨ì— ë„£ëŠ”ë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_TOHAND)

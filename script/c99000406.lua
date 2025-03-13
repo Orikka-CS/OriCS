@@ -1,4 +1,4 @@
---╧л╫╨ем╦╝ ╦╤╫╨ем╦╝
+--К╞╦Л┼╓М└╟К╕╛ К╖┬Л┼╓М└╟К╕╛
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate

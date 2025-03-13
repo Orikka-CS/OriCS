@@ -1,10 +1,10 @@
---³×Æ®¿öÅ© ÀÍ½ºÇÃ·Î·¯
+--ë„¤íŠ¸ì›Œí¬ ìµìŠ¤í”Œë¡œëŸ¬
 local s,id=GetID()
 function s.initial_effect(c)
 	--link summon
 	Link.AddProcedure(c,nil,2,3,s.lcheck)
 	c:EnableReviveLimit()
-	--±× ¸ó½ºÅÍ¸¦ 1¹ø ´õ ÄÁÆ®·Ñ·¯ÀÇ ÇÊµå¿¡ ÀÏ¹İ ¼ÒÈ¯ÇÑ´Ù.
+	--ê·¸ ëª¬ìŠ¤í„°ë¥¼ 1ë²ˆ ë” ì»¨íŠ¸ë¡¤ëŸ¬ì˜ í•„ë“œì— ì¼ë°˜ ì†Œí™˜í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SUMMON)
@@ -17,7 +17,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.operation)
 	c:RegisterEffect(e1)
-	--±× ¸ó½ºÅÍ¿Í °°Àº Á¾Á·ÀÇ ¸ó½ºÅÍ 1ÀåÀ» µ¦¿¡¼­ ÆĞ¿¡ ³Ö´Â´Ù.
+	--ê·¸ ëª¬ìŠ¤í„°ì™€ ê°™ì€ ì¢…ì¡±ì˜ ëª¬ìŠ¤í„° 1ì¥ì„ ë±ì—ì„œ íŒ¨ì— ë„£ëŠ”ë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)

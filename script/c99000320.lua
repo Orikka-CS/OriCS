@@ -1,10 +1,10 @@
---ÇÁ·Î½ÃÀú ¿À´õ
+--í”„ë¡œì‹œì € ì˜¤ë”
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon
 	aux.AddOrderProcedure(c,"R",nil,aux.FilterBoolFunction(Card.IsAttackBelow,1500),aux.FilterBoolFunctionEx(Card.IsDefenseBelow,1500))
 	c:EnableReviveLimit()
-	--ÀÌ Ä«µå´Â ¿À´õ ¼ÒÈ¯µÈ ÅÏ¿¡´Â ¿À´õ ¼ÒÀç·Î ÇÒ ¼ö ¾ø´Ù.
+	--ì´ ì¹´ë“œëŠ” ì˜¤ë” ì†Œí™˜ëœ í„´ì—ëŠ” ì˜¤ë” ì†Œì¬ë¡œ í•  ìˆ˜ ì—†ë‹¤.
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e0:SetCondition(s.ordcon)
 	e0:SetValue(1)
 	c:RegisterEffect(e0)
-	--ÀÚ½ÅÀÇ ÆĞ / ¹¦Áö¿¡¼­ ·¹º§ 8 ÀÌÇÏÀÇ ¸ó½ºÅÍ 1ÀåÀ» °í¸£°í Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù.
+	--ìì‹ ì˜ íŒ¨ / ë¬˜ì§€ì—ì„œ ë ˆë²¨ 8 ì´í•˜ì˜ ëª¬ìŠ¤í„° 1ì¥ì„ ê³ ë¥´ê³  íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -24,14 +24,14 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg1)
 	e1:SetOperation(s.spop1)
 	c:RegisterEffect(e1)
-	--ÀÌ Ä«µå°¡ ¹¦Áö·Î º¸³»Á³À» °æ¿ì, ´ÙÀ½ ÀÚ½Å ½ºÅÄ¹ÙÀÌ ÆäÀÌÁî¿¡ ¹ßµ¿ÇÒ ¼ö ÀÖ´Ù.
+	--ì´ ì¹´ë“œê°€ ë¬˜ì§€ë¡œ ë³´ë‚´ì¡Œì„ ê²½ìš°, ë‹¤ìŒ ìì‹  ìŠ¤íƒ ë°”ì´ í˜ì´ì¦ˆì— ë°œë™í•  ìˆ˜ ìˆë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetOperation(s.spr)
 	c:RegisterEffect(e2)
-	--¿¢½ºÆ®¶ó µ¦¿¡¼­ ¿À´õ ¸ó½ºÅÍ 1ÀåÀ» ¿¢½ºÆ®¶ó ¸ó½ºÅÍ Á¸¿¡ Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù.
+	--ì—‘ìŠ¤íŠ¸ë¼ ë±ì—ì„œ ì˜¤ë” ëª¬ìŠ¤í„° 1ì¥ì„ ì—‘ìŠ¤íŠ¸ë¼ ëª¬ìŠ¤í„° ì¡´ì— íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -63,7 +63,7 @@ function s.spop1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.spfilter1),tp,LOCATION_GRAVE|LOCATION_HAND,0,1,1,nil,e,tp):GetFirst()
 	if tc and Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP) then
-		--ÀÌ È¿°ú·Î Æ¯¼ö ¼ÒÈ¯ÇÑ ¸ó½ºÅÍ°¡ ¾Õ¸é Ç¥½Ã·Î Á¸ÀçÇÏ´Â ÇÑ, ÀÚ½ÅÀÌ ¿À´õ ¼ÒÈ¯À» ½ÇÇàÇÒ °æ¿ì, ±× ¸ó½ºÅÍ¸¦ ¼ÒÀç·Î ÇÑ ¿À´õ ¼ÒÈ¯¹Û¿¡ ½ÇÇàÇÒ ¼ö ¾ø´Ù.
+		--ì´ íš¨ê³¼ë¡œ íŠ¹ìˆ˜ ì†Œí™˜í•œ ëª¬ìŠ¤í„°ê°€ ì•ë©´ í‘œì‹œë¡œ ì¡´ì¬í•˜ëŠ” í•œ, ìì‹ ì´ ì˜¤ë” ì†Œí™˜ì„ ì‹¤í–‰í•  ê²½ìš°, ê·¸ ëª¬ìŠ¤í„°ë¥¼ ì†Œì¬ë¡œ í•œ ì˜¤ë” ì†Œí™˜ë°–ì— ì‹¤í–‰í•  ìˆ˜ ì—†ë‹¤.
 		local e1=Effect.CreateEffect(c)
 		e1:SetDescription(aux.Stringid(id,2))
 		e1:SetType(EFFECT_TYPE_FIELD)
@@ -105,7 +105,7 @@ function s.spop2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,s.spfilter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp):GetFirst()
 	if g and Duel.SpecialSummonStep(g,0,tp,tp,false,false,POS_FACEUP,0x60) then
-		--ÀÌ È¿°ú·Î Æ¯¼ö ¼ÒÈ¯ÇÑ ¸ó½ºÅÍ´Â, ±× ¸ó½ºÅÍ¿Í °°Àº ¼¼·Î¿­ÀÇ ¸ŞÀÎ ¸ó½ºÅÍ Á¸ÀÇ ¸ó½ºÅÍ·Î¼­ ¿À´õ ¼ÒÀç·Î ÇÒ ¼ö ÀÖ´Ù.
+		--ì´ íš¨ê³¼ë¡œ íŠ¹ìˆ˜ ì†Œí™˜í•œ ëª¬ìŠ¤í„°ëŠ”, ê·¸ ëª¬ìŠ¤í„°ì™€ ê°™ì€ ì„¸ë¡œì—´ì˜ ë©”ì¸ ëª¬ìŠ¤í„° ì¡´ì˜ ëª¬ìŠ¤í„°ë¡œì„œ ì˜¤ë” ì†Œì¬ë¡œ í•  ìˆ˜ ìˆë‹¤.
 		local e1=Effect.CreateEffect(c)
 		e1:SetDescription(aux.Stringid(id,3))
 		e1:SetType(EFFECT_TYPE_SINGLE)

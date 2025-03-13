@@ -1,7 +1,7 @@
---´ç½Å¸¸À» À§ÇÑ ¼Ò¾ß°î(¼¼·¹³ªµ¥ "¿°¿ø")
+--ë‹¹ì‹ ë§Œì„ ìœ„í•œ ì†Œì•¼ê³¡(ì„¸ë ˆë‚˜ë° "ì—¼ì›")
 local s,id=GetID()
 function s.initial_effect(c)
-	--µ¦¿¡¼­ ¸¶¹ı»çÁ· / ºû ¼Ó¼º ¸ó½ºÅÍ 1Àå°ú "RUM(·©Å© ¾÷ ¸ÅÁ÷)" ¼Ó°ø ¸¶¹ı Ä«µå 1ÀåÀ» ÆĞ¿¡ ³Ö´Â´Ù.
+	--ë±ì—ì„œ ë§ˆë²•ì‚¬ì¡± / ë¹› ì†ì„± ëª¬ìŠ¤í„° 1ì¥ê³¼ "RUM(ë­í¬ ì—… ë§¤ì§)" ì†ê³µ ë§ˆë²• ì¹´ë“œ 1ì¥ì„ íŒ¨ì— ë„£ëŠ”ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.thtg)
 	e1:SetOperation(s.thop)
 	c:RegisterEffect(e1)
-	--ÀÌ Ä«µå´Â È¿°ú ¸ó½ºÅÍ(¸¶¹ı»çÁ· / ºû / ·¹º§ 4 / °ø 1700 / ¼ö 1200)°¡ µÇ°í, ¸ó½ºÅÍ Á¸¿¡ Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù(¸¶¹ı Ä«µå·Î´Â Ãë±ŞÇÏÁö ¾Ê´Â´Ù).
+	--ì´ ì¹´ë“œëŠ” íš¨ê³¼ ëª¬ìŠ¤í„°(ë§ˆë²•ì‚¬ì¡± / ë¹› / ë ˆë²¨ 4 / ê³µ 1700 / ìˆ˜ 1200)ê°€ ë˜ê³ , ëª¬ìŠ¤í„° ì¡´ì— íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤(ë§ˆë²• ì¹´ë“œë¡œëŠ” ì·¨ê¸‰í•˜ì§€ ì•ŠëŠ”ë‹¤).
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -25,7 +25,7 @@ function s.initial_effect(c)
 	e2:SetTarget(s.sptg)
 	e2:SetOperation(s.spop)
 	c:RegisterEffect(e2)
-	--ÀÌ Ä«µå°¡ ¸ó½ºÅÍ Á¸¿¡ Á¸ÀçÇÏ´Â ÇÑ, ÀÚ½ÅÀÌ ¸ó½ºÅÍÀÇ ÀÏ¹İ ¼ÒÈ¯ / Æ¯¼ö ¼ÒÈ¯¿¡ ¼º°øÇßÀ» ¶§¿¡´Â, »ó´ë´Â ¸ó½ºÅÍÀÇ È¿°ú¸¦ ¹ßµ¿ÇÒ ¼ö ¾ø´Ù.
+	--ì´ ì¹´ë“œê°€ ëª¬ìŠ¤í„° ì¡´ì— ì¡´ì¬í•˜ëŠ” í•œ, ìì‹ ì´ ëª¬ìŠ¤í„°ì˜ ì¼ë°˜ ì†Œí™˜ / íŠ¹ìˆ˜ ì†Œí™˜ì— ì„±ê³µí–ˆì„ ë•Œì—ëŠ”, ìƒëŒ€ëŠ” ëª¬ìŠ¤í„°ì˜ íš¨ê³¼ë¥¼ ë°œë™í•  ìˆ˜ ì—†ë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e3:SetCode(EVENT_SUMMON_SUCCESS)
@@ -42,7 +42,7 @@ function s.initial_effect(c)
 	e5:SetCode(EVENT_CHAIN_END)
 	e5:SetOperation(s.limop2)
 	c:RegisterEffect(e5)
-	--ÀÌ Ä«µå¸¦ ¼ÒÀç·Î¼­ °¡Áö°í ÀÖ´Â ¿¢½ÃÁî ¸ó½ºÅÍ´Â ÀÌÇÏÀÇ È¿°ú¸¦ ¾ò´Â´Ù.
+	--ì´ ì¹´ë“œë¥¼ ì†Œì¬ë¡œì„œ ê°€ì§€ê³  ìˆëŠ” ì—‘ì‹œì¦ˆ ëª¬ìŠ¤í„°ëŠ” ì´í•˜ì˜ íš¨ê³¼ë¥¼ ì–»ëŠ”ë‹¤.
 	local e6=Effect.CreateEffect(c)
 	e6:SetType(EFFECT_TYPE_XMATERIAL+EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e6:SetCode(EVENT_SUMMON_SUCCESS)
@@ -102,7 +102,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		c:AssumeProperty(ASSUME_RACE,RACE_SPELLCASTER)
 		Duel.SpecialSummonStep(c,0,tp,tp,true,false,POS_FACEUP)
 		c:AddMonsterAttributeComplete()
-		--ÀÌ È¿°ú·Î Æ¯¼ö ¼ÒÈ¯ÇÑ ÀÌ Ä«µå´Â, ÇÊµå¿¡¼­ ¹ş¾î³µÀ» °æ¿ì¿¡ Á¦¿ÜµÈ´Ù.
+		--ì´ íš¨ê³¼ë¡œ íŠ¹ìˆ˜ ì†Œí™˜í•œ ì´ ì¹´ë“œëŠ”, í•„ë“œì—ì„œ ë²—ì–´ë‚¬ì„ ê²½ìš°ì— ì œì™¸ëœë‹¤.
 		local e1=Effect.CreateEffect(c)
 		e1:SetDescription(3300)
 		e1:SetType(EFFECT_TYPE_SINGLE)
@@ -112,7 +112,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
 		c:RegisterEffect(e1,true)
 		Duel.SpecialSummonComplete()
-		--±× ÈÄ, ¸¶¹ı»çÁ· ¸ó½ºÅÍ 1ÀåÀÇ ¿¢½ÃÁî ¼ÒÈ¯À» ½ÇÇàÇÒ ¼ö ÀÖ´Ù.
+		--ê·¸ í›„, ë§ˆë²•ì‚¬ì¡± ëª¬ìŠ¤í„° 1ì¥ì˜ ì—‘ì‹œì¦ˆ ì†Œí™˜ì„ ì‹¤í–‰í•  ìˆ˜ ìˆë‹¤.
 		local sg=Duel.GetMatchingGroup(s.xyzfilter,tp,LOCATION_EXTRA,0,nil)
 		if #sg==0 or not Duel.SelectYesNo(tp,aux.Stringid(id,2)) then return end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)

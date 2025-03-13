@@ -1,7 +1,7 @@
---¼¼·¹³ªµ¥ "¼­¾à"
+--ì„¸ë ˆë‚˜ë° "ì„œì•½"
 local s,id=GetID()
 function s.initial_effect(c)
-	--µ¦¿¡¼­ "RUM(·©Å© ¾÷ ¸ÅÁ÷)" ¸¶¹ı Ä«µå 1ÀåÀ» °í¸£°í, ÆĞ¿¡ ³Ö°Å³ª ¹¦Áö·Î º¸³½´Ù.
+	--ë±ì—ì„œ "RUM(ë­í¬ ì—… ë§¤ì§)" ë§ˆë²• ì¹´ë“œ 1ì¥ì„ ê³ ë¥´ê³ , íŒ¨ì— ë„£ê±°ë‚˜ ë¬˜ì§€ë¡œ ë³´ë‚¸ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TOGRAVE)
@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	local e2=e1:Clone()
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e2)
-	--ÀÌ È¿°ú´Â, ±× ¸¶¹ı Ä«µå ¹ßµ¿½ÃÀÇ È¿°ú¿Í °°¾ÆÁø´Ù. ±× ÈÄ, ¹¦ÁöÀÇ ±× Ä«µå¸¦ µ¦À¸·Î µÇµ¹¸°´Ù.
+	--ì´ íš¨ê³¼ëŠ”, ê·¸ ë§ˆë²• ì¹´ë“œ ë°œë™ì‹œì˜ íš¨ê³¼ì™€ ê°™ì•„ì§„ë‹¤. ê·¸ í›„, ë¬˜ì§€ì˜ ê·¸ ì¹´ë“œë¥¼ ë±ìœ¼ë¡œ ë˜ëŒë¦°ë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_TODECK)
@@ -44,7 +44,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
 	aux.ToHandOrElse(tc,tp)
 	local c=e:GetHandler()
-	--ÀÌ ÅÏ Áß¿¡ ÀÚ½ÅÀÌ "¼¼·¹³ªµ¥" ¿¢½ÃÁî ¸ó½ºÅÍ¸¦ Æ¯¼ö ¼ÒÈ¯ÇÏÁö ¾Ê¾ÒÀ» °æ¿ì,
+	--ì´ í„´ ì¤‘ì— ìì‹ ì´ "ì„¸ë ˆë‚˜ë°" ì—‘ì‹œì¦ˆ ëª¬ìŠ¤í„°ë¥¼ íŠ¹ìˆ˜ ì†Œí™˜í•˜ì§€ ì•Šì•˜ì„ ê²½ìš°,
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
@@ -52,7 +52,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetLabel(1)
 	e1:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e1,tp)
-	--¿£µå ÆäÀÌÁî¿¡ ÀÚ½ÅÀº 1600 LP¸¦ »ó½ÇÇÑ´Ù.
+	--ì—”ë“œ í˜ì´ì¦ˆì— ìì‹ ì€ 1600 LPë¥¼ ìƒì‹¤í•œë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EVENT_PHASE+PHASE_END)

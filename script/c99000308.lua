@@ -1,7 +1,7 @@
---°Ë°ú ±â»çÀÇ ¸Í¾à
+--ê²€ê³¼ ê¸°ì‚¬ì˜ ë§¹ì•½
 local s,id=GetID()
 function s.initial_effect(c)
-	--ÀÌ Ä«µå´Â ¹ßµ¿ ÈÄ, ÇÊµå¿¡ °è¼ÓÇØ¼­ ³²°í,
+	--ì´ ì¹´ë“œëŠ” ë°œë™ í›„, í•„ë“œì— ê³„ì†í•´ì„œ ë‚¨ê³ ,
 	local ea=Effect.CreateEffect(c)
 	ea:SetType(EFFECT_TYPE_ACTIVATE)
 	ea:SetCode(EVENT_FREE_CHAIN)
@@ -10,7 +10,7 @@ function s.initial_effect(c)
 	eb:SetType(EFFECT_TYPE_SINGLE)
 	eb:SetCode(EFFECT_REMAIN_FIELD)
 	c:RegisterEffect(eb)
-	--»ó´ë ÇÊµå¿¡ "¸Í¾à ÅäÅ«" 1ÀåÀ» Æ¯¼ö ¼ÒÈ¯ÇÏ´Â °Í¿¡ ÀÇÇØ »ó´ë ÇÊµå¿¡ ¹ßµ¿ÇÒ ¼öµµ ÀÖ´Ù.
+	--ìƒëŒ€ í•„ë“œì— "ë§¹ì•½ í† í°" 1ì¥ì„ íŠ¹ìˆ˜ ì†Œí™˜í•˜ëŠ” ê²ƒì— ì˜í•´ ìƒëŒ€ í•„ë“œì— ë°œë™í•  ìˆ˜ë„ ìˆë‹¤.
 	local ec=Effect.CreateEffect(c)
 	ec:SetType(EFFECT_TYPE_FIELD)
 	ec:SetCode(EFFECT_ACTIVATE_COST)
@@ -19,7 +19,7 @@ function s.initial_effect(c)
 	ec:SetTarget(s.meiyakutg)
 	ec:SetOperation(s.meiyakuop)
 	Duel.RegisterEffect(ec,0)
-	--±× Ä«µå¸¦ ÆÄ±«ÇÏ°í, ±× ¿·ÀÇ Á¸¿¡ Ä«µå°¡ Á¸ÀçÇÒ °æ¿ì, ±×°Íµéµµ ÆÄ±«ÇÑ´Ù.
+	--ê·¸ ì¹´ë“œë¥¼ íŒŒê´´í•˜ê³ , ê·¸ ì˜†ì˜ ì¡´ì— ì¹´ë“œê°€ ì¡´ì¬í•  ê²½ìš°, ê·¸ê²ƒë“¤ë„ íŒŒê´´í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,1))
 	e1:SetCategory(CATEGORY_DESTROY)
@@ -33,7 +33,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.operation)
 	c:RegisterEffect(e1)
-	--ÀÌ Ä«µå°¡ ¸¶¹ı Ä«µåÀÇ È¿°ú¸¦ ¹ßµ¿ÇÏ±â À§ÇØ Á¦¿ÜµÇ¾úÀ» °æ¿ì¿¡ ¹ßµ¿ÇÒ ¼ö ÀÖ´Ù.
+	--ì´ ì¹´ë“œê°€ ë§ˆë²• ì¹´ë“œì˜ íš¨ê³¼ë¥¼ ë°œë™í•˜ê¸° ìœ„í•´ ì œì™¸ë˜ì—ˆì„ ê²½ìš°ì— ë°œë™í•  ìˆ˜ ìˆë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCategory(CATEGORY_ATKCHANGE)
@@ -114,7 +114,7 @@ function s.bncon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.bnop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	--ÀÌ ÅÏ Áß¿¡´Â ÀÚ½Å ÇÊµåÀÇ "¸Í¾à" ¸ó½ºÅÍÀÇ °ø°İ·ÂÀ» 500 ¿Ã¸°´Ù.
+	--ì´ í„´ ì¤‘ì—ëŠ” ìì‹  í•„ë“œì˜ "ë§¹ì•½" ëª¬ìŠ¤í„°ì˜ ê³µê²©ë ¥ì„ 500 ì˜¬ë¦°ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_UPDATE_ATTACK)

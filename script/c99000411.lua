@@ -1,10 +1,10 @@
---½É¾ÈÀÇ °è½ÃÀÚ
+--ì‹¬ì•ˆì˜ ê³„ì‹œì
 local s,id=GetID()
 function s.initial_effect(c)
 	--module summon
 	aux.AddModuleProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER),nil,1,99,s.modulechk)
 	c:EnableReviveLimit()
-	--ÀÚ½Å ¶Ç´Â »ó´ë°¡ ÀüÅõ / È¿°ú·Î µ¥¹ÌÁö¸¦ ¹ŞÀ» °æ¿ì, ±× ¼öÄ¡´Â 1000 ÀÌ µÈ´Ù.
+	--ìì‹  ë˜ëŠ” ìƒëŒ€ê°€ ì „íˆ¬ / íš¨ê³¼ë¡œ ë°ë¯¸ì§€ë¥¼ ë°›ì„ ê²½ìš°, ê·¸ ìˆ˜ì¹˜ëŠ” 1000 ì´ ëœë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_CHANGE_DAMAGE)
@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	e1:SetTargetRange(1,1)
 	e1:SetValue(1000)
 	c:RegisterEffect(e1)
-	--ÀÌ ÅÏ¿¡, ´ë»ó ¸ó½ºÅÍ¸¦ À¶ÇÕ / ¸ğµâ ¼ÒÀç·Î ÇÒ °æ¿ì, º¸¿©ÁØ ¸ó½ºÅÍ¿Í °°Àº ÀÌ¸§ÀÇ Ä«µå·Î Ãë±ŞÇÒ ¼ö ÀÖ´Ù.
+	--ì´ í„´ì—, ëŒ€ìƒ ëª¬ìŠ¤í„°ë¥¼ ìœµí•© / ëª¨ë“ˆ ì†Œì¬ë¡œ í•  ê²½ìš°, ë³´ì—¬ì¤€ ëª¬ìŠ¤í„°ì™€ ê°™ì€ ì´ë¦„ì˜ ì¹´ë“œë¡œ ì·¨ê¸‰í•  ìˆ˜ ìˆë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_TOGRAVE+CATEGORY_TODECK)
@@ -25,7 +25,7 @@ function s.initial_effect(c)
 	e2:SetTarget(s.target)
 	e2:SetOperation(s.activate)
 	c:RegisterEffect(e2)
-	--ÀÌ Ä«µå°¡ Ãµ»çÁ· ¸ó½ºÅÍ¸¦ ¼ÒÀç·Î¼­ ¸ğµâ ¼ÒÈ¯µÇ¾î ÀÖÀ» °æ¿ì, ÀÌ È¿°ú´Â »ó´ë ÅÏ¿¡µµ ¹ßµ¿ÇÒ ¼ö ÀÖ´Ù.
+	--ì´ ì¹´ë“œê°€ ì²œì‚¬ì¡± ëª¬ìŠ¤í„°ë¥¼ ì†Œì¬ë¡œì„œ ëª¨ë“ˆ ì†Œí™˜ë˜ì–´ ìˆì„ ê²½ìš°, ì´ íš¨ê³¼ëŠ” ìƒëŒ€ í„´ì—ë„ ë°œë™í•  ìˆ˜ ìˆë‹¤.
 	local e3=e2:Clone()
 	e3:SetType(EFFECT_TYPE_QUICK_O)
 	e3:SetCode(EVENT_FREE_CHAIN)
@@ -33,7 +33,7 @@ function s.initial_effect(c)
 	e3:SetHintTiming(0,TIMING_MAIN_END|TIMINGS_CHECK_MONSTER_E|TIMING_BATTLE_END)
 	e3:SetCondition(s.quickcon)
 	c:RegisterEffect(e3)
-	--ÀÌ Ä«µå°¡ ¸ó½ºÅÍ¿Í ÀüÅõ¸¦ ½ÇÇàÇÒ °æ¿ì, ±× 2ÀåÀº ±× ÀüÅõ·Î´Â ÆÄ±«µÇÁö ¾Ê´Â´Ù.
+	--ì´ ì¹´ë“œê°€ ëª¬ìŠ¤í„°ì™€ ì „íˆ¬ë¥¼ ì‹¤í–‰í•  ê²½ìš°, ê·¸ 2ì¥ì€ ê·¸ ì „íˆ¬ë¡œëŠ” íŒŒê´´ë˜ì§€ ì•ŠëŠ”ë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_FIELD)
 	e4:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
@@ -48,7 +48,7 @@ function s.initial_effect(c)
 	e5:SetCode(EFFECT_MATERIAL_CHECK)
 	e5:SetValue(s.valcheck)
 	c:RegisterEffect(e5)
-	--±× ¸ó½ºÅÍ°¡ ÀÌ ÅÏ¿¡ ÀüÅõ¸¦ ½ÇÇàÇÏ°í ÀÖÀ» °æ¿ì,
+	--ê·¸ ëª¬ìŠ¤í„°ê°€ ì´ í„´ì— ì „íˆ¬ë¥¼ ì‹¤í–‰í•˜ê³  ìˆì„ ê²½ìš°,
 	aux.GlobalCheck(s,function()
 		local ge1=Effect.CreateEffect(c)
 		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)

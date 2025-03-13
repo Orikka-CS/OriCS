@@ -1,7 +1,7 @@
---ÀÇ½ÄÀÇ Á¦¹° ¾Æ±×³ª
+--ì˜ì‹ì˜ ì œë¬¼ ì•„ê·¸ë‚˜
 local s,id=GetID()
 function s.initial_effect(c)
-	--¿ø·¡ ÁÖÀÎÀÌ ÀÚ½ÅÀÌ µÇ´Â ¸ó½ºÅÍ°¡ »ó´ë ÇÊµå¿¡ Á¸ÀçÇÒ °æ¿ì, ÀÌ Ä«µå´Â ÆĞ¿¡¼­ Æ¯¼ö ¼ÒÈ¯ÇÒ ¼ö ÀÖ´Ù.
+	--ì›ë˜ ì£¼ì¸ì´ ìì‹ ì´ ë˜ëŠ” ëª¬ìŠ¤í„°ê°€ ìƒëŒ€ í•„ë“œì— ì¡´ì¬í•  ê²½ìš°, ì´ ì¹´ë“œëŠ” íŒ¨ì—ì„œ íŠ¹ìˆ˜ ì†Œí™˜í•  ìˆ˜ ìˆë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_FIELD)
@@ -11,7 +11,7 @@ function s.initial_effect(c)
 	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e1:SetCondition(s.spcon)
 	c:RegisterEffect(e1)
-	--ÇÊµåÀÇ ¸ğµç ¸ó½ºÅÍÀÇ ÄÁÆ®·ÑÀº ¿ø·¡ ÁÖÀÎ¿¡°Ô µÇµ¹¾Æ°£´Ù.
+	--í•„ë“œì˜ ëª¨ë“  ëª¬ìŠ¤í„°ì˜ ì»¨íŠ¸ë¡¤ì€ ì›ë˜ ì£¼ì¸ì—ê²Œ ë˜ëŒì•„ê°„ë‹¤.
 	Duel.EnableGlobalFlag(GLOBALFLAG_BRAINWASHING_CHECK)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
 	c:RegisterEffect(e2)
-	--¿¢½ºÆ®¶ó µ¦¿¡¼­ "¸Í¾àÀÇ½ÄÀÇ ÁıÇàÀÚ ¾Æ±×³ª" 1ÀåÀ» Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù.
+	--ì—‘ìŠ¤íŠ¸ë¼ ë±ì—ì„œ "ë§¹ì•½ì˜ì‹ì˜ ì§‘í–‰ì ì•„ê·¸ë‚˜" 1ì¥ì„ íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)

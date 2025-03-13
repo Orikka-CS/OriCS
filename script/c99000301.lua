@@ -1,10 +1,10 @@
---ÄÚµåºí·¡½ºÅÍ ³×¸®ÇÏ
+--ì½”ë“œë¸”ë˜ìŠ¤í„° ë„¤ë¦¬í•˜
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon
 	aux.AddOrderProcedure(c,"R",nil,aux.FilterBoolFunction(Card.IsType,TYPE_EFFECT),aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER))
 	c:EnableReviveLimit()
-	--±× »ó´ë ¸ó½ºÅÍÀÇ °ø°İ·Â / ¼öºñ·ÂÀº µ¥¹ÌÁö °è»ê½Ã¿¡¸¸ Àı¹İÀÌ µÈ´Ù.
+	--ê·¸ ìƒëŒ€ ëª¬ìŠ¤í„°ì˜ ê³µê²©ë ¥ / ìˆ˜ë¹„ë ¥ì€ ë°ë¯¸ì§€ ê³„ì‚°ì‹œì—ë§Œ ì ˆë°˜ì´ ëœë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_ATKCHANGE)
@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	e1:SetCost(s.atkcost)
 	e1:SetOperation(s.atkop)
 	c:RegisterEffect(e1)
-	--ÀÌ Ä«µåÀÇ °ø°İ·ÂÀº 1650 ¿Ã¸°´Ù.
+	--ì´ ì¹´ë“œì˜ ê³µê²©ë ¥ì€ 1650 ì˜¬ë¦°ë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)

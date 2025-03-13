@@ -1,7 +1,7 @@
---RUM(·©Å© ¾÷ ¸ÅÁ÷)-ÄÜ½ºÅÚ·¹ÀÌ¼Ç Æ÷½º
+--RUM(ëž­í¬ ì—… ë§¤ì§)-ì½˜ìŠ¤í…”ë ˆì´ì…˜ í¬ìŠ¤
 local s,id=GetID()
 function s.initial_effect(c)
-	--µ¦¿¡¼­ "¼¼·¹³ªµ¥" ¸ó½ºÅÍ 1ÀåÀ» ÆÐ¿¡ ³Ö´Â´Ù.
+	--ë±ì—ì„œ "ì„¸ë ˆë‚˜ë°" ëª¬ìŠ¤í„° 1ìž¥ì„ íŒ¨ì— ë„£ëŠ”ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
@@ -11,7 +11,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.dthtg)
 	e1:SetOperation(s.dthop)
 	c:RegisterEffect(e1)
-	--±× ¸ó½ºÅÍº¸´Ù ·©Å©°¡ 1°³ ³ôÀº "¼¼·¹³ªµ¥" ¸ó½ºÅÍ 1ÀåÀ», ´ë»óÀÇ ÀÚ½Å ¸ó½ºÅÍÀÇ À§¿¡ °ãÃÄ ¿¢½ÃÁî ¼ÒÈ¯À¸·Î Ãë±ÞÇÏ°í ¿¢½ºÆ®¶ó µ¦¿¡¼­ Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù.
+	--ê·¸ ëª¬ìŠ¤í„°ë³´ë‹¤ ëž­í¬ê°€ 1ê°œ ë†’ì€ "ì„¸ë ˆë‚˜ë°" ëª¬ìŠ¤í„° 1ìž¥ì„, ëŒ€ìƒì˜ ìžì‹  ëª¬ìŠ¤í„°ì˜ ìœ„ì— ê²¹ì³ ì—‘ì‹œì¦ˆ ì†Œí™˜ìœ¼ë¡œ ì·¨ê¸‰í•˜ê³  ì—‘ìŠ¤íŠ¸ë¼ ë±ì—ì„œ íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)

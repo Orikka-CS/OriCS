@@ -1,17 +1,17 @@
---ÇÏÀÌ»çÀÌ¹ö³×Æ½ ³×¸®ÇÏ
+--í•˜ì´ì‚¬ì´ë²„ë„¤í‹± ë„¤ë¦¬í•˜
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon
 	aux.AddOrderProcedure(c,"L",s.orderchk,aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER),s.ordfil1)
 	c:EnableReviveLimit()
-	--ÀÌ Ä«µå¸¦ ¿À´õ ¼ÒÈ¯ÇßÀ» ¶§¿¡ Àû¿ëÇÑ´Ù.
+	--ì´ ì¹´ë“œë¥¼ ì˜¤ë” ì†Œí™˜í–ˆì„ ë•Œì— ì ìš©í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e1:SetCondition(s.regcon)
 	e1:SetOperation(s.regop)
 	c:RegisterEffect(e1)
-	--ÀÌ Ä«µå°¡ ÀüÅõ·Î »ó´ë ¸ó½ºÅÍ¸¦ ÆÄ±«ÇÏ°í ¹¦Áö·Î º¸³ÂÀ» ¶§, ÀÌÇÏÀÇ È¿°ú¿¡¼­ 1°³¸¦ ¼±ÅÃÇÏ¿© ¹ßµ¿ÇÒ ¼ö ÀÖ´Ù.
+	--ì´ ì¹´ë“œê°€ ì „íˆ¬ë¡œ ìƒëŒ€ ëª¬ìŠ¤í„°ë¥¼ íŒŒê´´í•˜ê³  ë¬˜ì§€ë¡œ ë³´ëƒˆì„ ë•Œ, ì´í•˜ì˜ íš¨ê³¼ì—ì„œ 1ê°œë¥¼ ì„ íƒí•˜ì—¬ ë°œë™í•  ìˆ˜ ìˆë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCode(EVENT_BATTLE_DESTROYING)
@@ -32,7 +32,7 @@ function s.regcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.regop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	--ÀÌ ÅÏ¿¡, ÀÌ Ä«µå´Â »ó´ë°¡ ¹ßµ¿ÇÑ È¿°ú¸¦ ¹ŞÁö ¾Ê´Â´Ù.
+	--ì´ í„´ì—, ì´ ì¹´ë“œëŠ” ìƒëŒ€ê°€ ë°œë™í•œ íš¨ê³¼ë¥¼ ë°›ì§€ ì•ŠëŠ”ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CLIENT_HINT)
@@ -74,12 +74,12 @@ function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	--±× ¸ó½ºÅÍ¸¦ ÀÚ½Å ÇÊµå¿¡ ¼öºñ Ç¥½Ã·Î Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù.
+	--ê·¸ ëª¬ìŠ¤í„°ë¥¼ ìì‹  í•„ë“œì— ìˆ˜ë¹„ í‘œì‹œë¡œ íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤.
 	if e:GetLabel()==0 then
 		if tc:IsRelateToEffect(e) then
 			Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 		end
-	--±× ¸ó½ºÅÍÀÇ ¿ø·¡ °ø°İ·Â¸¸Å­ ÀÚ½ÅÀÇ LP¸¦ È¸º¹ÇÑ´Ù.
+	--ê·¸ ëª¬ìŠ¤í„°ì˜ ì›ë˜ ê³µê²©ë ¥ë§Œí¼ ìì‹ ì˜ LPë¥¼ íšŒë³µí•œë‹¤.
 	elseif e:GetLabel()==1 then
 		if tc:IsRelateToEffect(e) then
 			local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
@@ -87,7 +87,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 			if dam<0 then dam=0 end
 			Duel.Recover(p,dam,REASON_EFFECT)
 		end
-	--±× ¸ó½ºÅÍÀÇ ¿ø·¡ °ø°İ·Â¸¸Å­ÀÇ µ¥¹ÌÁö¸¦ »ó´ë¿¡°Ô ÁØ´Ù.
+	--ê·¸ ëª¬ìŠ¤í„°ì˜ ì›ë˜ ê³µê²©ë ¥ë§Œí¼ì˜ ë°ë¯¸ì§€ë¥¼ ìƒëŒ€ì—ê²Œ ì¤€ë‹¤.
 	elseif e:GetLabel()==2 then
 		if tc:IsRelateToEffect(e) then
 			local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)

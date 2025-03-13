@@ -1,20 +1,20 @@
---¼¼·¹³ªµ¥ "¿ù±¤"
+--ì„¸ë ˆë‚˜ë° "ì›”ê´‘"
 local s,id=GetID()
 function s.initial_effect(c)
 	--Xyz summon
 	Xyz.AddProcedure(c,nil,4,3)
 	c:EnableReviveLimit()
-	--ÀÌ Ä«µå´Â ÀüÅõ·Î´Â ÆÄ±«µÇÁö ¾ÊÀ¸¸ç,
+	--ì´ ì¹´ë“œëŠ” ì „íˆ¬ë¡œëŠ” íŒŒê´´ë˜ì§€ ì•Šìœ¼ë©°,
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
 	e1:SetValue(1)
 	c:RegisterEffect(e1)
-	--ÀÌ Ä«µåÀÇ ÀüÅõ·Î ¹ß»ıÇÏ´Â ÀÚ½Å¿¡°Ô·ÎÀÇ ÀüÅõ µ¥¹ÌÁö´Â 0 ÀÌ µÈ´Ù.
+	--ì´ ì¹´ë“œì˜ ì „íˆ¬ë¡œ ë°œìƒí•˜ëŠ” ìì‹ ì—ê²Œë¡œì˜ ì „íˆ¬ ë°ë¯¸ì§€ëŠ” 0 ì´ ëœë‹¤.
 	local e2=e1:Clone()
 	e2:SetCode(EFFECT_AVOID_BATTLE_DAMAGE)
 	c:RegisterEffect(e2)
-	--±× Ä«µå¸¦ ÁÖÀÎÀÇ ÆĞ·Î µÇµ¹¸°´Ù.
+	--ê·¸ ì¹´ë“œë¥¼ ì£¼ì¸ì˜ íŒ¨ë¡œ ë˜ëŒë¦°ë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,0))
 	e3:SetCategory(CATEGORY_TOHAND)
@@ -26,7 +26,7 @@ function s.initial_effect(c)
 	e3:SetTarget(s.thtg)
 	e3:SetOperation(s.thop)
 	c:RegisterEffect(e3)
-	--ÀÌ Ä«µå°¡ ÀüÅõ¸¦ ½ÇÇàÇÒ °æ¿ì, »ó´ë´Â µ¥¹ÌÁö ½ºÅÜ Á¾·á½Ã±îÁö ¸¶¹ı / ÇÔÁ¤ / ¸ó½ºÅÍÀÇ È¿°ú¸¦ ¹ßµ¿ÇÒ ¼ö ¾ø´Ù.
+	--ì´ ì¹´ë“œê°€ ì „íˆ¬ë¥¼ ì‹¤í–‰í•  ê²½ìš°, ìƒëŒ€ëŠ” ë°ë¯¸ì§€ ìŠ¤í… ì¢…ë£Œì‹œê¹Œì§€ ë§ˆë²• / í•¨ì • / ëª¬ìŠ¤í„°ì˜ íš¨ê³¼ë¥¼ ë°œë™í•  ìˆ˜ ì—†ë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_FIELD)
 	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
@@ -36,7 +36,7 @@ function s.initial_effect(c)
 	e4:SetValue(1)
 	e4:SetCondition(s.actcon)
 	c:RegisterEffect(e4)
-	--ÀÌ Ä«µå¸¦ ¼ÒÀç·Î¼­ °¡Áö°í ÀÖ´Â ¿¢½ÃÁî ¸ó½ºÅÍ´Â ÀÌÇÏÀÇ È¿°ú¸¦ ¾ò´Â´Ù.
+	--ì´ ì¹´ë“œë¥¼ ì†Œì¬ë¡œì„œ ê°€ì§€ê³  ìˆëŠ” ì—‘ì‹œì¦ˆ ëª¬ìŠ¤í„°ëŠ” ì´í•˜ì˜ íš¨ê³¼ë¥¼ ì–»ëŠ”ë‹¤.
 	local e5=Effect.CreateEffect(c)
 	e5:SetType(EFFECT_TYPE_XMATERIAL+EFFECT_TYPE_FIELD)
 	e5:SetProperty(EFFECT_FLAG_PLAYER_TARGET)

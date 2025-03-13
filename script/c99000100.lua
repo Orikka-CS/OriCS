@@ -1,8 +1,8 @@
---¼¼·¹³ªµ¥ "¼º¼³"
+--ì„¸ë ˆë‚˜ë° "ì„±ì„¤"
 local EFFECT_DOUBLE_XYZ_MATERIAL=511001225 --to be removed when the procedure is updated
 local s,id=GetID()
 function s.initial_effect(c)
-	--ÀÚ½ÅÀÇ ÆĞ / ¹¦Áö¿¡¼­ ·¹º§ 4 ÀÌÇÏÀÇ "¼¼·¹³ªµ¥" ¸ó½ºÅÍ 1ÀåÀ» Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù.
+	--ìì‹ ì˜ íŒ¨ / ë¬˜ì§€ì—ì„œ ë ˆë²¨ 4 ì´í•˜ì˜ "ì„¸ë ˆë‚˜ë°" ëª¬ìŠ¤í„° 1ì¥ì„ íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-	--¸ó½ºÅÍ 3Àå ÀÌ»óÀ» ¼ÒÀç·Î ÇÏ´Â ¸¶¹ı»çÁ· ¿¢½ÃÁî ¸ó½ºÅÍ¸¦ ¿¢½ÃÁî ¼ÒÈ¯ÇÒ °æ¿ì, ÀÌ Ä«µå´Â 2Àå¸¸Å­ÀÇ ¿¢½ÃÁî ¼ÒÀç·Î ÇÒ ¼ö ÀÖ´Ù.
+	--ëª¬ìŠ¤í„° 3ì¥ ì´ìƒì„ ì†Œì¬ë¡œ í•˜ëŠ” ë§ˆë²•ì‚¬ì¡± ì—‘ì‹œì¦ˆ ëª¬ìŠ¤í„°ë¥¼ ì—‘ì‹œì¦ˆ ì†Œí™˜í•  ê²½ìš°, ì´ ì¹´ë“œëŠ” 2ì¥ë§Œí¼ì˜ ì—‘ì‹œì¦ˆ ì†Œì¬ë¡œ í•  ìˆ˜ ìˆë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetCode(EFFECT_DOUBLE_XYZ_MATERIAL)

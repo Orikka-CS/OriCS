@@ -1,11 +1,11 @@
---¸Í¾àÀÇ ÁıÇàÀÚ Çì¸£Å×
+--ë§¹ì•½ì˜ ì§‘í–‰ì í—¤ë¥´í…Œ
 local s,id=GetID()
 function s.initial_effect(c)
 	--link summon
 	c:SetSPSummonOnce(id)
 	Link.AddProcedure(c,nil,2,2)
 	c:EnableReviveLimit()
-	--ÀÌ Ä«µå¸¦ ¸µÅ© ¼ÒÈ¯ÇÒ °æ¿ì, ÇÊµåÀÇ ¾Õ¸é Ç¥½ÃÀÇ ¸¶¹ı / ÇÔÁ¤ Ä«µå¸¦ ¸ó½ºÅÍ·Î¼­ ¸µÅ© ¼ÒÀç·Î ÇÒ ¼ö ÀÖ´Ù.
+	--ì´ ì¹´ë“œë¥¼ ë§í¬ ì†Œí™˜í•  ê²½ìš°, í•„ë“œì˜ ì•ë©´ í‘œì‹œì˜ ë§ˆë²• / í•¨ì • ì¹´ë“œë¥¼ ëª¬ìŠ¤í„°ë¡œì„œ ë§í¬ ì†Œì¬ë¡œ í•  ìˆ˜ ìˆë‹¤.
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_FIELD)
 	e0:SetRange(LOCATION_EXTRA)
@@ -23,7 +23,7 @@ function s.initial_effect(c)
 	e0a:SetTarget(aux.TargetBoolFunction(s.matfilter))
 	e0a:SetValue(TYPE_MONSTER)
 	c:RegisterEffect(e0a)
-	--ÀÚ½Å ¹¦Áö¿¡¼­ ÀÏ¹İ ¸¶¹ı Ä«µå¸¦ Á¦¿ÜÇÏÁö ¾ÊÀ¸¸ç ¹ßµ¿ÇÒ ¼öµµ ÀÖ´Ù.
+	--ìì‹  ë¬˜ì§€ì—ì„œ ì¼ë°˜ ë§ˆë²• ì¹´ë“œë¥¼ ì œì™¸í•˜ì§€ ì•Šìœ¼ë©° ë°œë™í•  ìˆ˜ë„ ìˆë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(id)
@@ -31,7 +31,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetTargetRange(1,0)
 	c:RegisterEffect(e1)
-	--°°Àº ÀÌ¸§ÀÇ Ä«µå°¡ ÇÊµå¿¡ Á¸ÀçÇÏÁö ¾Ê´Â, "ÀÇ½ÄÀÇ Á¦¹° ¾Æ±×³ª" ¶Ç´Â "¸Í¾à" Ä«µå 1ÀåÀ» ÆĞ¿¡ ³Ö´Â´Ù.
+	--ê°™ì€ ì´ë¦„ì˜ ì¹´ë“œê°€ í•„ë“œì— ì¡´ì¬í•˜ì§€ ì•ŠëŠ”, "ì˜ì‹ì˜ ì œë¬¼ ì•„ê·¸ë‚˜" ë˜ëŠ” "ë§¹ì•½" ì¹´ë“œ 1ì¥ì„ íŒ¨ì— ë„£ëŠ”ë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
@@ -42,7 +42,7 @@ function s.initial_effect(c)
 	e2:SetTarget(s.target)
 	e2:SetOperation(s.operation)
 	c:RegisterEffect(e2)
-	--ÀÚ½ÅÀº µ¦¿¡¼­ 1Àå µå·Î¿ìÇÑ´Ù.
+	--ìì‹ ì€ ë±ì—ì„œ 1ì¥ ë“œë¡œìš°í•œë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,2))
 	e3:SetCategory(CATEGORY_DRAW)

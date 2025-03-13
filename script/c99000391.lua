@@ -1,15 +1,15 @@
---¿¡Æä¸£ ¿Àºê ¿¡Äûµå
+--ì—í˜ë¥´ ì˜¤ë¸Œ ì—í€´ë“œ
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
-	--ÀÌ Ä«µå´Â ÀÇ½Ä ¼ÒÈ¯ ¹× ÀÌÇÏÀÇ ¹æ¹ıÀ¸·Î¸¸ Æ¯¼ö ¼ÒÈ¯ÇÒ ¼ö ÀÖ´Ù.
+	--ì´ ì¹´ë“œëŠ” ì˜ì‹ ì†Œí™˜ ë° ì´í•˜ì˜ ë°©ë²•ìœ¼ë¡œë§Œ íŠ¹ìˆ˜ ì†Œí™˜í•  ìˆ˜ ìˆë‹¤.
 	local e0=Effect.CreateEffect(c)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e0:SetType(EFFECT_TYPE_SINGLE)
 	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e0:SetValue(aux.ritlimit)
 	c:RegisterEffect(e0)
-	--ÀÚ½Å ¸ŞÀÎ ÆäÀÌÁî 2 ¿¡, ¿¢½ºÆ®¶ó ¸ó½ºÅÍ Á¸ÀÇ ÀÚ½ÅÀÇ ¶¥ ¼Ó¼º ¸ó½ºÅÍ 1ÀåÀ» ¸±¸®½ºÇßÀ» °æ¿ì¿¡ ÆĞ / µ¦¿¡¼­ Æ¯¼ö ¼ÒÈ¯ÇÒ ¼ö ÀÖ´Ù.
+	--ìì‹  ë©”ì¸ í˜ì´ì¦ˆ 2 ì—, ì—‘ìŠ¤íŠ¸ë¼ ëª¬ìŠ¤í„° ì¡´ì˜ ìì‹ ì˜ ë•… ì†ì„± ëª¬ìŠ¤í„° 1ì¥ì„ ë¦´ë¦¬ìŠ¤í–ˆì„ ê²½ìš°ì— íŒ¨ / ë±ì—ì„œ íŠ¹ìˆ˜ ì†Œí™˜í•  ìˆ˜ ìˆë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_FIELD)
@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.hsptg)
 	e1:SetOperation(s.hspop)
 	c:RegisterEffect(e1)
-	--«Ñ«¤«Ê«Ã«×«ëøï?
+	--ãƒ‘ã‚¤ãƒŠãƒƒãƒ—ãƒ«çˆ†?
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_TOGRAVE)
@@ -39,7 +39,7 @@ function s.initial_effect(c)
 	local eb=e2:Clone()
 	eb:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(eb)
-	--±× ¸ó½ºÅÍ¸¦ ÆÄ±«ÇÑ´Ù.
+	--ê·¸ ëª¬ìŠ¤í„°ë¥¼ íŒŒê´´í•œë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,2))
 	e3:SetCategory(CATEGORY_DESTROY)
@@ -50,7 +50,7 @@ function s.initial_effect(c)
 	e3:SetTarget(s.destg)
 	e3:SetOperation(s.desop)
 	c:RegisterEffect(e3)
-	--µ¦¿¡¼­ Åë»ó ¼ÒÈ¯ °¡´ÉÇÑ ¶¥ ¼Ó¼º ¸ó½ºÅÍ 1ÀåÀ» ÆĞ¿¡ ³Ö´Â´Ù.
+	--ë±ì—ì„œ í†µìƒ ì†Œí™˜ ê°€ëŠ¥í•œ ë•… ì†ì„± ëª¬ìŠ¤í„° 1ì¥ì„ íŒ¨ì— ë„£ëŠ”ë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,3))
 	e4:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)

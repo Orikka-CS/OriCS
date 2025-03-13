@@ -1,10 +1,10 @@
---¼¼·¹³ªµ¥ "³«¿ø"
+--ì„¸ë ˆë‚˜ë° "ë‚™ì›"
 local s,id=GetID()
 function s.initial_effect(c)
 	--Xyz summon
 	Xyz.AddProcedure(c,nil,6,5)
 	c:EnableReviveLimit()
-	--ÀÚ½Å ¹¦ÁöÀÇ Ä«µå 1ÀåÀ» ÀÌ Ä«µåÀÇ ¿¢½ÃÁî ¼ÒÀç·Î ÇÑ´Ù.
+	--ìì‹  ë¬˜ì§€ì˜ ì¹´ë“œ 1ì¥ì„ ì´ ì¹´ë“œì˜ ì—‘ì‹œì¦ˆ ì†Œì¬ë¡œ í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_LEAVE_GRAVE)
@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.attachtg)
 	e1:SetOperation(s.attachop)
 	c:RegisterEffect(e1)
-	--"No." ¸ó½ºÅÍ ÀÌ¿ÜÀÇ, ÀÌ Ä«µåº¸´Ù ·©Å©°¡ 1°³ ¶Ç´Â 2°³ ³ôÀº ¿¢½ÃÁî ¸ó½ºÅÍ 1ÀåÀ», ÀÚ½Å ÇÊµåÀÇ ÀÌ Ä«µå À§¿¡ °ãÄ¡°í ¿¢½ÃÁî ¼ÒÈ¯À¸·Î Ãë±ŞÇÏ¿© ¿¢½ºÆ®¶ó µ¦¿¡¼­ Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù.
+	--"No." ëª¬ìŠ¤í„° ì´ì™¸ì˜, ì´ ì¹´ë“œë³´ë‹¤ ë­í¬ê°€ 1ê°œ ë˜ëŠ” 2ê°œ ë†’ì€ ì—‘ì‹œì¦ˆ ëª¬ìŠ¤í„° 1ì¥ì„, ìì‹  í•„ë“œì˜ ì´ ì¹´ë“œ ìœ„ì— ê²¹ì¹˜ê³  ì—‘ì‹œì¦ˆ ì†Œí™˜ìœ¼ë¡œ ì·¨ê¸‰í•˜ì—¬ ì—‘ìŠ¤íŠ¸ë¼ ë±ì—ì„œ íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.spop)
 	e2:SetHintTiming(TIMING_DRAW_PHASE|TIMING_MAIN_END|TIMINGS_CHECK_MONSTER_E)
 	c:RegisterEffect(e2,false,REGISTER_FLAG_DETACH_XMAT)
-	--ÀÚ½Å ÇÊµåÀÇ Ä«µå°¡ ÀüÅõ / È¿°ú·Î ÆÄ±«µÉ °æ¿ì, ´ë½Å¿¡ ÀÌ Ä«µåÀÇ ¿¢½ÃÁî ¼ÒÀç¸¦ 1°³ Á¦°ÅÇÒ ¼ö ÀÖ´Ù.
+	--ìì‹  í•„ë“œì˜ ì¹´ë“œê°€ ì „íˆ¬ / íš¨ê³¼ë¡œ íŒŒê´´ë  ê²½ìš°, ëŒ€ì‹ ì— ì´ ì¹´ë“œì˜ ì—‘ì‹œì¦ˆ ì†Œì¬ë¥¼ 1ê°œ ì œê±°í•  ìˆ˜ ìˆë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e3:SetCode(EFFECT_DESTROY_REPLACE)
@@ -35,7 +35,7 @@ function s.initial_effect(c)
 	e3:SetTarget(s.reptg)
 	e3:SetValue(function(e,_c) return s.repfilter(_c,e:GetHandlerPlayer()) end)
 	c:RegisterEffect(e3)
-	--ÀÌ Ä«µå¸¦ ¼ÒÀç·Î¼­ °¡Áö°í ÀÖ´Â ¿¢½ÃÁî ¸ó½ºÅÍ´Â ÀÌÇÏÀÇ È¿°ú¸¦ ¾ò´Â´Ù.
+	--ì´ ì¹´ë“œë¥¼ ì†Œì¬ë¡œì„œ ê°€ì§€ê³  ìˆëŠ” ì—‘ì‹œì¦ˆ ëª¬ìŠ¤í„°ëŠ” ì´í•˜ì˜ íš¨ê³¼ë¥¼ ì–»ëŠ”ë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_XMATERIAL+EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e4:SetCode(EFFECT_DESTROY_REPLACE)

@@ -1,4 +1,4 @@
---È­·æ ³×¸£³×¸£ ÅäÅ«
+--í™”ë£¡ ë„¤ë¥´ë„¤ë¥´ í† í°
 local s,id=GetID()
 function s.initial_effect(c)
 	--pendulum summon

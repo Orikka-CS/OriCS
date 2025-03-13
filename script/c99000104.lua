@@ -1,14 +1,14 @@
---¼¼·¹³ªµ¥ "Á¡¼ú"
+--ì„¸ë ˆë‚˜ë° "ì ìˆ "
 local s,id=GetID()
 function s.initial_effect(c)
-	--ÀÌ Ä«µå¸¦ ¿¢½ÃÁî ¼ÒÈ¯ÀÇ ¼ÒÀç·Î ÇÒ °æ¿ì, ¸ó½ºÅÍ 3Àå ÀÌ»óÀ» ¼ÒÀç·Î ÇÑ ¿¢½ÃÁî ¼ÒÈ¯À¸·Î¹Û¿¡ »ç¿ëÇÒ ¼ö ¾ø´Ù.
+	--ì´ ì¹´ë“œë¥¼ ì—‘ì‹œì¦ˆ ì†Œí™˜ì˜ ì†Œìž¬ë¡œ í•  ê²½ìš°, ëª¬ìŠ¤í„° 3ìž¥ ì´ìƒì„ ì†Œìž¬ë¡œ í•œ ì—‘ì‹œì¦ˆ ì†Œí™˜ìœ¼ë¡œë°–ì— ì‚¬ìš©í•  ìˆ˜ ì—†ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(id)
 	e1:SetValue(0x30003) --0x1 >, 0x2 =, 0x4 <, value == last digit(s)
 	c:RegisterEffect(e1)
-	--ÀÌ Ä«µå¸¦ ÆÐ¿¡¼­ Æ¯¼ö ¼ÒÈ¯ÇÏ°í, ÀÚ½ÅÀº µ¦¿¡¼­ 1Àå µå·Î¿ìÇÑ´Ù. ±× ÈÄ, µå·Î¿ìÇÑ Ä«µåÀÇ Á¾·ù¿¡ µû¶ó ÀÌÇÏÀÇ È¿°ú¸¦ Àû¿ëÇÒ ¼ö ÀÖ´Ù.
+	--ì´ ì¹´ë“œë¥¼ íŒ¨ì—ì„œ íŠ¹ìˆ˜ ì†Œí™˜í•˜ê³ , ìžì‹ ì€ ë±ì—ì„œ 1ìž¥ ë“œë¡œìš°í•œë‹¤. ê·¸ í›„, ë“œë¡œìš°í•œ ì¹´ë“œì˜ ì¢…ë¥˜ì— ë”°ë¼ ì´í•˜ì˜ íš¨ê³¼ë¥¼ ì ìš©í•  ìˆ˜ ìžˆë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_DRAW)

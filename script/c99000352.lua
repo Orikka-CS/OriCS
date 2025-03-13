@@ -1,4 +1,4 @@
---¹«³à ¹ÌÄÚÄÚ
+--ë¬´ë…€ ë¯¸ì½”ì½”
 local s,id=GetID()
 function s.initial_effect(c)
 	--summon limit

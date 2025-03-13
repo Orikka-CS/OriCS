@@ -1,10 +1,10 @@
---╠Д╠чез╥╧фВем
+--Й╦╢Й╦┴М┘■К═┬М▐╛М└╟
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon
 	aux.AddOrderProcedure(c,"L",nil,s.ordfil1,aux.FilterBoolFunctionEx(Card.IsSummonLocation,LOCATION_DECK))
 	c:EnableReviveLimit()
-	--фп / ╣╕©║╪╜ ╥╧╨╖ 3 юлгоюг ╩Гюле╠а╥ ╦С╫╨ем 1юЕю╩ ф╞╪Ж ╪рх╞гя╢ы.
+	--М▄╗ / К█╠Л≈░Л└° К═┬К╡╗ 3 Л²╢М∙≤Л²≤ Л┌╛Л²╢М┌╔Л║╠ К╙╛Л┼╓М└╟ 1Л·╔Л²└ М┼╧Л┬≤ Л├▄М≥≤М∙°К▀╓.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -17,7 +17,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-	--╩Гюле╠а╥ ╦С╫╨ем юл©эюг ╟Ь╟щ╥б 2000 юлгоюн ╦С╫╨ем╢б ╟Ь╟щ ╪╠╬Пгр ╪Ж ╬Ь╢ы.
+	--Л┌╛Л²╢М┌╔Л║╠ К╙╛Л┼╓М└╟ Л²╢Л≥╦Л²≤ ЙЁ╣Й╡╘К═╔ 2000 Л²╢М∙≤Л²╦ К╙╛Л┼╓М└╟К┼■ ЙЁ╣Й╡╘ Л└═Л√╦М∙═ Л┬≤ Л≈├К▀╓.
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_CANNOT_ATTACK)
@@ -46,7 +46,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g:GetFirst()
 	if tc then
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
-		--юл х©╟З╥н ф╞╪Ж ╪рх╞гя ╦С╫╨ем╢б, юл еоюг ©ё╣Е фДюлаН©║ а╕©э╣х╢ы.
+		--Л²╢ М ╗ЙЁ╪К║° М┼╧Л┬≤ Л├▄М≥≤М∙° К╙╛Л┼╓М└╟К┼■, Л²╢ М└╢Л²≤ Л≈■К⌠° М▌≤Л²╢Л╕┬Л≈░ Л═°Л≥╦К░°К▀╓.
 		tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1,fid)
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)

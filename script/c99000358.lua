@@ -1,7 +1,7 @@
 --SERENADE@SPELL
 local s,id=GetID()
 function s.initial_effect(c)
-	--ÇÊµåÀÇ Ä«µå 1ÀåÀ» °í¸£°í ÆÄ±«ÇÑ´Ù.
+	--í•„ë“œì˜ ì¹´ë“œ 1ì¥ì„ ê³ ë¥´ê³  íŒŒê´´í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_DESTROY)
@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
-	--¹ßµ¿ ÅÏ¿¡ µû¶ó ÀÌÇÏÀÇ È¿°ú¸¦ ¹ßµ¿ÇÒ ¼ö ÀÖ´Ù.
+	--ë°œë™ í„´ì— ë”°ë¼ ì´í•˜ì˜ íš¨ê³¼ë¥¼ ë°œë™í•  ìˆ˜ ìˆë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,3))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)

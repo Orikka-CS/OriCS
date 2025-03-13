@@ -1,8 +1,8 @@
---´ëÇà°ü¸®ÀÚ ¾ÆÅ×
+--ëŒ€í–‰ê´€ë¦¬ìž ì•„í…Œ
 local s,id=GetID()
 function s.initial_effect(c)
 	--equal summon
-	--ÃßÈÄ ¾÷µ« --aux.AddEqualProcedure(c,6,3,aux.FilterBoolFunction(Card.IsType,TYPE_EFFECT),aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER),1,99,s.equalchk)
+	--ì¶”í›„ ì—…ëŽƒ --aux.AddEqualProcedure(c,6,3,aux.FilterBoolFunction(Card.IsType,TYPE_EFFECT),aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER),1,99,s.equalchk)
 	s.CardType_Equal=true
 	s.EqualChart=6
 	s.EqualNote=3
@@ -16,7 +16,7 @@ function s.initial_effect(c)
 	e0:SetCondition(s.EqualCondition)
 	e0:SetTarget(s.EqualTarget)
 	e0:SetOperation(s.EqualOperation)
-	--ÃßÈÄ ¾÷µ« --e0:SetValue(SUMMON_TYPE_EQUAL)
+	--ì¶”í›„ ì—…ëŽƒ --e0:SetValue(SUMMON_TYPE_EQUAL)
 	c:RegisterEffect(e0)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -25,7 +25,7 @@ function s.initial_effect(c)
 	Duel.RegisterEffect(e1,0)
 	c:SetStatus(STATUS_NO_LEVEL,true)
 	c:EnableReviveLimit()
-	--ÀÌ Ä«µåÀÇ È¿°ú¸¦ ¹ßµ¿ÇÒ ¶§¸¶´Ù, ÀÌ Ä«µåÀÇ ³ëÆ®´Â 3°³ ¿Ã¶ó°£´Ù.
+	--ì´ ì¹´ë“œì˜ íš¨ê³¼ë¥¼ ë°œë™í•  ë•Œë§ˆë‹¤, ì´ ì¹´ë“œì˜ ë…¸íŠ¸ëŠ” 3ê°œ ì˜¬ë¼ê°„ë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
@@ -42,7 +42,7 @@ function s.initial_effect(c)
 	e3:SetCondition(function(e,tp,eg,ep,ev,re,r,rp) return re:GetHandler() == e:GetHandler() and e:GetHandler():HasFlagEffect(id) end)
 	e3:SetOperation(s.noteop)
 	c:RegisterEffect(e3)
-	--±× ¸ó½ºÅÍÀÇ ÄÁÆ®·ÑÀ» ¾ò´Â´Ù.
+	--ê·¸ ëª¬ìŠ¤í„°ì˜ ì»¨íŠ¸ë¡¤ì„ ì–»ëŠ”ë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,0))
 	e4:SetCategory(CATEGORY_CONTROL)
@@ -53,24 +53,24 @@ function s.initial_effect(c)
 	e4:SetTarget(s.cttg)
 	e4:SetOperation(s.ctop)
 	c:RegisterEffect(e4)
-	--ÆÐ¿¡¼­ ºû ¼Ó¼º ¸ó½ºÅÍ 1ÀåÀ» Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù.
+	--íŒ¨ì—ì„œ ë¹› ì†ì„± ëª¬ìŠ¤í„° 1ìž¥ì„ íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤.
 	local e5=Effect.CreateEffect(c)
 	e5:SetDescription(aux.Stringid(id,1))
 	e5:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e5:SetType(EFFECT_TYPE_IGNITION)
 	e5:SetRange(LOCATION_MZONE)
 	e5:SetCountLimit(1)
-	--ÃßÈÄ ¾÷µ« --e5:SetCondition(function(e,tp,eg,ep,ev,re,r,rp) return e:GetHandler():IsFinaleState() end)
+	--ì¶”í›„ ì—…ëŽƒ --e5:SetCondition(function(e,tp,eg,ep,ev,re,r,rp) return e:GetHandler():IsFinaleState() end)
 	e5:SetCondition(function(e,tp,eg,ep,ev,re,r,rp) return e:GetHandler():GetChart()==e:GetHandler():GetNote() end)
 	e5:SetTarget(s.sptg)
 	e5:SetOperation(s.spop)
 	c:RegisterEffect(e5)
-	--ÀÌ Ä«µå°¡ ÇÇ³¯·¹ »óÅÂÀÏ °æ¿ì, ÀÌ Ä«µå´Â Ã¢Á¶½ÅÁ·ÀÌ µÈ´Ù.
+	--ì´ ì¹´ë“œê°€ í”¼ë‚ ë ˆ ìƒíƒœì¼ ê²½ìš°, ì´ ì¹´ë“œëŠ” ì°½ì¡°ì‹ ì¡±ì´ ëœë‹¤.
 	local e6=Effect.CreateEffect(c)
 	e6:SetType(EFFECT_TYPE_SINGLE)
 	e6:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e6:SetCode(EFFECT_CHANGE_RACE)
-	--ÃßÈÄ ¾÷µ« --e6:SetCondition(function(e,tp,eg,ep,ev,re,r,rp) return e:GetHandler():IsFinaleState() end)
+	--ì¶”í›„ ì—…ëŽƒ --e6:SetCondition(function(e,tp,eg,ep,ev,re,r,rp) return e:GetHandler():IsFinaleState() end)
 	e6:SetCondition(function(e,tp,eg,ep,ev,re,r,rp) return e:GetHandler():GetChart()==e:GetHandler():GetNote() end)
 	e6:SetRange(LOCATION_MZONE)
 	e6:SetValue(RACE_CREATORGOD)
@@ -148,7 +148,7 @@ function s.noteop(e,tp,eg,ep,ev,re,r,rp)
 	if val+c:GetNote()>=c:GetChart() then
 		val=c:GetChart()-c:GetNote()
 	end
-	if val<=0 then return false end --ÃßÈÄ ¾÷µ«
+	if val<=0 then return false end --ì¶”í›„ ì—…ëŽƒ
 	Duel.Hint(HINT_CARD,0,id)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

@@ -1,14 +1,14 @@
---¼¼·¹³ªµ¥ "¼º·Ê"
+--ì„¸ë ˆë‚˜ë° "ì„±ë¡€"
 local s,id=GetID()
 function s.initial_effect(c)
-	--ÀÌ Ä«µå¸¦ ¿¢½ÃÁî ¼ÒÈ¯ÀÇ ¼ÒÀç·Î ÇÒ °æ¿ì, ¸ó½ºÅÍ 3Àå ÀÌ»óÀ» ¼ÒÀç·Î ÇÑ ¿¢½ÃÁî ¼ÒÈ¯À¸·Î¹Û¿¡ »ç¿ëÇÒ ¼ö ¾ø´Ù.
+	--ì´ ì¹´ë“œë¥¼ ì—‘ì‹œì¦ˆ ì†Œí™˜ì˜ ì†Œìž¬ë¡œ í•  ê²½ìš°, ëª¬ìŠ¤í„° 3ìž¥ ì´ìƒì„ ì†Œìž¬ë¡œ í•œ ì—‘ì‹œì¦ˆ ì†Œí™˜ìœ¼ë¡œë°–ì— ì‚¬ìš©í•  ìˆ˜ ì—†ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(id)
 	e1:SetValue(0x30003) --0x1 >, 0x2 =, 0x4 <, value == last digit(s)
 	c:RegisterEffect(e1)
-	--µ¦¿¡¼­ "¼¼·¹³ªµ¥ "¼º·Ê"" ÀÌ¿ÜÀÇ "¼¼·¹³ªµ¥" ¸ó½ºÅÍ 1ÀåÀ» ÆÐ¿¡ ³Ö´Â´Ù.
+	--ë±ì—ì„œ "ì„¸ë ˆë‚˜ë° "ì„±ë¡€"" ì´ì™¸ì˜ "ì„¸ë ˆë‚˜ë°" ëª¬ìŠ¤í„° 1ìž¥ì„ íŒ¨ì— ë„£ëŠ”ë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
@@ -22,7 +22,7 @@ function s.initial_effect(c)
 	local e3=e2:Clone()
 	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e3)
-	--ÀÌ Ä«µå¸¦ Æ¯¼ö ¼ÒÈ¯ÇÏ°í, ´ë»ó Ä«µå¸¦ µ¦À¸·Î µÇµ¹¸°´Ù.
+	--ì´ ì¹´ë“œë¥¼ íŠ¹ìˆ˜ ì†Œí™˜í•˜ê³ , ëŒ€ìƒ ì¹´ë“œë¥¼ ë±ìœ¼ë¡œ ë˜ëŒë¦°ë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,1))
 	e4:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TODECK)

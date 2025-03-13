@@ -1,4 +1,4 @@
---¹«³à ¹ÌÄÚ
+--ë¬´ë…€ ë¯¸ì½”
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()

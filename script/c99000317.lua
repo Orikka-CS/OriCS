@@ -1,10 +1,10 @@
---¸¶¹ıÀ» Àü½ÂÇÏ´Â ÀÚ ¿¡¸£¸Ş
+--ë§ˆë²•ì„ ì „ìŠ¹í•˜ëŠ” ì ì—ë¥´ë©”
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon
 	aux.AddOrderProcedure(c,"R",nil,aux.FilterBoolFunction(Card.IsSummonType,SUMMON_TYPE_SPECIAL),aux.FilterBoolFunctionEx(Card.IsSummonLocation,LOCATION_DECK|LOCATION_EXTRA))
 	c:EnableReviveLimit()
-	--±× ¸ó½ºÅÍ¸¦ Æ¯¼ö ¼ÒÈ¯ÇÏ°í, ÀÚ½ÅÀº ÀÌ È¿°ú·Î Æ¯¼ö ¼ÒÈ¯ÇÑ ¸ó½ºÅÍÀÇ ¼ö ¡¿ 2400 LP¸¦ »ó½ÇÇÑ´Ù.
+	--ê·¸ ëª¬ìŠ¤í„°ë¥¼ íŠ¹ìˆ˜ ì†Œí™˜í•˜ê³ , ìì‹ ì€ ì´ íš¨ê³¼ë¡œ íŠ¹ìˆ˜ ì†Œí™˜í•œ ëª¬ìŠ¤í„°ì˜ ìˆ˜ Ã— 2400 LPë¥¼ ìƒì‹¤í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -17,7 +17,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-	--»ó´ë ÇÊµåÀÇ ¾Õ¸é Ç¥½Ã Ä«µå¸¦ ÀüºÎ ÆÄ±«ÇÑ´Ù.
+	--ìƒëŒ€ í•„ë“œì˜ ì•ë©´ í‘œì‹œ ì¹´ë“œë¥¼ ì „ë¶€ íŒŒê´´í•œë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_DESTROY)

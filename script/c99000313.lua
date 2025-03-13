@@ -1,10 +1,10 @@
---°ÌÈ­ÀÇ ÆÄ±«ÀÚ
+--ê²í™”ì˜ íŒŒê´´ì
 local s,id=GetID()
 function s.initial_effect(c)
 	--Synchro Summon procedure
 	Synchro.AddProcedure(c,nil,1,1,Synchro.NonTuner(nil),1,99)
 	c:EnableReviveLimit()
-	--ÇÊµåÀÇ ¸ó½ºÅÍ 1ÀåÀ» ´ë»óÀ¸·Î ÇÏ°í ¹ßµ¿ÇÒ ¼ö ÀÖ´Ù. ±× ¸ó½ºÅÍ¸¦ ÆÄ±«ÇÑ´Ù.
+	--í•„ë“œì˜ ëª¬ìŠ¤í„° 1ì¥ì„ ëŒ€ìƒìœ¼ë¡œ í•˜ê³  ë°œë™í•  ìˆ˜ ìˆë‹¤. ê·¸ ëª¬ìŠ¤í„°ë¥¼ íŒŒê´´í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_DESTROY)
@@ -16,7 +16,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.destg)
 	e1:SetOperation(s.desop)
 	c:RegisterEffect(e1)
-	--ÀÌ Ä«µå¸¦ Æ÷ÇÔÇÏ´Â ÀÚ½Å ÇÊµåÀÇ ¸ó½ºÅÍ¸¦ ¼ÒÀç·Î¼­ ¿À´õ ¼ÒÈ¯À» ½ÇÇàÇÑ´Ù.
+	--ì´ ì¹´ë“œë¥¼ í¬í•¨í•˜ëŠ” ìì‹  í•„ë“œì˜ ëª¬ìŠ¤í„°ë¥¼ ì†Œì¬ë¡œì„œ ì˜¤ë” ì†Œí™˜ì„ ì‹¤í–‰í•œë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)

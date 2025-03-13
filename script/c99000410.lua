@@ -1,7 +1,7 @@
---HRUM(Çìºì¸® ·©Å© ¾÷ ¸ÅÁ÷)-¼¼·¹³ªµ¥ Æ÷½º
+--HRUM(í—¤ë¸ë¦¬ ëž­í¬ ì—… ë§¤ì§)-ì„¸ë ˆë‚˜ë° í¬ìŠ¤
 local s,id=GetID()
 function s.initial_effect(c)
-	--ÇÊµåÀÇ È¿°ú ¸ó½ºÅÍ 1ÀåÀ» °ñ¶ó. ±× È¿°ú¸¦ ÅÏ Á¾·á½Ã±îÁö ¹«È¿·Î ÇÏ°í, ±× ¸ó½ºÅÍÀÇ °ø°Ý·Â¸¸Å­¸¸ ÀÚ½ÅÀÇ LP¸¦ È¸º¹ÇÑ´Ù.
+	--í•„ë“œì˜ íš¨ê³¼ ëª¬ìŠ¤í„° 1ìž¥ì„ ê³¨ë¼. ê·¸ íš¨ê³¼ë¥¼ í„´ ì¢…ë£Œì‹œê¹Œì§€ ë¬´íš¨ë¡œ í•˜ê³ , ê·¸ ëª¬ìŠ¤í„°ì˜ ê³µê²©ë ¥ë§Œí¼ë§Œ ìžì‹ ì˜ LPë¥¼ íšŒë³µí•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_DISABLE+CATEGORY_RECOVER)
@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
-	--±× 2Àå ÀÌ»óÀÇ ¸ó½ºÅÍÀÇ ·©Å©ÀÇ ÇÕ°è¿Í °°Àº ·©Å©¸¦ °¡Áö´Â ¿¢½ÃÁî ¸ó½ºÅÍ 1ÀåÀ» ¿¢½ÃÁî ¼ÒÈ¯À¸·Î Ãë±ÞÇÏ¿© ¿¢½ºÆ®¶ó µ¦¿¡¼­ Æ¯¼ö ¼ÒÈ¯ÇÏ°í, ´ë»ó ¸ó½ºÅÍ¸¦ ±× ¿¢½ÃÁî ¼ÒÀç·Î ÇÑ´Ù.
+	--ê·¸ 2ìž¥ ì´ìƒì˜ ëª¬ìŠ¤í„°ì˜ ëž­í¬ì˜ í•©ê³„ì™€ ê°™ì€ ëž­í¬ë¥¼ ê°€ì§€ëŠ” ì—‘ì‹œì¦ˆ ëª¬ìŠ¤í„° 1ìž¥ì„ ì—‘ì‹œì¦ˆ ì†Œí™˜ìœ¼ë¡œ ì·¨ê¸‰í•˜ì—¬ ì—‘ìŠ¤íŠ¸ë¼ ë±ì—ì„œ íŠ¹ìˆ˜ ì†Œí™˜í•˜ê³ , ëŒ€ìƒ ëª¬ìŠ¤í„°ë¥¼ ê·¸ ì—‘ì‹œì¦ˆ ì†Œìž¬ë¡œ í•œë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)

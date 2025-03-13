@@ -1,10 +1,10 @@
---ÀÌÂ÷¿øÀ¸·ÎºÎÅÍÀÇ °è¾àÀÚ
+--ì´ì°¨ì›ìœ¼ë¡œë¶€í„°ì˜ ê³„ì•½ì
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon
 	aux.AddOrderProcedure(c,"R",nil,aux.NOT(aux.FilterBoolFunctionEx(Card.IsType,TYPE_TOKEN)),aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER))
 	c:EnableReviveLimit()
-	--µ¦¿¡¼­ Áö¼Ó ¸¶¹ı Ä«µå 1ÀåÀ» °ñ¶ó ÀÚ½ÅÀÇ ¸¶¹ı & ÇÔÁ¤ Á¸¿¡ ¼¼Æ®ÇÑ´Ù.
+	--ë±ì—ì„œ ì§€ì† ë§ˆë²• ì¹´ë“œ 1ì¥ì„ ê³¨ë¼ ìì‹ ì˜ ë§ˆë²• & í•¨ì • ì¡´ì— ì„¸íŠ¸í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.settg)
 	e1:SetOperation(s.setop)
 	c:RegisterEffect(e1)
-	--±× »ó´ë ¸ó½ºÅÍ¸¦, ¹ßµ¿ ÈÄ 2È¸Â°ÀÇ »ó´ë ¿£µå ÆäÀÌÁî±îÁö Á¦¿ÜÇÑ´Ù.
+	--ê·¸ ìƒëŒ€ ëª¬ìŠ¤í„°ë¥¼, ë°œë™ í›„ 2íšŒì§¸ì˜ ìƒëŒ€ ì—”ë“œ í˜ì´ì¦ˆê¹Œì§€ ì œì™¸í•œë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_REMOVE)
@@ -38,7 +38,7 @@ function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
 	if tc and Duel.SSet(tp,tc)~=0 then
 		tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET,0,1)
-		--ÀÌ È¿°ú·Î ¼¼Æ®ÇÑ Ä«µå´Â, ¹ßµ¿ÇßÀ» °æ¿ì¿¡ ±× ÅÏÀÇ ¿£µå ÆäÀÌÁî¿¡ Á¦¿ÜµÈ´Ù.
+		--ì´ íš¨ê³¼ë¡œ ì„¸íŠ¸í•œ ì¹´ë“œëŠ”, ë°œë™í–ˆì„ ê²½ìš°ì— ê·¸ í„´ì˜ ì—”ë“œ í˜ì´ì¦ˆì— ì œì™¸ëœë‹¤.
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_FIELD)
 		e1:SetCode(EFFECT_ACTIVATE_COST)

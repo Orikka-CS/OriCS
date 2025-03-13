@@ -1,10 +1,10 @@
---¼¼·¹³ªµ¥ "¼ºÁÂ"
+--ì„¸ë ˆë‚˜ë° "ì„±ì¢Œ"
 local s,id=GetID()
 function s.initial_effect(c)
 	--Xyz summon
 	Xyz.AddProcedure(c,nil,5,4)
 	c:EnableReviveLimit()
-	--ÀÌ Ä«µåÀÇ °ø°İ·ÂÀº, ÀÚ½Å ¹¦ÁöÀÇ "¼¼·¹³ªµ¥" ¸ó½ºÅÍ ¹× "RUM(·©Å© ¾÷ ¸ÅÁ÷)" ¸¶¹ı Ä«µåÀÇ ¼ö ¡¿ 300 ¿Ã¸°´Ù.
+	--ì´ ì¹´ë“œì˜ ê³µê²©ë ¥ì€, ìì‹  ë¬˜ì§€ì˜ "ì„¸ë ˆë‚˜ë°" ëª¬ìŠ¤í„° ë° "RUM(ë­í¬ ì—… ë§¤ì§)" ë§ˆë²• ì¹´ë“œì˜ ìˆ˜ Ã— 300 ì˜¬ë¦°ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e1:SetCode(EFFECT_UPDATE_ATTACK)
 	e1:SetValue(s.atkup)
 	c:RegisterEffect(e1)
-	--±× ¸ó½ºÅÍ¸¦ ¹¦Áö·Î º¸³»°í, ±× ¿ø·¡ °ø°İ·Â¸¸Å­ÀÇ µ¥¹ÌÁö¸¦ »ó´ë¿¡°Ô ÁØ´Ù.
+	--ê·¸ ëª¬ìŠ¤í„°ë¥¼ ë¬˜ì§€ë¡œ ë³´ë‚´ê³ , ê·¸ ì›ë˜ ê³µê²©ë ¥ë§Œí¼ì˜ ë°ë¯¸ì§€ë¥¼ ìƒëŒ€ì—ê²Œ ì¤€ë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DAMAGE)
@@ -26,13 +26,13 @@ function s.initial_effect(c)
 	e2:SetTarget(s.target)
 	e2:SetOperation(s.operation)
 	c:RegisterEffect(e2,false,REGISTER_FLAG_DETACH_XMAT)
-	--ÀÌ Ä«µå´Â 1¹øÀÇ ¹èÆ² ÆäÀÌÁî Áß¿¡ 2È¸ °ø°İÇÒ ¼ö ÀÖ´Ù.
+	--ì´ ì¹´ë“œëŠ” 1ë²ˆì˜ ë°°í‹€ í˜ì´ì¦ˆ ì¤‘ì— 2íšŒ ê³µê²©í•  ìˆ˜ ìˆë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetCode(EFFECT_EXTRA_ATTACK)
 	e3:SetValue(1)
 	c:RegisterEffect(e3)
-	--ÀÌ Ä«µå¸¦ ¼ÒÀç·Î¼­ °¡Áö°í ÀÖ´Â ¿¢½ÃÁî ¸ó½ºÅÍ´Â ÀÌÇÏÀÇ È¿°ú¸¦ ¾ò´Â´Ù.
+	--ì´ ì¹´ë“œë¥¼ ì†Œì¬ë¡œì„œ ê°€ì§€ê³  ìˆëŠ” ì—‘ì‹œì¦ˆ ëª¬ìŠ¤í„°ëŠ” ì´í•˜ì˜ íš¨ê³¼ë¥¼ ì–»ëŠ”ë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_XMATERIAL)
 	e4:SetCode(EFFECT_EXTRA_ATTACK)

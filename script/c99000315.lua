@@ -1,10 +1,10 @@
---µ¥¹ÌÁöµå µ¥ÀÌÅÍ À¯´Ö
+--ë°ë¯¸ì§€ë“œ ë°ì´í„° ìœ ë‹›
 local s,id=GetID()
 function s.initial_effect(c)
 	--link summon
 	Link.AddProcedure(c,s.matfilter,1,1)
 	c:EnableReviveLimit()
-	--ÀÚ½Å ÇÊµå¿¡ "À¯´Ö ÅäÅ«"(»çÀÌ¹ö½ºÁ· / ºû / ·¹º§ 1 / °ø 0 / ¼ö 0) 2ÀåÀ» Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù.
+	--ìì‹  í•„ë“œì— "ìœ ë‹› í† í°"(ì‚¬ì´ë²„ìŠ¤ì¡± / ë¹› / ë ˆë²¨ 1 / ê³µ 0 / ìˆ˜ 0) 2ì¥ì„ íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOKEN)
@@ -38,7 +38,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	for i=1,2 do
 		local token=Duel.CreateToken(tp,id+1)
 		Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP)
-		--ÀÌ ÅäÅ«Àº ¸±¸®½ºÇÒ ¼ö ¾ø´Ù.
+		--ì´ í† í°ì€ ë¦´ë¦¬ìŠ¤í•  ìˆ˜ ì—†ë‹¤.
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetDescription(3303)
 		e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
@@ -50,17 +50,17 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		local e2=e1:Clone()
 		e2:SetCode(EFFECT_UNRELEASABLE_NONSUM)
 		token:RegisterEffect(e2,true)
-		--ÀÌ ÅäÅ«Àº À¶ÇÕ ¼ÒÀç·Î ÇÒ ¼ö ¾ø´Ù.
+		--ì´ í† í°ì€ ìœµí•© ì†Œì¬ë¡œ í•  ìˆ˜ ì—†ë‹¤.
 		local e3=e2:Clone()
 		e3:SetDescription(3309)
 		e3:SetCode(EFFECT_CANNOT_BE_FUSION_MATERIAL)
 		token:RegisterEffect(e3,true)
-		--ÀÌ ÅäÅ«Àº ½ÌÅ©·Î ¼ÒÀç·Î ÇÒ ¼ö ¾ø´Ù.
+		--ì´ í† í°ì€ ì‹±í¬ë¡œ ì†Œì¬ë¡œ í•  ìˆ˜ ì—†ë‹¤.
 		local e4=e2:Clone()
 		e4:SetDescription(3312)
 		e4:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
 		token:RegisterEffect(e4,true)
-		--ÀÌ ÅäÅ«Àº ¸µÅ© ¼ÒÀç·Î ÇÒ ¼ö ¾ø´Ù.
+		--ì´ í† í°ì€ ë§í¬ ì†Œì¬ë¡œ í•  ìˆ˜ ì—†ë‹¤.
 		local e5=e2:Clone()
 		e5:SetDescription(3310)
 		e5:SetCode(EFFECT_CANNOT_BE_SYNCHRO_MATERIAL)

@@ -1,4 +1,4 @@
---¸¶·ÂÀÇ ÅÂµ¿
+--ë§ˆë ¥ì˜ íƒœë™
 local s,id=GetID()
 function s.initial_effect(c)
 	--	

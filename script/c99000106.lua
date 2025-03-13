@@ -1,10 +1,10 @@
---¼¼·¹³ªµ¥ "¼ºÈÖ"
+--ì„¸ë ˆë‚˜ë° "ì„±íœ˜"
 local s,id=GetID()
 function s.initial_effect(c)
 	--Xyz summon
 	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xc22),4,3)
 	c:EnableReviveLimit()
-	--»ó´ë ÇÊµåÀÇ ¾Õ¸é Ç¥½Ã ¸ó½ºÅÍ¸¦ ÀüºÎ µŞ¸é ¼öºñ Ç¥½Ã·Î ÇÑ´Ù.
+	--ìƒëŒ€ í•„ë“œì˜ ì•ë©´ í‘œì‹œ ëª¬ìŠ¤í„°ë¥¼ ì „ë¶€ ë’·ë©´ ìˆ˜ë¹„ í‘œì‹œë¡œ í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_POSITION)
@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.postg)
 	e1:SetOperation(s.posop)
 	c:RegisterEffect(e1)
-	--µ¦¿¡¼­ "RUM(·©Å© ¾÷ ¸ÅÁ÷)" ¸¶¹ı Ä«µå 1ÀåÀ» ÆĞ¿¡ ³Ö´Â´Ù.
+	--ë±ì—ì„œ "RUM(ë­í¬ ì—… ë§¤ì§)" ë§ˆë²• ì¹´ë“œ 1ì¥ì„ íŒ¨ì— ë„£ëŠ”ë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
@@ -26,12 +26,12 @@ function s.initial_effect(c)
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2,false,REGISTER_FLAG_DETACH_XMAT)
-	--ÀÌ Ä«µå°¡ ¼öºñ Ç¥½Ã ¸ó½ºÅÍ¸¦ °ø°İÇßÀ» °æ¿ì, ±× ¼öºñ·ÂÀ» °ø°İ·ÂÀÌ ³ÑÀº ¸¸Å­¸¸ ÀüÅõ µ¥¹ÌÁö¸¦ ÁØ´Ù.
+	--ì´ ì¹´ë“œê°€ ìˆ˜ë¹„ í‘œì‹œ ëª¬ìŠ¤í„°ë¥¼ ê³µê²©í–ˆì„ ê²½ìš°, ê·¸ ìˆ˜ë¹„ë ¥ì„ ê³µê²©ë ¥ì´ ë„˜ì€ ë§Œí¼ë§Œ ì „íˆ¬ ë°ë¯¸ì§€ë¥¼ ì¤€ë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetCode(EFFECT_PIERCE)
 	c:RegisterEffect(e3)
-	--ÀÌ Ä«µå¸¦ ¼ÒÀç·Î¼­ °¡Áö°í ÀÖ´Â ¿¢½ÃÁî ¸ó½ºÅÍ´Â ÀÌÇÏÀÇ È¿°ú¸¦ ¾ò´Â´Ù.
+	--ì´ ì¹´ë“œë¥¼ ì†Œì¬ë¡œì„œ ê°€ì§€ê³  ìˆëŠ” ì—‘ì‹œì¦ˆ ëª¬ìŠ¤í„°ëŠ” ì´í•˜ì˜ íš¨ê³¼ë¥¼ ì–»ëŠ”ë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_XMATERIAL)
 	e4:SetCode(EFFECT_PIERCE)
@@ -64,7 +64,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g)
 	end
 	local c=e:GetHandler()
-	--ÀÌ ÅÏ¿¡, ÀÚ½ÅÀº Åë»ó ¼ÒÈ¯ ¿Ü¿¡µµ 1¹ø¸¸, ÀÚ½Å ¸ŞÀÎ ÆäÀÌÁî¿¡ ¸¶¹ı»çÁ· ¸ó½ºÅÍ 1ÀåÀ» ÀÏ¹İ ¼ÒÈ¯ÇÒ ¼ö ÀÖ´Ù.
+	--ì´ í„´ì—, ìì‹ ì€ í†µìƒ ì†Œí™˜ ì™¸ì—ë„ 1ë²ˆë§Œ, ìì‹  ë©”ì¸ í˜ì´ì¦ˆì— ë§ˆë²•ì‚¬ì¡± ëª¬ìŠ¤í„° 1ì¥ì„ ì¼ë°˜ ì†Œí™˜í•  ìˆ˜ ìˆë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,2))
 	e1:SetType(EFFECT_TYPE_FIELD)

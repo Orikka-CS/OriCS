@@ -1,10 +1,10 @@
---¼¼·¹³ªµ¥ "¸ùÈ¯"
+--ì„¸ë ˆë‚˜ë° "ëª½í™˜"
 local s,id=GetID()
 function s.initial_effect(c)
 	--Link summon
 	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xc22),2,2)
 	c:EnableReviveLimit()
-	--±× È¿°ú¸¦ ¹«È¿·Î ÇÑ´Ù.
+	--ê·¸ íš¨ê³¼ë¥¼ ë¬´íš¨ë¡œ í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_DISABLE)
@@ -17,7 +17,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.distg)
 	e1:SetOperation(function(e,tp,eg,ep,ev,re,r,rp) Duel.NegateEffect(ev) end)
 	c:RegisterEffect(e1)
-	--ÀÌ Ä«µå¸¦ ±× ¸ó½ºÅÍÀÇ ¿¢½ÃÁî ¼ÒÀç·Î ÇÑ´Ù.
+	--ì´ ì¹´ë“œë¥¼ ê·¸ ëª¬ìŠ¤í„°ì˜ ì—‘ì‹œì¦ˆ ì†Œì¬ë¡œ í•œë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
@@ -28,7 +28,7 @@ function s.initial_effect(c)
 	e2:SetTarget(s.attachtg)
 	e2:SetOperation(s.attachop)
 	c:RegisterEffect(e2)
-	--ÀÚ½Å ÇÊµå¿¡ ´Ù¸¥ "¼¼·¹³ªµ¥" ¸ó½ºÅÍ°¡ Á¸ÀçÇÏ´Â ÇÑ, »ó´ë´Â ÀÌ Ä«µå¸¦ È¿°úÀÇ ´ë»óÀ¸·Î ÇÒ ¼ö ¾ø´Ù.
+	--ìì‹  í•„ë“œì— ë‹¤ë¥¸ "ì„¸ë ˆë‚˜ë°" ëª¬ìŠ¤í„°ê°€ ì¡´ì¬í•˜ëŠ” í•œ, ìƒëŒ€ëŠ” ì´ ì¹´ë“œë¥¼ íš¨ê³¼ì˜ ëŒ€ìƒìœ¼ë¡œ í•  ìˆ˜ ì—†ë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
@@ -37,7 +37,7 @@ function s.initial_effect(c)
 	e3:SetValue(aux.tgoval)
 	e3:SetCondition(s.tgcon)
 	c:RegisterEffect(e3)
-	--ÀÌ Ä«µå¸¦ ¼ÒÀç·Î¼­ °¡Áö°í ÀÖ´Â ¿¢½ÃÁî ¸ó½ºÅÍ´Â ÀÌÇÏÀÇ È¿°ú¸¦ ¾ò´Â´Ù.
+	--ì´ ì¹´ë“œë¥¼ ì†Œì¬ë¡œì„œ ê°€ì§€ê³  ìˆëŠ” ì—‘ì‹œì¦ˆ ëª¬ìŠ¤í„°ëŠ” ì´í•˜ì˜ íš¨ê³¼ë¥¼ ì–»ëŠ”ë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_XMATERIAL)
 	e4:SetProperty(EFFECT_FLAG_SINGLE_RANGE)

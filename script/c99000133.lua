@@ -1,4 +1,4 @@
---¹«³à ¹ÌÄÚÅä
+--ë¬´ë…€ ë¯¸ì½”í† 
 local s,id=GetID()
 function s.initial_effect(c)
 	--Inactivate

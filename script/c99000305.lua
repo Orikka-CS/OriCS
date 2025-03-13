@@ -1,7 +1,7 @@
---�;��� ������ �츣��
+--맹약의 이행자 헤르테
 local s,id=GetID()
 function s.initial_effect(c)
-	--�ʵ忡 "�;�" ī�尡 ������ ���, �� ī��� �� ī��� ���� ���ο��� �ڽ� �ʵ忡 �п��� Ư�� ��ȯ�� �� �ִ�.
+	--필드에 "맹약" 카드가 존재할 경우, 이 카드는 그 카드와 같은 세로열의 자신 필드에 패에서 특수 소환할 수 있다.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_FIELD)
@@ -11,7 +11,7 @@ function s.initial_effect(c)
 	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e1:SetValue(s.hspval)
 	c:RegisterEffect(e1)
-	--�� ī��� ���� ���ο��� �ٸ� ī���� �� + 1�����, ������ "�ǽ��� ���� �Ʊ׳�" �Ǵ� "�;�" �Ϲ� ���� ī�带 �п� �ִ´�.
+	--이 카드와 같은 세로열인 다른 카드의 수 + 1장까지, 덱에서 "의식의 제물 아그나" 또는 "맹약" 일반 마법 카드를 패에 넣는다.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
@@ -25,7 +25,7 @@ function s.initial_effect(c)
 	local e3=e2:Clone()
 	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e3)
-	--�� �Ϲ� ���� ī�� 1�� ��ſ� ������ �� ī�带 ������ �� �ִ�.
+	--그 일반 마법 카드 1장 대신에 묘지의 이 카드를 제외할 수 있다.
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_SINGLE)
 	e4:SetCode(99000305)

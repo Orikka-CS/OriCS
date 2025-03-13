@@ -1,7 +1,7 @@
 --MEIYAKU@SPELL
 local s,id=GetID()
 function s.initial_effect(c)
-	--ÀÌ Ä«µå´Â ¹ßµ¿ ÈÄ, ÇÊµå¿¡ °è¼ÓÇØ¼­ ³²°í,
+	--ì´ ì¹´ë“œëŠ” ë°œë™ í›„, í•„ë“œì— ê³„ì†í•´ì„œ ë‚¨ê³ ,
 	local ea=Effect.CreateEffect(c)
 	ea:SetType(EFFECT_TYPE_ACTIVATE)
 	ea:SetCode(EVENT_FREE_CHAIN)
@@ -10,7 +10,7 @@ function s.initial_effect(c)
 	eb:SetType(EFFECT_TYPE_SINGLE)
 	eb:SetCode(EFFECT_REMAIN_FIELD)
 	c:RegisterEffect(eb)
-	--»ó´ë ÇÊµå¿¡ "¸Í¾à ÅäÅ«" 1ÀåÀ» Æ¯¼ö ¼ÒÈ¯ÇÏ´Â °Í¿¡ ÀÇÇØ »ó´ë ÇÊµå¿¡ ¹ßµ¿ÇÒ ¼öµµ ÀÖ´Ù.
+	--ìƒëŒ€ í•„ë“œì— "ë§¹ì•½ í† í°" 1ì¥ì„ íŠ¹ìˆ˜ ì†Œí™˜í•˜ëŠ” ê²ƒì— ì˜í•´ ìƒëŒ€ í•„ë“œì— ë°œë™í•  ìˆ˜ë„ ìˆë‹¤.
 	local ec=Effect.CreateEffect(c)
 	ec:SetType(EFFECT_TYPE_FIELD)
 	ec:SetCode(EFFECT_ACTIVATE_COST)
@@ -19,7 +19,7 @@ function s.initial_effect(c)
 	ec:SetTarget(s.meiyakutg)
 	ec:SetOperation(s.meiyakuop)
 	Duel.RegisterEffect(ec,0)
-	--»ó´ëÀÇ ÆĞ ¹× »ó´ë ÇÊµå¿¡ ¼¼Æ®µÈ Ä«µå¸¦ ÀüºÎ È®ÀÎÇÑ´Ù.
+	--ìƒëŒ€ì˜ íŒ¨ ë° ìƒëŒ€ í•„ë“œì— ì„¸íŠ¸ëœ ì¹´ë“œë¥¼ ì „ë¶€ í™•ì¸í•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,1))
 	e1:SetCategory(CATEGORY_TODECK)
@@ -39,7 +39,7 @@ function s.initial_effect(c)
 	local e1b=e1:Clone()
 	e1b:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e1b)
-	--ÀÌ Ä«µå°¡ ¸¶¹ı Ä«µåÀÇ È¿°ú¸¦ ¹ßµ¿ÇÏ±â À§ÇØ Á¦¿ÜµÇ¾úÀ» °æ¿ì¿¡ ¹ßµ¿ÇÒ ¼ö ÀÖ´Ù.
+	--ì´ ì¹´ë“œê°€ ë§ˆë²• ì¹´ë“œì˜ íš¨ê³¼ë¥¼ ë°œë™í•˜ê¸° ìœ„í•´ ì œì™¸ë˜ì—ˆì„ ê²½ìš°ì— ë°œë™í•  ìˆ˜ ìˆë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
@@ -121,7 +121,7 @@ function s.bncon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.bnop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	--ÀÚ½ÅÀÇ "¸Í¾à" Ä«µå ¹× "@SPELL" ¸¶¹ı Ä«µåÀÇ È¿°ú ¹ßµ¿ ¹× ±× ¹ßµ¿ÇÑ È¿°ú´Â ¹«È¿È­µÇÁö ¾Ê´Â´Ù.
+	--ìì‹ ì˜ "ë§¹ì•½" ì¹´ë“œ ë° "@SPELL" ë§ˆë²• ì¹´ë“œì˜ íš¨ê³¼ ë°œë™ ë° ê·¸ ë°œë™í•œ íš¨ê³¼ëŠ” ë¬´íš¨í™”ë˜ì§€ ì•ŠëŠ”ë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_CANNOT_INACTIVATE)

@@ -1,18 +1,18 @@
---¿¬¼ÒÀÇ ½ºÆçÄ³½ºÅÍ ÇÇ³×¸£³ª¸£
+--ì—°ì†Œì˜ ìŠ¤í ìºìŠ¤í„° í”¼ë„¤ë¥´ë‚˜ë¥´
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon
 	aux.AddOrderProcedure(c,"L",nil,s.ordfil1,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_FIRE))
 	Pendulum.AddProcedure(c,false)
 	c:EnableReviveLimit()
-	--ÀÌ Ä«µå´Â ¿À´õ ¼ÒÈ¯ ¹× Ææµâ·³ ¼ÒÈ¯À¸·Î¸¸ ¿¢½ºÆ®¶ó µ¦¿¡¼­ Æ¯¼ö ¼ÒÈ¯ÇÒ ¼ö ÀÖ´Ù.
+	--ì´ ì¹´ë“œëŠ” ì˜¤ë” ì†Œí™˜ ë° íœë“ˆëŸ¼ ì†Œí™˜ìœ¼ë¡œë§Œ ì—‘ìŠ¤íŠ¸ë¼ ë±ì—ì„œ íŠ¹ìˆ˜ ì†Œí™˜í•  ìˆ˜ ìˆë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(s.splimit)
 	c:RegisterEffect(e1)
-	--»ó´ëÀÇ ¿¢½ºÆ®¶ó µ¦ÀÇ ¸Å¼ö ¡¿ 200 µ¥¹ÌÁö¸¦ »ó´ë¿¡°Ô ÁØ´Ù.
+	--ìƒëŒ€ì˜ ì—‘ìŠ¤íŠ¸ë¼ ë±ì˜ ë§¤ìˆ˜ Ã— 200 ë°ë¯¸ì§€ë¥¼ ìƒëŒ€ì—ê²Œ ì¤€ë‹¤.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_DAMAGE)
@@ -25,7 +25,7 @@ function s.initial_effect(c)
 	e2:SetTarget(s.damtg)
 	e2:SetOperation(s.damop)
 	c:RegisterEffect(e2)
-	--µ¦ / ¿¢½ºÆ®¶ó µ¦¿¡¼­ ¼öºñ·Â 200 ÀÇ È­¿° ¼Ó¼º ¸ó½ºÅÍ 1ÀåÀ» Æ¯¼ö ¼ÒÈ¯ÇÑ´Ù.
+	--ë± / ì—‘ìŠ¤íŠ¸ë¼ ë±ì—ì„œ ìˆ˜ë¹„ë ¥ 200 ì˜ í™”ì—¼ ì†ì„± ëª¬ìŠ¤í„° 1ì¥ì„ íŠ¹ìˆ˜ ì†Œí™˜í•œë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -36,7 +36,7 @@ function s.initial_effect(c)
 	e3:SetTarget(s.sptg)
 	e3:SetOperation(s.spop)
 	c:RegisterEffect(e3)
-	--ÀÌ Ä«µå¿Í "È­·æ ³×¸£³×¸£ ÅäÅ«" 1ÀåÀ» ÀÚ½ÅÀÇ Ææµâ·³ Á¸¿¡ ³õ´Â´Ù.
+	--ì´ ì¹´ë“œì™€ "í™”ë£¡ ë„¤ë¥´ë„¤ë¥´ í† í°" 1ì¥ì„ ìì‹ ì˜ íœë“ˆëŸ¼ ì¡´ì— ë†“ëŠ”ë‹¤.
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,2))
 	e4:SetCategory(CATEGORY_DESTROY+CATEGORY_TOKEN)
@@ -47,7 +47,7 @@ function s.initial_effect(c)
 	e4:SetTarget(s.pentg)
 	e4:SetOperation(s.penop)
 	c:RegisterEffect(e4)
-	--»ó´ëÀÇ ¿¢½ºÆ®¶ó µ¦À» È®ÀÎÇÏ°í, ±× Áß¿¡¼­ ÆÄ±«ÇÑ ¼ö¸¸Å­ Ä«µå¸¦ °í¸£°í ¹¦Áö·Î º¸³½´Ù.
+	--ìƒëŒ€ì˜ ì—‘ìŠ¤íŠ¸ë¼ ë±ì„ í™•ì¸í•˜ê³ , ê·¸ ì¤‘ì—ì„œ íŒŒê´´í•œ ìˆ˜ë§Œí¼ ì¹´ë“œë¥¼ ê³ ë¥´ê³  ë¬˜ì§€ë¡œ ë³´ë‚¸ë‹¤.
 	local e5=Effect.CreateEffect(c)
 	e5:SetDescription(aux.Stringid(id,3))
 	e5:SetCategory(CATEGORY_DESTROY+CATEGORY_TOGRAVE)
@@ -121,7 +121,7 @@ function s.penop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.MoveToField(c,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
 		local token=Duel.CreateToken(tp,id+1)
 		Duel.MoveToField(token,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
-		--ÀÌ ÅäÅ«Àº Æ¯¼ö ¼ÒÈ¯ÇÒ ¼ö ¾ø´Ù.
+		--ì´ í† í°ì€ íŠ¹ìˆ˜ ì†Œí™˜í•  ìˆ˜ ì—†ë‹¤.
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)

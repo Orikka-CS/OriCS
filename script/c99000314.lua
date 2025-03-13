@@ -1,10 +1,10 @@
---³ªÀÌÆ®¸Ş¾î ³×Å©·Î¸Ç¼­
+--ë‚˜ì´íŠ¸ë©”ì–´ ë„¤í¬ë¡œë§¨ì„œ
 local s,id=GetID()
 function s.initial_effect(c)
 	--order summon
 	aux.AddOrderProcedure(c,"R",nil,aux.FilterBoolFunction(Card.IsType,TYPE_EFFECT),aux.FilterBoolFunction(Card.HasLevel))
 	c:EnableReviveLimit()
-	--±× ÇÃ·¹ÀÌ¾î´Â ÆĞ¸¦ ÀüºÎ °è¼ÓÇØ¼­ °ø°³ÇÑ´Ù.
+	--ê·¸ í”Œë ˆì´ì–´ëŠ” íŒ¨ë¥¼ ì „ë¶€ ê³„ì†í•´ì„œ ê³µê°œí•œë‹¤.
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_PUBLIC)
@@ -16,7 +16,7 @@ function s.initial_effect(c)
 	e2:SetCondition(function(e,tp,eg,ep,ev,re,r,rp) return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_HAND)>=4 end)
 	e2:SetTargetRange(0,LOCATION_HAND)
 	c:RegisterEffect(e2)
-	--»ó´ëÀÇ ÆĞ¸¦ ÀüºÎ È®ÀÎÇÑ´Ù.
+	--ìƒëŒ€ì˜ íŒ¨ë¥¼ ì „ë¶€ í™•ì¸í•œë‹¤.
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,0))
 	e3:SetCategory(CATEGORY_DESTROY)
