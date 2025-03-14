@@ -57,5 +57,5 @@ function s.vfil3(c)
 end
 function s.val3(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetMatchingGroupCount(s.vfil3,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)*300
+	return Duel.GetMatchingGroupCount(s.vfil3,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)*-300
 end
