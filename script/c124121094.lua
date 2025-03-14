@@ -94,7 +94,7 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 		g:AddCard(c)
 		if Duel.SendtoDeck(g,nil,2,REASON_EFFECT)>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-			local sg=Duel.SelectMatchingCard(tp,s.ofil3,tp,LOCATION_DECK,0,0,1,nil)
+			local sg=Duel.SelectMatchingCard(tp,s.ofil3,tp,LOCATION_DECK,0,0,1,nil,e,tp)
 			if #sg>0 then
 				Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
 			end
