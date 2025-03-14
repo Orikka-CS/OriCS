@@ -38,7 +38,7 @@ function s.op1(c,e,tp,sg,mg,lc,og,chk)
 	if not s.pg1 then
 		return true
 	end
-	return #s.pg1<=1
+	return #(sg&s.pg1)<=1
 end
 function s.vfil1(c)
 	return c:IsSetCard(0x2a) and c:IsType(TYPE_MONSTER)
