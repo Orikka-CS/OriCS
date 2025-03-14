@@ -1,4 +1,4 @@
---하얀 실: 아크비숍
+--하얀 실: 대주교
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableUnsummonable()

@@ -1,4 +1,4 @@
---하얀 실: 삼다수
+--하얀 실: 삼도천
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
