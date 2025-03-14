@@ -42,7 +42,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 		and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE))
 end
 function s.cfil2(c,tp)
-	return ((c:IsControler(tp) and c:IsAttack(3000) and c:IsType(TYPE_SYNCHRO)) or c:IsHasEffect(18454353))
+	return ((c:IsControler(tp) and c:IsAttack(3000) and c:IsType(TYPE_SYNCHRO)) or false)
 		and c:IsAbleToGraveAsCost()
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)

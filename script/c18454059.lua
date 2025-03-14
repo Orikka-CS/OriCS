@@ -41,7 +41,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.cfil2(c,tp)
-	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or c:IsHasEffect(18454353))
+	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or false)
 		and c:IsAbleToGraveAsCost() and c:IsType(TYPE_SPELL)
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)

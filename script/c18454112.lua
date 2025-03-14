@@ -32,7 +32,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.cfil1(c,tp)
 	return ((c:IsControler(tp) and (c:IsSetCard(0xc01) or (c:IsType(TYPE_SYNCHRO) and c:IsAttack(3000))))
-		or c:IsHasEffect(18454353))
+		or false)
 		and c:IsAbleToGraveAsCost()
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)

@@ -16,7 +16,7 @@ function s.afil1(c)
 	return c:GetTextAttack()==3000
 end
 function s.cfil1(c,tp)
-	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or c:IsHasEffect(18454353))
+	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or false)
 		and c:IsType(TYPE_TRAP) and c:IsAbleToRemoveAsCost()
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)

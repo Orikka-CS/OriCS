@@ -77,7 +77,7 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.cfil4(c,tp)
-	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or c:IsHasEffect(18454353))
+	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or false)
 		and c:IsAbleToRemoveAsCost() and c:IsType(TYPE_TRAP)
 end
 function s.tfil4(c)

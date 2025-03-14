@@ -28,7 +28,7 @@ function s.afil1(c)
 	return c:GetTextAttack()==3000
 end
 function s.cfil2(c,tp)
-	return (c:IsControler(tp) or c:IsHasEffect(18454353))
+	return (c:IsControler(tp) or false)
 		and c:IsAbleToGraveAsCost()
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)

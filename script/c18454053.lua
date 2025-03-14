@@ -66,7 +66,7 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	c:RegisterEffect(e1)
 end
 function s.cfil4(c,tp)
-	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or c:IsHasEffect(18454353))
+	return ((c:IsControler(tp) and c:IsSetCard(0xc01)) or false)
 		and c:IsType(TYPE_MONSTER) and c:IsAbleToGraveAsCost()
 end
 function s.cost4(e,tp,eg,ep,ev,re,r,rp,chk)
