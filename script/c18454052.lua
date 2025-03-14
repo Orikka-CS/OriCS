@@ -46,6 +46,7 @@ function s.cfil2(c,tp)
 		and c:IsAbleToGraveAsCost()
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
 	if chk==0 then
 		return c:IsAbleToGraveAsCost()
 			and Duel.IsExistingMatchingCard(s.cfil2,tp,LOCATION_MZONE,LOCATION_MZONE,1,c,tp)
