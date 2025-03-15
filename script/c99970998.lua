@@ -26,14 +26,14 @@ end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and
-		Duel.IsPlayerCanSpecialSummonMonster(tp,id,0,TYPE_EFFECT|TYPE_MONSTER,900,1100,5,RACE_INSECT,ATTRIBUTE_FIRE) end
+		Duel.IsPlayerCanSpecialSummonMonster(tp,id,0,TYPE_EFFECT|TYPE_MONSTER|TYPE_TUNER,900,1100,5,RACE_INSECT,ATTRIBUTE_FIRE) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or Duel.GetLocationCount(tp,LOCATION_MZONE)<=0
-		or not Duel.IsPlayerCanSpecialSummonMonster(tp,id,0,TYPE_EFFECT|TYPE_MONSTER,900,1100,5,RACE_INSECT,ATTRIBUTE_FIRE) then return end
-	c:AddMonsterAttribute(TYPE_EFFECT|TYPE_TRAP)
+		or not Duel.IsPlayerCanSpecialSummonMonster(tp,id,0,TYPE_EFFECT|TYPE_MONSTER|TYPE_TUNER,900,1100,5,RACE_INSECT,ATTRIBUTE_FIRE) then return end
+	c:AddMonsterAttribute(TYPE_EFFECT|TYPE_TRAP|TYPE_TUNER)
 	Duel.SpecialSummonStep(c,0,tp,tp,true,false,POS_FACEUP)
 	c:AddMonsterAttributeComplete()
 
@@ -45,33 +45,11 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	c:RegisterEffect(e99,true)
 
 	local e3=MakeEff(c,"F","M")
-	e3:SetCode(EFFECT_CANNOT_BE_MODULE_MATERIAL)
+	e3:SetCode(EFFECT_CANNOT_BE_MATERIAL)
 	e3:SetTargetRange(0,LOCATION_MZONE)
 	e3:SetTarget(s.sumtar)
-	e3:SetValue(1)
+	e3:SetValue(aux.cannotmatfilter(SUMT_F,SUMT_S,SUMT_X,SUMT_L,SUMT_E,SUMT_O,SUMT_M,SUMT_Q,SUMT_B,SUMT_D))
 	c:RegisterEffect(e3,true)
-	local e5=e3:Clone()
-	e5:SetCode(EFFECT_CANNOT_BE_FUSION_MATERIAL)
-	e5:SetValue(s.fuslimit)
-	c:RegisterEffect(e5,true)
-	local e6=e3:Clone()
-	e6:SetCode(EFFECT_CANNOT_BE_SYNCHRO_MATERIAL)
-	c:RegisterEffect(e6,true)
-	local e7=e3:Clone()
-	e7:SetCode(EFFECT_CANNOT_BE_XYZ_MATERIAL)
-	c:RegisterEffect(e7,true)
-	local e8=e3:Clone()
-	e8:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
-	c:RegisterEffect(e8,true)
-	local e9=e3:Clone()
-	e9:SetCode(EFFECT_CANNOT_BE_ORDER_MATERIAL)
-	c:RegisterEffect(e9,true)
-	local e10=e3:Clone()
-	e10:SetCode(EFFECT_CANNOT_BE_DELIGHT_MATERIAL)
-	c:RegisterEffect(e10,true)
-	local e11=e3:Clone()
-	e11:SetCode(EFFECT_CANNOT_BE_SQUARE_MATERIAL)
-	c:RegisterEffect(e11,true)
 	
 	Duel.SpecialSummonComplete()
 	
