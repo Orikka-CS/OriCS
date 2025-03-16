@@ -35,7 +35,7 @@ function s.initial_effect(c)
 		ge3:SetOperation(s.gop3)
 		Duel.RegisterEffect(ge3,0)
 		local ge4=MakeEff(c,"FC")
-		ge4:SetCode(EVENT_REMOVE)
+		ge4:SetCode(EVENT_MOVE)
 		ge4:SetOperation(s.gop4)
 		Duel.RegisterEffect(ge4,0)
 	end
@@ -52,13 +52,17 @@ end
 function s.gop2(e,tp,eg,ep,ev,re,r,rp)
 	for p=0,1 do
 		local ct=eg:FilterCount(s.gofil2,nil,p)
-		s[p][3]=s[p][3]+1
+		if ct>0 then
+			s[p][3]=s[p][3]+1
+		end
 	end
 end
 function s.gop3(e,tp,eg,ep,ev,re,r,rp)
 	for p=0,1 do
 		local ct=eg:FilterCount(s.gofil2,nil,p)
-		s[p][4]=s[p][4]+1
+		if ct>0 then
+			s[p][4]=s[p][4]+1
+		end
 	end
 end
 function s.gofil4(c,tp)
@@ -67,7 +71,9 @@ end
 function s.gop4(e,tp,eg,ep,ev,re,r,rp)
 	for p=0,1 do
 		local ct=eg:FilterCount(s.gofil4,nil,p)
-		s[p][3]=s[p][3]+1
+		if ct>0 then
+			s[p][3]=s[p][3]+1
+		end
 	end
 end
 function s.ofil1(c)
