@@ -1,4 +1,4 @@
---스피나스피 미스틸테인
+--란샤르드 미스틸테인
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

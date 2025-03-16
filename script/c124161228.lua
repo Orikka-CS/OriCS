@@ -1,4 +1,4 @@
---스피나스피 아바리스
+--란샤르드 아바리스
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

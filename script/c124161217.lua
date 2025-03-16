@@ -1,4 +1,4 @@
---스피나스피 로제
+--란샤르드 로제
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

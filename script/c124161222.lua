@@ -1,4 +1,4 @@
---스피나스피 그리프 오브
+--란샤르드 그리프 오브
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

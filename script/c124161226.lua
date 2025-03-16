@@ -1,4 +1,4 @@
---스피나스피 트라우마
+--란샤르드 스티그마
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---스피나스피 티슬
+--란샤르드 티슬
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

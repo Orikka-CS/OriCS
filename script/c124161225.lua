@@ -1,4 +1,4 @@
---스피나스피 인그로스
+--란샤르드 인그로스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

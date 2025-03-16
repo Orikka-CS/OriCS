@@ -1,4 +1,4 @@
---스피나스피 위즈 아딘
+--란샤르드 위즈 아딘
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

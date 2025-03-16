@@ -1,4 +1,4 @@
---스피나스피 홀리
+--란샤르드 홀리
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

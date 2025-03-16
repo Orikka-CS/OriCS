@@ -1,4 +1,4 @@
---스피나스피 클로
+--란샤르드 클로
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

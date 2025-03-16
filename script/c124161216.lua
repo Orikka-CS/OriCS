@@ -1,4 +1,4 @@
---스피나스피 시아
+--란샤르드 시아
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---스피나스피 더스크
+--란샤르드 더스크
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
