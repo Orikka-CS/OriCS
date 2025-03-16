@@ -53,6 +53,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local gg=eg:Filter(s.con1filter,nil,tp):GetFirst()
+	if not gg:IsLocation(LOCATION_HAND) then return end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if Duel.SendtoGrave(gg,REASON_EFFECT)>0 and c:IsRelateToEffect(e) and Duel.SendtoHand(c,1-tp,REASON_EFFECT)>0 and #g>0 then
 		 Duel.BreakEffect()
