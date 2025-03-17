@@ -99,7 +99,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_HAND,nil)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.BreakEffect()
-		local sg=g:RandomSelect(1-tp,1)
+		local sg=g:RandomSelect(tp,1)
 		aux.RemoveUntil(sg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
 	end
 end

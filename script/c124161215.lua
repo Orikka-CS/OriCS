@@ -77,9 +77,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,0,LOCATION_HAND,nil)
 	if #g>0 then
-		Duel.ConfirmCards(tp,g)
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+		local sg=g:RandomSelect(tp,1)
 		Duel.SendtoGrave(sg,REASON_EFFECT)
-		Duel.ShuffleHand(1-tp)
 	end
 end

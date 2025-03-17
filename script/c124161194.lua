@@ -57,7 +57,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 				aux.RemoveUntil(rsg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
 			end
 			if rsg:IsLocation(LOCATION_REMOVED) then
-				local osg=og:RandomSelect(1-tp,1)
+				local osg=og:RandomSelect(tp,1)
 				aux.RemoveUntil(osg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
 			end
 		end

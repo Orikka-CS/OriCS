@@ -33,6 +33,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(ac)
 	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_HAND)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)

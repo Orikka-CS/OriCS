@@ -84,11 +84,15 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #rg==0 then return end
 	local srg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
 	Duel.SendtoGrave(srg,REASON_EFFECT)
+	local gg=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,LOCATION_HAND,0,nil)
 	local b1=true
-	local b2=true
-	local b3=not sg:IsType(TYPE_FUSION)
+	local b2=#gg>0
+	local b3=#gg>0 and not sg:IsType(TYPE_FUSION)
 	local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)},{b3,aux.Stringid(id,2)}) 
 	if b==1 then return end
+	local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
+	Duel.SendtoGrave(gsg,REASON_EFFECT)
+	if not gsg:IsLocation(LOCATION_GRAVE) then return end
 	if b==2 then
 		Duel.BreakEffect()
 		Duel.SendtoHand(sg,tp,REASON_EFFECT)

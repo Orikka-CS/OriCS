@@ -50,7 +50,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	else
 		local g=Duel.GetMatchingGroup(Card.IsDiscardable,tp,0,LOCATION_HAND,nil)
 		if #g>1 then
-			local sg=g:RandomSelect(1-tp,2)
+			local sg=g:RandomSelect(tp,2)
 			Duel.SendtoGrave(sg,REASON_DISCARD+REASON_EFFECT)
 		end
 	end

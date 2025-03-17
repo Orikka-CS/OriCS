@@ -8,13 +8,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DRAW+CATEGORY_HANDES)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetCode(EVENT_TO_HAND)
+	e1:SetCategory(CATEGORY_TOHAND)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_SZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -31,26 +30,40 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1filter(c,tp)
-	return c:IsControler(1-tp) and c:GetOwner()==tp and not c:IsReason(REASON_DRAW)
+function s.cst1filter(c)
+	return c:IsSetCard(0xf2e) and c:IsAbleToRemoveAsCost()
 end
 
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con1filter,1,nil,tp)
+function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_GRAVE,0,nil)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_HANDES,nil,1,0,0)
+	local g=Duel.GetMatchingGroup(Card.IsSetCard,tp,LOCATION_HAND,0,nil,0xf2e)
+	local og=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
+	if chk==0 then return #g>0 and #og>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_HAND)
+end
+
+function s.op1filter(c)
+	return not c:IsSetCard(0xf2e)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=eg:Filter(s.con1filter,nil,tp)
-	g=g:Filter(Card.IsLocation,nil,LOCATION_HAND)
-	if Duel.Draw(tp,1,REASON_EFFECT)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.SendtoGrave(g,REASON_EFFECT)
-	end
+	local g=Duel.GetMatchingGroup(Card.IsSetCard,tp,LOCATION_HAND,0,nil,0xf2e)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
+		local og=Duel.GetMatchingGroup(s.op1filter,tp,0,LOCATION_HAND,nil)
+		if #og==0 then return end
+		Duel.BreakEffect()
+		local osg=aux.SelectUnselectGroup(og,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(osg,tp,REASON_EFFECT)
+	end 
 end
 
 --effect 2

@@ -47,7 +47,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
 	if #g>0 then
-		local sg=g:RandomSelect(1-tp,1):GetFirst()
+		local sg=g:RandomSelect(tp,1):GetFirst()
 		Duel.ConfirmCards(tp,sg)
 		if sg:IsMonster() and sg:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE) and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
