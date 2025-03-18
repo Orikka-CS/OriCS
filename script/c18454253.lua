@@ -66,7 +66,7 @@ function s.gop3(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.gofil4(c,tp)
-	return c:IsControler(tp) and c:IsSetCard("功力") and c:IsLoc("G") and c:isPreviousLocation(LSTN("R"))
+	return c:IsControler(tp) and c:IsSetCard("功力") and c:IsLoc("G") and c:IsPreviousLocation(LSTN("R"))
 end
 function s.gop4(e,tp,eg,ep,ev,re,r,rp)
 	for p=0,1 do
