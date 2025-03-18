@@ -42,9 +42,10 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		ct=2
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.tfil1,tp,LOCATION_DECK,0,1,ct,nil)
+	local g=Duel.GetMatchingGroup(s.tfil1,tp,LOCATION_DECK,0,nil)
 	if #g>0 then
-		Duel.SendtoGrave(g,REASON_EFFECT)
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.dncheck,1,tp,HINTMSG_TOGRAVE)
+		Duel.SendtoGrave(sg,REASON_EFFECT)
 	end
 end
 function s.tar2(e,c)
@@ -53,9 +54,9 @@ function s.tar2(e,c)
 	return c:IsRelateToBattle() and bc and bc:IsControler(tp) and bc:IsFaceup() and bc:IsSetCard(0x2a)
 end
 function s.vfil3(c)
-	return c:IsSetCard(0x2a) and c:IsFaceup()
+	return c:IsSetCard(0x2a) and c:IsFaceup() and c:IsType(TYPE_MONSTER)
 end
 function s.val3(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetMatchingGroupCount(s.vfil3,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)*-300
+	return Duel.GetMatchingGroupCount(s.vfil3,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)*-200
 end

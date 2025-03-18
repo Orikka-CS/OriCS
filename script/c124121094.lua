@@ -82,7 +82,6 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,s.tfil3,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,3,3,nil)
 	g:AddCard(c)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,4,0,0)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 function s.ofil3(c,e,tp)
 	return c:IsSetCard(0x2a) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
@@ -92,12 +91,6 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetTargetCards(e)
 	if c:IsRelateToEffect(e) and #g>0 then
 		g:AddCard(c)
-		if Duel.SendtoDeck(g,nil,2,REASON_EFFECT)>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-			local sg=Duel.SelectMatchingCard(tp,s.ofil3,tp,LOCATION_DECK,0,0,1,nil,e,tp)
-			if #sg>0 then
-				Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
-			end
-		end
+		Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
 	end
 end
