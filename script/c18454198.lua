@@ -43,7 +43,7 @@ function s.gop1(e,tp,eg,ep,ev,re,r,rp)
 		if pl==LOCATION_MZONE and tc:GetPreviousTypeOnField()==TYPE_TOON then
 			local p=tc:GetReasonPlayer()
 			s[p]=s[p]+1
-		elseif pl==LOCATION_HAND and tc:IsMonster() and tc:GetOriginalType()==TYPE_TOON then
+		elseif pl==LOCATION_HAND and tc:IsMonster() and tc:GetOriginalType()&TYPE_TOON==TYPE_TOON then
 			local p=tc:GetPreviousControler()
 			s[p]=s[p]+1
 		end
