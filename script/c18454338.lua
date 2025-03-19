@@ -33,7 +33,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local b1=Duel.GetLocCount(tp,"M")>0 and tc:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		local b2=tc:IsAbleToGrave()
 		local res=nil
-		local op=Duel.SelectEffect(tp,{b1,aux.Stringid(id,1)},{b1,aux.Stringid(id,2)})
+		local op=Duel.SelectEffect(tp,{b1,aux.Stringid(id,1)},{b2,aux.Stringid(id,2)})
 		if op==1 then
 			res=Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 		elseif op==2 then
