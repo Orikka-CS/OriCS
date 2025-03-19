@@ -100,7 +100,7 @@ function cm.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 		return Duel.GetFieldGroupCount(tp,LSTN("H"),0)>0 and Duel.IEMCard(cm.tfil3,tp,"D",0,1,nil)
 	end
 	Duel.SOI(0,CATEGORY_HANDES,nil,0,tp,1)
-	Duel.SOI(0,CATEGORY_TOAHND,nil,1,tp,"D")
+	Duel.SOI(0,CATEGORY_TOHAND,nil,1,tp,"D")
 end
 function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.DiscardHand(tp,nil,1,1,REASON_EFFECT+REASON_DISCARD)>0 then
