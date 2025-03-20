@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
@@ -69,11 +69,11 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsPreviousControler(1-tp) and c:IsPreviousLocation(LOCATION_HAND) and c:IsControler(tp) and c:IsSetCard(0xf2e)
+	return c:IsSetCard(0xf2e) and c:IsFaceup() and c:IsControler(tp)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,tp) and not eg:IsContains(e:GetHandler())
+	return eg:IsExists(s.con2filter,1,nil,tp)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

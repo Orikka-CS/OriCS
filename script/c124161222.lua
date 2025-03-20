@@ -91,13 +91,12 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)},{b3,aux.Stringid(id,2)}) 
 	if b==1 then return end
 	local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
+	Duel.BreakEffect()
 	Duel.SendtoGrave(gsg,REASON_EFFECT)
 	if not gsg:IsLocation(LOCATION_GRAVE) then return end
 	if b==2 then
-		Duel.BreakEffect()
 		Duel.SendtoHand(sg,tp,REASON_EFFECT)
 	else
-		Duel.BreakEffect()
 		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
 	end
 end
