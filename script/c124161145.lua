@@ -32,8 +32,10 @@ function s.tfilter(c,lc,stype,tp)
 end
 --effect 1
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	e:SetLabel(2)
-	return true
+	local g=Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_ONFIELD,0,e:GetHandler())
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+	Duel.SendtoGrave(sg,REASON_COST)
 end
 
 function s.tg1filter(c)
@@ -41,22 +43,15 @@ function s.tg1filter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local gg=Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_ONFIELD,0,e:GetHandler())
-	if chk==0 then if e:GetLabel()==0 or #gg==0 then return false end
-		e:SetLabel(0)
-		return Duel.IsExistingMatchingCard(s.tg1filter,tp,LOCATION_DECK,0,1,nil)
-	end
-	local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(gsg,REASON_COST)
-	e:SetLabel(0)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
-	local g=Duel.SelectMatchingCard(tp,s.tg1filter,tp,LOCATION_DECK,0,1,1,nil)
-	local te,ceg,cep,cev,cre,cr,crp=g:GetFirst():CheckActivateEffect(false,true,true)
-	Duel.ConfirmCards(1-tp,g)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM):GetFirst()
+	local te,ceg,cep,cev,cre,cr,crp=sg:CheckActivateEffect(false,true,true)
+	Duel.ConfirmCards(1-tp,sg)
 	Duel.ShuffleDeck(tp)
 	e:SetProperty(te:GetProperty())
-	local tg=te:GetTarget()
-	if tg then tg(e,tp,ceg,cep,cev,cre,cr,crp,1) end
+	local ta=te:GetTarget()
+	if ta then ta(e,tp,ceg,cep,cev,cre,cr,crp,1) end
 	te:SetLabelObject(e:GetLabelObject())
 	e:SetLabelObject(te)
 	Duel.ClearOperationInfo(0)

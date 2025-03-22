@@ -7,7 +7,6 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
-	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -34,35 +33,31 @@ function s.con1(e,tp)
 	return #g>0 
 end
 
-function s.cst1filter(c)
+function s.tg1filter(c)
 	local te=c:GetActivateEffect()
-	return c:IsAbleToGraveAsCost() and c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY) and c:CheckActivateEffect(false,true,false)
+	return c:IsAbleToGraveAsCost() and c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY) and c:CheckActivateEffect(true,true,false)~=nil
 end
 
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cst1filter,tp,LOCATION_DECK,0,1,nil) end
-end
-
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then
-		local te=e:GetLabelObject()
-		return tg and tg(e,tp,eg,ep,ev,re,r,rp,0,chkc)
-	end
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cst1filter,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil) end
-	local g=Duel.SelectMatchingCard(tp,s.cst1filter,tp,LOCATION_HAND+LOCATION_DECK,0,1,1,nil)
-	if not Duel.SendtoGrave(g,REASON_COST) then return end
-	local te=g:GetFirst():CheckActivateEffect(true,true,false)
-	e:SetLabel(te:GetLabel())
-	e:SetLabelObject(te:GetLabelObject())
-	local tg=te:GetTarget()
-	if tg then
-		tg(e,tp,eg,ep,ev,re,r,rp,1)
-	end
-	te:SetLabel(e:GetLabel())
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
+	local te,ceg,cep,cev,cre,cr,crp=sg:CheckActivateEffect(false,true,true)
+	Duel.SendtoGrave(sg,REASON_EFFECT)
+	e:SetProperty(te:GetProperty())
+	local ta=te:GetTarget()
+	if ta then ta(e,tp,ceg,cep,cev,cre,cr,crp,1) end
 	te:SetLabelObject(e:GetLabelObject())
 	e:SetLabelObject(te)
-	e:SetCategory(0)
 	Duel.ClearOperationInfo(0)
+end
+
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local te=e:GetLabelObject()
+	if not te then return end
+	e:SetLabelObject(te:GetLabelObject())
+	local op=te:GetOperation()
+	if op then op(e,tp,eg,ep,ev,re,r,rp) end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)

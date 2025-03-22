@@ -31,40 +31,35 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1filter(c)
+function s.tg1filter(c,e)
 	local te=c:GetActivateEffect()
-	return c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY) and c:CheckActivateEffect(false,true,false)
+	return c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY) and c:CheckActivateEffect(false,true,false) and c:IsCanBeEffectTarget(e)
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then
-		local te=e:GetLabelObject()
-		local tg=te:GetTarget()
-		return tg and tg(e,tp,eg,ep,ev,re,r,rp,0,chkc)
-	end
-	if chk==0 then return Duel.IsExistingTarget(s.tg1filter,tp,LOCATION_GRAVE,0,1,nil) end
-	e:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	local g=Duel.SelectTarget(tp,s.tg1filter,tp,LOCATION_GRAVE,0,1,1,nil)
-	local te,ceg,cep,cev,cre,cr,crp=g:GetFirst():CheckActivateEffect(false,true,true)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET):GetFirst()
+	Duel.SetTargetCard(sg)
+	local te,ceg,cep,cev,cre,cr,crp=sg:CheckActivateEffect(false,true,true)
 	Duel.ClearTargetCard()
-	g:GetFirst():CreateEffectRelation(e)
-	local tg=te:GetTarget()
+	sg:CreateEffectRelation(e)
 	e:SetProperty(te:GetProperty())
-	if tg then tg(e,tp,ceg,cep,cev,cre,cr,crp,1) end
+	local ta=te:GetTarget()
+	if ta then ta(e,tp,ceg,cep,cev,cre,cr,crp,1) end
+	te:SetLabelObject(e:GetLabelObject())
 	e:SetLabelObject(te)
 	Duel.ClearOperationInfo(0)
 	e:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_NO_TURN_RESET)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local tg=Duel.GetFirstTarget()
 	local te=e:GetLabelObject()
 	if not te or not te:GetHandler():IsRelateToEffect(e) then return end
 	e:SetLabelObject(te:GetLabelObject())
 	local op=te:GetOperation()
-	if op then
-		op(e,tp,eg,ep,ev,re,r,rp)
-	end
+	if op then op(e,tp,eg,ep,ev,re,r,rp) end
 end
 
 --effect 2

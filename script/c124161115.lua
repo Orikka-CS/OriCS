@@ -10,8 +10,7 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
-	e1:SetCost(s.cst1)
+	e1:SetCondition(function(e,tp) return Duel.IsTurnPlayer(1-tp) end)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -29,32 +28,19 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1(_,tp)
-	return Duel.IsTurnPlayer(1-tp)
-end
-
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	e:SetLabel(2)
-	return true
-end
-
 function s.tg1filter(c)
 	return c:IsSpellTrap() and c:IsSetCard(0xf27) and c:IsAbleToRemoveAsCost() and c:CheckActivateEffect(false,true,true)~=nil
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then if e:GetLabel()==0 then return false end
-		e:SetLabel(0)
-		return Duel.IsExistingMatchingCard(s.tg1filter,tp,LOCATION_GRAVE,0,1,nil)
-	end
-	e:SetLabel(0)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,s.tg1filter,tp,LOCATION_GRAVE,0,1,1,nil)
-	local te,ceg,cep,cev,cre,cr,crp=g:GetFirst():CheckActivateEffect(false,true,true)
-	Duel.Remove(g,POS_FACEUP,REASON_COST)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE):GetFirst()
+	local te,ceg,cep,cev,cre,cr,crp=sg:CheckActivateEffect(false,true,true)
+	Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 	e:SetProperty(te:GetProperty())
-	local tg=te:GetTarget()
-	if tg then tg(e,tp,ceg,cep,cev,cre,cr,crp,1) end
+	local ta=te:GetTarget()
+	if ta then ta(e,tp,ceg,cep,cev,cre,cr,crp,1) end
 	te:SetLabelObject(e:GetLabelObject())
 	e:SetLabelObject(te)
 	Duel.ClearOperationInfo(0)

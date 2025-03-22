@@ -31,20 +31,16 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.cst1filter,tp,LOCATION_DECK,0,1,nil) end
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then
-		local te=e:GetLabelObject()
-		return tg and tg(e,tp,eg,ep,ev,re,r,rp,0,chkc)
-	end
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.cst1filter,tp,LOCATION_DECK,0,1,nil) end
 	local g=Duel.SelectMatchingCard(tp,s.cst1filter,tp,LOCATION_DECK,0,1,1,nil)
 	if not Duel.SendtoGrave(g,REASON_COST) then return end
 	local te=g:GetFirst():CheckActivateEffect(true,true,false)
 	e:SetLabel(te:GetLabel())
 	e:SetLabelObject(te:GetLabelObject())
-	local tg=te:GetTarget()
-	if tg then
-		tg(e,tp,eg,ep,ev,re,r,rp,1)
+	local ta=te:GetTarget()
+	if ta then
+		ta(e,tp,eg,ep,ev,re,r,rp,1)
 	end
 	te:SetLabel(e:GetLabel())
 	te:SetLabelObject(e:GetLabelObject())
