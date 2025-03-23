@@ -23,7 +23,7 @@ function cm.con1(e)
 	return c:IsLoc("HOG")
 end
 function cm.nfil2(c)
-	return c:IsFaceup() and not c:IsSetCard(0x2df)
+	return c:IsFacedown() or not c:IsSetCard(0x2df)
 end
 function cm.con2(e,tp,eg,ep,ev,re,r,rp)
 	return not Duel.IEMCard(cm.nfil2,tp,"M",0,1,nil)

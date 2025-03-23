@@ -15,7 +15,7 @@ function cm.afil1(re,tp,cid)
 	return not (loc&LOCATION_ONFIELD>0 and not rc:IsSetCard(0x2df))
 end
 function cm.nfil1(c)
-	return c:IsFaceup() and not c:IsSetCard(0x2df)
+	return c:IsFacedown() or not c:IsSetCard(0x2df)
 end
 function cm.con1(e,tp,eg,ep,ev,re,r,rp)
 	return not Duel.IEMCard(cm.nfil1,tp,"M",0,1,nil)
