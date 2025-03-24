@@ -59,7 +59,7 @@ end
 
 --effect 2
 function s.con2filter(c,e,tp,re,r,rp)
-	return rp==tp and c:IsPreviousLocation(LOCATION_MZONE) and c:IsLocation(LOCATION_GRAVE) and c:IsPreviousControler(1-tp) and c:IsReason(REASON_EFFECT) and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsPreviousLocation(LOCATION_MZONE) and c:IsLocation(LOCATION_GRAVE) and c:IsPreviousControler(1-tp) and c:IsReason(REASON_EFFECT) and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
