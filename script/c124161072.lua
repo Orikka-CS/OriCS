@@ -44,28 +44,17 @@ function s.initial_effect(c)
 	e3a:SetCode(EVENT_CHAIN_END)
 	e3a:SetOperation(s.op3a)
 	c:RegisterEffect(e3a)  
-	--count
-	aux.GlobalCheck(s,function()
-		local cnt=Effect.CreateEffect(c)
-		cnt:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		cnt:SetCode(EVENT_DESTROYED)
-		cnt:SetOperation(s.cnt)
-		Duel.RegisterEffect(cnt,0)
-	end)
-end
-
---count
-function s.cnt(e,tp,eg,ep,ev,re,r,rp)
-	for tc in eg:Iter() do
-		if tc:IsReason(REASON_EFFECT) then Duel.RegisterFlagEffect(0,id,RESET_PHASE+PHASE_END,0,1) end
-	end
 end
 
 --effect 1
-function s.val1(e)
-	return Duel.GetFlagEffect(0,id)*200
+function s.val1filter(c)
+	local te=c:GetActivateEffect()
+	return c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY)
 end
 
+function s.val1(e,c)
+	return Duel.GetMatchingGroupCount(s.val1filter,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil)*300
+end
 --effect 2
 function s.con2filter(c,tp)
 	return c:IsReason(REASON_EFFECT) and c:IsPreviousLocation(LOCATION_ONFIELD) and c:GetPreviousControler()==1-tp and c:IsLocation(LOCATION_GRAVE)
