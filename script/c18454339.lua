@@ -84,7 +84,7 @@ function s.ocon13(e)
 	return Duel.IEMCard(s.onfil13,tp,"MG",0,1,nil)
 end
 function s.tfil2(c,e,tp)
-	return c:IsSetCard("ÆÛ½ºÆ®ÄõÅÍ") and c:IsAbleToHand()
+	return c:IsSetCard("ÆÛ½ºÆ®ÄõÅÍ") and c:IsType(TYPE_MONSTER)
 		and (c:IsAbleToHand() or (Duel.GetLocCount(tp,"M")>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)))
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
