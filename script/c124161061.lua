@@ -11,10 +11,11 @@ function s.initial_effect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_EQUIP+CATEGORY_DISABLE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCode(EVENT_CHAINING)
 	e1:SetRange(LOCATION_SZONE)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -37,6 +38,9 @@ function s.unendalf(c)
 	return c:IsCode(124161058) and c:IsFaceup()
 end
 
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	return re:GetHandler()~=e:GetHandler()
+end
 
 function s.tg1filter(c)
 	return c:IsFaceup() and c:IsSetCard(0xf23)
