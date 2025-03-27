@@ -12,11 +12,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCategory(CATEGORY_HANDES)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_TO_HAND)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(s.con2)
 	e2:SetCost(aux.bfgcost)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
@@ -48,22 +50,24 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.tg2filter(c,e)
-	return c:IsMonster() and c:IsCanBeEffectTarget(e) and c:IsAbleToHand() and not c:IsType(TYPE_EXTRA)
+function s.con2filter(c,tp)
+	return c:IsControler(1-tp) and c:GetOwner()==tp and not c:IsReason(REASON_DRAW)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,e:GetHandler(),e)
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.con2filter,1,nil,tp)
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=eg:Filter(s.con2filter,nil,tp)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,gg,1,tp,LOCATION_HAND)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) then
-		Duel.SendtoHand(tg,1-tp,REASON_EFFECT)
+	local g=eg:Filter(s.con2filter,nil,tp)
+	local gg=g:Filter(Card.IsLocation,nil,LOCATION_HAND)
+	if #gg>0 then
+		Duel.SendtoGrave(gg,REASON_EFFECT)
 	end
 end
