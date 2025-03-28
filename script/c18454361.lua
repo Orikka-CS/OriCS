@@ -110,12 +110,12 @@ function s.tar4(e,c)
 end
 function s.val5(e,c)
 	local ec=e:GetHandler()
-	return c:IsFaceup() and c:IsSetCaard("Ω ¿Ã»Ò") and c~=ec
+	return c:IsFaceup() and c:IsSetCard("Ω ¿Ã»Ò") and c~=ec
 end
 function s.op7(e,tp,eg,ep,ev,re,r,rp)
 	if re:IsSpellEffect() and rp==tp and re:GetHandler():IsSetCard("Ω ¿Ã»Ò") then
 		Duel.Hint(HINT_CARD,0,id)
-		Duel.Recover(tp,100,REASON_EFFECT)
+		Duel.Recover(tp,150,REASON_EFFECT)
 	end
 end
 
