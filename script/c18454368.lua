@@ -21,8 +21,7 @@ function s.initial_effect(c)
 	e4:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e4:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
 	e4:SetCondition(aux.exccon)
-	e4:SetCost(aux.bfgcost)
-	WriteEff(e4,4,"TO")
+	WriteEff(e4,4,"CTO")
 	c:RegisterEffect(e4)
 end
 function s.tfil1(c,e,tp)
@@ -73,6 +72,14 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(tp,1,REASON_EFFECT)
+end
+function s.cost4(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then
+		return c:IsAbleToDeckAsCost()
+	end
+	Duel.HintSelection(Group.FromCards(c))
+	Duel.SendtoDeck(c,nil,2,REASON_COST)
 end
 function s.tfil4(c)
 	return c:IsSetCard("Ω ¿Ã»Ò") and c:IsAbleToDeck() and not c:IsCode(id)
