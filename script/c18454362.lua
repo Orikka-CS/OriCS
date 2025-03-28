@@ -91,7 +91,7 @@ function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		return chkc:IsLoc("G") and chkc:IsControler(tp) and s.tfil4(chkc,e,tp)
 	end
 	if chk==0 then
-		return Duel.IETarget(s.tfil1,tp,"G",0,1,nil,e,tp) and Duel.GetLocCount(tp,"M")>0
+		return Duel.IETarget(s.tfil4,tp,"G",0,1,nil,e,tp) and Duel.GetLocCount(tp,"M")>0
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.STarget(tp,s.tfil4,tp,"G",0,1,1,nil,e,tp)
