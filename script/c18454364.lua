@@ -67,7 +67,7 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		return chkc:IsLoc("M") and chkc:IsAbleToRemove()
 	end
 	if chk==0 then
-		return Duel.IsExistingTarget(Card.IsAbleToRemove,tp,"M","M",1,nil)
+		return Duel.IETarget(Card.IsAbleToRemove,tp,"M","M",1,nil)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.STarget(tp,Card.IsAbleToRemove,tp,"M","M",1,1,nil)
@@ -125,7 +125,7 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc and tc:IsFaceup() and tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-		local g=Duel.SMCard(tp,s.tfil42,"DG",0,1,1,nil)
+		local g=Duel.SMCard(tp,s.tfil42,tp,"DG",0,1,1,nil)
 		if #g>0 then
 			Duel.Overlay(tc,g)
 		end

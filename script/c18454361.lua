@@ -78,7 +78,7 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		return chkc:IsLoc("M") and chkc:IsControler(1-tp) and chkc:IsFaceup()
 	end
 	if chk==0 then
-		return Duel.IEarget(Card.IsFaceup,tp,0,"M",1,nil)
+		return Duel.IETarget(Card.IsFaceup,tp,0,"M",1,nil)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	Duel.STarget(tp,Card.IsFaceup,tp,0,"M",1,1,nil)

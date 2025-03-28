@@ -8,7 +8,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function s.tfil1(c)
-	return c:IsSetCard("Ω ¿Ã»Ò") and c:IsAbleToHand() and not c:GetType()==TYPE_SPELL
+	return c:IsSetCard("Ω ¿Ã»Ò") and c:IsAbleToHand() and c:GetType()~=TYPE_SPELL
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
