@@ -113,7 +113,7 @@ function s.nfil4(c,tp,rp)
 end
 function s.con4(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return not eg:IsContains(c) and eg:IsExists(s.cfilter,1,nil,tp,rp)
+	return not eg:IsContains(c) and eg:IsExists(s.nfil4,1,nil,tp,rp)
 end
 function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
