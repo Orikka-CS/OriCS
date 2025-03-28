@@ -29,7 +29,7 @@ function s.con1(e,c)
 	return Duel.GetLocCount(tp,"M")>0 and Duel.GetFieldGroupCount(tp,LSTN("M"),0)==0
 end
 function s.tfil2(c)
-	return c:IsSetCard("Ω ¿Ã»Ò") and not c:IsCode(id)
+	return c:IsSetCard("Ω ¿Ã»Ò")
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
