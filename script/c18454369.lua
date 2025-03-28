@@ -67,7 +67,7 @@ function s.tfil4(c,e,tp)
 end
 function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.GetLocCount(tp,"M")>0 and Duel.IEMCard(s.tfil3,tp,"D",0,1,nil,e,tp)
+		return Duel.GetLocCount(tp,"M")>0 and Duel.IEMCard(s.tfil4,tp,"D",0,1,nil,e,tp)
 	end
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,"D")
 end
@@ -76,7 +76,7 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SMCard(tp,s.tfil3,tp,"D",0,1,1,nil,e,tp)
+	local g=Duel.SMCard(tp,s.tfil4,tp,"D",0,1,1,nil,e,tp)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
