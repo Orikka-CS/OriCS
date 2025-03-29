@@ -47,9 +47,9 @@ function c17280012.op1(e,tp,eg,ep,ev,re,r,rp)
 	if g1:GetCount()<1 or g2:GetCount()<1 then
 		return
 	end
-	Duel.Hint(HINT_SELECMTSG,tp,HINTMSG_CONFIRM)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
 	local sg1=g1:Select(tp,1,1,nil)
-	Duel.Hint(HINT_SELECMTSG,tp,HINTMSG_CONFIRM)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
 	local sg2=g2:Select(tp,1,1,nil)
 	sg1:Merge(sg2)
 	Duel.ConfirmCards(1-tp,sg1)
