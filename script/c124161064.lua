@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetCondition(function(e,tp) return Duel.IsTurnPlayer(1-tp) end)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -28,10 +28,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1(_,tp)
-	return Duel.IsTurnPlayer(1-tp)
-end
-
 function s.tg1filter(c)
 	return c:IsSetCard(0xf24) and c:IsDiscardable()
 end
