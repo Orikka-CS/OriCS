@@ -71,10 +71,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if #g==0 then
 		return
 	end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,2,s.ofun1,1,tp,HINTMSG_ATOHAND)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,2,s.ofun1,1,tp,HINTMSG_TOGRAVE)
 	if sg then
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
+		Duel.SendtoGrave(sg,REASON_EFFECT)
 		if #sg==1 then
 			local tc=sg:GetFirst()
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
