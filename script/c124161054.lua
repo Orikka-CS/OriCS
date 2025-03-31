@@ -53,7 +53,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and chkc:IsCanBeEffectTarget(e) end
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chkc:IsCanBeEffectTarget(e) end
 	local eq=Duel.GetFlagEffect(tp,124161058)
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return #g>0 and eq>0 end
