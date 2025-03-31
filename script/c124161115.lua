@@ -21,7 +21,7 @@ function s.initial_effect(c)
 	e2:SetCode(EVENT_PHASE+PHASE_END)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
+	e2:SetCondition(function(e,tp) return Duel.IsTurnPlayer(tp) end)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -55,10 +55,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2(_,tp)
-	return Duel.IsTurnPlayer(tp)
-end
-
 function s.tg2filter(c,e)
 	return c:IsSetCard(0xf27) and c:IsSpellTrap() and c:IsSSetable() and c:IsCanBeEffectTarget(e) and c:IsFaceup()
 end
