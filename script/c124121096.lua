@@ -44,7 +44,7 @@ s.listed_series={0x2a}
 function s.val0(e,c)
 	local g=c:GetMaterial()
 	e:SetLabel(0)
-	if g:IsExists(Card.IsSetacrd,1,nil,0x2a) then
+	if g:IsExists(Card.IsSetCard,1,nil,0x2a) then
 		e:SetLabel(1)
 	end
 end
