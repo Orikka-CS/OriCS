@@ -3,6 +3,11 @@ local s,id=GetID()
 function s.initial_effect(c)
 	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_EARTH),2,2)
 	c:EnableReviveLimit()
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetCode(EFFECT_MATERIAL_CHECK)
+	e0:SetValue(s.val0)
+	c:RegisterEffect(e0)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_EXTRA_MATERIAL)
@@ -17,9 +22,11 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetCountLimit(1,id)
+	e2:SetCondition(s.con2)
 	e2:SetCost(s.cost2)
 	e2:SetTarget(s.tar2)
 	e2:SetOperation(s.op2)
+	e2:SetLabelObject(e0)
 	c:RegisterEffect(e2)
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_QUICK_O)
@@ -34,6 +41,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 s.listed_series={0x2a}
+function s.val0(e,c)
+	local g=c:GetMaterial()
+	e:SetLabel(0)
+	if g:IsExists(Card.IsSetacrd,1,nil,0x2a) then
+		e:SetLabel(1)
+	end
+end
 function s.op1(c,e,tp,sg,mg,lc,og,chk)
 	if not s.pg1 then
 		return true
@@ -61,6 +75,11 @@ function s.val1(chk,summon_type,e,...)
 		s.pg1=nil
 	end
 end
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local te=e:GetLabelObject()
+	return c:IsSummonType(SUMMON_TYPE_LINK) and te:GetLabel()==1
+end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,nil)
@@ -75,38 +94,20 @@ end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return Duel.GetLocationCount(tp,LOCATION_MZONE)>1
-			and Duel.IsExistingMatchingCard(s.tfil2,tp,LOCATION_DECK,0,1,nil,e,tp)
-			and Duel.IsExistingMatchingCard(s.tfil2,tp,LOCATION_GRAVE,0,1,nil,e,tp)
+			and Duel.IsExistingMatchingCard(s.tfil2,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp)
 	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_DECK+LOCATION_GRAVE)
-	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,nil,1,tp,LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<2
-		or not Duel.IsExistingMatchingCard(s.tfil2,tp,LOCATION_DECK,0,1,nil,e,tp)
-		or not Duel.IsExistingMatchingCard(s.tfil2,tp,LOCATION_DECK,0,1,nil,e,tp) then
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g1=Duel.SelectMatchingCard(tp,s.tfil2,tp,LOCATION_DECK,0,1,1,nil,e,tp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g2=Duel.SelectMatchingCard(tp,s.tfil2,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
-	g1:AddCard(g2)
-	local tc=g1:GetFirst()
-	while tc do
-		Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP)
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
-		e1:SetDescription(3312)
-		e1:SetReset(RESET_EVENT|RESETS_STANDARD)
-		e1:SetValue(1)
-		tc:RegisterEffect(e1)
-		tc=g1:GetNext()
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil2),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
+	if #g>0 then
+		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
-	Duel.SpecialSummonComplete()
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
