@@ -52,7 +52,7 @@ function s.tfil1(c)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then
-		return chkc:IsOnField() and chkc:IsControler(tp) and s.tfil2(chkc)
+		return chkc:IsOnField() and chkc:IsControler(tp) and s.tfil1(chkc)
 	end
 	if chk==0 then
 		return Duel.IsExistingTarget(s.tfil1,tp,LOCATION_ONFIELD,0,1,nil)
