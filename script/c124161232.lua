@@ -65,34 +65,37 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.cst2filter(c)
-	return c:IsSetCard(0xf2f) and not c:IsPublic()
-end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,c)
-	if chk==0 then return c:IsDiscardable() and #g>0 end
+	if chk==0 then return c:IsDiscardable() end
 	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.ShuffleHand(tp)
 end
 
 function s.tg2filter(c)
-	return c:IsContinuousSpell()
+	return c:IsSetCard(0xf2f) and not c:IsPublic()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,nil)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,e:GetHandler())
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 end
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,nil)
-	if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOFIELD):GetFirst()
-		Duel.MoveToField(sg,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
-		aux.DelayedOperation(sg,PHASE_STANDBY,id,e,tp,function(sg) Duel.SendtoDeck(sg,nil,SEQ_DECKTOP,REASON_EFFECT) end,nil,0,1,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)-3,aux.TRUE,1,tp,HINTMSG_CONFIRM)
+		local ct=#sg+3
+		Duel.ConfirmCards(1-tp,sg)
+		Duel.ShuffleHand(tp)
+		Duel.ConfirmDecktop(tp,ct)
+		local mg=Duel.GetDecktopGroup(tp,ct)
+		mg=mg:Filter(Card.IsContinuousSpell,nil)
+		mg=mg+Duel.GetFieldGroup(tp,LOCATION_HAND,0):Filter(Card.IsContinuousSpell,nil)
+		if #mg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
+			local msg=aux.SelectUnselectGroup(mg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOFIELD):GetFirst()
+			Duel.MoveToField(msg,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+		end
+		Duel.ShuffleDeck(tp)
 	end
 end
