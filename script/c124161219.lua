@@ -76,10 +76,10 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetLabel()==1 then
-		local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
+		local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_MZONE,nil)
 		if #g>0 then Duel.Destroy(g,REASON_EFFECT) end
 	else
-		local g=Duel.GetMatchingGroup(Card.IsFacedown,tp,0,LOCATION_SZONE,nil)
+		local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_SZONE,nil)
 		if #g>0 then Duel.Destroy(g,REASON_EFFECT) end
 	end
 end
