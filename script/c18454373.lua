@@ -51,14 +51,15 @@ function s.tfil1(c)
 	return c:IsFaceup() and c:IsSetCard(0xc00)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
 	if chkc then
-		return chkc:IsOnField() and chkc:IsControler(tp) and s.tfil1(chkc)
+		return chkc:IsOnField() and chkc:IsControler(tp) and s.tfil1(chkc) and chkc~=c
 	end
 	if chk==0 then
-		return Duel.IsExistingTarget(s.tfil1,tp,LOCATION_ONFIELD,0,1,nil)
+		return Duel.IsExistingTarget(s.tfil1,tp,LOCATION_ONFIELD,0,1,c)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,s.tfil1,tp,LOCATION_ONFIELD,0,1,1,nil)
+	Duel.SelectTarget(tp,s.tfil1,tp,LOCATION_ONFIELD,0,1,1,c)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
