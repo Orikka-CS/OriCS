@@ -101,7 +101,7 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(act_from_hand_chk)
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	local rc=re:GetHandler()
-	if rc:IsDestructable() and rC:IsRelateToEffect(re) then
+	if rc:IsDestructable() and rc:IsRelateToEffect(re) then
 		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
 	end
 end
