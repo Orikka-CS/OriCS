@@ -34,6 +34,7 @@ function s.initial_effect(c)
 	e5:SetOperation(s.op5)
 	c:RegisterEffect(e5)
 end
+s.listed_names={199900002}
 function s.tfil1(c)
 	return c:IsCode(199900002) and not c:IsForbidden()
 end

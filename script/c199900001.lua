@@ -48,7 +48,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e6)
 end
 s.material={199900000,199900002}
-s.listed_names={199900000,199900002}
+s.listed_names={199900000,199900002,199900003}
 local gfilter=Group.Filter
 function Group.Filter(group,filter,exceptions,param1,...)
 	if type(filter)=="function" and filter==Card.IsCanBeSynchroMaterial

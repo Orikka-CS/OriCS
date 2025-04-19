@@ -57,6 +57,7 @@ function s.initial_effect(c)
 	e8:SetValue(s.val8)
 	c:RegisterEffect(e8)
 end
+s.listed_names={199900000}
 function s.tfil2(c)
 	return c:IsCode(199900000) and c:IsAbleToHand()
 end

@@ -66,6 +66,7 @@ function s.initial_effect(c)
 	e8:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_IMMEDIATELY_APPLY)
 	c:RegisterEffect(e8)
 end
+s.listed_names={199900000,199900001}
 function s.tfil2(c,e,tp)
 	return c:IsCode(199900000) and (c:IsAbleToHand()
 		or (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)))
