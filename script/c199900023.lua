@@ -260,3 +260,11 @@ end
 function s.tar9(e,c)
 	return not c:HasLevel()
 end
+local cicbsm=Card.IsCanBeSynchroMaterial
+function Card.IsCanBeSynchroMaterial(c,sc,...)
+	if c:Type()&TYPE_XYZ~=0 and c:IsHasEffect(EFFECT_SYNCHRO_LEVEL) then
+		--not fully implemented
+		return true
+	end
+	return cicbsm(c,sc,...)
+end
