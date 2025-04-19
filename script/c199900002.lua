@@ -56,6 +56,15 @@ function s.initial_effect(c)
 	e8:SetCode(EFFECT_CANNOT_BE_SYNCHRO_MATERIAL)
 	e8:SetValue(s.val8)
 	c:RegisterEffect(e8)
+	local e9=Effect.CreateEffect(c)
+	e9:SetType(EFFECT_TYPE_FIELD)
+	e9:SetCode(EFFECT_SYNCHRO_LEVEL)
+	e9:SetRange(LOCATION_FZONE)
+	e9:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e9:SetTargetRange(0xff,0xff)
+	e9:SetTarget(s.tar9)
+	e9:SetValue(999)
+	c:RegisterEffect(e9)
 end
 s.listed_names={199900000}
 function s.tfil2(c)
@@ -171,4 +180,7 @@ function s.val8(e,c)
 		return false
 	end
 	return not c:IsLevel(9)
+end
+function s.tar9(e,c)
+	return not c:HasLevel()
 end
