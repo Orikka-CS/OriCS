@@ -1,91 +1,69 @@
---태양월영초신관
+--오성신 - 에투알
 local s,id=GetID()
 function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetRange(LOCATION_HAND)
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
-	e1:SetTarget(s.tar1)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCategory(CATEGORY_SEARCH)
+	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetTarget(s.tar2)
-	e2:SetOperation(s.op2)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_CANNOT_INACTIVATE)
+	e2:SetRange(LOCATION_FZONE)
+	e2:SetValue(s.val2)
 	c:RegisterEffect(e2)
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetCode(EVENT_DESTROYED)
-	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
-	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e3:SetCountLimit(1,{id,2})
-	e3:SetCondition(s.con3)
-	e3:SetTarget(s.tar3)
-	e3:SetOperation(s.op3)
+	local e3=e2:Clone()
+	e3:SetCode(EFFECT_CANNOT_DISEFFECT)
 	c:RegisterEffect(e3)
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_IGNITION)
+	e4:SetRange(LOCATION_FZONE)
+	e4:SetCategory(CATEGORY_ATKCHANGE)
+	e4:SetCountLimit(1)
+	e4:SetTarget(s.tar4)
+	e4:SetOperation(s.op4)
+	c:RegisterEffect(e4)
 end
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsType,TYPE_SYNCHRO),tp,LOCATION_MZONE,0,1,nil)
-		and Duel.IsExistingMatchingCard(Card.IsType,tp,LOCATION_GRAVE,0,1,nil,TYPE_SYNCHRO)
-end
-function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then
-		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-			and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
+function s.ofil1(c)
+	return c:IsSetCard(0xffe) and c:IsAbleToHand() and not c:IsCode(id)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then
-		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
-	end
-end
-function s.tfil2(c)
-	return c:IsType(TYPE_TUNER) and c:IsLevelBelow(3) and c:IsAbleToHand()
-end
-function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then
-		return Duel.IsExistingMatchingCard(s.tfil2,tp,LOCATION_DECK|LOCATION_GRAVE,0,1,nil)
-	end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK|LOCATION_GRAVE)
-end
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil2),tp,LOCATION_DECK|LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_DECK,0,0,1,nil)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
 	end
 end
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c:IsReason(REASON_DESTROY) and c:IsReason(REASON_BATTLE+REASON_EFFECT)
-		and c:IsPreviousLocation(LOCATION_ONFIELD) and c:IsPreviousControler(tp)
+function s.val2(e,ct)
+	local te=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT)
+	local tc=te:GetHandler()
+	return tc:GetType()&(TYPE_RITUAL+TYPE_SPELL)==(TYPE_RITUAL+TYPE_SPELL)
 end
-function s.tfil3(c,e,tp)
-	return c:IsRace(RACE_DRAGON) and c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function s.tfil4(c)
+	return c:IsFaceup() and c:IsCode(15480009) and c:GetAttack()~=10000
 end
-function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then
+		return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and s.tfil4(chkc)
+	end
 	if chk==0 then
-		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-			and Duel.IsExistingMatchingCard(s.tfil3,tp,LOCATION_GRAVE,0,1,nil,e,tp)
+		return Duel.IsExistingTarget(s.tfil4,tp,LOCATION_MZONE,0,1,nil)
 	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+	Duel.SelectTarget(tp,s.tfil4,tp,LOCATION_MZONE,0,1,1,nil)
 end
-function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then
-		return
-	end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil3),tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
-	if #g>0 then
-		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+function s.op4(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=Duel.GetFirstTarget()
+	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		e1:SetValue(10000)
+		tc:RegisterEffect(e1)
 	end
 end
