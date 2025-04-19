@@ -27,7 +27,7 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SOI(0,CATEGORY_DRAW,nil,0,tp,2)
 end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.Draw(tp,2,REASON_EFEFCT)>1 then
+	if Duel.Draw(tp,2,REASON_EFFECT)>1 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local g=Duel.SMCard(tp,Card.IsAbleToRemove,tp,"H",0,1,1,nil)
 		if #g>0 then
