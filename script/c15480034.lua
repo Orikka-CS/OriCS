@@ -166,7 +166,7 @@ function s.con5(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsPreviousLocation(LOCATION_MZONE) and c:IsFaceup()
 end
 function s.tar5(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 the
+	if chk==0 then
 		 return Duel.CheckPendulumZones(tp)
 	end
 end
