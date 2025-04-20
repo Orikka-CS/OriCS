@@ -24,6 +24,7 @@ function s.initial_effect(c)
 	e3:SetCategory(CATEGORY_TODECK+CATEGORY_SPECIAL_SUMMON)
 	e3:SetCountLimit(1,id)
 	e3:SetCondition(s.con3)
+	e3:Setcost(s.cost3)
 	e3:SetTarget(s.tar3)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
@@ -35,9 +36,10 @@ end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return c:IsAbleToGraveAsCost()
+		return c:IsAbleToGraveAsCost() and Duel.GetFlagEffect(tp,id)==0
 	end
 	Duel.SendtoGrave(c,REASON_COST)
+	Duel.RegisterFlagEffect(tp,id,RESET_CHAIN,0,1)
 end
 function s.tfil1(c,e,tp)
 	return c:IsSetCard(0x2a) and c:IsLevelBelow(2) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
@@ -66,6 +68,12 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()&(PHASE_MAIN1+PHASE_MAIN2)~=0
+end
+function s.cost3(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		return Duel.GetFlagEffect(tp,id)==0
+	end
+	Duel.RegisterFlagEffect(tp,id,RESET_CHAIN,0,1)
 end
 function s.tfil3(c)
 	return c:IsFaceup() and c:IsAbleToDeck() and c:IsSetCard(0x2a) and not c:IsCode(id)
