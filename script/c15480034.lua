@@ -15,7 +15,8 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
-	e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_ATKCHANGE)
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_ATKCHANGE+CATEGORY_DESTROY)
+	e2:SetCountLimit(1,id)
 	e2:SetTarget(s.tar2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -32,17 +33,10 @@ function s.initial_effect(c)
 	e4:SetRange(LOCATION_MZONE)
 	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e4:SetCategory(CATEGORY_DAMAGE)
+	e4:SetCountLimit(1,{id,1})
 	e4:SetTarget(s.tar4)
 	e4:SetOperation(s.op4)
 	c:RegisterEffect(e4)
-	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e5:SetCode(EVENT_DESTROYED)
-	e5:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
-	e5:SetCondition(s.con5)
-	e5:SetTarget(s.tar5)
-	e5:SetOperation(s.op5)
-	c:RegisterEffect(e5)
 	local e6=Effect.CreateEffect(c)
 	e6:SetType(EFFECT_TYPE_FIELD)
 	e6:SetCode(EFFECT_CANNOT_ACTIVATE)
@@ -64,6 +58,7 @@ function s.tfil2(c,e,tp)
 	if not (c:IsRace(RACE_DRAGON) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)) then
 		return false
 	end
+	local g=Duel.GetMatchingGroup(aux.NOT(aux.FaceupFilter(Card.IsCode,id)),tp,LOCATION_MZONE,0,nil)
 	if c:IsLocation(LOCATION_EXTRA) then
 		return Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 	else
@@ -71,10 +66,12 @@ function s.tfil2(c,e,tp)
 	end
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(aux.NOT(aux.FaceupFilter(Card.IsCode,id)),tp,LOCATION_MZONE,0,nil)
 	if chk==0 then
-		return Duel.IsExistingMatchingCard(s.tfil2,tp,
+		return #g>0 and Duel.IsExistingMatchingCard(s.tfil2,tp,
 			LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_EXTRA,0,1,nil,e,tp)
 	end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,#g,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_EXTRA)
 end
 function s.ofil21(c)
@@ -98,6 +95,10 @@ function s.ofun2(ft1,ft2,ft3,ft4,ft)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
+	local dg=Duel.GetMatchingGroup(aux.NOT(aux.FaceupFilter(Card.IsCode,id)),tp,LOCATION_MZONE,0,nil)
+	if #dg==0 or Duel.Destroy(dg,REASON_EFFECT)==0 then
+		return
+	end
 	local ft1=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	local ft2=Duel.GetLocationCountFromEx(tp)
 	local ft3=Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_FUSION+TYPE_SYNCHRO+TYPE_XYZ)
