@@ -50,7 +50,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	elseif op==3 then
 		e:SetProperty(EFFECT_FLAG_CARD_TARGET)
 		e:SetCategory(CATEGORY_SPECIAL_SUMMON)
-		Duel.STaarget(tp,s.tfil13,tp,"G",0,1,1,nil,e,tp)
+		local g=Duel.STarget(tp,s.tfil13,tp,"G",0,1,1,nil,e,tp)
 		Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 	else
 		e:SetProperty(0)
