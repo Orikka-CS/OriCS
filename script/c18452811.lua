@@ -130,7 +130,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 			g=g:Select(tp,mft,mft,nil)
 		end
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
-		if ec and Duel.SelectYesNo(tp,aux.Stringid(m,2) then
+		if ec and Duel.SelectYesNo(tp,aux.Stringid(m,2)) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
 			local sg=g:Select(tp,1,1,nil)
 			local tc=sg:GetFirst()
