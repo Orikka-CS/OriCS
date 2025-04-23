@@ -4,6 +4,7 @@ function s.initial_effect(c)
 	local e1=Fusion.CreateSummonEff(c,aux.FilterBoolFunction(Card.IsRace,FAIRY),Fusion.OnFieldMat,s.mg1,Fusion.BanishMaterial
 		,nil,nil,nil,nil,nil,nil,nil,nil,nil,s.tar1)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON+CATEGORY_REMOVE)
+	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	c:RegisterEffect(e1)
 end
 function s.mg1(e,tp,mg)
