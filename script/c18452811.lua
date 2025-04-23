@@ -109,13 +109,13 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	local opval={}
 	local mct=g:FilterCount(cm.tfil22,nil,e,tp)
 	if mct>0 and mft>0 then
-		ops[off]=m,
+		ops[off]=aux.Stringid(m,0)
 		opval[off-1]=1
 		off=off+1
 	end
 	local sct=g:FilterCount(cm.tfil23,nil,ec)
 	if sct>0 and sft>0 then
-		ops[off]=m,+1
+		ops[off]=aux.Stringid(m,1)
 		opval[off-1]=2
 		off=off+1
 	end
@@ -130,7 +130,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 			g=g:Select(tp,mft,mft,nil)
 		end
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
-		if ec and Duel.SelectYesNo(tp,aux.Stringid(m,0+2) then
+		if ec and Duel.SelectYesNo(tp,aux.Stringid(m,2) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
 			local sg=g:Select(tp,1,1,nil)
 			local tc=sg:GetFirst()
