@@ -85,6 +85,7 @@ function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.dpcheck(Card.GetLocation),1,tp,HINTMSG_TODECK)
 	e:SetLabel(#sg)
+	Duel.ConfirmCards(1-tp,sg)
 	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
 
