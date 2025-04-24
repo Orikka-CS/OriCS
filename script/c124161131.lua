@@ -98,5 +98,5 @@ function s.tg2(e,c)
 end
 
 function s.val2(e,te)
-	return te:IsActiveType(TYPE_SPELL+TYPE_TRAP) and te:GetOwnerPlayer()~=e:GetHandlerPlayer()
+	return te:GetHandler():IsSpellTrap() and te:GetOwnerPlayer()~=e:GetHandlerPlayer()
 end

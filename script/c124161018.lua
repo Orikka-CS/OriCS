@@ -25,7 +25,7 @@ function s.initial_effect(c)
 end
 --effect 1
 function s.tg1filter(c,e,tp)
-	return c:IsSetCard(0xf21) and c:IsLevelBelow(5) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xf21) and not c:IsType(TYPE_FUSION) and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

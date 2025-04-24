@@ -66,7 +66,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.op1imfilter(e,re)
-	return e:GetOwnerPlayer()~=re:GetOwnerPlayer()
+	return e:GetOwnerPlayer()~=re:GetOwnerPlayer() and te:IsActivated() and te:IsActiveType(TYPE_MONSTER)
 end
 
 --effect 2

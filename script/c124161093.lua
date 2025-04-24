@@ -120,5 +120,5 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.op3imfilter(e,te)
-	return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() and te:IsActivated() and te:GetHandler():IsSpellTrap()
+	return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() and te:IsActivated() and te:IsActiveType(TYPE_MONSTER)
 end

@@ -9,7 +9,6 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e1:SetRange(LOCATION_HAND+LOCATION_GRAVE)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -25,10 +24,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1(e,tp,eg)
-	return eg:IsExists(Card.IsControler,1,nil,1-tp)
-end
-
 function s.tg1filter(c)
 	return c:IsSetCard(0xf21) and c:IsAbleToGrave()
 end
@@ -36,7 +31,7 @@ end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)  
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,c)   
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>1 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,1-tp) and #g>0 end
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,1-tp) and #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
 
