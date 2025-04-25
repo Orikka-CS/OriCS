@@ -60,9 +60,9 @@ function s.tfil2(c,e,tp)
 	end
 	local g=Duel.GetMatchingGroup(aux.NOT(aux.FaceupFilter(Card.IsCode,id)),tp,LOCATION_MZONE,0,nil)
 	if c:IsLocation(LOCATION_EXTRA) then
-		return Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
+		return Duel.GetLocationCountFromEx(tp,tp,g,c)>0
 	else
-		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		return Duel.GetMZoneCount(tp,g)>0
 	end
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
