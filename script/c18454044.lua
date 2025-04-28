@@ -121,7 +121,7 @@ function s.op6(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-		Duel.GetControl(tc,tp)
+		Duel.GetControl(tc,tp,RESET_SELF_TURN+PHASE_END,1)
 		local e3=Effect.CreateEffect(c)
 		e3:SetType(EFFECT_TYPE_SINGLE)
 		e3:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
