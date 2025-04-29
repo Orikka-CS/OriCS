@@ -25,7 +25,7 @@ end
 
 --effect 1
 function s.con1filter(c)
-	return c:IsSetCard(0xf2d) and c:IsType(TYPE_EFFECT) and c:IsFaceup()
+	return c:IsFaceup() and not c:IsType(TYPE_EFFECT)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
@@ -48,7 +48,7 @@ end
 
 --effect 2
 function s.con2filter(c)
-	return (c:IsSetCard(0xf2d) or c:IsType(TYPE_LINK)) and not c:IsType(TYPE_EFFECT) and c:IsFaceup()
+	return c:IsSetCard(0xf2d) and c:IsType(TYPE_EFFECT) and c:IsFaceup()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)

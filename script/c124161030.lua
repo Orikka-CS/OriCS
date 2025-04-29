@@ -88,7 +88,7 @@ end
 
 --effect 2
 function s.tg2filter(c)
-	return c:IsSetCard(0xf21) and c:IsMonster() and c:IsAbleToDeck() and c:IsFaceup()
+	return c:IsSetCard(0xf21) and c:IsAbleToDeck() and c:IsFaceup()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--link
 	c:EnableReviveLimit()
-	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf2d),2,nil,s.linkfilter)
+	Link.AddProcedure(c,s.matfilter,2,nil,s.linkfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_CONTROL)
@@ -58,12 +58,12 @@ function s.cntop2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --link
-function s.ffilter(c,lc,sumtype,tp)
-	return not c:IsType(TYPE_EFFECT,lc,sumtype,tp)
+function s.matfilter(c,scard,sumtype,tp)
+	return not c:IsType(TYPE_EFFECT,scard,sumtype,tp) 
 end
 
 function s.linkfilter(g,lc,sumtype,tp)
-	return g:IsExists(s.ffilter,1,nil,lc,sumtype,tp)
+	return g:IsExists(Card.IsSetCard,1,nil,0xf2d,lc,sumtype,tp)
 end
 
 --effect 1
