@@ -48,7 +48,8 @@ function s.pop1(e,tp,chk)
 	return true
 end
 function s.tfil1(c,e,tp)
-	if not (c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_SEASERPENT)) then
+	if not (c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_SEASERPENT)
+		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)) then
 		return false
 	end
 	if c:IsLocation(LOCATION_EXTRA) then
@@ -122,6 +123,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	local rg=aux.SelectUnselectGroup(sg,e,tp,1,ft,s.ofun1(ft1,ft2,ft3,ft4,ft),1,tp,HINTMSG_SPSUMMON)
+	Duel.SpecialSummon(rg,0,tp,tp,false,false,POS_FACEUP)
 end
 function s.cfil2(c)
 	return c:IsAttribute(ATTRIBUTE_WATER) and c:IsAbleToGraveAsCost()
