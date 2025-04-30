@@ -40,7 +40,7 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCountLimit(1,id)
 	e2:SetCondition(s.con2)
-	e2:SetCost(s.cst2)
+	e2:SetCost(Cost.PayLP(100))
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -72,11 +72,6 @@ end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	return rc:IsSetCard(0xf2b) and not rc:IsType(TYPE_FIELD) and rp==tp
-end
- 
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,100) end
-	Duel.PayLPCost(tp,100)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

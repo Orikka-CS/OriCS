@@ -21,7 +21,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_GRAVE)  
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
-	e2:SetCost(s.cst2)
+	e2:SetCost(Cost.PayLP(700))
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -60,11 +60,6 @@ end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.con2filter,1,nil,tp)
-end
-
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,700) end
-	Duel.PayLPCost(tp,700)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

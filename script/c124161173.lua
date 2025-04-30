@@ -10,7 +10,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
+	e1:SetCost(Cost.PayLP(900))
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -28,11 +28,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,900) end
-	Duel.PayLPCost(tp,900)
-end
-
 function s.tg1filter(c)
 	return c:IsSetCard(0xf2b) and c:IsTrap() and c:IsAbleToHand()
 end

@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
+	e1:SetCost(Cost.PayLP(1000))
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -25,11 +25,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,1000) end
-	Duel.PayLPCost(tp,1000)
-end
-
 function s.tg1filter(c)
 	return c:IsSetCard(0xf2b) and not c:IsCode(id) and c:IsAbleToHand()
 end

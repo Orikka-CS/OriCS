@@ -25,7 +25,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(function(e,tp) return Duel.IsTurnPlayer(tp) end)
-	e2:SetCost(s.cst2)
+	e2:SetCost(Cost.PayLP(600))
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -66,11 +66,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,600) end
-	Duel.PayLPCost(tp,600)
-end
-
 function s.tg2filter(c,e)
 	return c:IsRace(RACE_PLANT) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
 end
