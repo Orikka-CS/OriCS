@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2i)
-	e2:SetCost(s.cst2)
+	e2:SetCost(Cost.SelfToDeck)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -68,11 +68,6 @@ function s.con2q(e,tp,eg,ep,ev,re,r,rp)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
 	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_GRAVE,0,c)
 	return g>0 and ug~=dg
-end
-
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToDeckAsCost() end
-	Duel.SendtoDeck(e:GetHandler(),nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
 
 function s.tg2filter(c,e)

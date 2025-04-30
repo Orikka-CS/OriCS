@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
+	e1:SetCost(Cost.SelfReveal)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -27,13 +27,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return not c:IsPublic() end
-	Duel.ConfirmCards(1-tp,c)
-	Duel.ShuffleHand(tp)
-end
-
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) and Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=3 end
@@ -90,7 +83,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ShuffleDeck(tp)
 		local dg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_ONFIELD,0,nil)
 		if #dg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-			Duel.BreakEffect()		 
+			Duel.BreakEffect()	   
 			Duel.DisableShuffleCheck()
 			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK):GetFirst()
 			Duel.SendtoDeck(dsg,nil,SEQ_DECKTOP,REASON_EFFECT)

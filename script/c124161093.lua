@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
-	e1:SetCost(s.cst1)
+	e1:SetCost(Cost.SelfDiscard)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -42,12 +42,6 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	local ch_player,ch_eff=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_EFFECT)
 	local ch_c=ch_eff:GetHandler()
 	return ch_player==tp and (ch_c:IsSetCard(0xf26) and ch_eff:IsMonsterEffect())
-end
-
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsDiscardable(REASON_COST) end
-	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

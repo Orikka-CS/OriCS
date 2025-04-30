@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
+	e1:SetCost(Cost.SelfDiscard)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -25,12 +25,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsAbleToGraveAsCost() end
-	Duel.SendtoGrave(c,REASON_COST)
-end
-
 function s.tg1filter(c,e,cl)
 	local mg=c:GetMaterial()
 	return c:IsCanBeEffectTarget(e) and c:IsNegatable() and ((cl and c:IsSpellTrap()) or (c:IsLocation(LOCATION_MZONE) and #mg>0 and c:IsSummonLocation(LOCATION_EXTRA) and #mg==mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)))
