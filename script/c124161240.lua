@@ -72,7 +72,7 @@ end
 
 --effect 2
 function s.tg2(e,c,tp,r)
-	return c:IsLocation(LOCATION_GRAVE) and c:IsControler(1-e:GetHandlerPlayer())
+	return c:IsMonster() and c:IsLocation(LOCATION_GRAVE) and c:IsControler(1-e:GetHandlerPlayer())
 end
 
 function s.tg2ex(e,c)
