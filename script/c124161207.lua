@@ -36,15 +36,15 @@ end
 
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local mg=e:GetHandler():GetMaterial()
-	return #mg>0 and #mg~=mg:FilterCount(Card.IsType,nil,TYPE_EFFECT) and not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) and Duel.IsChainNegatable(ev) and rp==1-tp
+	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) and Duel.IsChainNegatable(ev) and rp==1-tp
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_GRAVE)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_ONFIELD+LOCATION_GRAVE)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_ONFIELD)	
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -53,17 +53,23 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateActivation(ev)
 	local ag
 	local asg
+	ag=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
+	if ct>0 and #ag>0 then
+		Duel.BreakEffect()
+		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+		Duel.Remove(asg,POS_FACEUP,REASON_EFFECT)
+	end
 	ag=Duel.GetMatchingGroup(Card.IsDiscardable,tp,0,LOCATION_HAND,nil,REASON_EFFECT)
 	if ct>1 and #ag>0 then
 		Duel.BreakEffect()
 		asg=ag:RandomSelect(tp,1)
 		Duel.SendtoGrave(asg,REASON_EFFECT+REASON_DISCARD)
 	end
-	ag=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil)
+	ag=Duel.GetMatchingGroup(Card.IsAbleToHand,tp,0,LOCATION_ONFIELD,nil)
 	if ct>2 and #ag>0 then
 		Duel.BreakEffect()
-		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-		Duel.Remove(asg,POS_FACEUP,REASON_EFFECT)
+		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+		Duel.SendtoHand(asg,nil,REASON_EFFECT)
 	end
 end
 

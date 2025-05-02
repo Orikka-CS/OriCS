@@ -41,7 +41,7 @@ function s.tg1filter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local gg=eg:Filter(s.con1filter,nil,tp)
+	local gg=eg:Filter(s.con1filter,nil,tp):Filter(Card.IsLocation,nil,LOCATION_HAND)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #gg>0 and #g>0 end
