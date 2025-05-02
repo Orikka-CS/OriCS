@@ -34,7 +34,7 @@ function s.nfil2(c)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return not eg:IsContains(c) and eg:IsExists(s.nfil1,1,nil)
+	return not eg:IsContains(c) and eg:IsExists(s.nfil2,1,nil)
 end
 function s.tfil2(c,e,tp)
 	return c:IsLevelAbove(5) and c:IsSetCard(0xffe) and c:IsReleasableByEffect() and Duel.GetMZoneCount(tp,c)>0
