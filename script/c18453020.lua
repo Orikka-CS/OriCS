@@ -51,7 +51,7 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	if c:IsRelateToEffect(e) and Duel.GetLocCount(tp,"M")>0
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,m,0,0x21,-2,0,10,RACE_FAIRY,ATTRIBUTE_EARTH) then
 		c:AddMonsterAttribute(TYPE_EFFECT+TYPE_TRAP)
-		Duel.SpecialSummonStep(c,SUMMON_VALUE_SELF,tp,tp,true,false,POS_FACEUP)
+		Duel.SpecialSummonStep(c,1,tp,tp,true,false,POS_FACEUP)
 		local satk=0
 		local g=e:GetLabelObject()
 		local tc=g:GetFirst()
