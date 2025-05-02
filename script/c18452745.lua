@@ -28,12 +28,12 @@ end
 function cm.con2(e)
 	local c=e:GetHandler()
 	local ec=c:GetEquipTarget()
-	return ec:IsSetCard(0x2d2)
+	return ec:IsOriginalSetCard(0x2d2)
 end
 function cm.con3(e)
 	local c=e:GetHandler()
 	local ec=c:GetEquipTarget()
-	return not ec:IsSetCard(0x2d2)
+	return not ec:IsOriginalSetCard(0x2d2)
 end
 function cm.op3(sc,st,tp)
 	return (st&MATERIAL_FUSION)~=0
