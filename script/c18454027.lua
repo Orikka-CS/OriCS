@@ -128,7 +128,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Group.CreateGroup()
 	if Duel.GetLocCount(tp,"M")>0 then
-		local sg1=Duel.GMGroup(s.tfil21,tp,"HG",0,nil,e,tp)
+		local sg1=Duel.GMGroup(aux.NecroValleyFilter(s.tfil21),tp,"HG",0,nil,e,tp)
 		sg:Merge(sg1)
 	end
 	Fusion.CheckAdditional=s.tfun2

@@ -58,7 +58,7 @@ function s.con4(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.GetLocCount(tp,"M")>1
+		return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) and Duel.GetLocCount(tp,"M")>1
 			and Duel.IsPlayerCanSpecialSummonMonster(tp,18453669,0x12d,TYPES_TOKEN,0,0,1,RACE_WINGEDBEAST,ATTRIBUTE_WIND)
 	end
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,2,0,0)
@@ -66,7 +66,7 @@ function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocCount(tp,"M")>1
+	if not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) and Duel.GetLocCount(tp,"M")>1
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,18453669,0x12d,TYPES_TOKEN,0,0,1,RACE_WINGEDBEAST,ATTRIBUTE_WIND) then
 		for i=1,2 do
 			local token=Duel.CreateToken(tp,18453698)

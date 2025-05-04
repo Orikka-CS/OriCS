@@ -62,9 +62,9 @@ function cm.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SOI(0,CATEGORY_TOHAND,nil,0,tp,"DG")
 end
 function cm.op4(e,tp,eg,ep,ev,re,r,rp)
-	local g1=Duel.GMGroup(cm.tfil4,tp,"OHDG",0,nil,e,tp,18453340)
-	local g2=Duel.GMGroup(cm.tfil4,tp,"OHDG",0,nil,e,tp,18453341)
-	local g3=Duel.GMGroup(cm.tfil4,tp,"OHDG",0,nil,e,tp,18453342)
+	local g1=Duel.GMGroup(aux.NecroValleyFilter(cm.tfil4),tp,"OHDG",0,nil,e,tp,18453340)
+	local g2=Duel.GMGroup(aux.NecroValleyFilter(cm.tfil4),tp,"OHDG",0,nil,e,tp,18453341)
+	local g3=Duel.GMGroup(aux.NecroValleyFilter(cm.tfil4),tp,"OHDG",0,nil,e,tp,18453342)
 	if #g1<1 or #g2<1 or #g3<1 then
 		return
 	end

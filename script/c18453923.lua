@@ -53,7 +53,13 @@ function s.con3(e,c)
 	if c==nil then
 		return true
 	end
-	local tp=e:GetHandlerPlayer()
+	local eff={c:GetCardEffect(EFFECT_NECRO_VALLEY)}
+	for _,te in ipairs(eff) do
+		local op=te:GetOperation()
+		if not op or op(e,c) then
+			return false
+		end
+	end
 	local rg=Duel.GMGroup(s.nfil3,tp,"M",0,nil)
 	local tp=c:GetControler()
 	return aux.SelectUnselectGroup(rg,e,tp,1,1,aux.ChkfMMZ(1),0)

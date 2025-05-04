@@ -315,10 +315,10 @@ function cm.op5(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsSummonType(SUMMON_TYPE_ADVANCE) then
 		return
 	end
-	local res=Duel.GetLocCount(tp,"M")>0 and Duel.IEMCard(cm.ofil51,tp,"DG",0,1,nil,e,tp)
+	local res=Duel.GetLocCount(tp,"M")>0 and Duel.IEMCard(aux.NecroValleyFilter(cm.ofil51),tp,"DG",0,1,nil,e,tp)
 	if res and Duel.SelectEffectYesNo(tp,c,aux.Stringid(m,3)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local g=Duel.SMCard(tp,cm.ofil51,tp,"DG",0,1,1,nil,e,tp)
+		local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.ofil51),tp,"DG",0,1,1,nil,e,tp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end

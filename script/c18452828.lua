@@ -39,7 +39,7 @@ function cm.ctar11(e,c,sump,sumtype,sumpos,targetp,se)
 end
 function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.GetLocCount(tp,"M")>1
+		return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) and Duel.GetLocCount(tp,"M")>1
 			and Duel.IsPlayerCanSpecialSummonMonster(tp,m+1,0x2d7,0x80004011,0,1800,3,RACE_AQUA,ATTRIBUTE_LIGHT)
 			and Duel.IsPlayerCanSpecialSummonMonster(tp,m+2,0x2d7,0x80004011,1800,0,3,RACE_THUNDER,ATTRIBUTE_WATER)
 	end
@@ -47,7 +47,7 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,2,0,0)
 end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocCount(tp,"M")>1
+	if  not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) and Duel.GetLocCount(tp,"M")>1
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,m+1,0x2d7,0x80004011,0,1800,3,RACE_AQUA,ATTRIBUTE_LIGHT)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,m+2,0x2d7,0x80004011,1800,0,3,RACE_THUNDER,ATTRIBUTE_WATER) then
 		local token1=Duel.CreateToken(tp,m+1)

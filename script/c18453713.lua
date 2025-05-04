@@ -63,7 +63,8 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 			return false
 		end
 		e:SetLabel(0)
-		return Duel.GetLocCount(tp,"M")>1 and Duel.IEMCard(s.tfil2,tp,"E",0,1,nil)
+		return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+			and Duel.GetLocCount(tp,"M")>1 and Duel.IEMCard(s.tfil2,tp,"E",0,1,nil)
 			 and Duel.IsPlayerCanSpecialSummonMonster(tp,18453725,0,TYPES_TOKEN,-2,0,0,RACE_FAIRY,ATTRIBUTE_FAIRY)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
@@ -76,7 +77,7 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocCount(tp,"M")<2
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) or Duel.GetLocCount(tp,"M")<2
 		or not Duel.IsPlayerCanSpecialSummonMonster(tp,18453725,0,TYPES_TOKEN,-2,0,0,RACE_FAIRY,ATTRIBUTE_FAIRY) then
 		return
 	end
@@ -109,7 +110,7 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local ec=e:GetLabel()==1 and c or nil
 		e:SetLabel(0)
-		return Duel.GetMZoneCount(tp,c)>3
+		return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) and Duel.GetMZoneCount(tp,c)>3
 			and Duel.IsPlayerCanSpecialSummonMonster(tp,18453725,0,TYPES_TOKEN,-2,0,0,RACE_FAIRY,ATTRIBUTE_FAIRY)
 	end
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,"E",4,0,0)
@@ -120,7 +121,7 @@ function s.ofil3(c)
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if Duel.GetLocCount(tp,"M")<4
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) or Duel.GetLocCount(tp,"M")<4
 		or not Duel.IsPlayerCanSpecialSummonMonster(tp,18453725,0,TYPES_TOKEN,-2,0,0,RACE_FAIRY,ATTRIBUTE_FAIRY) then
 		return
 	end

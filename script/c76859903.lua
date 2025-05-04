@@ -123,6 +123,9 @@ function cm.op4(e,tp,eg,ep,ev,re,r,rp)
 	if ft<1 then
 		return
 	end
+	if ft>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
+		ft=1
+	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SMCard(tp,cm.tfil4,tp,"H",0,1,ft,nil,e,tp)
 	if g:GetCount()>0 then

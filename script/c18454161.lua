@@ -135,7 +135,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if ct==0 then
 		return
 	end
-	local g=Duel.GMGroup(Card.IsAbleToDeck,tp,0,"HOG",nil)
+	local g=Duel.GMGroup(aux.NecroValleyFilter(Card.IsAbleToDeck),tp,0,"HOG",nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local sg=g:SelectSubGroup(tp,s.tfun2,false,ct,ct)
 	if sg and #sg==ct then

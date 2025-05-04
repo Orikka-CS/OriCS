@@ -68,7 +68,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetLabel()&0x1~=0 then
 		loc="G"
 	end
-	local g=Duel.SMCard(tp,s.tfil1,tp,loc,"MG",1,1,nil,e,tp,atk)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil1),tp,loc,"MG",1,1,nil,e,tp,atk)
 	local tc=g:GetFirst()
 	if tc then
 		if tc:IsLoc("G") then
@@ -102,7 +102,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetLabel()==1 then
 		loc="G"
 	end
-	local g=Duel.GMGroup(s.tfil2,tp,loc,"MG",nil,e,tp)
+	local g=Duel.GMGroup(aux.NecroValleyFilter(s.tfil2),tp,loc,"MG",nil,e,tp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
 	local sg=g:Select(tp,1,ct,nil)
 	if #sg>0 then

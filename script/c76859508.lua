@@ -45,7 +45,7 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SMCard(tp,cm.tfil1,tp,"DGR",0,1,1,nil)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil1),tp,"DGR",0,1,1,nil)
 	local tc=g:GetFirst()
 	if tc then
 		if tc:IsAbleToHand() and Duel.SelectYesNo(tp,aux.Stringid(m,0)) then
@@ -108,7 +108,7 @@ function cm.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SMCard(tp,cm.tfil3,tp,"DG",0,1,1,nil)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil3),tp,"DG",0,1,1,nil)
 	local tc=g:GetFirst()
 	if tc then
 		local te=tc:CheckActivateEffect(false,false,false)

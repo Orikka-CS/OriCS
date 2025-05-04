@@ -45,7 +45,7 @@ end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local chkf=tp
 	local mg1=Duel.GetFusionMaterial(tp):Filter(cm.tfil11,nil):Filter(cm.ofil1,nil,e)
-	local exg=Duel.GMGroup(cm.tfil12,tp,"G",0,nil)
+	local exg=Duel.GMGroup(aux.NecroValleyFilter(cm.tfil12),tp,"G",0,nil)
 	mg1:Merge(exg)
 	local sg1=SilentMajorityGroups[tp]:Filter(cm.tfil13,nil,e,tp,mg1,nil,chkf)
 	local mg2=nil

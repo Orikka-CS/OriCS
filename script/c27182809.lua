@@ -99,16 +99,18 @@ function c27182809.tg3(e,c)
 	return not c:IsSetCard(0x2c2)
 end
 function c27182809.nfilter5(c)
-	return c:IsCode(27182801)
+	return c:IsCode(27182801) and (c:IsFaceup() or not c:IsLocation(LOCATION_REMOVED))
 end
 function c27182809.con5(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c27182809.nfilter5,tp,LOCATION_DECK+LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil)
+		and Duel.IsExistingMatchingCard(aux.NecroValleyFilter(c27182809.nfilter5),tp,
+			LOCATION_DECK+LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil)
 		and c:GetFlagEffect(27182809)==0
 end
 function c27182809.op5(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.SelectMatchingCard(tp,c27182809.nfilter5,tp,LOCATION_DECK+LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c27182809.nfilter5),tp,
+		LOCATION_DECK+LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
 	local tc=g:GetFirst()
 	local c=e:GetHandler()
 	if tc and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then

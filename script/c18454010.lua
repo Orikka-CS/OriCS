@@ -71,7 +71,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.BreakEffect()
-	local b3=c:IsDiscardable()
+	local b3=true
 	local b4=c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and Duel.CheckReleaseGroup(tp,s.ofil11,2,false,2,true,c,tp,nil,nil,nil,tp)
 	op=Duel.SelectEffect(tp,

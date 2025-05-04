@@ -20,6 +20,7 @@ function s.con1(e,c)
 	end
 	local tp=c:GetControler()
 	return Duel.GetLocCount(tp,"M")>1 and Duel.GetLocCount(1-tp,"M")>0
+		and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
 		and Duel.IsPlayerCanSpecialSummonCount(tp,2)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,18453669,0x12d,TYPES_TOKEN,0,0,1,RACE_WINGEDBEAST,ATTRIBUTE_LIGHT)
 end

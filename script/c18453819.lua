@@ -65,8 +65,9 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	end
 	local g=Duel.STarget(tp,s.tfil2,tp,"G",0,1,1,nil)
 	if #g>0 then
-		Duel.SPOI(0,CATEGORY_TOHAND,tc,1,0,0)
-		Duel.SPOI(0,CATEGORY_SPECIAL_SUMMON,tc,1,0,0)
+		Duel.SOI(0,CATEGORY_LEAVE_GRAVE,g,1,0,0)
+		Duel.SPOI(0,CATEGORY_TOHAND,g,1,0,0)
+		Duel.SPOI(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 	end
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)

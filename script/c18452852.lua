@@ -72,6 +72,7 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SMCard(tp,Card.IsAbleToGrave,tp,0,"M",1,1,nil)
 	if #g>0 then
+		Duel.HintSelection(g)
 		Duel.SendtoGrave(g,REASON_EFFECT)
 	end
 end

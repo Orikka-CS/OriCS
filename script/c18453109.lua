@@ -101,7 +101,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 	if label&0x2==0x2 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g=Duel.SMCard(tp,cm.tfil22,tp,"DG",0,1,1,nil)
+		local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil22),tp,"DG",0,1,1,nil)
 		local tc=g:GetFirst()
 		if tc then
 			Duel.SendtoHand(g,nil,REASON_EFFECT)

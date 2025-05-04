@@ -30,7 +30,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SMCard(tp,s.tfil1,tp,"DG",0,1,1,nil)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil1),tp,"DG",0,1,1,nil)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
@@ -41,7 +41,7 @@ function s.cfil2(c)
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Group.CreateGroup()
-	local mg=Duel.GetMatchingGroup(s.cfil2,tp,LOCATION_MZONE,0,nil)
+	local mg=Duel.GMGroup(s.cfil2,tp,"M",0,nil)
 	for tc in aux.Next(mg) do
 		g:Merge(tc:GetOverlayGroup())
 	end

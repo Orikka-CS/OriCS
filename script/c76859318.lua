@@ -46,7 +46,8 @@ function c76859318.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c76859318.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.GetLocationCount(1-tp,LOCATION_MZONE,tp)>2
+		return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+			and Duel.GetLocationCount(1-tp,LOCATION_MZONE,tp)>2
 			and Duel.IsPlayerCanSpecialSummonMonster(tp,76859319,0x2c5,TYPES_TOKEN+TYPE_TUNER,
 				1600,800,4,RACE_FAIRY,ATTRIBUTE_LIGHT,POS_FACEUP_DEFENSE,1-tp)
 	end
@@ -58,9 +59,10 @@ function c76859318.ofil1(c,mg)
 end
 function c76859318.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocationCount(1-tp,LOCATION_MZONE,tp)<3 
+	if not (not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+		and Duel.GetLocationCount(1-tp,LOCATION_MZONE,tp)>2
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,76859319,0x2c5,TYPES_TOKEN+TYPE_TUNER,
-			1600,800,4,RACE_FAIRY,ATTRIBUTE_LIGHT,POS_FACEUP_DEFENSE,1-tp) then
+			1600,800,4,RACE_FAIRY,ATTRIBUTE_LIGHT,POS_FACEUP_DEFENSE,1-tp)) then
 		return
 	end
 	local mg=Group.CreateGroup()

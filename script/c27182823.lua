@@ -74,7 +74,8 @@ function c27182823.op2(e,tp,eg,ep,ev,re,r,rp)
 		local rc=re:GetHandler()
 		local att=rc:GetAttribute()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-		local g=Duel.SelectMatchingCard(tp,c27182823.ofilter2,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,att)
+		local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c27182823.ofilter2),tp,
+			LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,att)
 		if g:GetCount()>0 then
 			Duel.Hint(HINT_CARD,0,27182823)
 			Duel.HintSelection(g)

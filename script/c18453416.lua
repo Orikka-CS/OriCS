@@ -38,7 +38,7 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RESOLVECARD)
-	local tg=Duel.SMCard(tp,cm.tfil12,tp,"DG",0,1,1,nil,tp)
+	local tg=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil12),tp,"DG",0,1,1,nil,tp)
 	local tc=tg:GetFirst()
 	if tc then
 		Duel.BreakEffect()

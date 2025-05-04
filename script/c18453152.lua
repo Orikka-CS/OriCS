@@ -119,7 +119,8 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	local mg=Duel.GetRitualMaterial(tp)
 	local exg=Duel.GMGroup(Auxiliary.RitualExtraFilter,tp,"G",0,nil,cm.tfil31)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local tg=Duel.SMCard(tp,Auxiliary.RitualUltimateFilter,tp,"HGR",0,1,1,nil,filter,e,tp,mg,exg,Card.GetLevel,"Greater")
+	local tg=Duel.SMCard(tp,aux.NecroValleyFilter(Auxiliary.RitualUltimateFilter),tp,
+		"HGR",0,1,1,nil,cm.tfil32,e,tp,mg,exg,Card.GetLevel,"Greater")
 	local tc=tg:GetFirst()
 	if tc then
 		mg=mg:Filter(Card.IsCanBeRitualMaterial,tc,tc)

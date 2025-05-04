@@ -56,8 +56,9 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 			return false
 		end
 		e:SetLabel(0)
-		return Duel.CheckReleaseGroupCost(tp,s.tfil2,1,1,false,nil,nil,tp)
-			 and Duel.IsPlayerCanSpecialSummonMonster(tp,18453725,0,TYPES_TOKEN,-2,0,0,RACE_FAIRY,ATTRIBUTE_FAIRY)
+		return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+			and Duel.CheckReleaseGroupCost(tp,s.tfil2,1,1,false,nil,nil,tp)
+			and Duel.IsPlayerCanSpecialSummonMonster(tp,18453725,0,TYPES_TOKEN,-2,0,0,RACE_FAIRY,ATTRIBUTE_FAIRY)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
 	local g=Duel.SelectReleaseGroupCost(tp,s.tfil2,1,1,false,nil,nil,tp)
@@ -69,7 +70,7 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocCount(tp,"M")<2
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) or Duel.GetLocCount(tp,"M")<2
 		or not Duel.IsPlayerCanSpecialSummonMonster(tp,18453725,0,TYPES_TOKEN,-2,0,0,RACE_FAIRY,ATTRIBUTE_FAIRY) then
 		return
 	end

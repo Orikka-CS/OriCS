@@ -37,7 +37,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocCount(tp,"S")<1 then
 		return
 	end
-	local g=Duel.SMCard(tp,s.tfil1,tp,"DG",0,1,1,nil)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil1),tp,"DG",0,1,1,nil)
 	local tc=g:GetFirst()
 	local pos=POS_FACEUP_ATTACK
 	if tc:IsSSetable() then

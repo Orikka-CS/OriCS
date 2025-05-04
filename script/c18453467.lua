@@ -77,7 +77,7 @@ function cm.ofil2(c,tp)
 end
 function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SMCard(tp,cm.ofil2,tp,"DG",0,1,1,nil,tp)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.ofil2),tp,"DG",0,1,1,nil,tp)
 	local tc=g:GetFirst()
 	if tc then
 		aux.PlayFieldSpell(tc,e,tp,eg,ep,ev,re,r,rp)

@@ -41,7 +41,7 @@ function cm.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SMCard(tp,cm.tfil2,tp,"OHDG",0,1,1,nil,e,tp)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil2),tp,"OHDG",0,1,1,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc then
 		if tc:IsLoc("O") then

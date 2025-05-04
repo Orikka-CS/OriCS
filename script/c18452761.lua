@@ -37,7 +37,7 @@ function cm.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	local typ=0
 	local sg=Group.CreateGroup()
-	if #g1>0 and ((#g2<1 and #g3<1) or Duel.SelectYesNo(tp,aux.Stringid(m,0+1)) then
+	if #g1>0 and ((#g2<1 and #g3<1) or Duel.SelectYesNo(tp,aux.Stringid(m,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 		local rg=g1:Select(tp,1,1,nil)
 		sg:Merge(rg)

@@ -34,7 +34,8 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local b2=Duel.IsPlayerCanSpecialSummonMonster(1-tp,18452829,0x2d7,0x80004011,0,1800,3,RACE_AQUA,ATTRIBUTE_LIGHT)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,18452830,0x2d7,0x80004011,1800,0,3,RACE_THUNDER,ATTRIBUTE_WATER)
 	if chk==0 then
-		return Duel.GetLocCount(tp,"M")>0 and Duel.GetLocCount(1-tp,"M")>0 and (b1 or b2)
+		return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+			and Duel.GetLocCount(tp,"M")>0 and Duel.GetLocCount(1-tp,"M")>0 and (b1 or b2)
 	end
 	Duel.SOI(0,CATEGORY_TOKEN,nil,2,0,0)
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,2,0,0)
@@ -44,7 +45,8 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 		and Duel.IsPlayerCanSpecialSummonMonster(1-tp,18452830,0x2d7,0x80004011,1800,0,3,RACE_THUNDER,ATTRIBUTE_WATER)
 	local b2=Duel.IsPlayerCanSpecialSummonMonster(1-tp,18452829,0x2d7,0x80004011,0,1800,3,RACE_AQUA,ATTRIBUTE_LIGHT)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,18452830,0x2d7,0x80004011,1800,0,3,RACE_THUNDER,ATTRIBUTE_WATER)
-	if Duel.GetLocCount(tp,"M")>0 and Duel.GetLocCount(1-tp,"M")>0 and (b1 or b2) then
+	if not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+		and Duel.GetLocCount(tp,"M")>0 and Duel.GetLocCount(1-tp,"M")>0 and (b1 or b2) then
 		local token1=Duel.CreateToken(tp,18452829)
 		local token2=Duel.CreateToken(tp,18452830)
 		local g=Group.CreateGroup()
@@ -87,7 +89,7 @@ function cm.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.GetLocCount(tp,"M")>0
+		return Duel.GetLocCount(tp,"M")>0 and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
 			and Duel.IsPlayerCanSpecialSummonMonster(tp,18452829,0x2d7,0x80004011,0,1800,3,RACE_AQUA,ATTRIBUTE_LIGHT)
 			and Duel.IsPlayerCanSpecialSummonMonster(tp,18452830,0x2d7,0x80004011,1800,0,3,RACE_THUNDER,ATTRIBUTE_WATER)
 	end
@@ -95,7 +97,7 @@ function cm.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,2,0,0)
 end
 function cm.op2(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocCount(tp,"M")>1
+	if Duel.GetLocCount(tp,"M")>1 and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,18452829,0x2d7,0x80004011,0,1800,3,RACE_AQUA,ATTRIBUTE_LIGHT)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,18452830,0x2d7,0x80004011,1800,0,3,RACE_THUNDER,ATTRIBUTE_WATER) then
 		local token1=Duel.CreateToken(tp,18452829)

@@ -268,7 +268,7 @@ function cm.ofil2(c)
 end
 function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GMGroup(cm.ofil2,tp,"DG",0,nil)
+	local g=Duel.GMGroup(aux.NecroValleyFilter(cm.ofil2),tp,"DG",0,nil)
 	if #g>0 and Duel.SelectEffectYesNo(tp,c,aux.Stringid(m,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local sg=g:Select(tp,1,1,nil)

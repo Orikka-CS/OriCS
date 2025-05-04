@@ -59,7 +59,10 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	if ct<1 then
 		return
 	end
-	local g=Duel.SMCard(tp,s.tfil4,tp,"HG",0,1,ct,nil,e,tp,zone)
+	if ct>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
+		ct=1
+	end
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil4),tp,"HG",0,1,ct,nil,e,tp,zone)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP,zone)
 	end

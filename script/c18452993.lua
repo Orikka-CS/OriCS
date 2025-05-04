@@ -27,6 +27,13 @@ function cm.con1(e,c)
 	if c==nil then
 		return true
 	end
+	local eff={c:GetCardEffect(EFFECT_NECRO_VALLEY)}
+	for _,te in ipairs(eff) do
+		local op=te:GetOperation()
+		if not op or op(e,c) then
+			return false
+		end
+	end
 	local tp=c:GetControler()
 	return Duel.IEMCard(cm.nfil1,tp,"M",0,1,nil,tp)
 end

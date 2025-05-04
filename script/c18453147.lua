@@ -88,6 +88,7 @@ function cm.tfil3(c)
 	return c:IsSetCard(0x2e4) and c:IsType(TYPE_MONSTER) and c:IsSSetable(true) and not c:IsCode(m)
 end
 function cm.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
 	local g=Duel.GMGroup(cm.tfil3,tp,"G",0,nil)
 	local ft=Duel.GetLocCount(tp,"S")
 	if chkc then
@@ -99,7 +100,8 @@ function cm.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 	local sg=g:SelectSubGroup(tp,aux.dncheck,false,1,ft)
 	Duel.SetTargetCard(sg)
-	e:GetHandler():CancelToGrave(false)
+	Duel.SOI(0,CATEGORY_LEAVE_GRAVE,sg,#sg,0,0)
+	c:CancelToGrave(false)
 end
 function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)

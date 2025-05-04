@@ -31,11 +31,12 @@ function cm.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SOI(0,CATEGORY_TOHAND,nil,2,tp,"DGR")
 end
 function cm.op2(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IEMCard(cm.tfil21,tp,"DGR",0,1,nil) and Duel.IEMCard(cm.tfil22,tp,"DGR",0,1,nil) then
+	if Duel.IEMCard(aux.NecroValleyFilter(cm.tfil21),tp,"DGR",0,1,nil)
+		and Duel.IEMCard(aux.NecroValleyFilter(cm.tfil22),tp,"DGR",0,1,nil) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g1=Duel.SMCard(tp,cm.tfil21,tp,"DGR",0,1,1,nil)
+		local g1=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil21),tp,"DGR",0,1,1,nil)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g2=Duel.SMCard(tp,cm.tfil22,tp,"DGR",0,1,1,nil)
+		local g2=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil22),tp,"DGR",0,1,1,nil)
 		g1:Merge(g2)
 		Duel.SendtoHand(g1,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g1)
@@ -64,14 +65,14 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	local b=tp==Duel.GetTurnPlayer()
 	if b then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g=Duel.SMCard(tp,cm.tfil31,tp,"DGR",0,1,1,nil)
+		local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil31),tp,"DGR",0,1,1,nil)
 		if #g>0 then
 			Duel.SendtoHand(g,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,g)
 		end
 	else
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local g=Duel.SMCard(tp,cm.tfil32,tp,"HDGR",0,1,1,nil,e,tp)
+		local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil32),tp,"HDGR",0,1,1,nil,e,tp)
 		if #g>0 then
 			Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		end

@@ -272,7 +272,7 @@ function cm.ofil2(c)
 end
 function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GMGroup(cm.ofil2,tp,"OG",0,nil)
+	local g=Duel.GMGroup(aux.NecroValleyFilter(cm.ofil2),tp,"OG",0,nil)
 	if #g>0 and Duel.SelectEffectYesNo(tp,c,aux.Stringid(m,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 		local sg=g:Select(tp,1,1,nil)
@@ -293,7 +293,7 @@ function cm.ofil4(c)
 end
 function cm.op4(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GMGroup(cm.ofil4,tp,"DG",0,nil)
+	local g=Duel.GMGroup(aux.NecroValleyFilter(cm.ofil4),tp,"DG",0,nil)
 	local ft=Duel.GetLocCount(tp,"S")
 	if ft>2 then
 		ft=2

@@ -31,7 +31,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 and Duel.SendtoHand(g,nil,REASON_EFFECT)>0 then
 		Duel.ConfirmCards(1-tp,g)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local sg=Duel.SMCard(tp,s.ofil1,tp,"DG",0,0,1,nil)
+		local sg=Duel.SMCard(tp,aux.NecroValleyFilter(s.ofil1),tp,"DG",0,0,1,nil)
 		if #sg>0 then
 			local tc=sg:GetFirst()
 			local loc=tc:GetLocation()

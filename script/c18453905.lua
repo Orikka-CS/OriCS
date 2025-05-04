@@ -42,7 +42,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetLabel()==1 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g=Duel.SMCard(tp,s.tfil13,tp,"DG",0,1,1,nil)
+		local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil13),tp,"DG",0,1,1,nil)
 		if #g>0 then
 			Duel.SendtoHand(g,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,g)

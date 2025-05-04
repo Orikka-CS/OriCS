@@ -144,7 +144,7 @@ function cm.op4(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	local mg=Duel.GetRitualMaterial(tp):Filter(Card.IsCanOverlay,nil)
-	local exg=Duel.GMGroup(cm.tfil41,tp,"G",0,nil)
+	local exg=Duel.GMGroup(aux.NecroValleyFilter(cm.tfil41),tp,"G",0,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local tg=Duel.SMCard(tp,cm.tfil42,tp,"H",0,1,1,nil,e,tp,mg,exg)
 	local tc=tg:GetFirst()

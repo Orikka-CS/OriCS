@@ -236,7 +236,7 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	end
 	Duel.RegisterFlagEffect(tp,id,RESET_CHAIN,0,0)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SMCard(tp,s.gofil1,tp,"HG",0,1,1,nil,e,tp)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.gofil1),tp,"HG",0,1,1,nil,e,tp)
 	Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	if g:GetFirst():IsLoc("M") then
 		Duel.HintSelection(g)
@@ -352,7 +352,7 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RegisterEffect(e2,tp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SMCard(tp,s.gofil1,tp,"HG",0,0,1,nil,e,tp)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.gofil1),tp,"HG",0,0,1,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc then
 		Duel.BreakEffect()

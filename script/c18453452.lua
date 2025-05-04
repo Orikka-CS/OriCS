@@ -68,6 +68,13 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 function cm.ocon12(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
+	local eff={c:GetCardEffect(EFFECT_NECRO_VALLEY)}
+	for _,te in ipairs(eff) do
+		local op=te:GetOperation()
+		if not op or op(e,c) then
+			return false
+		end
+	end
 	return Duel.GetTurnCount()~=e:GetLabel() and c:IsAbleToHand()
 end
 function cm.oop12(e,tp,eg,ep,ev,re,r,rp)

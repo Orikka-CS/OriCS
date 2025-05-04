@@ -26,8 +26,8 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SOI(0,CATEGORY_TOHAND,nil,2,tp,"DG")
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g1=Duel.GMGroup(s.tfil11,tp,"DG",0,nil)
-	local g2=Duel.GMGroup(s.tfil12,tp,"DG",0,nil)
+	local g1=Duel.GMGroup(aux.NecroValleyFilter(s.tfil11),tp,"DG",0,nil)
+	local g2=Duel.GMGroup(aux.NecroValleyFilter(s.tfil12),tp,"DG",0,nil)
 	if #g1<1 or #g2<1 then
 		return
 	end

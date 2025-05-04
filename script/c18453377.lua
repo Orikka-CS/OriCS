@@ -25,7 +25,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
-		local mg=Duel.GMGroup(s.ofil1,tp,"G",0,nil)
+		local mg=Duel.GMGroup(aux.NecroValleyFilter(s.ofil1),tp,"G",0,nil)
 		if #mg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)

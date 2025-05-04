@@ -91,7 +91,7 @@ function cm.oop31(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
-	local g=Duel.SMCard(tp,cm.oofil31,tp,"EGR",0,1,1,nil,tp)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.oofil31),tp,"HDGR",0,1,1,nil,tp)
 	local tc=g:GetFirst()
 	if tc and Duel.MoveToField(tc,tp,tp,LSTN("M"),POS_FACEUP,true) then
 		e:GetLabelObject():Reset()

@@ -42,7 +42,8 @@ function c76859413.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED)
 end
 function c76859413.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(c76859413.tfilter1,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
+	local g=Duel.GetMatchingGroup(aux.NecroValleyFilter(c76859413.tfilter1),tp,
+		LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
 	if g:GetCount()<2 then
 		return
 	end

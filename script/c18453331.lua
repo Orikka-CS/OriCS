@@ -280,7 +280,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	local c=e:GetHandler()
-	local g=Duel.GMGroup(cm.ofil2,tp,"DG",0,nil)
+	local g=Duel.GMGroup(aux.NecroValleyFilter(cm.ofil2),tp,"DG",0,nil)
 	if #g>0 and Duel.SelectEffectYesNo(tp,c,aux.Stringid(m,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local sg=g:Select(tp,1,1,nil)
@@ -307,7 +307,7 @@ function cm.op4(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GMGroup(Card.IsAbleToDeck,tp,0,"OHG",nil)
 	if #g>0 and Duel.SelectEffectYesNo(tp,c,aux.Stringid(m,2)) then
 		local g1=Duel.GMGroup(Card.IsAbleToDeck,tp,0,"O",nil)
-		local g2=Duel.GMGroup(Card.IsAbleToDeck,tp,0,"G",nil)
+		local g2=Duel.GMGroup(aux.NecroValleyFilter(Card.IsAbleToDeck),tp,0,"G",nil)
 		local g3=Duel.GMGroup(Card.IsAbleToDeck,tp,0,"H",nil)
 		local sg=Group.CreateGroup()
 		if #g1>0 and ((#g2==0 and #g2==0) or Duel.SelectYesNo(tp,aux.Stringid(m,04))) then

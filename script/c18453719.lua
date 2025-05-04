@@ -29,8 +29,9 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 		end
 		e:SetLabel(0)
 		return Duel.GetLocCount(tp,"M")>1 and Duel.IEMCard(s.tfil1,tp,"E",0,1,nil)
-			 and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0,TYPE_MONSTER+TYPE_NORMAL,-2,0,0,RACE_CYBERSE,ATTRIBUTE_FAIRY)
-			 and Duel.IsPlayerCanSpecialSummonMonster(tp,18453725,0,TYPES_TOKEN,-2,0,0,RACE_FAIRY,ATTRIBUTE_FAIRY)
+			and Duel.IsPlayerCanSpecialSummonCount(tp,2)
+			and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0,TYPE_MONSTER+TYPE_NORMAL,-2,0,0,RACE_CYBERSE,ATTRIBUTE_FAIRY)
+			and Duel.IsPlayerCanSpecialSummonMonster(tp,18453725,0,TYPES_TOKEN,-2,0,0,RACE_FAIRY,ATTRIBUTE_FAIRY)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
 	local g=Duel.SMCard(tp,s.tfil1,tp,"E",0,1,1,nil)

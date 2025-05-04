@@ -55,14 +55,15 @@ end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocCount(tp,"M")>1
+		return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+			and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocCount(tp,"M")>1
 			and Duel.IEMCard(s.tfil3,tp,"D",0,1,nil,e,tp)
 	end
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,c,2,tp,"D")
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocCount(tp,"M")<2 or not c:IsRelateToEffect(e) then
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) or Duel.GetLocCount(tp,"M")<2 or not c:IsRelateToEffect(e) then
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)

@@ -80,13 +80,15 @@ end
 function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GMGroup(s.tfil4,tp,"D",0,nil,e,tp)
 	if chk==0 then
-		return Duel.GetLocCount(tp,"M")>1 and g:GetClassCount(Card.GetLevel)>1
+		return not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+			and Duel.GetLocCount(tp,"M")>1 and g:GetClassCount(Card.GetLevel)>1
 	end
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,"D")
 end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GMGroup(s.tfil4,tp,"D",0,nil,e,tp)
-	if Duel.GetLocCount(tp,"M")>1 and g:GetClassCount(Card.GetLevel)>1 then
+	if not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+		and Duel.GetLocCount(tp,"M")>1 and g:GetClassCount(Card.GetLevel)>1 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=g:SelectSubGroup(tp,aux.dncheck,false,2,2)
 		Duel.SpecialSummon(sg,0,tp,tp,false,flase,POS_FACEUP_DEFENSE)

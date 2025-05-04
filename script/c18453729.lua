@@ -155,7 +155,7 @@ function cm.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.op4(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	if rc:IsRelateToEffect(re) and rc:IsControler(1-tp) then
+	if rc:IsRelateToEffect(re) and rc:IsControler(1-tp) and aux.NecroValleyFilter(rc) then
 		if rc:IsLoc("G") then
 			Duel.SpecialSummon(rc,0,tp,tp,false,false,POS_FACEUP)
 		elseif rc:IsLoc("M") then

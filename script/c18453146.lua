@@ -73,12 +73,14 @@ function cm.tfil3(c)
 	return c:IsSetCard(0x2e4) and c:IsType(TYPE_MONSTER) and c:IsSSetable(true) and not c:IsCode(m)
 end
 function cm.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
 	if chk==0 then
 		return Duel.GetLocCount(tp,"S")>0 and Duel.IETarget(cm.tfil3,tp,"G",0,1,nil)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-	Duel.STarget(tp,cm.tfil3,tp,"G",0,1,1,nil)
-	e:GetHandler():CancelToGrave(false)
+	lcoal g=Duel.STarget(tp,cm.tfil3,tp,"G",0,1,1,nil)
+	c:CancelToGrave(false)
+	Duel.SOI(0,CATEGORY_LEAVE_GRAVE,g,1,0,0)
 end
 function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

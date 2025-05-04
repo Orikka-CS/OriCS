@@ -44,6 +44,13 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local bc=Duel.GetFirstTarget()
 	if bc:IsRelateToEffect(e) then
+		local eff={bc:GetCardEffect(EFFECT_NECRO_VALLEY)}
+		for _,te in ipairs(eff) do
+			local op=te:GetOperation()
+			if not op or op(e,bc) then
+				return
+			end
+		end
 		bc:CompleteProcedure()
 		if c:IsRelateToEffect(e) and e:GetLabel()==1 then
 			local blv1,blv2=bc:GetBYDLV()

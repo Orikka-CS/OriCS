@@ -44,6 +44,9 @@ end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GMGroup(Card.IsFaceup,tp,"M",0,nil)
 	local ft=Duel.GetLocCount(tp,"M")
+	if ft>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
+		ft=1
+	end
 	local ct=cm.tfun1(g)
 	if ft>0 and ct>0 and Duel.IsPlayerCanSpecialSummonMonster(tp,m+1,0,0x4011,0,0,1,RACE_PYRO,ATTRIBUTE_FIRE) then
 		local count=math.min(ft,ct)

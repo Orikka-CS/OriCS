@@ -82,7 +82,8 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 					rc=rg:GetNext()
 				end
 			elseif not c:IsHasEffect(EFFECT_DISABLE) and not c:IsDisabled() then
-				Duel.SendtoDeck(rg,nil,2,REASON_EFFECT)
+				local sg=rg:Filter(aux.NecroValleyFilter,nil)
+				Duel.SendtoDeck(sg,nil,2,REASON_EFFECT)
 			end
 			return			
 		end

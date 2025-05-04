@@ -63,7 +63,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
-	local g=Duel.SMCard(tp,s.tfil2,tp,"G","MG",1,1,nil,e,tp)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil2),tp,"G","MG",1,1,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc then
 		if tc:IsLoc("G") then

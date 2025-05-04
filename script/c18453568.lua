@@ -18,6 +18,7 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 		return Duel.IEMCard(Card.IsAbleToHand,tp,"G","G",1,nil)
 	end
 	Duel.SetChainLimit(aux.FALSE)
+	Duel.SOI(0,CATEGORY_TOHAND,nil,1,PLAYER_ALL,"G")
 end
 function s.ofil2(c)
 	return c:IsSetCard("저지불가") and (c:IsSummonable(true,nil) or c:IsMSetable(true,nil) or c:IsSpecialSummonable())

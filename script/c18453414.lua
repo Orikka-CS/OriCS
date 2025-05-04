@@ -27,7 +27,7 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SMCard(tp,cm.tfil1,tp,"DG",0,1,1,nil)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil1),tp,"DG",0,1,1,nil)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
@@ -72,7 +72,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 				cc=ce:GetLabelObject()
 			end
 			if Duel.Destroy(tc,REASON_EFFECT)>0 and cc and cc:IsAbleToHand()
-				and cc:GetFlagEffect(CARD_TIME_CAPSULE)>0 and Duel.SelectYesNo(tp,aux.Stringid(m,00)) then
+				and cc:GetFlagEffect(CARD_TIME_CAPSULE)>0 and Duel.SelectYesNo(tp,aux.Stringid(m,0)) then
 				Duel.SendtoHand(cc,nil,REASON_EFFECT)
 			end
 		end

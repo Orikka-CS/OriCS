@@ -106,6 +106,7 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 					rc=rg:GetNext()
 				end
 			elseif not c:IsHasEffect(EFFECT_DISABLE) and not c:IsDisabled() then
+				local sg=rg:Filter(aux.NecroValleyFilter,nil)
 				local tc=rg:GetFirst()
 				while tc do
 					if tc:IsNegatable() then

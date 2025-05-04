@@ -111,8 +111,9 @@ function cm.tar4(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_OPERATECARD)
 	local g=Duel.STarget(tp,cm.tfil4,tp,"G",0,1,1,nil,e,tp)
-	Duel.SOI(0,CATEGORY_TOHAND,g,0,0,0)
-	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,g,0,0,0)
+	Duel.SOI(0,CATEGORY_LEAVE_GRAVE,g,1,0,0)
+	Duel.SPOI(0,CATEGORY_TOHAND,g,1,0,0)
+	Duel.SPOI(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 end
 function cm.op4(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()

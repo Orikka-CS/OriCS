@@ -86,6 +86,9 @@ function cm.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local ft=math.min(Duel.GetLocCount(tp,"M"),e:GetLabel()+1)
+	if ft>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
+		ft=1
+	end
 	local g=Duel.STarget(tp,cm.tfil2,tp,"G",0,1,ft,nil,e,tp)
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,g,#g,0,0)
 end
@@ -93,6 +96,9 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
+	if ft>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
+		ft=1
+	end
 	if #g>ft then
 		g=g:Select(tp,ft,ft,nil)
 	end

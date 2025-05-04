@@ -36,6 +36,9 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 		aux.FGoalCheckAdditional=nil
 		Fusion.CheckAdditional=nil
 		return res and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,true,false)
+			and Duel.IsPlayerCanSpecialSummonCount(tp,2)
+			and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0,TYPE_MONSTER+TYPE_RITUAL,
+				2750,2250,9,RACE_FAIRY,ATTRIBUTE_WIND)
 	end
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
@@ -83,7 +86,10 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 		tc:CompleteProcedure()
 		aux.FGoalCheckAdditional=nil
 		Fusion.CheckAdditional=nil
-		if c:IsRelateToEffect(e) and Duel.GetLocCount(tp,"M")>0 then
+		if c:IsRelateToEffect(e)
+			and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0,TYPE_MONSTER+TYPE_RITUAL,
+				2750,2250,9,RACE_FAIRY,ATTRIBUTE_WIND)
+			and Duel.GetLocCount(tp,"M")>0 then
 			c:AddMonsterAttribute(TYPE_RITUAL)
 			Duel.SpecialSummon(c,SUMMON_TYPE_RITUAL,tp,tp,true,false,POS_FACEUP)
 		end

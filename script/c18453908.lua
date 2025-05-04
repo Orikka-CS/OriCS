@@ -42,7 +42,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetLabel()==1 then
 		if Duel.GetLocCount(tp,"M")>0 then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-			local g=Duel.SMCard(tp,s.tfil13,tp,"DG",0,1,1,nil,e,tp)
+			local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil13),tp,"DG",0,1,1,nil,e,tp)
 			if #g>0 then
 				Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 			end

@@ -21,7 +21,8 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function cm.tfil1(c,e,tp)
-	return c:IsSetCard(0x2dc) and c:IsType(TYPE_MONSTER) and (c:IsAbleToHand() or c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE))
+	return c:IsSetCard(0x2dc) and c:IsType(TYPE_MONSTER) and (c:IsAbleToHand()
+		or (Duel.GetLocCount(tp,"M")>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)))
 end
 function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then
@@ -36,8 +37,9 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		e:SetOperation(cm.op1)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 		local g=Duel.STarget(tp,cm.tfil1,tp,"G",0,1,1,nil,e,tp)
-		Duel.SOI(0,CATEGORY_TOHAND,g,0,0,0)
-		Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,g,0,0,0)
+		Duel.SOI(0,CATEGORY_LEAVE_GRAVE,g,1,0,0)
+		Duel.SPOI(0,CATEGORY_TOHAND,g,1,0,0)
+		Duel.SPOI(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 	else
 		e:SetProperty(0)
 		e:SetCategory(0)
@@ -48,7 +50,7 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) then
-		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
+		if Duel.GetLocCount(tp,"M")>0 and tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
 			and (not tc:IsAbleToHand() or Duel.SelectOption(tp,1190,1152)==1) then
 			Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 		else

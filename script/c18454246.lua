@@ -110,14 +110,14 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	local op=e:GetLabel()
 	if op==1 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g=Duel.SMCard(tp,s.tfil41,tp,"DGR",0,1,1,nil)
+		local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil41),tp,"DGR",0,1,1,nil)
 		if #g>0 then
 			Duel.SendtoHand(g,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,g)
 		end
 	elseif op==2 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local g=Duel.SMCard(tp,s.tfil42,tp,"DR",0,1,1,nil)
+		local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil42),tp,"DG",0,1,1,nil)
 		if #g>0 then
 			Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 		end

@@ -68,7 +68,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.BreakEffect()
-	local b3=c:IsDiscardable()
+	local b3=true
 	local b4=c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and Duel.CheckReleaseGroup(tp,s.ofil11,2,false,2,true,c,tp,nil,nil,nil,tp)
 	op=Duel.SelectEffect(tp,
@@ -112,6 +112,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local ft=math.min(2,Duel.GetLocationCount(tp,LOCATION_MZONE))
 	if ft==0 or not Duel.IsPlayerCanSpecialSummonMonster(tp,18454013,0x0,0x4011,3750,2750,10,RACE_REPTILE,ATTRIBUTE_WATER) then
 		return
+	end
+	if ft>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
+		ft=1
 	end
 	local ct=Duel.AnnounceNumberRange(tp,1,ft)
 	for i=1,ct do

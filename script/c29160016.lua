@@ -67,10 +67,12 @@ end
 function c29160016.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and Duel.Destroy(tc,REASON_EFFECT)>0
-		and Duel.IsExistingMatchingCard(c29160016.spfilter,tp,LOCATION_GRAVE+LOCATION_EXTRA+LOCATION_PZONE,0,1,nil,e,tp)
+		and Duel.IsExistingMatchingCard(aux.NecroValleyFilter(c29160016.spfilter),tp,
+			LOCATION_GRAVE+LOCATION_EXTRA+LOCATION_PZONE,0,1,nil,e,tp)
 		and Duel.SelectYesNo(tp,aux.Stringid(29160016,3)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local g=Duel.SelectMatchingCard(tp,c29160016.spfilter,tp,LOCATION_GRAVE+LOCATION_EXTRA+LOCATION_PZONE,0,1,1,nil,e,tp)
+		local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c29160016.spfilter),tp,
+			LOCATION_GRAVE+LOCATION_EXTRA+LOCATION_PZONE,0,1,1,nil,e,tp)
 		if g:GetCount()>0 then
 			Duel.BreakEffect()
 			Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP_DEFENSE)

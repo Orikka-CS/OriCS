@@ -80,12 +80,20 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Group.CreateGroup()
 	while tc do
 		Duel.HintSelection(Group.FromCards(tc))
-		if tc:IsAbleToHand() and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		local res=true
+		local eff={tc:GetCardEffect(EFFECT_NECRO_VALLEY)}
+		for _,te in ipairs(eff) do
+			local op=te:GetOperation()
+			if not op or op(e,tc) then
+				res=false
+			end
+		end
+		if tc:IsAbleToHand() and res and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			sg:AddCard(tc)
 		else
-			local e1=MakeEff(c,"S","M")
+			local e1=MakeEff(c,"S")
 			e1:SetCode(EFFECT_IMMUNE_EFFECT)
-			e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CLIENT_HINT)
+			e1:SetProperty(EFFECT_FLAG_CLIENT_HINT+EFFECT_FLAG_IMMEDIATELY_APPLY)
 			e1:SetDescription(3110)
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 			e1:SetValue(s.oval11)

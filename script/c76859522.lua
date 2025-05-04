@@ -51,7 +51,7 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) then
 		return
 	end
-	if Duel.IEMCard(cm.ofil1,tp,"D",0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(m,00)) then
+	if Duel.IEMCard(cm.ofil1,tp,"D",0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(m,0)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 		local g=Duel.SMCard(tp,cm.ofil1,tp,"D",0,1,1,nil)
 		Duel.SendtoGrave(g,REASON_EFFECT)

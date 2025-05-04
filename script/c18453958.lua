@@ -73,7 +73,7 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SMCard(tp,s.tfil3,tp,0,"HEOGR",1,1,nil)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil3),tp,0,"HEOGR",1,1,nil)
 	local tc=g:GetFirst()
 	if tc then
 		g:AddCard(c)

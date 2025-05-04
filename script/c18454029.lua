@@ -116,7 +116,17 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local sg=Group.CreateGroup()
 	if Duel.GetLocCount(tp,"M")>0 and c:IsRelateToEffect(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) then
-		sg:AddCard(c)
+		local res=true
+		local eff={c:GetCardEffect(EFFECT_NECRO_VALLEY)}
+		for _,te in ipairs(eff) do
+			local op=te:GetOperation()
+			if not op or op(e,c) then
+				res=false
+			end
+		end
+		if res then
+			sg:AddCard(c)
+		end
 	end
 	Fusion.CheckAdditional=s.tfun2
 	local mg1=Duel.GetFusionMaterial(tp):Filter(s.ofil2,nil,e)

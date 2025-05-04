@@ -62,7 +62,7 @@ end
 function s.oop11(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g1=Duel.GMGroup(s.onfil111,tp,"O",0,nil)
-	local g2=Duel.GMGroup(s.onfil112,tp,0,"OGR",nil)
+	local g2=Duel.GMGroup(aux.NecroValleyFilter(s.onfil112),tp,0,"OGR",nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 	local sg1=g1:Select(tp,1,#g2,nil)
 	local ct=Duel.Release(sg1,REASON_EFFECT)

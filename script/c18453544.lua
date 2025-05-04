@@ -27,7 +27,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SOI(0,CATEGORY_TODECK,nil,1,tp,"H")
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GMGroup(aux.OR(s.tfil11,s.tfil12),tp,"DG",0,nil)
+	local g=Duel.GMGroup(aux.NecroValleyFilter(aux.OR(s.tfil11,s.tfil12)),tp,"DG",0,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local sg=g:SelectSubGroup(tp,s.tfun1,false,2,2)
 	if #sg==2 and Duel.SendtoHand(sg,nil,REASON_EFFECT)>0 then

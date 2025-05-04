@@ -121,7 +121,7 @@ function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local tc=Duel.SMCard(tp,s.tfil4,tp,"DGPE",0,1,1,nil,e,tp):GetFirst()
+	local tc=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil4),tp,"DGPE",0,1,1,nil,e,tp):GetFirst()
 	if not tc then
 		return
 	end

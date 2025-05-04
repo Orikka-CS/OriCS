@@ -55,7 +55,7 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SMCard(tp,s.tfil4,tp,"DG",0,1,1,nil,e,tp,zone)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil4),tp,"DG",0,1,1,nil,e,tp,zone)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP,zone)
 	end

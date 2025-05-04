@@ -105,7 +105,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local tc=Duel.SMCard(tp,s.tfil21,tp,"DG",0,1,1,nil,e,tp,e:GetLabel()==1):GetFirst()
+	local tc=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil21),tp,"DG",0,1,1,nil,e,tp,e:GetLabel()==1):GetFirst()
 	if tc then
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 	end

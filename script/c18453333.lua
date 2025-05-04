@@ -287,7 +287,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 	local c=e:GetHandler()
 	local g1=Duel.GMGroup(Card.IsFaceup,tp,"M",0,nil)
-	local g2=Duel.GMGroup(cm.ofil2,tp,"DG",0,nil)
+	local g2=Duel.GMGroup(aux.NecroValleyFilter(cm.ofil2),tp,"DG",0,nil)
 	if #g1>0 and #g2>0 and Duel.GetLocCount(tp,"S")>0 and Duel.SelectEffectYesNo(tp,c,aux.Stringid(m,2)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 		local tc1=g1:Select(tp,1,1,nil):GetFirst()

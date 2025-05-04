@@ -117,7 +117,7 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	end
 	local mg=Duel.GetRitualMaterial(tp):Filter(Card.IsCanOverlay,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local tg=Duel.SMCard(tp,cm.tfil3,tp,"HG",0,1,1,nil,e,tp,mg)
+	local tg=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil3),tp,"HG",0,1,1,nil,e,tp,mg)
 	local tc=tg:GetFirst()
 	if tc then
 		mg=mg:Filter(Card.IsCanBeRitualMaterial,tc,tc)

@@ -41,7 +41,7 @@ function cm.tfil1(c)
 end
 function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.GetLocCount(tp,"S")>0 and Duel.IEMCard(cm.tfil1,tp,"D",0,1,nil)
+		return Duel.GetLocCount(tp,"S")>0 and Duel.IEMCard(cm.tfil1,tp,"DG",0,1,nil)
 	end
 end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -49,7 +49,7 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-	local g=Duel.SMCard(tp,cm.tfil1,tp,"D",0,1,1,nil)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil1),tp,"DG",0,1,1,nil)
 	if #g>0 then
 		Duel.SSet(tp,g)
 	end

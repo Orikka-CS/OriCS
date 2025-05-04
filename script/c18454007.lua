@@ -69,7 +69,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.BreakEffect()
-	local b3=c:IsDiscardable()
+	local b3=true
 	local b4=c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and Duel.CheckReleaseGroup(tp,s.ofil11,2,false,2,true,c,tp,nil,nil,nil,tp)
 	op=Duel.SelectEffect(tp,
@@ -114,6 +114,13 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and (tc:IsFaceup() or tc:IsLoc("G")) and tc:IsType(TYPE_MONSTER) then
+		local eff={tc:GetCardEffect(EFFECT_NECRO_VALLEY)}
+		for _,te in ipairs(eff) do
+			local op=te:GetOperation()
+			if not op or op(e,tc) then
+				return
+			end
+		end
 		local e1=MakeEff(c,"S")
 		e1:SetCode(EFFECT_CHANGE_ATTRIBUTE)
 		e1:SetReset(RESET_PHASE+PHASE_END+RESET_EVENT+RESETS_STANDARD)

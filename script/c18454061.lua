@@ -71,7 +71,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g=Duel.SelectMatchingCard(tp,s.ofil2,tp,LOCATION_GRAVE,0,0,1,nil)
+		local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.ofil2),tp,LOCATION_GRAVE,0,0,1,nil)
 		if #g>0 then
 			Duel.BreakEffect()
 			Duel.HintSelection(g)

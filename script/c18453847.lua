@@ -66,6 +66,9 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 	if ct<1 then
 		return
 	end
+	if ct>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
+		ct=1
+	end
 	if #g>ct then
 		g=g:Select(tp,ct,ct,nil)
 	end

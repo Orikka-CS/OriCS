@@ -37,7 +37,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SMCard(tp,s.tfil2,tp,0,"OGR",1,1,nil)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil2),tp,0,"OGR",1,1,nil)
 	local tc=g:GetFirst()
 	if tc and Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)>0 then
 		local code=tc:GetOriginalCodeRule()

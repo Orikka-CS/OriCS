@@ -27,7 +27,7 @@ function c76859101.op1(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
-		local mg=Duel.GetMatchingGroup(c76859101.ofilter1,tp,LOCATION_GRAVE,0,nil)
+		local mg=Duel.GetMatchingGroup(aux.NecroValleyFilter(c76859101.ofilter1),tp,LOCATION_GRAVE,0,nil)
 		if mg:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(76859101,0)) then
 			Duel.BreakEffect()
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)

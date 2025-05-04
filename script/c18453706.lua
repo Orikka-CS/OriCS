@@ -156,6 +156,13 @@ function s.ocon41(e,tp,eg,ep,ev,re,r,rp)
 		e:Reset()
 		return false
 	end
+	local eff={tc:GetCardEffect(EFFECT_NECRO_VALLEY)}
+	for _,te in ipairs(eff) do
+		local op=te:GetOperation()
+		if not op or op(e,tc) then
+			return false
+		end
+	end
 	return Duel.GetTurnCount()~=ct and tc:IsCanBeSpecialSummoned(e,0,tp,true,false)
 		and Duel.GetLocCount(tp,"M")>0
 end

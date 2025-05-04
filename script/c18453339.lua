@@ -51,7 +51,7 @@ end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SMCard(tp,cm.tfil1,tp,"DG",0,1,1,nil)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil1),tp,"DG",0,1,1,nil)
 	if #g>0 and Duel.SendtoHand(g,nil,REASON_EFFECT)>0 then
 		Duel.ConfirmCards(1-tp,g)
 		if c:IsRelateToEffect(e) and c:IsFaceup() then

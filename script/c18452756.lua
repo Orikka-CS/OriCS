@@ -36,9 +36,9 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local sg=g:Select(tp,1,1,nil)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		local ag=Duel.GMGroup(cm.ofil12,tp,"D",0,nil,tp)
+		local ag=Duel.GMGroup(aux.NecroValleyFilter(cm.ofil12),tp,"DG",0,nil,tp)
 		if Duel.IsPlayerAffectedByEffect(tp,18452752) and #ag>0 and
-			Duel.SelectYesNo(tp,aux.Stringid(m,0+1) then
+			Duel.SelectYesNo(tp,aux.Stringid(m,1) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RESOLVECARD)
 			local tg=ag:Select(tp,1,1,nil)
 			local tc=tg:GetFirst()

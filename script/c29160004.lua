@@ -41,7 +41,8 @@ function c29160004.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c29160004.spop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,c29160004.filter,tp,LOCATION_EXTRA+LOCATION_GRAVE+LOCATION_PZONE,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c29160004.filter),tp,
+		LOCATION_EXTRA+LOCATION_GRAVE+LOCATION_PZONE,0,1,1,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc and Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP) then
 		local e1=Effect.CreateEffect(e:GetHandler())
