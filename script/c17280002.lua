@@ -62,7 +62,8 @@ function c17280002.op4(e,tp,eg,ep,ev,re,r,rp)
 	local rc=c:GetReasonCard()
 	local att=rc:GetOriginalAttribute()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,c17280002.tfilter4,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,att)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c17280002.tfilter4),tp,
+		LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,att)
 	if g:GetCount()>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)

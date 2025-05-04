@@ -43,7 +43,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
-	local g=Duel.SMCard(tp,s.tfil11,tp,"DGR",0,1,1,nil,tp)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil11),tp,"DGR",0,1,1,nil,tp)
 	local tc=g:GetFirst()
 	if tc then
 		Duel.MoveToField(tc,tp,tp,LSTN("F"),POS_FACEUP,true)

@@ -55,8 +55,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()
 	if c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) then
 		local b1=tc:IsAbleToGrave()
-		local b2=e:GetLabel()==1 and Duel.GetLocCount(tp,"M")>1 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-			and tc:IsCanBeSpecialSummoned(e,0,tp,false,false)
+		local b2=e:GetLabel()==1 and Duel.GetLocCount(tp,"M")>1 and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+			and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and tc:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		local op=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)})
 		if op==1 then
 			if Duel.SendtoGrave(tc,REASON_EFFECT)>0 then

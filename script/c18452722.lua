@@ -40,6 +40,8 @@ function cm.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 		return c:IsReleasable()
 	end
 	Duel.Release(c,REASON_COST)
+	local te=Effect.CreateEffect(c)
+	e:SetLabelObject(te)
 	c:CreateEffectRelation(e)
 end
 function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -58,7 +60,8 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) and rc:IsRelateToEffect(re) then
 		Duel.Destroy(eg,REASON_EFFECT)
 	end
-	if c:IsRelateToEffect(e) then
+	local te=e:GetLabelObject()
+	if c:IsRelateToEffect(te) then
 		c:RegisterFlagEffect(m,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
 	end
 end

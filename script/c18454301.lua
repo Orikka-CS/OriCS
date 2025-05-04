@@ -114,6 +114,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GMGroup(s.tfil2,tp,"M","M",nil)
 	local ct=#g
+	if ct>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
+		ct=1
+	end
 	if ct>0 and Duel.GetLocCount(tp,"M")>0
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,18454306,0,TYPES_TOKEN,0,0,1,RACE_PLANT,ATTRIBUTE_WATER) then
 		for i=1,ct do

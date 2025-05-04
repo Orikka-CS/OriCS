@@ -46,6 +46,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if tc then
 		local e1=MakeEff(c,"F")
 		e1:SetCode(EFFECT_IMMUNE_EFFECT)
+		e1:SetProperty(EFFECT_FLAG_IMMEDIATELY_APPLY)
 		e1:SetTR(0xff,0)
 		e1:SetReset(RESET_PHASE+PHASE_END)
 		e1:SetLabel(tc:GetOriginalCodeRule())

@@ -57,7 +57,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GMGroup(s.tfil1,tp,"D",0,nil,e,tp)
 	if #g>0 and Duel.GetLocCount(tp,"M")>0 then
-		local b=e:GetLabel()==1 and Duel.GetLocCount(tp,"M")>3
+		local b=e:GetLabel()==1 and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) and Duel.GetLocCount(tp,"M")>3
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=g:SelectSubGroup(tp,s.ofun1,false,1,4,b)
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)

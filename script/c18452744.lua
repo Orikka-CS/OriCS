@@ -75,7 +75,7 @@ end
 function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and Duel.SendtoGrave(tc,REASON_EFFECT+REASON_RETURN)>0 and tc:IsLoc("G") then
-		if tc:IsSetCard(0x2e7) and tc:IsType(TYPE_MONSTER) and Duel.SelectYesNo(tp,aux.Stringid(m,00)) then
+		if tc:IsSetCard(0x2e7) and tc:IsType(TYPE_MONSTER) and Duel.SelectYesNo(tp,aux.Stringid(m,0)) then
 			Duel.Recover(tp,1000,REASON_EFFECT)
 		end
 		local g=Duel.GMGroup(cm.ofil2,tp,"G",0,tc)

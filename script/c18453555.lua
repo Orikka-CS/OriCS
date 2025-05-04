@@ -44,6 +44,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 	local e1=MakeEff(c,"S")
 	e1:SetCode(EFFECT_IMMUNE_EFFECT)
+	e1:SetProperty(EFFECT_FLAG_IMMEDIATELY_APPLY)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 	e1:SetValue(s.oval21)
 	tc:RegisterEffect(e1)

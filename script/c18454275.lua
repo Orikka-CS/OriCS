@@ -35,6 +35,13 @@ function s.con1(e,c)
 	if c==nil then
 		return true
 	end
+	local eff={c:GetCardEffect(EFFECT_NECRO_VALLEY)}
+	for _,te in ipairs(eff) do
+		local op=te:GetOperation()
+		if not op or op(e,c) then
+			return false
+		end
+	end
 	local tp=c:GetControler()
 	return Duel.CheckReleaseGroup(tp,s.nfil1,1,true,1,true,c,tp,nil,false,nil)
 end

@@ -61,7 +61,7 @@ function c18452705.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_GRAVE+LOCATION_DECK)
 end
 function c18452705.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(c18452705.tfil1,tp,LOCATION_GRAVE+LOCATION_DECK,0,nil)
+	local g=Duel.GetMatchingGroup(aux.NecroValleyFilter(c18452705.tfil1),tp,LOCATION_GRAVE+LOCATION_DECK,0,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local sg=g:SelectWithSumEqual(tp,c18452705.tfun1,0x33,2,2)
 	if sg:GetCount()>1 then

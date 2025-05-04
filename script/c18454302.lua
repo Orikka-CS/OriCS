@@ -96,6 +96,9 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		return ct>0 and #sg>0
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	if ct>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
+		ct=1
+	end
 	local tg=sg:SelectSubGroup(tp,s.tfun2,false,1,ct)
 	Duel.SetTargetCard(tg)
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,tg,#tg,0,0)
@@ -105,6 +108,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetTargetCards(e):Filter(Card.IsCanBeSpecialSummoned,nil,e,0,tp,false,false,POS_FACEUP_DEFENSE)
 	local ft=Duel.GetLocCount(tp,"M")
 	if ft>0 then
+		if ft>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
+			ft=1
+		end
 		if #g>ft then
 			g=g:Select(tp,ft,ft,nil)
 		end

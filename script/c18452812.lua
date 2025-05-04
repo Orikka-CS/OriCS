@@ -55,7 +55,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
-	local g=Duel.SMCard(tp,cm.tfil21,tp,"HDG",0,1,1,nil,tp)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil21),tp,"HDG",0,1,1,nil,tp)
 	local tc=g:GetFirst()
 	if tc then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)

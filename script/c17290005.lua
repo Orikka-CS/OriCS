@@ -115,6 +115,14 @@ function c17290005.op6(e,tp,eg,ep,ev,re,r,rp)
 	c:RegisterEffect(e1)
 end
 function c17290005.con61(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local eff={c:GetCardEffect(EFFECT_NECRO_VALLEY)}
+	for _,te in ipairs(eff) do
+		local op=te:GetOperation()
+		if not op or op(e,c) then
+			return false
+		end
+	end
 	local ct=e:GetLabel()
 	return Duel.GetTurnCount()==ct+2
 end

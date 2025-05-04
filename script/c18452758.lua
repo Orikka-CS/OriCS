@@ -44,6 +44,10 @@ function cm.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HITNMSG_RESOLVECARD)
 	local g=Duel.STarget(tp,cm.tfil3,tp,"D",0,1,1,nil,tp,tc)
+	local gc=g:GetFirst()
+	if gc:IsLoc("G") then
+		Duel.SOI(0,CATEGORY_LEAVE_GRAVE,gc,1,0,0)
+	end
 end
 function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

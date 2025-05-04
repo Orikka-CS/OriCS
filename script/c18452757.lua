@@ -70,7 +70,7 @@ function cm.oop11(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	if eg:IsExists(cm.oofil111,1,nil,tp,TYPE_MONSTER) and Duel.GetFlagEffect(tp,m)<1 then
-		local mg=Duel.GMGroup(cm.oofil112,tp,"DG",0,nil,e,tp)
+		local mg=Duel.GMGroup(aux.NecroValleyFilter(cm.oofil112),tp,"DG",0,nil,e,tp)
 		if #mg>0 and Duel.GetLocCount(tp,"M")>0 then
 			Duel.Hint(HINT_CARD,0,m)
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
@@ -83,7 +83,7 @@ function cm.oop11(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RaiseEvent(eg,m,e,0,tp,tp,0)
 	end
 	if eg:IsExists(cm.oofil111,1,nil,tp,TYPE_TRAP) and Duel.GetFlagEffect(tp,m+2)<1 then
-		local tg=Duel.GMGroup(cm.oofil113,tp,"DG",0,nil)
+		local tg=Duel.GMGroup(aux.NecroValleyFilter(cm.oofil113),tp,"DG",0,nil)
 		if #tg>0 and Duel.GetLocCount(tp,"S")>0 then
 			Duel.Hint(HINT_CARD,0,m)
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
@@ -94,6 +94,14 @@ function cm.oop11(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.ocon12(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local eff={c:GetCardEffect(EFFECT_NECRO_VALLEY)}
+	for _,te in ipairs(eff) do
+		local op=te:GetOperation()
+		if not op or op(e,c) then 
+			eturn false
+		end
+	end
 	return ep==tp
 end
 function cm.ocost12(e,tp,eg,ep,ev,re,r,rp,chk)

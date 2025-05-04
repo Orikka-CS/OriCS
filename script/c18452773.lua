@@ -92,7 +92,7 @@ function cm.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 	local label=e:GetLabel()
 	local g1=Duel.GMGroup(aux.TRUE,tp,"H",0,nil)
-	if #g1>0 and Duel.IsPlayerCanDraw(tp,2) and Duel.SelectYesNo(tp,aux.Stringid(m,00)) then
+	if #g1>0 and Duel.IsPlayerCanDraw(tp,2) and Duel.SelectYesNo(tp,aux.Stringid(m,0)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
 		local sg1=g1:Select(tp,1,1,nil)
 		Duel.SendtoGrave(sg1,REASON_DISCARD+REASON_EFFECT)

@@ -59,7 +59,7 @@ function cm.op4(e,tp,eg,ep,ev,re,r,rp)
 	local g2=Duel.GMGroup(Card.IsAbleToRemove,tp,0,"G",nil)
 	local g3=Duel.GMGroup(Card.IsAbleToRemove,tp,0,"H",nil)
 	local sg=Group.CreateGroup()
-	if #g1>0 and ((#g2==0 and #g3==0) or Duel.SelectYesNo(tp,aux.Stringid(m,00))) then
+	if #g1>0 and ((#g2==0 and #g3==0) or Duel.SelectYesNo(tp,aux.Stringid(m,0))) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local sg1=g1:Select(tp,1,1,nil)
 		Duel.HintSelection(sg1)

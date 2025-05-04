@@ -42,6 +42,13 @@ function cm.nfil1(c,code)
 	if not c:IsAbleToRemoveAsCost() then
 		return false
 	end
+	local eff={c:GetCardEffect(EFFECT_NECRO_VALLEY)}
+	for _,te in ipairs(eff) do
+		local op=te:GetOperation()
+		if not op or op(e,c) then
+			return false
+		end
+	end
 	if code==13522325 or code==74823665 then
 		return c:IsAttribute(ATTRIBUTE_FIRE)
 	end

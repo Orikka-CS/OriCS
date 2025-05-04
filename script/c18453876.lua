@@ -18,7 +18,8 @@ end
 function s.val1(e,re,rp)
 	local rc=re:GetHandler()
 	return not (rc:IsLoc("S") and rc:IsFacedown())
-		and (not Duel.IsMainPhase() or Duel.GetTurnPlayer()~=rp or Duel.GetCurrentChain()>0)
+		and (not Duel.IsMainPhase() or Duel.GetTurnPlayer()~=rp or (Duel.GetCurrentChain()>0 and
+			not (rc:IsLoc("D") and rc:IsCode(CARD_NEW_HEAVEN_AND_EARTH))))
 end
 function s.nfil2(c)
 	return c:IsHasEffect(CARD_NEW_HEAVEN_AND_EARTH)
