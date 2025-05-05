@@ -57,7 +57,7 @@ function s.val1(e,c)
 		mg=tc:GetMaterial()
 		x=x+#mg-mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)
 	end
-	return x*300
+	return x*200
 end
 
 --effect 2

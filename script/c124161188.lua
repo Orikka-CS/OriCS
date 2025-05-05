@@ -28,7 +28,7 @@ function s.tg1filter(c,e)
 	return c:IsSetCard(0xf2c) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsFaceup()
 end
 
-function s.rescon(sg,e,tp,mg)
+function s.tg1con(sg,e,tp,mg)
 	return sg:IsExists(s.tg1filter,1,nil,e)
 end
 

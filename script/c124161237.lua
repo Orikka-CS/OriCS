@@ -32,13 +32,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e3:SetCode(EFFECT_CANNOT_ACTIVATE)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e3:SetCode(EFFECT_DESTROY_REPLACE)
 	e3:SetRange(LOCATION_FZONE)
-	e3:SetCondition(s.con3)
-	e3:SetTargetRange(0,1)
-	e3:SetValue(s.val3)
+	e3:SetTarget(s.tg3)
+	e3:SetOperation(s.op3)
+	e3:SetValue(function(e,c) return s.val3filter(c,e,e:GetHandlerPlayer()) end)
 	c:RegisterEffect(e3)
 end
 
@@ -49,7 +48,7 @@ end
 
 function s.val1(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetMatchingGroupCount(s.val1filter,tp,LOCATION_GRAVE,0,nil)*200
+	return Duel.GetMatchingGroupCount(s.val1filter,tp,LOCATION_GRAVE,0,nil)*300
 end
 
 --effect 2
@@ -83,16 +82,23 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 3
-function s.con3filter(c)
-	return c:IsSetCard(0xf2f) and c:IsFaceup()
+function s.val3filter(c,e,tp)
+	return c:IsSetCard(0xf2f) and c:IsFaceup() and c:IsControler(tp) and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_BATTLE+REASON_EFFECT) and c~=e:GetHandler()
 end
 
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con3filter,e:GetHandlerPlayer(),LOCATION_ONFIELD,0,e:GetHandler())
-	return g>0
+function s.tg3filter(c)
+	return c:IsContinuousSpell() and c:IsAbleToDeck()
 end
 
-function s.val3(e,re,tp)
-	local rc=re:GetHandler()
-	return (re:GetActivateLocation()==LOCATION_GRAVE or re:GetActivateLocation()==LOCATION_REMOVED) and re:IsActiveType(TYPE_MONSTER) and rc:HasLevel() and rc:IsLevelBelow(Duel.GetMatchingGroupCount(Card.IsContinuousSpell,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil))
+function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_GRAVE,0,eg)
+	if chk==0 then return eg:IsExists(s.val3filter,1,nil,e,tp) and #g>0 end
+	return Duel.SelectYesNo(tp,aux.Stringid(id,1))
+end
+
+function s.op3(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_GRAVE,0,eg)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+	Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_EFFECT+REASON_REPLACE)
+	Duel.Hint(HINT_CARD,0,id)
 end

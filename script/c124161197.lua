@@ -22,6 +22,7 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e2:SetCode(EFFECT_CANNOT_REMOVE)
 	e2:SetRange(LOCATION_SZONE)
+	e2:SetCondition(s.con2)
 	e2:SetTargetRange(0,1)
 	e2:SetTarget(s.tg2filter)
 	c:RegisterEffect(e2)
@@ -63,6 +64,15 @@ function s.op1op(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.con2filter(c)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayCount()==0
+end
+
+function s.con2(e)
+	local g=Duel.GetMatchingGroupCount(s.con2filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)
+	return g>0
+end
+
 function s.tg2filter(e,c,tp,r)
-	return c:IsSetCard(0xf2c) and c:IsLocation(LOCATION_GRAVE) and c:IsControler(e:GetHandlerPlayer()) and r&REASON_EFFECT>0
+	return c:IsLocation(LOCATION_GRAVE)
 end
