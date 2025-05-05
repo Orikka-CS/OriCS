@@ -41,7 +41,7 @@ function s.next_phase(phase)
 	return next_phase
 end
 function s.cfil1(c)
-	return c:IsDiscardable() and (c:IsRace(RACE_FAIRY) or c:IsAttribute(ATTRIBUTE_WATER))
+	return c:IsDiscardable() and (c:IsRace(RACE_FAIRY) or c:IsAttribute(ATTRIBUTE_WIND))
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
