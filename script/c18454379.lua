@@ -110,6 +110,7 @@ function s.oop11(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 	e:Reset()
+	Duel.ProcessQuickEffect(1-tp)
 end
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -174,6 +175,7 @@ function s.oop21(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 	end
 	e:Reset()
+	Duel.ProcessQuickEffect(1-tp)
 end
 function s.ocon23(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -232,4 +234,5 @@ function s.oop31(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g)
 	end
 	e:Reset()
+	Duel.ProcessQuickEffect(1-tp)
 end
