@@ -66,7 +66,7 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function s.tfil1(c,e,tp)
-	return c:IsCode(18454377) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsCode(id) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
