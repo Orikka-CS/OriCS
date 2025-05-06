@@ -18,11 +18,11 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
-	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -58,24 +58,42 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.tg2filter(c,e)
-	return c:IsSetCard(0xf20) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand() and c:IsFaceup()
+function s.con2filter(c)
+	return c:IsSetCard(0xf20) and c:IsPublic()
+end
+
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_HAND,0,nil)
+	return g>0
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,tp,0)
+	local c=e:GetHandler()
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
+end
+
+function s.op2filter(c)
+	return c:IsSetCard(0xf20) and not c:IsPublic() 
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) then
-		Duel.SendtoHand(tg,nil,REASON_EFFECT)
-		Duel.BreakEffect()
-		Duel.ConfirmCards(1-tp,tg)
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+		local rg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,nil)
+		if #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local srg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
+			Duel.ConfirmCards(1-tp,srg)
+			Duel.ShuffleHand(tp)
+		end
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
+		e1:SetValue(LOCATION_DECKSHF)
+		e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
+		c:RegisterEffect(e1)
 	end
 end
