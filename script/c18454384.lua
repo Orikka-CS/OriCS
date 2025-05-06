@@ -100,5 +100,7 @@ function s.oop11(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 	e:Reset()
-	Duel.ProcessQuickEffect(1-tp)
+	if Duel.GetCurrentChain()>0 then
+		Duel.ProcessQuickEffect(1-tp)
+	end
 end
