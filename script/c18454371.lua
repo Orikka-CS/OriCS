@@ -77,7 +77,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		if #sg==1 then
 			local tc=sg:GetFirst()
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-			local dg=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_GRAVE,0,0,1,nil,tc:GetType()&0x7)
+			local dg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.ofil1),tp,
+				LOCATION_GRAVE,0,0,1,nil,tc:GetType()&0x7)
 			if #dg>0 then
 				Duel.BreakEffect()
 				Duel.HintSelection(dg)
