@@ -100,12 +100,12 @@ function s.ocon11(e,tp,eg,ep,ev,re,r,rp)
 		e:Reset()
 	end
 	return s.phase_check(phase) and Duel.GetLocCount(tp,"M")>0
-		and Duel.IEMCard(aux.NecroValleyFilter(s.tfil1),tp,"HG",0,1,nil,e,tp)
+		and Duel.IEMCard(aux.NecroValleyFilter(s.tfil1),tp,"HG",0,1,nil,e,0,tp,false,false)
 end
 function s.oop11(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,id)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil1),tp,"HG",0,1,1,nil,e,tp)
+	local g=Duel.SMCard(tp,aux.NecroValleyFilter(s.tfil1),tp,"HG",0,1,1,nil,e,0,tp,false,false)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
