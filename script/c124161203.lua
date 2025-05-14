@@ -44,7 +44,7 @@ end
 
 --effect 2
 function s.cst2filter(c)
-	return c:IsSetCard(0xf2d) and not c:IsCode(id) and c:IsAbleToGraveAsCost()
+	return c:IsSetCard(0xf2d) and not c:IsCode(id) and c:IsAbleToGraveAsCost() and c:IsMonster()
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)

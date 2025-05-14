@@ -47,16 +47,19 @@ function s.op1filter(c)
 	return c:IsType(TYPE_LINK) and #mg>0 and #mg~=mg:FilterCount(Card.IsType,nil,TYPE_EFFECT) and c:IsFaceup()
 end
 
+function s.op1rmfilter(c)
+	return c:IsAbleToRemove() and c:IsType(TYPE_EFFECT)
+end
+
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateSummon(eg)
 	Duel.Remove(eg,POS_FACEUP,REASON_EFFECT)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_EXTRA,nil)
-	if Duel.GetMatchingGroupCount(s.op1filter,tp,LOCATION_MZONE,0,nil)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+	local rg=Duel.GetMatchingGroup(s.op1rmfilter,tp,0,LOCATION_GRAVE,nil)
+	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_MZONE,0,nil)
+	if #rg>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
-		Duel.ConfirmCards(tp,g)
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+		local sg=aux.SelectUnselectGroup(rg,e,tp,1,g:GetSum(Card.GetLink),aux.TRUE,1,tp,HINTMSG_REMOVE)
 		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
-		Duel.ShuffleExtra(1-tp)
 	end
 end
 
