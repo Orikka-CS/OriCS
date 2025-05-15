@@ -27,6 +27,7 @@ function c17290003.initial_effect(c)
 	e6:SetValue(1)
 	c:RegisterEffect(e6)
 end
+c17290003.listed_series={0x8}
 function c17290003.mat_filter(c)
 	return c:IsAttribute(ATTRIBUTE_FIRE) or c:IsSetCard(0x8)
 end

@@ -25,6 +25,7 @@ function c17280008.initial_effect(c)
 	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e4)
 end
+c17280008.listed_series={0x2c4}
 function c17280008.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()	
 	local e1=Effect.CreateEffect(c)

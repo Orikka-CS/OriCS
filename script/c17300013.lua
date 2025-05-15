@@ -19,6 +19,7 @@ function c17300013.initial_effect(c)
 	e2:SetOperation(c17300013.thop)
 	c:RegisterEffect(e2)
 end
+c17300013.listed_series={0x2d1}
 function c17300013.tfil11(c,tp)
 	return (Duel.CheckLocation(tp,LOCATION_PZONE,0) and Duel.IsExistingMatchingCard(c17300013.tfil12,tp,LOCATION_DECK,0,1,nil,c:GetRightScale()))
 		or (Duel.CheckLocation(tp,LOCATION_PZONE,1) and Duel.IsExistingMatchingCard(c17300013.tfil13,tp,LOCATION_DECK,0,1,nil,c:GetLeftScale()))

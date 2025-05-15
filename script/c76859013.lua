@@ -41,6 +41,7 @@ function c76859013.initial_effect(c)
 	e4:SetOperation(c76859013.op4)
 	c:RegisterEffect(e4)
 end
+c76859013.listed_names={76859015}
 function c76859013.con1(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp
 end

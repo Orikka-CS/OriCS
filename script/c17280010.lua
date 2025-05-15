@@ -43,6 +43,7 @@ function c17280010.initial_effect(c)
 	e6:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e6)
 end
+c17280010.listed_series={0x2c4}
 function c17280010.cfilter21(c,e,tp)
 	local att=c:GetAttribute()
 	local satt=0

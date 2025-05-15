@@ -27,6 +27,8 @@ function c17280001.initial_effect(c)
 	e5:SetRange(LOCATION_MZONE)
 	c:RegisterEffect(e5)
 end
+c17280001.listed_names={17280001}
+c17280001.listed_series={0x2c4}
 function c17280001.tfilter1(c,e,tp)
 	return c:IsSetCard(0x2c4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsCode(17280001)
 end

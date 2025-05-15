@@ -26,6 +26,8 @@ function c17300012.initial_effect(c)
 	c:RegisterEffect(e1)
 	Duel.AddCustomActivityCounter(17300012,ACTIVITY_SPSUMMON,c17300012.counterfilter)
 end
+c17300012.listed_names={17300012}
+c17300012.listed_series={0x2d1}
 function c17300012.counterfilter(c)
 	return c:IsSetCard(0x2d1)
 end

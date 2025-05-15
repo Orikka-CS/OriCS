@@ -26,6 +26,7 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"NTO")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={26190001,26190004}
 function cm.pfil1(c)
 	return c:IsFaceup() and c:IsCode(26190001)
 end

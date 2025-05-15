@@ -24,6 +24,7 @@ function c26190003.initial_effect(c)
 	e3:SetTarget(aux.TargetBoolFunction(Card.IsType,TYPE_SPELL+TYPE_TRAP))
 	c:RegisterEffect(e3)
 end
+c26190003.listed_names={26190001,26190004}
 function c26190003.ofil1(c)
 	return c:IsCode(26190001) and c:IsAbleToHand()
 end

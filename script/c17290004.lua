@@ -40,6 +40,8 @@ function c17290004.initial_effect(c)
 	e8:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e8)
 end
+c17290004.listed_names={17290004}
+c17290004.listed_series={0x8,0x2c3}
 function c17290004.mat_filter(c)
 	return c:IsAttribute(ATTRIBUTE_WATER) or c:IsSetCard(0x8)
 end

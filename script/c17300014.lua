@@ -21,6 +21,7 @@ function c17300014.initial_effect(c)
 	e2:SetOperation(c17300014.thop)
 	c:RegisterEffect(e2)
 end
+c17300014.listed_series={0x2d1}
 function c17300014.filter(c,e,tp,m,ft)
 	if not c:IsCode(17300003)
 		or not c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,true,true) then return false end

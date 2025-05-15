@@ -31,6 +31,7 @@ function c17290006.initial_effect(c)
 	e6:SetOperation(c17290006.op6)
 	c:RegisterEffect(e6)
 end
+c17290006.listed_series={0x8,0x2c3}
 function c17290006.mat_filter(c)
 	return c:IsAttribute(ATTRIBUTE_DARK) or c:IsSetCard(0x8)
 end

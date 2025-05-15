@@ -27,6 +27,7 @@ function c17280012.initial_effect(c)
 	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e4)
 end
+c17280012.listed_series={0x2c4}
 function c17280012.tfilter11(c,e,tp)
 	return c:IsSetCard(0x2c4) and c:IsType(TYPE_TUNER) and c:IsType(TYPE_MONSTER)
 		and (c:IsAbleToHand() or (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)))

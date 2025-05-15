@@ -34,6 +34,7 @@ function c17290012.initial_effect(c)
 	e4:SetTarget(c17290012.tg2)
 	c:RegisterEffect(e4)
 end
+c17290012.listed_series={0x8,0x2c3}
 function c17290012.con4(e,c)
 	if not c then
 		return true

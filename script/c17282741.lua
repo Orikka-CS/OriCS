@@ -29,6 +29,7 @@ function c17282741.initial_effect(c)
 	e3:SetOperation(c17282741.pcop)
 	c:RegisterEffect(e3)
 end
+c17282741.listed_names={17282640}
 function c17282741.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(r,REASON_EFFECT+REASON_BATTLE)~=0 and e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD)
 end

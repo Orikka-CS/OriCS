@@ -41,6 +41,7 @@ function c17300005.initial_effect(c)
 	Duel.AddCustomActivityCounter(17300005,ACTIVITY_SPSUMMON,c17300005.counterfilter)
 end
 c17300005.pendulum_level=3
+c17300005.listed_series={0x2d1}
 function c17300005.counterfilter(c)
 	return c:IsSetCard(0x2d1)
 end

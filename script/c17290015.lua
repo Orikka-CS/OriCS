@@ -41,6 +41,8 @@ function c17290015.initial_effect(c)
 	e1:SetOperation(c17290015.spop)
 	c:RegisterEffect(e1)
 end
+c17290015.listed_names={17290015}
+c17290015.listed_series={0x8,0x2c3}
 function c17290015.mat_filter(c)
 	return c:IsRace(RACE_SPELLCASTER) or c:IsSetCard(0x8)
 end

@@ -21,6 +21,7 @@ function c17280005.initial_effect(c)
 	e2:SetOperation(c17280005.op2)
 	c:RegisterEffect(e2)
 end
+c17280005.listed_series={0x2c4}
 function c17280005.tfilter1(c,e,tp)
 	return c:IsSetCard(0x2c4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end

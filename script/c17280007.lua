@@ -44,6 +44,7 @@ function c17280007.initial_effect(c)
 	e6:SetOperation(c17280007.op6)
 	c:RegisterEffect(e6)
 end
+c17280007.listed_series={0x2c4}
 function c17280007.con1(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SYNCHRO
 end

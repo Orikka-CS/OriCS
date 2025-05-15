@@ -25,6 +25,8 @@ function c17280002.initial_effect(c)
 	e4:SetOperation(c17280002.op4)
 	c:RegisterEffect(e4)
 end
+c17280002.listed_names={17280002}
+c17280002.listed_series={0x2c4}
 function c17280002.tfilter1(c)
 	return c:IsSetCard(0x2c4) and c:IsAbleToHand() and not c:IsCode(17280002)
 end

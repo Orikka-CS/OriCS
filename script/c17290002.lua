@@ -37,6 +37,8 @@ function c17290002.initial_effect(c)
 	e7:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e7)
 end
+c17290002.listed_names={17290002}
+c17290002.listed_series={0x8,0x2c3}
 function c17290002.mat_filter(c)
 	return c:IsAttribute(ATTRIBUTE_WIND) or c:IsSetCard(0x8)
 end

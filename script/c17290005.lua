@@ -33,6 +33,7 @@ function c17290005.initial_effect(c)
 	e6:SetOperation(c17290005.op6)
 	c:RegisterEffect(e6)
 end
+c17290005.listed_series={0x8,0x2c3}
 function c17290005.mat_filter(c)
 	return c:IsAttribute(ATTRIBUTE_EARTH) or c:IsSetCard(0x8)
 end

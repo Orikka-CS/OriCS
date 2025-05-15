@@ -20,6 +20,7 @@ function c17300015.initial_effect(c)
 	e2:SetOperation(c17300015.thop)
 	c:RegisterEffect(e2)
 end
+c17300015.listed_series={0x2d1}
 function c17300015.filter1(c,e)
 	return not c:IsImmuneToEffect(e)
 end

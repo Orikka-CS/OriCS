@@ -27,6 +27,8 @@ function c17280004.initial_effect(c)
 	e5:SetRange(LOCATION_MZONE)
 	c:RegisterEffect(e5)
 end
+c17280004.listed_names={17280004}
+c17280004.listed_series={0x2c4}
 function c17280004.tfilter1(c)
 	return c:IsSetCard(0x2c4) and c:IsAbleToGrave() and not c:IsCode(17280004)
 end

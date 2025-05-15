@@ -34,6 +34,8 @@ function c17290013.initial_effect(c)
 	e6:SetOperation(c17290013.op6)
 	c:RegisterEffect(e6)
 end
+c17290013.listed_names={17290013}
+c17290013.listed_series={0x8,0x2c3}
 function c17290013.mat_filter(c)
 	return c:IsRace(RACE_FAIRY) or c:IsSetCard(0x8)
 end

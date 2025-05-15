@@ -21,6 +21,8 @@ function c17280006.initial_effect(c)
 	e2:SetOperation(c17280006.op2)
 	c:RegisterEffect(e2)
 end
+c17280006.listed_names={17280006}
+c17280006.listed_series={0x2c4}
 function c17280006.nfilter1(c)
 	return c:IsSetCard(0x2c4) and c:IsFaceup()
 end

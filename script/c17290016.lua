@@ -35,6 +35,8 @@ function c17290016.initial_effect(c)
 	e4:SetTarget(c17290016.tg2)
 	c:RegisterEffect(e4)
 end
+c17290016.listed_names={17290016}
+c17290016.listed_series={0x8,0x2c3}
 function c17290016.filter(c)
 	return c:IsRitualMonster() and c:IsSetCard(0x2c3) and c:IsSetCard(0x8) and c:IsAbleToHand()
 end

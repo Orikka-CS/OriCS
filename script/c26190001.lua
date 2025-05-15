@@ -51,6 +51,7 @@ function c26190001.initial_effect(c)
 	e7:SetOperation(c26190001.op7)
 	c:RegisterEffect(e7)
 end
+c26190001.listed_names={26190004}
 function c26190001.con1(e)
 	local c=e:GetHandler()
 	return not c:IsType(TYPE_RITUAL)

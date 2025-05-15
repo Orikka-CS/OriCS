@@ -35,6 +35,7 @@ function c17290001.initial_effect(c)
 	e7:SetOperation(c17290001.op7)
 	c:RegisterEffect(e7)
 end
+c17290001.listed_series={0x8}
 function c17290001.mat_filter(c)
 	return c:IsAttribute(ATTRIBUTE_LIGHT) or c:IsSetCard(0x8)
 end
