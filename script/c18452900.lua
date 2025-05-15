@@ -11,6 +11,7 @@ function c18452900.initial_effect(c)
 	e1:SetOperation(c18452900.activate)
 	c:RegisterEffect(e1)
 end
+c18452900.listed_series={0x12da}
 function c18452900.cfilter(c)
 	return c:GetSequence()<5
 end

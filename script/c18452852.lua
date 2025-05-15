@@ -29,6 +29,7 @@ function cm.initial_effect(c)
 	WriteEff(e4,4,"TO")
 	c:RegisterEffect(e4)
 end
+cm.listed_series={0x2d9}
 function cm.con1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsSummonType(SUMMON_TYPE_SYNCHRO) and e:GetLabel()>0

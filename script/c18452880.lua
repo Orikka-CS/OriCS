@@ -25,6 +25,7 @@ function cm.initial_effect(c)
 	WriteEff(e4,4,"CTO")
 	c:RegisterEffect(e4)
 end
+cm.listed_series={"´©¸¥ ´«"}
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	c:RegisterFlagEffect(m,RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET+RESET_CHAIN,0,1)

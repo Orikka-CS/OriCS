@@ -10,6 +10,7 @@ function cm.initial_effect(c)
 	e1:SetOperation(cm.op1)
 	c:RegisterEffect(e1)
 end
+cm.listed_names={18452865}
 function cm.nfil1(c)
 	return c:IsCode(18452865) and c:IsAbleToGraveAsCost()
 end

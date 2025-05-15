@@ -10,6 +10,7 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
 end
+cm.listed_series={"모래 먼지","검은 감비아"}
 function cm.tfil1(c)
 	return (c:IsSetCard("모래 먼지") or c:IsSetCard("검은 감비아")) and c:IsAbleToHand()
 end

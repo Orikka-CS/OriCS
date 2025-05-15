@@ -22,6 +22,8 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 cm.mana_list={ATTRIBUTE_WATER}
+cm.listed_names={m}
+cm.listed_series={"컬러큐브"}
 function cm.ofil1(c,tp)
 	local te=c:CheckActivateEffect(false,false,false)
 	local ft=Duel.GetLocCount(tp,"S")

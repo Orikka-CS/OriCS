@@ -21,6 +21,8 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"NCTO")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={CARD_EINE_KLEINE}
+cm.listed_series={"클라이네"}
 function cm.pfil1(c)
 	return c:IsFaceup() and c:IsCode(CARD_EINE_KLEINE) and c:IsLevelAbove(7)
 end

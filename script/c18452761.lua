@@ -14,6 +14,8 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"TO")
 	c:RegisterEffect(e2)
 end
+cm.listed_names={m}
+cm.listed_series={0x2d4,0x2d3,"바이러스"}
 function cm.cfil11(c)
 	return c:IsSetCard(0x2d4) and c:IsType(TYPE_MONSTER) and c:IsReleasable()
 end

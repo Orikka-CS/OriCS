@@ -42,6 +42,8 @@ function cm.initial_effect(c)
 		Duel.RegisterEffect(ge3,0)
 	end
 end
+cm.listed_names={m}
+cm.listed_series={0x2d3}
 function cm.gop1(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.CheckPhaseActivity() and Duel.GetCurrentPhase()&(PHASE_MAIN1+PHASE_MAIN2)>0 then
 		cm[0]=true

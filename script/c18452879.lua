@@ -10,6 +10,7 @@ function cm.initial_effect(c)
 	Duel.AddCustomActivityCounter(m,ACTIVITY_SUMMON,cm.afil1)
 	Duel.AddCustomActivityCounter(m,ACTIVITY_SPSUMMON,cm.afil1)
 end
+cm.listed_series={"´©¸¥ ´«"}
 function cm.afil1(c)
 	return c:IsSetCard("´©¸¥ ´«")
 end

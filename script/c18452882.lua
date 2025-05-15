@@ -15,6 +15,7 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"NTO")
 	c:RegisterEffect(e2)
 end
+cm.listed_series={"´©¸¥ ´«"}
 function cm.tfil1(c)
 	return c:IsLevel(2) and c:IsAttribute(ATTRIBUTE_EARTH) and c:IsAbleToHand()
 end

@@ -18,6 +18,7 @@ function cm.initial_effect(c)
 	WriteEff(e4,4,"TO")
 	c:RegisterEffect(e4)
 end
+cm.listed_series={0x2d4,"바이러스",0x2d3}
 function cm.con3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=c:GetEquipTarget()

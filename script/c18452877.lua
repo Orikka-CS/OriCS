@@ -9,6 +9,7 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
 end
+cm.listed_names={18452865}
 function cm.tfil1(c)
 	return c:IsAttribute(ATTRIBUTE_EARTH) and c:IsRace(RACE_DRAGON) and c:IsAbleToGrave()
 end

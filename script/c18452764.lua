@@ -19,6 +19,7 @@ function c18452764.initial_effect(c)
 	e2:SetOperation(c18452764.op2)
 	c:RegisterEffect(e2)
 end
+c18452764.listed_series={0x2d5}
 function c18452764.con1(e,tp,eg,ep,ev,re,r,rp)
 	return r&REASON_EFFECT>0
 end

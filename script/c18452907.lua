@@ -36,6 +36,7 @@ function c18452907.initial_effect(c)
 	e4:SetOperation(c18452907.op4)
 	c:RegisterEffect(e4)
 end
+c18452907.listed_series={0x2da,0x12da}
 function c18452907.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
 	if chkc then return chkc:IsOnField() and chkc:IsControler(tp) and chkc~=c end

@@ -22,6 +22,8 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 cm.mana_list={ATTRIBUTE_WIND}
+cm.listed_names={m}
+cm.listed_series={"컬러큐브"}
 function cm.ofil1(c)
 	return c:IsSetCard("컬러큐브") and (c:IsFaceup() or c:IsLoc("H")) and c:GetType()&TYPE_SPELL+TYPE_CONTINUOUS==TYPE_SPELL+TYPE_CONTINUOUS
 		and c:IsAbleToGrave() and not c:IsCode(m)

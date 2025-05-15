@@ -25,6 +25,8 @@ function c18452719.initial_effect(c)
 	e3:SetOperation(c18452719.op3)
 	c:RegisterEffect(e3)
 end
+c18452719.listed_names={18452714}
+c18452719.listed_series={0x2d0}
 function c18452719.ofil1(c)
 	return c:IsCode(18452714) and c:IsAbleToHand()
 end

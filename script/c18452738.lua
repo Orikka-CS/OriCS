@@ -35,6 +35,8 @@ function cm.initial_effect(c)
 	WriteEff(e6,6,"TO")
 	c:RegisterEffect(e6)
 end
+cm.listed_series={0x2d2}
+cm.material_setcode=0x2d2
 function cm.pfil1(c)
 	return c:IsFusionAttribute(ATTRIBUTE_WATER) or c:IsHasEffect(18452720)
 end

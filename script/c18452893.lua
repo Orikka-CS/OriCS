@@ -18,6 +18,8 @@ function c18452893.initial_effect(c)
 	e2:SetOperation(c18452893.tgop)
 	c:RegisterEffect(e2)
 end
+c18452893.listed_names={18452893}
+c18452893.listed_series={0x12da,0x2da}
 function c18452893.matfilter(c)
 	return c:IsLinkSetCard(0x12da) and not c:IsLinkAttribute(ATTRIBUTE_WIND)
 end

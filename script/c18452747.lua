@@ -27,6 +27,7 @@ function cm.initial_effect(c)
 	WriteEff(e5,5,"CTO")
 	c:RegisterEffect(e5)
 end
+cm.listed_series={0x2d2,0x12d2}
 function cm.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then

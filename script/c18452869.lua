@@ -15,6 +15,8 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"TO")
 	c:RegisterEffect(e2)
 end
+cm.listed_names={m}
+cm.listed_series={"´©¸¥ ´«"}
 function cm.con1(e,c,minc)
 	if c==nil then
 		return true

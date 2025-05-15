@@ -19,6 +19,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 cm.custom_type=CUSTOMTYPE_DELIGHT
+cm.listed_series={0x2e7,0x2e8}
 function cm.pffil1(c)
 	return c:IsSetCard(0x2e7) and c:IsCustomType(CUSTOMTYPE_DELIGHT)
 end

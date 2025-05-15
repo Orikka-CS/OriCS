@@ -27,6 +27,7 @@ function cm.initial_effect(c)
 	WriteEff(e4,4,"TO")
 	c:RegisterEffect(e4)
 end
+cm.listed_series={0x1e1d,0xe1d}
 function cm.tfil1(c)
 	return c:IsSetCard(0x1e1d) and c:IsType(TYPE_EQUIP) and c:IsAbleToHand()
 end

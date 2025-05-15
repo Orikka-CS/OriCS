@@ -8,6 +8,8 @@ function c18452713.initial_effect(c)
 	e1:SetOperation(c18452713.op1)
 	c:RegisterEffect(e1)
 end
+c18452713.listed_names={18452713}
+c18452713.listed_series={0x2cf}
 function c18452713.tfil1(c,tp,tc)
 	if c:IsCode(18452713) then
 		return false

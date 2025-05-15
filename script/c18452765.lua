@@ -21,6 +21,7 @@ function c18452765.initial_effect(c)
 	e3:SetOperation(c18452765.op3)
 	c:RegisterEffect(e3)
 end
+c18452765.listed_series={0x2d5}
 function c18452765.tfil11(c,tp)
 	return c:IsSetCard(0x2d5) and c:IsType(TYPE_MONSTER) and c:IsAbleToGrave()
 		and Duel.IsExistingMatchingCard(c18452765.tfil12,tp,LOCATION_DECK,0,1,c,c:GetCode())

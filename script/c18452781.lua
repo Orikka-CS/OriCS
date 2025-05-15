@@ -19,6 +19,8 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"CTO")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={CARD_EINE_KLEINE,m}
+cm.listed_series={"클라이네"}
 function cm.con1(e,c)
 	if c==nil then
 		return true

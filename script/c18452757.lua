@@ -9,6 +9,7 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
 end
+cm.listed_series={0x2d3,0x2d4,"바이러스"}
 function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return true

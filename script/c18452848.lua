@@ -17,6 +17,8 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"CTO")
 	c:RegisterEffect(e2)
 end
+cm.listed_names={m}
+cm.listed_series={0x2d9}
 function cm.nfil1(c)
 	return c:IsFacedown() or not c:IsSetCard(0x2d9)
 end

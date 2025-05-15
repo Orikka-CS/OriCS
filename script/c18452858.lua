@@ -23,6 +23,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 cm.mana_list={ATTRIBUTE_LIGHT}
+cm.listed_series={"컬러큐브"}
 function cm.tfil1(c)
 	return c:IsSetCard("컬러큐브") and c:GetType()&TYPE_SPELL+TYPE_CONTINUOUS==TYPE_SPELL+TYPE_CONTINUOUS
 		and c:IsFaceup() and Duel.IsCanAddCounter(tp,0x2d7,1,c)

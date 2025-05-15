@@ -20,6 +20,7 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"NTO")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={m}
 function cm.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return true

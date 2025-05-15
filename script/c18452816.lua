@@ -20,6 +20,8 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"CTO")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={CARD_EINE_KLEINE}
+cm.listed_series={"클라이네"}
 function cm.nfil1(c,tp)
 	return c:IsFaceup() and c:IsCode(CARD_EINE_KLEINE) and c:IsAbleToHandAsCost() and Duel.GetMZoneCount(tp,c,tp)>0
 end

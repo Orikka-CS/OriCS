@@ -17,6 +17,8 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"CTO")
 	c:RegisterEffect(e2)
 end
+cm.listed_names={CARD_EINE_KLEINE}
+cm.listed_series={"클라이네"}
 function cm.pfil1(c,fc,sub,mg,sg)
 	if c:IsType(TYPE_FUSION) then
 		return false

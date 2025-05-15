@@ -15,6 +15,8 @@ function c18452711.initial_effect(c)
 	e2:SetOperation(c18452711.op2)
 	c:RegisterEffect(e2)
 end
+c18452711.listed_names={18452711}
+c18452711.listed_series={0x2cf}
 function c18452711.ofil1(c)
 	return c:IsSetCard(0x2cf) and c:IsAbleToHand() and not c:IsCode(18452711)
 end

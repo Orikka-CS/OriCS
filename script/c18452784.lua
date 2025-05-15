@@ -38,6 +38,8 @@ function cm.initial_effect(c)
 	e8:SetLabelObject(e7)
 	c:RegisterEffect(e8)
 end
+cm.listed_names={47606319,61901281,99234526,73001017,218704,74823665,18452771,18452785,18452787,18452788}
+cm.listed_series={"Á¤·É"}
 function cm.nfil1(c,code)
 	if not c:IsAbleToRemoveAsCost() then
 		return false

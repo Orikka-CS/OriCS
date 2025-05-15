@@ -23,6 +23,7 @@ function cm.initial_effect(c)
 	ge1:SetOperation(cm.gop1)
 	Duel.RegisterEffect(ge1,0)
 end
+cm.listed_names={18452815}
 function cm.gtar1(e,c)
 	return c:GetFlagEffect(m)>0
 end

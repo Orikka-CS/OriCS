@@ -8,6 +8,8 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"CO")
 	c:RegisterEffect(e1)
 end
+cm.listed_names={47606319,61901281,99234526,73001017,218704,74823665}
+cm.listed_series={"정령","초정령"}
 function cm.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return Duel.IsPlayerCanDiscardDeckAsCost(tp,4)

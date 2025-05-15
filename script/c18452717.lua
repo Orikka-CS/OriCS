@@ -11,6 +11,7 @@ function c18452717.initial_effect(c)
 	c:RegisterEffect(e1)
 	Duel.AddCustomActivityCounter(18452717,ACTIVITY_SPSUMMON,c18452717.afil1)
 end
+c18452717.listed_series={0x2d0}
 function c18452717.afil1(c)
 	return not (c:GetSummonLocation()==LOCATION_EXTRA and not c:IsType(TYPE_FUSION))
 end

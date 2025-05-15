@@ -19,6 +19,7 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"CTO")
 	c:RegisterEffect(e3)
 end
+cm.listed_series={0x2d2,0x12d2}
 function cm.tfil2(c,e,tp,m,f,chkf)
 	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x2d2) and (not f or f(c))
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)

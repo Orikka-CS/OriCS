@@ -21,6 +21,7 @@ function c18452767.initial_effect(c)
 	e3:SetOperation(c18452767.op3)
 	c:RegisterEffect(e3)
 end
+c18452767.listed_series={0x2d5}
 function c18452767.tfil1(c,e,tp)
 	return c:IsSetCard(0x2d5) and not c:IsType(TYPE_TUNER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
 end

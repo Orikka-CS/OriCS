@@ -22,6 +22,7 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"CTO")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={CARD_EINE_KLEINE,18452963}
 function cm.pfil1(c)
 	return c:IsLinkCode(CARD_EINE_KLEINE) and not c:IsType(TYPE_LINK)
 end

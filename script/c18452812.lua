@@ -18,6 +18,7 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"TO")
 	c:RegisterEffect(e3)
 end
+cm.listed_series={0x2d6}
 function cm.con1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local ct=c:GetFlagEffectLabel(m+10000000)

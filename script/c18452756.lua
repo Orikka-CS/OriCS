@@ -18,6 +18,8 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"O")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={m}
+cm.listed_series={0x2d3,"바이러스"}
 function cm.ofil11(c)
 	return c:IsSetCard(0x2d3) and c:IsAbleToHand() and not c:IsCode(m)
 end

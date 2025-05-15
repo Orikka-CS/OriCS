@@ -36,6 +36,7 @@ function c18452702.initial_effect(c)
 	e4:SetOperation(c18452702.op4)
 	c:RegisterEffect(e4)
 end
+c18452702.listed_series={0x2cf}
 c18452702.material_setcode=0x2cf
 c18452702.december_fmaterial=true
 function c18452702.tfil1(c,bc)

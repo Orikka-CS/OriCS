@@ -28,6 +28,8 @@ function cm.pfun1(g)
 end
 cm.square_mana={ATTRIBUTE_FIRE,0x0,0x0,0x0,ATTRIBUTE_WIND}
 cm.custom_type=CUSTOMTYPE_SQUARE
+cm.listed_names={m}
+cm.listed_series={0x2d8,0x2d7}
 function cm.con1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsSummonType(SUMMON_TYPE_SYNCHRO)

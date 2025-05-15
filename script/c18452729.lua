@@ -20,6 +20,8 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"TO")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={m}
+cm.listed_series={0x2d2}
 function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return Duel.IEMToHandST(Card.IsSetCard,tp,"D",0,1,nil,0x2d2)

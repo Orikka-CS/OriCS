@@ -30,6 +30,8 @@ function c18452889.initial_effect(c)
 	e3:SetOperation(c18452889.spop2)
 	c:RegisterEffect(e3)
 end
+c18452889.listed_names={18452889}
+c18452889.listed_series={0x12da}
 function c18452889.cfilter1(c)
 	return c:IsFaceup() and c:IsSetCard(0x12da) and not c:IsCode(18452889)
 end

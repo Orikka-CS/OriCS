@@ -18,6 +18,7 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"CTO")
 	c:RegisterEffect(e2)
 end
+cm.listed_series={"컬러큐브"}
 function cm.pfun1(g,lc)
 	return g:IsExists(Card.IsCustomType,1,nil,CUSTOMTYPE_SQUARE)
 end

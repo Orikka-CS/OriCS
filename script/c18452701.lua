@@ -30,6 +30,8 @@ function c18452701.initial_effect(c)
 	e4:SetOperation(c18452701.op4)
 	c:RegisterEffect(e4)
 end
+c18452701.listed_names={18452711}
+c18452701.listed_series={0x2cf}
 function c18452701.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then

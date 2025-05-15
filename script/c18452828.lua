@@ -11,6 +11,7 @@ function cm.initial_effect(c)
 	Duel.AddCustomActivityCounter(m,ACTIVITY_NORMALSUMMON,cm.afil1)
 	Duel.AddCustomActivityCounter(m,ACTIVITY_SPSUMMON,cm.afil1)
 end
+cm.listed_names={m+1,m+2}
 function cm.afil1(c)
 	return c:IsCustomType(CUSTOMTYPE_SQUARE)
 end

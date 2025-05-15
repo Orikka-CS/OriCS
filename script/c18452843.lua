@@ -38,6 +38,7 @@ function cm.initial_effect(c)
 		Duel.RegisterEffect(ge2,0)
 	end
 end
+cm.listed_names={m}
 function cm.gop1(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()
 	if ph>PHASE_MAIN1 and ph<PHASE_MAIN2 then

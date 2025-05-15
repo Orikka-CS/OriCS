@@ -33,6 +33,7 @@ function c18452703.initial_effect(c)
 	e3:SetOperation(c18452703.op3)
 	c:RegisterEffect(e3)
 end
+c18452703.listed_series={0x2cf}
 c18452703.material_setcode=0x2cf
 c18452703.december_fmaterial=true
 function c18452703.con1(e,tp,eg,ep,ev,re,r,rp)

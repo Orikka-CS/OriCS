@@ -29,6 +29,8 @@ function c18452894.initial_effect(c)
 	e3:SetOperation(c18452894.recop)
 	c:RegisterEffect(e3)
 end
+c18452894.listed_names={18452894}
+c18452894.listed_series={0x12da,0x2da}
 function c18452894.matfilter(c)
 	return c:IsLinkSetCard(0x12da) and not c:IsLinkAttribute(ATTRIBUTE_EARTH)
 end

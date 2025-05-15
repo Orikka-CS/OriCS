@@ -18,6 +18,8 @@ function cm.initial_effect(c)
 	e3:SetTR(1,1)
 	c:RegisterEffect(e3)
 end
+cm.listed_names={m}
+cm.listed_series={0x2d3}
 function cm.cfil1(c)
 	return c:IsSetCard(0x2d3) and c:IsDiscardable()
 end

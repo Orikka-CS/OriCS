@@ -20,6 +20,7 @@ function cm.initial_effect(c)
 	e3:SetOperation(cm.op3)
 	c:RegisterEffect(e3)
 end
+cm.listed_series={"´©¸¥ ´«"}
 function cm.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then

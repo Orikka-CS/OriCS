@@ -24,6 +24,7 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"TO")
 	c:RegisterEffect(e3)
 end
+cm.listed_series={0x2d2}
 function cm.nfil11(c)
 	return c:IsSetCard(0x2d2) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsDiscardable()
 end

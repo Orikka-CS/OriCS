@@ -18,6 +18,8 @@ function c18452766.initial_effect(c)
 	e2:SetOperation(c18452766.op2)
 	c:RegisterEffect(e2)
 end
+c18452766.listed_names={18452766}
+c18452766.listed_series={0x2d5}
 function c18452766.nfil1(c,ft)
 	return c:IsSetCard(0x2d5) and c:IsAbleToHandAsCost() and not c:IsCode(18452766) and (ft>0 or c:GetSequence()<5)
 end

@@ -17,6 +17,8 @@ function cm.initial_effect(c)
 	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e3)
 end
+cm.listed_names={47606319,61901281,99234526,73001017,218704,74823665,18452785}
+cm.listed_series={"정령"}
 function cm.nfil1(c)
 	return (((c:IsLevel(4) or c:IsRank(4)) and c:IsSetCard("정령") and not c:IsSummonableCard())
 		or c:IsCode(47606319,61901281,99234526,73001017,218704,74823665))

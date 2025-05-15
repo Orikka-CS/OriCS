@@ -18,6 +18,8 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 cm.custom_type=CUSTOMTYPE_DELIGHT
+cm.listed_names={m}
+cm.listed_series={0x2e7}
 function cm.pfil1(c)
 	return c:IsLoc("G")
 end

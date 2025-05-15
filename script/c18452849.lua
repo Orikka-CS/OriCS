@@ -28,6 +28,7 @@ function cm.initial_effect(c)
 	WriteEff(e4,4,"NCTO")
 	c:RegisterEffect(e4)
 end
+cm.listed_series={0x2d9}
 function cm.val1(e,c)
 	return c:GetAttack()+300
 end

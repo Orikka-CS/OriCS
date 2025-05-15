@@ -57,6 +57,7 @@ function cm.initial_effect(c)
 		Duel.RegisterEffect(ge2,0)
 	end
 end
+cm.listed_serise={0x2d9}
 function cm.ofil1(c)
 	return c:IsSetCard(0x2d9) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
 end

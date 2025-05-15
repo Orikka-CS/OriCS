@@ -15,6 +15,7 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"CTO")
 	c:RegisterEffect(e2)
 end
+cm.listed_names={m}
 function cm.con1(e,c)
 	if c==nil then
 		return true

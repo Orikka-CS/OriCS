@@ -16,6 +16,8 @@ function c18452710.initial_effect(c)
 	e2:SetOperation(c18452710.op2)
 	c:RegisterEffect(e2)
 end
+c18452710.listed_names={18452710}
+c18452710.listed_series={0x2cf}
 function c18452710.tfil11(c,e,tp,tc)
 	local ft=0
 	if not tc:IsLocation(LOCATION_SZONE) then

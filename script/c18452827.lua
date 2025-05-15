@@ -17,6 +17,7 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"CTO")
 	c:RegisterEffect(e2)
 end
+cm.listed_names={CARD_EINE_KLEINE}
 function cm.cfil21(c)
 	return c:IsCode(CARD_EINE_KLEINE) and c:IsAbleToRemoveAsCost()
 end

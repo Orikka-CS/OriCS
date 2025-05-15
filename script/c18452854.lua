@@ -39,6 +39,7 @@ function cm.initial_effect(c)
 		Duel.RegisterEffect(ge2,0)
 	end
 end
+cm.listed_names={18452836}
 function cm.gop1(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	if (rc:IsStatus(STATUS_ACT_FROM_HAND) and re:IsHasType(EFFECT_TYPE_ACTIVATE))

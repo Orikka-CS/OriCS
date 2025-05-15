@@ -14,6 +14,7 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"TO")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={18452792}
 function cm.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local ec=c:GetEquipTarget()

@@ -17,6 +17,7 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"TO")
 	c:RegisterEffect(e2)
 end
+cm.listed_names={18452865}
 function cm.nfil1(c,tp)
 	return c:IsCode(18452865) and (c:IsControler(tp) or c:IsFaceup())
 end

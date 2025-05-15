@@ -15,6 +15,8 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"NCTO")
 	c:RegisterEffect(e2)
 end
+cm.listed_names={18452790}
+cm.listed_series={0x1e1d}
 function cm.ofil1(c)
 	return c:IsCode(18452790) and c:IsAbleToHand()
 end

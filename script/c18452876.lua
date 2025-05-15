@@ -10,6 +10,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e1)
 	Duel.AddCustomActivityCounter(m,ACTIVITY_ATTACK,cm.afil1)
 end
+cm.listed_names={18452865}
 function cm.afil1(c)
 	return not c:IsCode(18452865)
 end

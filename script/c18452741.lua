@@ -14,6 +14,7 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"CTO")
 	c:RegisterEffect(e2)
 end
+cm.listed_series={0x2d2,0x12d2}
 function cm.tfil11(c)
 	return c:IsType(TYPE_MONSTER) and c:IsCanBeFusionMaterial()
 end

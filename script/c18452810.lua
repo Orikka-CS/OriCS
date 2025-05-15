@@ -51,6 +51,7 @@ function cm.initial_effect(c)
 	e10:SetValue(cm.val10)
 	c:RegisterEffect(e10)
 end
+cm.listed_series={0x2d6}
 function cm.pfun1(g)
 	local tc=g:GetFirst()
 	local ec=tc:GetEquipTarget()

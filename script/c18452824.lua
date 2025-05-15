@@ -19,6 +19,7 @@ function cm.initial_effect(c)
 end
 cm.square_mana={ATTRIBUTE_LIGHT}
 cm.custom_type=CUSTOMTYPE_SQUARE
+cm.listed_series={0x2d8}
 function cm.tfil1(c,e,tp)
 	return c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
 end

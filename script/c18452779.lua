@@ -19,6 +19,7 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"CTO")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={CARD_EINE_KLEINE}
 function cm.nfil1(c)
 	return c:IsFacedown() or not c:IsCode(CARD_EINE_KLEINE)
 end

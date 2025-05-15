@@ -9,6 +9,8 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"CTO")
 	c:RegisterEffect(e1)
 end
+cm.listed_names={m}
+cm.listed_series={"´©¸¥ ´«"}
 function cm.cfil1(c)
 	return c:IsSetCard("´©¸¥ ´«") and c:IsType(TYPE_MONSTER) and c:IsAbleToRemoveAsCost()
 end

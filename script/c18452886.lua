@@ -9,6 +9,8 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"CTO")
 	c:RegisterEffect(e1)
 end
+cm.listed_names={18452865}
+cm.listed_series={"´©¸¥ ´«"}
 function cm.cfil1(c)
 	return c:IsCode(18452865) and c:IsAbleToGraveAsCost()
 end

@@ -22,6 +22,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 cm.mana_list={ATTRIBUTE_FIRE}
+cm.listed_names={m+1}
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.GetLocCount(tp,"M")>0

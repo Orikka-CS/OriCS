@@ -22,6 +22,8 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"TO")
 	c:RegisterEffect(e3)
 end
+cm.listed_series={0x2d2}
+cm.material_setcode=0x2d2
 function cm.pfil1(c)
 	return c:IsFusionAttribute(ATTRIBUTE_WIND) or c:IsHasEffect(18452720)
 end

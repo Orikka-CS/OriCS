@@ -15,6 +15,8 @@ function cm.initial_effect(c)
 	e2:SetTarget(cm.tar2)
 	c:RegisterEffect(e2)
 end
+cm.listed_names={47606319,61901281,99234526,73001017,218704,74823665,18452771}
+cm.listed_series={"Á¤·É"}
 function cm.ofil1(c)
 	return c:IsCode(18452771) and c:IsAbleToHand()
 end

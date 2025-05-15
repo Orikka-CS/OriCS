@@ -22,6 +22,7 @@ function cm.initial_effect(c)
 	WriteEff(e4,4,"CTO")
 	c:RegisterEffect(e4)
 end
+cm.listed_series={0x2d9}
 function cm.tfil1(c)
 	return c:IsSetCard(0x2d9) and c:IsAbleToHand()
 end

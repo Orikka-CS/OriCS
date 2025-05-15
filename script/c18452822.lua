@@ -21,6 +21,7 @@ function cm.initial_effect(c)
 end
 cm.square_mana={0x0}
 cm.custom_type=CUSTOMTYPE_SQUARE
+cm.listed_names={m}
 function cm.val1(e,c)
 	local g=c:GetMaterial()
 	local att=0

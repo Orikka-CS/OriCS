@@ -34,6 +34,8 @@ function c18452895.initial_effect(c)
 	e3:SetOperation(c18452895.tgop)
 	c:RegisterEffect(e3)
 end
+c18452895.listed_names={18452895}
+c18452895.listed_series={0x12da}
 function c18452895.lcheck(g,lc)
 	return g:IsExists(Card.IsLinkSetCard,1,nil,0x12da)
 end

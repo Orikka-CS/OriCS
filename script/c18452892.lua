@@ -23,6 +23,8 @@ function c18452892.initial_effect(c)
 	e3:SetOperation(c18452892.thop)
 	c:RegisterEffect(e3)
 end
+c18452892.listed_names={18452892}
+c18452892.listed_series={0x12da,0x2da}
 function c18452892.matfilter(c)
 	return c:IsLinkSetCard(0x12da) and not c:IsLinkAttribute(ATTRIBUTE_FIRE)
 end

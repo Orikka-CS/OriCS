@@ -10,6 +10,7 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
 end
+cm.listed_series={"´©¸¥ ´«"}
 function cm.tfil1(c)
 	return c:IsSetCard("´©¸¥ ´«") and c:IsType(TYPE_MONSTER) and c:IsFaceup() and c:IsAbleToHand()
 end

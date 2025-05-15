@@ -15,6 +15,7 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"TO")
 	c:RegisterEffect(e2)
 end
+cm.listed_series={0x2d4}
 function cm.cfil1(c)
 	return c:IsAttribute(ATTRIBUTE_DARK) and c:IsType(TYPE_TUNER)
 end

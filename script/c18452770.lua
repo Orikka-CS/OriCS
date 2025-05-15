@@ -20,6 +20,7 @@ function c18452770.initial_effect(c)
 	e2:SetOperation(c18452770.op2)
 	c:RegisterEffect(e2)
 end
+c18452770.listed_series={0x2d5}
 function c18452770.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsSummonType(SUMMON_TYPE_SYNCHRO)

@@ -9,6 +9,7 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
 end
+cm.listed_names={18452865}
 function cm.tfil1(c,e,tp)
 	return c:IsLevel(5,6) and c:IsRace(RACE_DRAGON) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end

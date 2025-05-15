@@ -30,6 +30,8 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 cm.mana_list={ATTRIBUTE_EARTH}
+cm.listed_names={m}
+cm.listed_series={"컬러큐브"}
 function cm.tar2(e,c)
 	return c:GetType()&TYPE_SPELL+TYPE_CONTINUOUS==TYPE_SPELL+TYPE_CONTINUOUS and c:IsSetCard("컬러큐브") and not c:IsCode(m)
 end

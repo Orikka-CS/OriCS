@@ -39,6 +39,7 @@ function cm.pop1(e,tp,chk)
 end
 cm.square_mana={0x0}
 cm.custom_type=CUSTOMTYPE_SQUARE
+cm.listed_series={"컬러큐브",0x2d7}
 function cm.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then

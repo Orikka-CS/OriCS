@@ -9,6 +9,7 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
 end
+cm.listed_series={0xe1d}
 function cm.tfil11(c,tp)
 	if not c:IsAbleToHand() or not c:IsType(TYPE_MONSTER) then
 		return false

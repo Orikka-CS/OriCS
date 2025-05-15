@@ -9,6 +9,7 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"CTO")
 	c:RegisterEffect(e1)
 end
+cm.listed_names={18452865}
 function cm.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then

@@ -25,6 +25,7 @@ function cm.initial_effect(c)
 	WriteEff(e5,5,"CTO")
 	c:RegisterEffect(e5)
 end
+cm.listed_series={0x2d2,0x12d2}
 function cm.con2(e)
 	local c=e:GetHandler()
 	local ec=c:GetEquipTarget()

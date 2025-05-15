@@ -20,6 +20,7 @@ function cm.initial_effect(c)
 end
 cm.square_mana={ATTRIBUTE_WATER}
 cm.custom_type=CUSTOMTYPE_SQUARE
+cm.listed_series={"컬러큐브"}
 function cm.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then

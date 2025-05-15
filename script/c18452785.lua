@@ -14,6 +14,8 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"CTO")
 	c:RegisterEffect(e2)
 end
+cm.listed_names={47606319,61901281,99234526,73001017,218704,74823665,18452771}
+cm.listed_series={"정령"}
 function cm.tfil11(c,tp)
 	return ((c:IsLevel(4) and c:IsSetCard("정령") and not c:IsSummonableCard())
 		or c:IsCode(47606319,61901281,99234526,73001017,218704,74823665,18452771)) and c:IsAbleToHand()

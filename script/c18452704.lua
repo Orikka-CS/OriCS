@@ -28,7 +28,8 @@ function c18452704.initial_effect(c)
 	e3:SetOperation(c18452704.op3)
 	c:RegisterEffect(e3)
 end
-c18452704.material_setcode=0x2cf
+c18452704.listed_series={0x2cf,0x46}
+c18452704.material_setcode={0x2cf,0x46}
 c18452704.december_fmaterial=true
 function c18452704.tfil21(c,tp,tc)
 	return c:IsFaceup() or (c:IsFacedown() and Duel.IsExistingMatchingCard(c18452704.tfil22,tp,LOCATION_ONFIELD,0,1,tc))

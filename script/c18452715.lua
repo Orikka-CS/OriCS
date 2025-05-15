@@ -51,6 +51,7 @@ function c18452715.initial_effect(c)
 	e6:SetOperation(c18452715.op6)
 	c:RegisterEffect(e6)
 end
+c18452715.listed_series={0x12d0,0x46}
 function c18452715.ffil1(c,fc,sub,mg,sg)
 	if not sg or sg:FilterCount(aux.TRUE,c)==0 or sg:IsExists(c18452715.ffun1,1,c,c) then
 		return true

@@ -35,6 +35,7 @@ function cm.initial_effect(c)
 		Duel.RegisterEffect(ge1,0)
 	end
 end
+cm.listed_series={0x2d4,0x2d3,"바이러스"}
 function cm.gcost1(e,te,tp)
 	if not Duel.CheckPhaseActivity() and Duel.GetCurrentPhase()&(PHASE_MAIN1+PHASE_MAIN2)>0 then
 		cm[0]=te

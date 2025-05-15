@@ -36,6 +36,7 @@ function cm.initial_effect(c)
 	WriteEff(e5,5,"TO")
 	c:RegisterEffect(e5)
 end
+cm.listed_names={m,12800777,73001017,18452786}
 function cm.nfil1(c,tp,xc)
 	return ((c:IsFaceup() and c:IsLoc("M")) or
 		(Duel.GetFlagEffect(tp,m)<1 and c:IsCode(12800777,73001017) and c:IsLoc("H")))

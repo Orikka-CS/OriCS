@@ -23,6 +23,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 cm.material_setcode="´©¸¥ ´«"
+cm.listed_series={"´©¸¥ ´«"}
 function cm.val1(e,se,sp,st)
 	return st&SUMMON_TYPE_FUSION==SUMMON_TYPE_FUSION
 end

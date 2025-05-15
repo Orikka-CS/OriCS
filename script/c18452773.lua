@@ -19,6 +19,8 @@ function cm.initial_effect(c)
 		Duel.RegisterEffect(ge1,0)
 	end
 end
+cm.listed_names={m}
+cm.listed_series={0x2e7}
 function cm.gop1(e,tp,eg,ep,ev,re,r,rp)
 	if r~=CUSTOMREASON_DELIGHT then
 		return

@@ -8,6 +8,8 @@ function cm.initial_effect(c)
 	WriteEff(e1,1,"TO")
 	c:RegisterEffect(e1)
 end
+cm.listed_series={0x2d7}
+cm.listed_names={m}
 function cm.tfil11(c)
 	return c:IsSetCard(0x2d7) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
 end

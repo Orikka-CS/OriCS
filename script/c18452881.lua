@@ -23,6 +23,7 @@ function cm.initial_effect(c)
 	WriteEff(e4,4,"TO")
 	c:RegisterEffect(e4)
 end
+cm.listed_names={18452876}
 function cm.tar2(e,c)
 	return c:IsAttribute(ATTRIBUTE_EARTH)
 end

@@ -39,7 +39,9 @@ function c18452707.initial_effect(c)
 	e4:SetOperation(c18452707.op4)
 	c:RegisterEffect(e4)
 end
-c18452707.material_setcode=0x2cf
+c18452707.listed_names={18452707}
+c18452707.listed_series={0x12cf,0x2cf,0x46}
+c18452707.material_setcode={0x12cf,0x2cf}
 c18452707.december_fmaterial=true
 function c18452707.tfil1(c,e,tp)
 	return (c:IsSetCard(0x2cf) or c:IsType(TYPE_FUSION)) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsCode(18452707)

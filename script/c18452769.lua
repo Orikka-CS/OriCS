@@ -22,6 +22,8 @@ function c18452769.initial_effect(c)
 	e2:SetOperation(c18452769.op2)
 	c:RegisterEffect(e2)
 end
+c18452769.listed_names={18452769}
+c18452769.listed_series={0x2d5}
 function c18452769.con1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsSummonType(SUMMON_TYPE_LINK)

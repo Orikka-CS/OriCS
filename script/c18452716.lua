@@ -11,6 +11,7 @@ function c18452716.initial_effect(c)
 	c:RegisterEffect(e1)
 	Duel.AddCustomActivityCounter(18452716,ACTIVITY_CHAIN,c18452716.afil1)
 end
+c18452716.listed_series={0x46}
 function c18452716.afil1(re,tp,cid)
 	local rc=re:GetHandler()
 	return not (rc:GetSummonLocation()==LOCATION_EXTRA and not re:IsActiveType(TYPE_FUSION))

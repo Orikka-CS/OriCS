@@ -10,6 +10,8 @@ function c18452896.initial_effect(c)
 	e1:SetOperation(c18452896.activate)
 	c:RegisterEffect(e1)
 end
+c18452896.listed_names={18452896}
+c18452896.listed_series={0x2da}
 function c18452896.cfilter(c)
 	return c:GetSequence()<5
 end

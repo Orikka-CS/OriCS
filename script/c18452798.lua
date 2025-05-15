@@ -11,6 +11,7 @@ function cm.initial_effect(c)
 	WriteEff(e3,3,"CO")
 	c:RegisterEffect(e3)
 end
+cm.listed_names={m}
 function cm.cfil3(c)
 	return c:GetType()&(TYPE_SPELL+TYPE_EQUIP)==(TYPE_SPELL+TYPE_EQUIP) and c:IsAbleToGraveAsCost() and not c:IsCode(m)
 end

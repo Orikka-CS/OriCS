@@ -26,6 +26,7 @@ function c18452887.initial_effect(c)
 	e2:SetOperation(c18452887.spop2)
 	c:RegisterEffect(e2)
 end
+c18452887.listed_series={0x12da}
 function c18452887.spcost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsReleasable() end
 	Duel.Release(e:GetHandler(),REASON_COST)

@@ -8,6 +8,7 @@ function c18452709.initial_effect(c)
 	e1:SetOperation(c18452709.op1)
 	c:RegisterEffect(e1)
 end
+c18452709.listed_series={0x2cf}
 function c18452709.tfil1(c,e,tp,m1,m2,f,chkf)
 	local mg=m1
 	if c.december_fmaterial then

@@ -34,6 +34,8 @@ function c18452891.initial_effect(c)
 	e4:SetOperation(c18452891.thop)
 	c:RegisterEffect(e4)
 end
+c18452891.listed_names={18452891}
+c18452891.listed_series={0x12da,0x2da}
 function c18452891.matfilter(c)
 	return c:IsLinkSetCard(0x12da) and not c:IsLinkAttribute(ATTRIBUTE_WATER)
 end

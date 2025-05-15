@@ -52,6 +52,8 @@ function c18452905.initial_effect(c)
 	e6:SetValue(1)
 	c:RegisterEffect(e6)
 end
+c18452905.listed_names={18452905}
+c18452905.listed_series={0x2da}
 function c18452905.cfilter(c)
 	return c:GetSequence()<5
 end

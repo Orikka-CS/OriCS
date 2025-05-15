@@ -24,6 +24,8 @@ function cm.initial_effect(c)
 	WriteEff(e4,4,"CTO")
 	c:RegisterEffect(e4)
 end
+cm.listed_names={CARD_EINE_KLEINE}
+cm.listed_series={"클라이네"}
 function cm.tar3(e,c)
 	local lg=e:GetHandler():GetLinkedGroup()
 	return c:IsCode(CARD_EINE_KLEINE) and lg:IsContains(c)
