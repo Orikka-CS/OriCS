@@ -60,7 +60,7 @@ function s.op1(fustg,fusop)
 end
 
 function s.ffilter(c,tp)
-	return c:GetOwner()==tp and c:IsSetCard(0xf2e)
+	return c:GetOwner()==tp
 end
 
 function s.f2filter(c,tp)
@@ -68,7 +68,7 @@ function s.f2filter(c,tp)
 end
 
 function s.fcheck(tp,sg,fc)
-	return sg:FilterCount(s.f2filter,nil,tp)<=Duel.GetMatchingGroupCount(s.ffilter,tp,0,LOCATION_HAND,nil,tp)
+	return sg:FilterCount(Card.IsSetCard,nil,0xf2e)>0 and sg:FilterCount(s.f2filter,nil,tp)<=Duel.GetMatchingGroupCount(s.ffilter,tp,0,LOCATION_HAND,nil,tp)
 end
 
 function s.extrafil(e,tp,mg)

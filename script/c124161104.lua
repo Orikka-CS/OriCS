@@ -12,23 +12,24 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_TRAP_ACT_IN_HAND)
-	e2:SetValue(function(e,c) e:SetLabel(1) end)
-	e2:SetCondition(function(e) return Duel.CheckRemoveOverlayCard(e:GetHandlerPlayer(),1,0,1,REASON_COST) end)
-	c:RegisterEffect(e2)
-	e1:SetLabelObject(e2)
+	local e1a=Effect.CreateEffect(c)
+	e1a:SetType(EFFECT_TYPE_SINGLE)
+	e1a:SetCode(EFFECT_TRAP_ACT_IN_HAND)
+	e1a:SetValue(function(e,c) e:SetLabel(1) end)
+	e1a:SetCondition(function(e) return Duel.CheckRemoveOverlayCard(e:GetHandlerPlayer(),1,0,1,REASON_COST) end)
+	c:RegisterEffect(e1a)
+	e1:SetLabelObject(e1a)
 	--effect 2
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_QUICK_O)
-	e3:SetCode(EVENT_FREE_CHAIN)
-	e3:SetRange(LOCATION_GRAVE)
-	e3:SetCountLimit(1,id)
-	e3:SetCost(s.cst2)
-	e3:SetTarget(s.tg2)
-	e3:SetOperation(s.op2)
-	c:RegisterEffect(e3)
+	local e2=Effect.CreateEffect(c)
+	e2:SetCategory(CATEGORY_TOHAND)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetRange(LOCATION_GRAVE)
+	e2:SetCountLimit(1,id)
+	e2:SetCost(s.cst2)
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
+	c:RegisterEffect(e2)
 end
 
 --effect 1
@@ -83,19 +84,13 @@ end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return c:IsSSetable() and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 end
-	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,c,1,tp,0)
+	if chk==0 then return c:IsAbleToHand() end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,LOCATION_GRAVE)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and c:IsSSetable() and Duel.SSet(tp,c)>0 then
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-		e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
-		e1:SetValue(LOCATION_DECKBOT)
-		e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
-		c:RegisterEffect(e1)
+	if c:IsRelateToEffect(e) then
+		Duel.SendtoHand(c,nil,REASON_EFFECT)
 	end
 end

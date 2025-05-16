@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--xyz
 	c:EnableReviveLimit()
-	Xyz.AddProcedure(c,nil,4,3,s.ovfilter,0,99,s.ovop)
+	Xyz.AddProcedure(c,nil,4,3,s.ovfilter,0,Xyz.InfiniteMats,s.ovop)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DISABLE)

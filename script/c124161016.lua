@@ -92,6 +92,6 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
-function s.op2imfilter(e,re)
-	return e:GetOwnerPlayer()~=re:GetOwnerPlayer()
+function s.op2imfilter(e,te)
+	return e:GetOwnerPlayer()~=te:GetOwnerPlayer() and te:IsActivated()
 end

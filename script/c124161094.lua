@@ -82,7 +82,7 @@ function s.tg3filter(c,e)
 end
 
 function s.tg3xfilter(c,e)
-	return c:IsRace(RACE_INSECT) and not c:IsCode(id)
+	return c:IsSetCard(0xf26) and not c:IsCode(id)
 end
 
 function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

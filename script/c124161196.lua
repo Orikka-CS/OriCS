@@ -71,12 +71,12 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg2filter(c,e,tp)
-	return c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and s.tg2filter(chkc,e,tp) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,LOCATION_REMOVED,nil,e,tp)
+	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_REMOVED) and s.tg2filter(chkc,e,tp) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_REMOVED,nil,e,tp)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 	Duel.SetTargetCard(sg)
@@ -86,6 +86,6 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetFirstTarget()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tg:IsRelateToEffect(e) then
-		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
+		Duel.SpecialSummon(tg,0,tp,tp,true,false,POS_FACEUP)
 	end
 end
