@@ -62,9 +62,9 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.GetLocCount(tp,"S")>0 then
-		local e1=MakeEff(c,"S")
+		local e1=MakeEff(c,"S","S")
 		e1:SetCode(EFFECT_CHANGE_TYPE)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SINGLE_RANGE)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD-RESET_LEAVE)
 		e1:SetValue(TYPE_SPELL+TYPE_CONTINUOUS)
 		c:RegisterEffect(e1)
