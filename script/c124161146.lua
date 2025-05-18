@@ -21,12 +21,9 @@ function s.initial_effect(c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_TO_HAND)
+	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetCountLimit(1,id)
-	e2:SetCondition(s.con2)
 	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
@@ -40,13 +37,6 @@ function s.initial_effect(c)
 	e3:SetCondition(s.con3)
 	e3:SetOperation(s.opc3)
 	c:RegisterEffect(e3)
-	local e3a=Effect.CreateEffect(c)
-	e3a:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e3a:SetCode(EVENT_BE_PRE_MATERIAL)
-	e3a:SetRange(LOCATION_FZONE)
-	e3a:SetCondition(s.con3)
-	e3a:SetOperation(s.opn3)
-	c:RegisterEffect(e3a)
 end
 
 --effect 1
@@ -60,14 +50,6 @@ function s.val1(e,c)
 end
 
 --effect 2
-function s.con2filter(c)
-	return not c:IsReason(REASON_DRAW)
-end
-
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil)
-end
-
 function s.cst2filter(c)
 	return c:IsSetCard(0xf29) and not c:IsType(TYPE_FIELD) and not c:IsPublic()
 end
@@ -124,15 +106,4 @@ end
 
 function s.chainlm(e,rp,tp)
 	return tp==rp
-end
-
-function s.opn3(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local rc=eg:GetFirst():GetReasonCard()
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_CANNOT_DISABLE_SPSUMMON)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-	rc:RegisterEffect(e1)
 end

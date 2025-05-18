@@ -15,8 +15,8 @@ function s.initial_effect(c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_LEAVE_FIELD)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
@@ -61,11 +61,10 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousSetCard(0xf25)
-		and c:IsPreviousControler(tp) and c:GetReasonPlayer()==1-tp and c:IsPreviousLocation(LOCATION_MZONE)
+	return c:IsSummonPlayer(tp) and c:IsSummonType(SUMMON_TYPE_LINK) and c:IsType(TYPE_LINK) and c:IsSetCard(0xf25)
 end
 
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
+function s.con2(e,tp,eg)
 	return eg:IsExists(s.con2filter,1,nil,tp)
 end
 

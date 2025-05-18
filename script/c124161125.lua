@@ -60,7 +60,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,nil)
 	if #g==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,2,aux.TRUE,1,tp,HINTMSG_DISCARD)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,#g,aux.TRUE,1,tp,HINTMSG_DISCARD)
 	Duel.SendtoGrave(sg,REASON_EFFECT+REASON_DISCARD)
 	Duel.BreakEffect()
 	Duel.Draw(tp,#sg,REASON_EFFECT)

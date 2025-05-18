@@ -29,12 +29,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_IMMUNE_EFFECT)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e3:SetCode(EVENT_CHAINING)
 	e3:SetRange(LOCATION_FZONE)
-	e3:SetTargetRange(LOCATION_MZONE,0)
-	e3:SetTarget(s.tg3)
-	e3:SetValue(s.val3)
+	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
 end
 
@@ -91,11 +89,10 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 3
-function s.tg3(e,c)
-	return c:IsSetCard(0xf21) and c:IsType(TYPE_FUSION) and c:IsFaceup()
-end
-
-function s.val3(e,te)
-	local loc=Duel.GetChainInfo(0,CHAININFO_TRIGGERING_LOCATION)
-	return te:IsActivated() and e:GetHandlerPlayer()==1-te:GetHandlerPlayer() and (loc==LOCATION_HAND or loc==LOCATION_GRAVE or loc==LOCATION_REMOVED or loc==LOCATION_EXTRA or loc==LOCATION_DECK) 
+function s.op3(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	local mg=rc:GetMaterial()
+	if rc:IsSetCard(0xf21) and re:GetOwnerPlayer()==tp and re:IsHasCategory(CATEGORY_SPECIAL_SUMMON) then
+		Duel.SetChainLimit(function(e,ep,tp) return ep==tp end)
+	end
 end

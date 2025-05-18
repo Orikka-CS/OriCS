@@ -56,13 +56,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect2
-function s.cst2filter(c)
-	return c:IsAbleToGraveAsCost()
-end
-
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,nil)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,nil)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 	Duel.SendtoGrave(sg,REASON_COST)

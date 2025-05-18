@@ -103,5 +103,5 @@ function s.tg3(e,c)
 end
 
 function s.val3(e,te)
-	return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() and te:IsActivated()
+	return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() and te:IsActivated() and te:IsActiveType(TYPE_SPELL)
 end

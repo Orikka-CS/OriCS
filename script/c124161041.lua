@@ -56,11 +56,11 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return re:GetHandler():GetOwner()==tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsSetCard(0xf22) and re:GetHandler()~=e:GetHandler()
+	return re:GetHandler():GetOwner()==tp and re:GetHandler():IsSetCard(0xf22) and re:GetHandler()~=e:GetHandler() and not re:GetHandler():IsType(TYPE_FIELD)
 end
 
 function s.tg2filter(c,cd)
-	return c:IsSetCard(0xf22) and c:IsAbleToHand() and not c:IsCode(cd) and not c:IsType(TYPE_FIELD)
+	return c:IsSetCard(0xf22) and c:IsAbleToHand() and not c:IsCode(cd)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

@@ -81,11 +81,12 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_EXTRA_SUMMON_COUNT)
-	e1:SetTargetRange(LOCATION_HAND+LOCATION_MZONE,0)
+	e1:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xf2b))
+	e1:SetTargetRange(LOCATION_ONFIELD,0)
+	e1:SetValue(aux.tgoval)
 	e1:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e1,tp)
 end
@@ -103,5 +104,5 @@ end
 function s.tg3(e,c,sump,sumtype,sumpos,targetp)
 	local tp=e:GetHandlerPlayer()
 	local lp=math.min(Duel.GetLP(tp),Duel.GetLP(1-tp))
-	return c:GetAttack()+c:GetDefense()>=lp and c:IsLocation(LOCATION_HAND)
+	return c:GetAttack()+c:GetDefense()>=lp and c:IsLocation(LOCATION_GRAVE)
 end

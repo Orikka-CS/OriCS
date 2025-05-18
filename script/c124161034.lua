@@ -23,19 +23,11 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1onfilter(c)
-	return c:IsSetCard(0xf22) and c:IsMonster() and c:IsFaceup()
-end
-
-function s.con1setfilter(c)
-	return c:IsFacedown()
-end
-
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local og=Duel.GetMatchingGroupCount(s.con1onfilter,tp,LOCATION_MZONE,0,nil)
-	local sg=Duel.GetMatchingGroupCount(s.con1setfilter,tp,0,LOCATION_STZONE,nil)
-	return og+sg>0
+	local g=Duel.GetMatchingGroupCount(Card.IsSetCard,tp,LOCATION_GRAVE,0,nil,0xf22)
+	return g>0
 end
+
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)  
 	local c=e:GetHandler()

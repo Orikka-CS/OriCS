@@ -9,12 +9,12 @@ function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_TOGRAVE+CATEGORY_ATKCHANGE)
+	e1:SetCategory(CATEGORY_REMOVE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_SZONE)
 	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -33,39 +33,38 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1dfilter(c)
-	return c:IsSetCard(0xf2f) and c:IsSpellTrap() and not c:IsCode(id) and c:IsAbleToGrave() 
+function s.con1filter(c)
+	return c:IsSetCard(0xf2f) and c:IsFaceup()
 end
 
-function s.tg1filter(c,e)
-	return c:IsSetCard(0xf2f) and c:IsCanBeEffectTarget(e) and c:IsFaceup()
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_ONFIELD,0,e:GetHandler())
+	return g>0
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
-	local dg=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_DECK,0,nil)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e,tp)
-	if chk==0 then return #dg>0 and #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,dg,1,tp,LOCATION_DECK)
+function s.tg1filter(c)
+	return c:IsSetCard(0xf2f) and not c:IsCode(id)
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return #g>0 and Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>0 end
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
-	local g=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_DECK,0,nil)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
-		Duel.SendtoGrave(sg,REASON_EFFECT)
-		if not (sg:IsLocation(LOCATION_GRAVE) and tg:IsRelateToEffect(e) and tg:IsFaceup()) then return end
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-		e1:SetValue(tg:GetAttack()*2)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		tg:RegisterEffect(e1)
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SELECT):GetFirst()
+		Duel.ShuffleDeck(tp)
+		Duel.MoveSequence(sg,0)
+		Duel.ConfirmDecktop(tp,1)
+		Duel.DisableShuffleCheck()
+		Duel.ConfirmDecktop(1-tp,1)
+		if Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+			Duel.BreakEffect()
+			Duel.Remove(Duel.GetDecktopGroup(1-tp,1),POS_FACEUP,REASON_EFFECT)
+		end
 	end
 end
 

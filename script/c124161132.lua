@@ -31,16 +31,10 @@ function s.initial_effect(c)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_CANNOT_INACTIVATE)
+	e3:SetCode(EFFECT_CANNOT_DISEFFECT)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetValue(s.val3)
 	c:RegisterEffect(e3)
-	local e3a=Effect.CreateEffect(c)
-	e3a:SetType(EFFECT_TYPE_FIELD)
-	e3a:SetCode(EFFECT_CANNOT_DISEFFECT)
-	e3a:SetRange(LOCATION_FZONE)
-	e3a:SetValue(s.val3)
-	c:RegisterEffect(e3a)
 end
 
 --effect 1
@@ -86,5 +80,5 @@ end
 function s.val3(e,ct)
 	local p=e:GetHandler():GetControler()
 	local te,tp,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
-	return p==tp and te:GetHandler():IsTrapMonster() and te:GetHandler():IsContinuousTrap()
+	return p==tp and te:GetHandler():IsTrapMonster() and te:GetHandler():IsContinuousTrap() and (loc&LOCATION_ONFIELD)>0
 end

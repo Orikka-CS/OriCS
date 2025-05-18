@@ -31,7 +31,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,2,tp,1)
 end
 
 function s.op1filter(c)
@@ -46,14 +46,14 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
 		Duel.ShuffleDeck(tp)
-		local dg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil)
+		local dg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,sg)
 		if #dg>0 and Duel.IsPlayerCanDraw(tp) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.DisableShuffleCheck()
 			local sdg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 			Duel.ConfirmCards(1-tp,sdg)
 			Duel.SendtoDeck(sdg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
-			Duel.Draw(tp,1,REASON_EFFECT)
+			Duel.Draw(tp,2,REASON_EFFECT)
 		end
 	end
 end

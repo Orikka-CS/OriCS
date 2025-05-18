@@ -79,19 +79,20 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.BreakEffect()
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_FACEUP):GetFirst()
+		sg:RegisterFlagEffect(id,RESET_EVENT+RESET_TURN_SET+RESET_TOFIELD+RESET_PHASE+PHASE_END,0,2)
 		local e1=Effect.CreateEffect(c)
-		e1:SetDescription(aux.Stringid(id,2))
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CLIENT_HINT)
-		e1:SetRange(LOCATION_MZONE)
-		e1:SetCode(EFFECT_IMMUNE_EFFECT)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
-		e1:SetValue(s.op2imfilter)
-		e1:SetOwnerPlayer(tp)
-		sg:RegisterEffect(e1)
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+		e1:SetCode(EFFECT_CANNOT_DISEFFECT)
+		e1:SetTargetRange(1,1)
+		e1:SetValue(s.op2val)
+		e1:SetReset(RESET_PHASE+PHASE_END,2)
+		Duel.RegisterEffect(e1,tp)
+		Duel.ConfirmCards(1-tp,sg)
 	end
 end
 
-function s.op2imfilter(e,te)
-	return e:GetOwnerPlayer()~=te:GetOwnerPlayer() and te:IsActivated()
+function s.op2val(e,ct)
+	local eff,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_LOCATION)
+	return eff:GetHandler():HasFlagEffect(id) and (loc&LOCATION_ONFIELD)>0
 end

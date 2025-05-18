@@ -64,7 +64,7 @@ end
 
 --effect 2
 function s.tg2filter(c,e)
-	return c:IsSetCard(0xf26) and c:IsType(TYPE_XYZ) and c:IsCanBeEffectTarget(e)
+	return c:IsType(TYPE_XYZ) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2xfilter(c,e)

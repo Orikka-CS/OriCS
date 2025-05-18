@@ -60,7 +60,7 @@ end
 
 --effect2
 function s.tg2ffilter(c,cd)
-	return c:IsSetCard(0xf2e) and c:IsAbleToGrave() and not c:IsCode(cd)
+	return c:IsSetCard(0xf2e) and c:IsAbleToHand() and not c:IsCode(cd)
 end
 
 function s.tg2filter(c,e,tp)
@@ -71,32 +71,19 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e,tp) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e,tp)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET):GetFirst()
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND):GetFirst()
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,0,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,0,LOCATION_DECK)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local sg=Duel.GetFirstTarget()
-	if not sg or not sg:IsRelateToEffect(e) then return end
-	local rg=Duel.GetMatchingGroup(s.tg2ffilter,tp,LOCATION_DECK,0,nil,sg:GetCode())
-	if #rg==0 then return end
-	local srg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
-	Duel.SendtoGrave(srg,REASON_EFFECT)
-	local gg=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,LOCATION_HAND,0,nil)
-	local b1=true
-	local b2=#gg>0
-	local b3=#gg>0 and not sg:IsType(TYPE_FUSION)
-	local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)},{b3,aux.Stringid(id,2)}) 
-	if b==1 then return end
-	local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
+	local tg=Duel.GetFirstTarget()
+	if not tg or not tg:IsRelateToEffect(e) then return end
+	local og=Duel.GetMatchingGroup(s.tg2ffilter,tp,LOCATION_DECK,0,nil,tg:GetCode())
+	if #og==0 then return end
+	local osg=aux.SelectUnselectGroup(og,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND):GetFirst()
+	Duel.SendtoHand(osg,1-tp,REASON_EFFECT)
 	Duel.BreakEffect()
-	Duel.SendtoGrave(gsg,REASON_EFFECT)
-	if not gsg:IsLocation(LOCATION_GRAVE) then return end
-	if b==2 then
-		Duel.SendtoHand(sg,tp,REASON_EFFECT)
-	else
-		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
-	end
+	Duel.SendtoHand(tg,tp,REASON_EFFECT)
 end

@@ -15,18 +15,19 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_CHAINING)
-	e2:SetRange(LOCATION_MZONE)
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_BE_MATERIAL)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(s.cst2)
+	e2:SetCondition(s.con2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
 
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return re:GetHandler():IsSetCard(0xf2d) and rp==tp and re:GetHandler():IsMonster()
+	return re:GetHandler():IsSetCard(0xf2d) and rp==tp
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -43,15 +44,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.cst2filter(c)
-	return c:IsSetCard(0xf2d) and not c:IsCode(id) and c:IsAbleToGraveAsCost() and c:IsMonster()
-end
-
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_DECK,0,nil)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(sg,REASON_COST)
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return e:GetHandler():IsLocation(LOCATION_GRAVE) and r&REASON_LINK>0
 end
 
 function s.op2filter(e,c)
@@ -66,6 +60,6 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetTargetRange(LOCATION_MZONE,0)
 	e1:SetTarget(s.op2filter)
 	e1:SetValue(1)
-	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetReset(RESET_PHASE+PHASE_END,2)
 	Duel.RegisterEffect(e1,tp)
 end
