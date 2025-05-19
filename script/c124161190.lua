@@ -20,12 +20,12 @@ function s.initial_effect(c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_REMOVE)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(function(e) return Duel.IsMainPhase() and e:GetHandler():GetOverlayCount()==0 end)
+	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -63,6 +63,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.con2(e,tp,eg)
+	local c=e:GetHandler()
+	return not eg:IsContains(c) and c:GetOverlayCount()==0
+end
+
 function s.tg2filter(c,e)
 	return c:IsFaceup() and c:IsSetCard(0xf2c) and c:IsCanBeEffectTarget(e) and c:IsAbleToRemove()
 end
@@ -73,7 +78,7 @@ end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
-	local g1=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_ONFIELD,0,nil,e)
+	local g1=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e)
 	local g2=Duel.GetMatchingGroup(s.tg2ofilter,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return #g1>0 and #g2>0 end
 	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)

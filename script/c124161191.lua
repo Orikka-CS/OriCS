@@ -7,11 +7,12 @@ function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_REMOVE)
-	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(Cost.Detach(1,1,nil))
+	e1:SetCondition(function() return Duel.IsMainPhase() end)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -48,8 +49,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if tg:IsRelateToEffect(e) then
 		Duel.SendtoHand(tg,nil,REASON_EFFECT)
 		local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
-		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if Duel.CheckRemoveOverlayCard(tp,1,0,1,REASON_EFFECT) and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
+			Duel.RemoveOverlayCard(tp,1,0,1,1,REASON_EFFECT)
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
 			aux.RemoveUntil(sg,nil,REASON_EFFECT,PHASE_END,id,e,tp,aux.DefaultFieldReturnOp)
 		end
