@@ -55,13 +55,15 @@ function s.cnt(e,tp,eg,ep,ev,re,r,rp)
 	for tc in eg:Iter() do
 		np=tc:GetPosition()
 		pp=tc:GetPreviousPosition()
-		if np==POS_FACEDOWN_DEFENSE and pp~=np then Duel.RegisterFlagEffect(0,id,RESET_PHASE+PHASE_END,0,1) end
+		if np==POS_FACEDOWN_DEFENSE and pp~=np then 
+		tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET,0,1) end
 	end
 end
 
 --effect 1
 function s.val1(e,c)
-	return Duel.GetFlagEffect(0,id)*300
+	local tp=e:GetHandlerPlayer()
+	return Duel.GetMatchingGroup(Card.HasFlagEffect,tp,LOCATION_MZONE,LOCATION_MZONE,nil,id):GetSum(Card.GetFlagEffect,id)*200
 end
 
 --effect 2

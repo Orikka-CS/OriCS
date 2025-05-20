@@ -71,11 +71,15 @@ end
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	return rc:IsSetCard(0xf2b) and not rc:IsType(TYPE_FIELD) and rp==tp
+	return rc:IsSetCard(0xf2b) and rc~=e:GetHandler() and rp==tp
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
+end
+
+function s.op2filter(e,c)
+	return c:IsSetCard(0xf2b) and c:IsFaceup() and not c:IsType(TYPE_FIELD)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -84,7 +88,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
 	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e1:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xf2b))
+	e1:SetTarget(s.op2filter)
 	e1:SetTargetRange(LOCATION_ONFIELD,0)
 	e1:SetValue(aux.tgoval)
 	e1:SetReset(RESET_PHASE+PHASE_END)

@@ -47,12 +47,9 @@ end
 --effect 1
 function s.val1(e,c)
 	local tp=e:GetHandlerPlayer()
-	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)-1
+	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,e:GetHandler())
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-	if ug>dg then
-		dg=ug
-	end
-	return dg*100
+	return math.abs(ug-dg)*100
 end
 
 --effect 2
