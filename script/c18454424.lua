@@ -48,12 +48,12 @@ function s.gop1(e,tp,eg,ep,ev,re,r,rp)
 		tc=eg:GetNext()
 	end
 end
-function s.cfil1(c)
-	return c:IsAbleToRemoveAsCost() and c:IsHasEffect(18454430)
+function s.cfil1(c,tp)
+	return c:IsAbleToRemoveAsCost() and c:IsHasEffect(18454430,tp)
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cfil1,tp,LOCATION_GRAVE,0,nil)
+	local g=Duel.GetMatchingGroup(s.cfil1,tp,LOCATION_GRAVE,0,nil,tp)
 	g:AddCard(c)
 	if chk==0 then
 		return Duel.GetFlagEffect(tp,id)==0 and #g>0
@@ -84,6 +84,8 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 		Duel.SendtoGrave(c,REASON_COST)
 	else
 		Duel.HintSelection(Group.FromCards(sc))
+		local se=sc:IsHasEffect(18454430)
+		se:UseCountLimit(tp)
 		Duel.Remove(sc,POS_FACEUP,REASON_COST)
 	end
 end
@@ -209,7 +211,7 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,s.tfil2,tp,LOCATION_DECK,0,0,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,s.tfil2,tp,LOCATION_DECK,0,1,1,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc then
 		aux.ToHandOrElse(tc,tp,

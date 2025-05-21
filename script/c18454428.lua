@@ -12,6 +12,17 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetRange(LOCATION_GRAVE)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(s.con2)
+	e2:SetTarget(s.tar2)
+	e2:SetOperation(s.op2)
+	c:RegisterEffect(e2)
 	if s.global_check==nil then
 		local ge1=Effect.CreateEffect(c)
 		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -36,12 +47,12 @@ function s.gop1(e,tp,eg,ep,ev,re,r,rp)
 		tc=eg:GetNext()
 	end
 end
-function s.cfil1(c)
-	return c:IsAbleToRemoveAsCost() and c:IsHasEffect(18454430)
+function s.cfil1(c,tp)
+	return c:IsAbleToRemoveAsCost() and c:IsHasEffect(18454430,tp)
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cfil1,tp,LOCATION_GRAVE,0,nil)
+	local g=Duel.GetMatchingGroup(s.cfil1,tp,LOCATION_GRAVE,0,nil,tp)
 	g:AddCard(c)
 	if chk==0 then
 		return Duel.GetFlagEffect(tp,id)==0 and #g>0
@@ -72,6 +83,8 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 		Duel.SendtoGrave(c,REASON_COST)
 	else
 		Duel.HintSelection(Group.FromCards(sc))
+		local se=sc:IsHasEffect(18454430)
+		se:UseCountLimit(tp)
 		Duel.Remove(sc,POS_FACEUP,REASON_COST)
 	end
 end
@@ -136,6 +149,43 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 				if Duel.SendtoGrave(tc,REASON_EFFECT)>0 then
 					Duel.SpecialSummon(g,SUMMON_TYPE_SYNCHRO,tp,tp,false,false,POS_FACEUP)
 					sc:CompleteProcedure()
+				end
+			end
+		end
+	end
+end
+function s.nfil2(c,tp)
+	return c:IsSummonPlayer(tp) and c:IsFaceup() and c:IsType(TYPE_SYNCHRO)
+		and (c:IsRace(RACE_FAIRY|RACE_DRAGON) or c:IsAttribute(ATTRIBUTE_WIND|ATTRIBUTE_WATER))
+end
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.nfil2,1,nil,tp)
+end
+function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then
+		return c:IsAbleToHand()
+	end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,0)
+end
+function s.ofil2(c)
+	return c:IsType(TYPE_TUNER) and c:IsAbleToHand() and c:IsSetCard(0xc08)
+end
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) and Duel.SendtoHand(c,nil,REASON_EFFECT)>0 and c:IsLocation(LOCATION_HAND) then
+		local g=Duel.GetMatchingGroup(s.ofil2,tp,LOCATION_DECK,0,nil)
+		if #g>0 then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+			local sg=Duel.SelectMatchingCard(tp,Card.IsAbleToGrave,tp,LOCATION_HAND,0,0,1,nil)
+			local sc=sg:GetFirst()
+			if sc then
+				Duel.BreakEffect()
+				if Duel.SendtoGrave(sg,REASON_EFFECT)>0 and sc:IsLocation(LOCATION_GRAVE) then
+					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+					local tg=g:Select(tp,1,1,nil)
+					Duel.SendtoHand(tg,nil,REASON_EFFECT)
+					Duel.ConfirmCards(1-tp,tg)
 				end
 			end
 		end
