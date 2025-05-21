@@ -42,11 +42,6 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,eg,#eg,0,0)
 end
 
-function s.op1filter(c)
-	local mg=c:GetMaterial()
-	return c:IsType(TYPE_LINK) and #mg>0 and #mg~=mg:FilterCount(Card.IsType,nil,TYPE_EFFECT) and c:IsFaceup()
-end
-
 function s.op1rmfilter(c)
 	return c:IsAbleToRemove() and c:IsType(TYPE_EFFECT)
 end
@@ -55,10 +50,17 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateSummon(eg)
 	Duel.Remove(eg,POS_FACEUP,REASON_EFFECT)
 	local rg=Duel.GetMatchingGroup(s.op1rmfilter,tp,0,LOCATION_GRAVE,nil)
-	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_MZONE,0,nil)
-	if #rg>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_LINK)
+	local x=0
+	local mg
+	if #g==0 then return 0 end
+	for tc in aux.Next(g) do
+		mg=tc:GetMaterial()
+		x=x+#mg-mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)
+	end
+	if #rg>0 and x>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
-		local sg=aux.SelectUnselectGroup(rg,e,tp,1,g:GetSum(Card.GetLink),aux.TRUE,1,tp,HINTMSG_REMOVE)
+		local sg=aux.SelectUnselectGroup(rg,e,tp,1,x,aux.TRUE,1,tp,HINTMSG_REMOVE)
 		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 	end
 end
