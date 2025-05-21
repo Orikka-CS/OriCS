@@ -60,8 +60,8 @@ function s.con3(e,c)
 			return false
 		end
 	end
-	local rg=Duel.GMGroup(s.nfil3,tp,"M",0,nil)
 	local tp=c:GetControler()
+	local rg=Duel.GMGroup(s.nfil3,tp,"M",0,nil)
 	return aux.SelectUnselectGroup(rg,e,tp,1,1,aux.ChkfMMZ(1),0)
 end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,c)
