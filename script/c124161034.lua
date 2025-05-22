@@ -28,7 +28,6 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return g>0
 end
 
-
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)  
 	local c=e:GetHandler()
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) end
