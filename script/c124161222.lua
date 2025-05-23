@@ -79,11 +79,11 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
+	local tg=Duel.GetTargetCards(e):GetFirst()
 	local og=Duel.GetMatchingGroup(s.tg2ofilter,tp,LOCATION_DECK,0,nil)
 	if #og==0 then return end
 	local osg=aux.SelectUnselectGroup(og,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND):GetFirst()
-	if Duel.SendtoHand(osg,1-tp,REASON_EFFECT)>0 and tg:IsRelateToEffect(e) then
+	if Duel.SendtoHand(osg,1-tp,REASON_EFFECT)>0 and tg then
 		 Duel.BreakEffect()
 		Duel.SendtoHand(tg,tp,REASON_EFFECT)
 	end

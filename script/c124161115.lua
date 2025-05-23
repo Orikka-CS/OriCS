@@ -68,8 +68,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
 		Duel.SSet(tp,tg)
 	end
 end

@@ -45,9 +45,9 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
+	local tg=Duel.GetTargetCards(e):GetFirst()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if not tg:IsRelateToEffect(e) then return end
+	if not tg then return end
 	if Duel.Destroy(tg,REASON_EFFECT)>0 and c:IsRelateToEffect(e) then
 		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) and #g>0 then
 			Duel.BreakEffect()

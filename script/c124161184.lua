@@ -62,8 +62,8 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tg then
 		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
 	end
 end

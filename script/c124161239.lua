@@ -60,14 +60,14 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
+	local tg=Duel.GetTargetCards(e):GetFirst()
 	local hg=Duel.GetMatchingGroup(s.tg1hfilter,tp,LOCATION_DECK,0,nil)
 	if #hg>0 then
 		local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(hsg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,hsg)
 		Duel.ShuffleDeck(tp)
-		if tg:IsRelateToEffect(e) then
+		if tg then
 			Duel.DisableShuffleCheck()
 			Duel.SendtoDeck(tg,nil,SEQ_DECKTOP,REASON_EFFECT)
 		end

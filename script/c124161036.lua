@@ -48,8 +48,8 @@ function s.op1filter(c,e,tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg then
 		if Duel.Destroy(tg,REASON_EFFECT)<1 then return end
 		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_DECK,0,nil,e,tp)
 		if tg:GetOwner()==tp and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then

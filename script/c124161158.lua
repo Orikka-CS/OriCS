@@ -91,8 +91,8 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
-	if c:IsRelateToEffect(e) and tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if c:IsRelateToEffect(e) and tg then
 		Duel.Overlay(c,tg,true)
 	end
 end

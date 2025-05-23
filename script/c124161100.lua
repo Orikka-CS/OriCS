@@ -83,8 +83,8 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local xg=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_DECK,0,nil)
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) and #xg>0 then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg and #xg>0 then
 		local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 		Duel.Overlay(tg,xsg,true)
 		Duel.BreakEffect()

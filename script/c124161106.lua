@@ -46,10 +46,10 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local rc=re:GetHandler()
-	local tg=Duel.GetFirstTarget()
+	local tg=Duel.GetTargetCards(e):GetFirst()
 	local ov=tg:GetOverlayGroup()
 	local ovc=tg:GetOverlayCount()
-	if not tg:IsRelateToEffect(e) then return end
+	if not tg then return end
 	Duel.SendtoGrave(ov,REASON_EFFECT)
 	if not Duel.NegateActivation(ev) then return end
 	local xg=Duel.GetMatchingGroup(Card.IsCanBeXyzMaterial,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil)

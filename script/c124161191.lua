@@ -45,8 +45,8 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg then
 		Duel.SendtoHand(tg,nil,REASON_EFFECT)
 		local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 		if Duel.CheckRemoveOverlayCard(tp,1,0,1,REASON_EFFECT) and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then

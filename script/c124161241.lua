@@ -42,8 +42,8 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
-	if c:IsRelateToEffect(e) and c:IsFaceup() and tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if c:IsRelateToEffect(e) and c:IsFaceup() and tg then
 		local code=tg:GetOriginalCodeRule()
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)

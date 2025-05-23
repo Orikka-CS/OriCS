@@ -45,11 +45,11 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
+	local tg=Duel.GetTargetCards(e):GetFirst()
 	local dg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,c)
 	if #dg==0 or not c:IsRelateToEffect(e) then return end
 	local sdg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
-	if Duel.SendtoGrave(c+sdg,REASON_EFFECT+REASON_DISCARD) and tg:IsRelateToEffect(e) then
+	if Duel.SendtoGrave(c+sdg,REASON_EFFECT+REASON_DISCARD) and tg then
 		Duel.Destroy(tg,REASON_EFFECT)
 	end
 end

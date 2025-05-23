@@ -52,8 +52,8 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg then
 		if tg:IsType(TYPE_FIELD) then
 			aux.RemoveUntil(tg,nil,REASON_EFFECT,PHASE_END,id,e,tg:GetControler(),s.op1rtop)
 		else
@@ -100,8 +100,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tg then
 		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP) 
 	end
 end

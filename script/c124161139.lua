@@ -70,8 +70,8 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.SendtoHand(c,nil,REASON_EFFECT)>0 then
 		if Duel.GetLocationCount(tp,LOCATION_SZONE)==0 then return end
-		local tg=Duel.GetFirstTarget()
-		if tg:IsRelateToEffect(e) then
+		local tg=Duel.GetTargetCards(e):GetFirst()
+		if tg then
 			Duel.SSet(tp,tg)
 			local e1=Effect.CreateEffect(c)
 			e1:SetType(EFFECT_TYPE_SINGLE)

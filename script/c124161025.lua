@@ -85,8 +85,8 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
-	if tg:IsNegatable() and tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg:IsNegatable() and tg then
 		tg:NegateEffects(e:GetHandler(),nil,true)
 		if tg:IsMonster() then
 			local e1=Effect.CreateEffect(c)

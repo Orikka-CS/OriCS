@@ -61,8 +61,8 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=c:GetMaterial()
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg then
 		Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)
 		if not (tg:IsLocation(LOCATION_REMOVED) and not tg:IsReason(REASON_REDIRECT) and c:IsSummonType(SUMMON_TYPE_LINK) and g:FilterCount(Card.IsSetCard,nil,0xf28)>0) then return end
 		if tg:IsSpellTrap() and tg:IsSSetable() and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then

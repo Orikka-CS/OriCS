@@ -45,8 +45,8 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
-	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and tg:IsRelateToEffect(e) and Duel.Remove(tg,POS_FACEUP,REASON_EFFECT+REASON_TEMPORARY)>0 and tg:IsLocation(LOCATION_REMOVED) and not tg:IsReason(REASON_REDIRECT) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and tg and Duel.Remove(tg,POS_FACEUP,REASON_EFFECT+REASON_TEMPORARY)>0 and tg:IsLocation(LOCATION_REMOVED) and not tg:IsReason(REASON_REDIRECT) then
 		Duel.BreakEffect()
 		Duel.ReturnToField(tg)
 	end

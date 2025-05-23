@@ -64,11 +64,11 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local gg=Duel.GetMatchingGroup(s.tg1gfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil)
-	local tg=Duel.GetFirstTarget()
+	local tg=Duel.GetTargetCards(e):GetFirst()
 	if #gg>0 then
 		local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONTROL):GetFirst()
 		Duel.SendtoHand(gsg,1-tp,REASON_EFFECT)
-		if gsg:IsLocation(LOCATION_HAND) and tg:IsRelateToEffect(e) then
+		if gsg:IsLocation(LOCATION_HAND) and tg then
 			Duel.BreakEffect()
 			Duel.GetControl(tg,tp)
 		end

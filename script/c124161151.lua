@@ -44,8 +44,8 @@ function s.op1filter(c)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg then
 		if Duel.SendtoHand(tg,nil,REASON_EFFECT)==0 then return end
 		if not tg:IsLocation(LOCATION_HAND+LOCATION_EXTRA) then return end
 		local hg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_GRAVE,LOCATION_MZONE,nil)

@@ -45,8 +45,8 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) and Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)>0 then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg and Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)>0 then
 		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_REMOVED,0,nil)
 		if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
 			Duel.BreakEffect()

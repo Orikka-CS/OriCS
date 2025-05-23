@@ -50,8 +50,8 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg then
 		if Duel.SendtoGrave(tg,REASON_EFFECT) and tg:IsLocation(LOCATION_GRAVE) and c:IsRelateToEffect(e) then
 			local dis=0
 			local og=Duel.GetOperatedGroup()

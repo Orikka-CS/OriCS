@@ -44,8 +44,8 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if tg:IsRelateToEffect(e) and Duel.SendtoHand(tg,1-tp,REASON_EFFECT)>0 and tg:IsLocation(LOCATION_HAND) then
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg and Duel.SendtoHand(tg,1-tp,REASON_EFFECT)>0 and tg:IsLocation(LOCATION_HAND) then
 		local g=Duel.GetMatchingGroup(s.tg1ffilter,tp,LOCATION_DECK,0,nil,e,tp,tg:GetCode())
 		if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then
 			Duel.BreakEffect()

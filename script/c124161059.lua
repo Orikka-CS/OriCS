@@ -86,9 +86,9 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
+	local tg=Duel.GetTargetCards(e):GetFirst()
 	local un=Duel.GetMatchingGroup(s.unfilter,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
-	if tg:IsRelateToEffect(e) and tg:IsFaceup() and #un>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then
+	if tg and tg:IsFaceup() and #un>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then
 	local sg=aux.SelectUnselectGroup(un,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
 		Duel.Equip(tp,sg,tg)
 	end

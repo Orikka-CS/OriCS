@@ -67,8 +67,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if not tg:IsRelateToEffect(e) then return end
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if not tg then return end
 	if tg:GetOverlayCount()>0 then
 		local g=tg:GetOverlayGroup()
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)

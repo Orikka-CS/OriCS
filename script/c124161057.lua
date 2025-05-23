@@ -37,8 +37,8 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if not (tg:IsRelateToEffect(e) and tg:IsFaceup()) then return end
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if not (tg and tg:IsFaceup()) then return end
 	local c=e:GetHandler()
 	if not tg:IsImmuneToEffect(e) then
 		local e1=Effect.CreateEffect(c)

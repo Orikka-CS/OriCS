@@ -52,7 +52,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local rc=re:GetHandler()
-	local tg=Duel.GetFirstTarget()
+	local tg=Duel.GetTargetCards(e):GetFirst()
 	if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then return end
 	rc:CancelToGrave()
 	if Duel.Remove(rc,POS_FACEUP,REASON_EFFECT) then

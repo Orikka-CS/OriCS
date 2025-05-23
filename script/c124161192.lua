@@ -79,9 +79,9 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
+	local tg=Duel.GetTargetCards(e):GetFirst()
 	local xg=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_REMOVED,0,nil)
-	if tg:IsRelateToEffect(e) and #xg>0 then 
+	if tg and #xg>0 then 
 		local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 		Duel.Overlay(tg,xsg,true)
 		local c=e:GetHandler()

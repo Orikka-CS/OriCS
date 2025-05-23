@@ -47,8 +47,8 @@ function s.op1filter(c,tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetFirstTarget()
-	if not tg:IsRelateToEffect(e) then return end
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if not tg then return end
 	if tg:GetOverlayCount()>0 then
 		tg:RemoveOverlayCard(tp,1,1,REASON_EFFECT)
 		local dg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_GRAVE,0,nil)
