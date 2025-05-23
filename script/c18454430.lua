@@ -84,7 +84,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		)
 		if tc:IsLocation(LOCATION_HAND|LOCATION_MZONE) and e:GetLabel()==0x10000 then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-			local sg=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_GRAVE,0,0,1,nil,e,tp)
+			local sg=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_DECK,0,0,1,nil,e,tp)
 			local sc=sg:GetFirst()
 			if sc and Duel.SendtoGrave(sg,REASON_EFFECT)>0 then
 				local e1=Effect.CreateEffect(c)
