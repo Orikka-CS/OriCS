@@ -64,7 +64,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if tc and tc:IsRelateToEffect(e) and Duel.Destroy(tc,REASON_EFFECT)>0 then
 		Duel.Draw(tp,1,REASON_EFFECT)
 	end
-	if c:IsRelateToEffect(e) and c:IsFaceup() and c:Code()==18454451 then
+	if c:IsRelateToEffect(e) and c:IsFaceup() and c:Code()==18454451
+		and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
 		local mt=_G["c18454451"]
 		local ct=0
 		while true do

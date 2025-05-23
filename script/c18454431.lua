@@ -33,7 +33,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		end
 	end
-	if c:IsRelateToEffect(e) and c:IsFaceup() and c:Code()==18454431 then
+	if c:IsRelateToEffect(e) and c:IsFaceup() and c:Code()==18454431
+		and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
 		local mt=_G["c18454431"]
 		local ct=0
 		while true do
