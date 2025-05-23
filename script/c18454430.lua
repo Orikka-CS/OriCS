@@ -39,11 +39,13 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 		return true
 	end
 	if lo:GetLabel()==1 then
-		lo:SetLabel(0x10000)
+		e:SetLabel(0x10000)
+		lo:SetLabel(0)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 		local g=Duel.SelectMatchingCard(tp,Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,1,nil)
 		Duel.SendtoGrave(g,REASON_COST)
 	else
+		e:SetLabel(0)
 		lo:SetLabel(0)
 	end
 end
