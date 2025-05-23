@@ -12,13 +12,15 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	--effect 2
+   --effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TOGRAVE)
-	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetCode(EVENT_CHAINING)
+	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -54,6 +56,10 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return re:GetHandler():IsSetCard(0xf25) and rp==tp
+end
+
 function s.tg2filter(c)
 	return c:IsSetCard(0xf25) and not c:IsCode(id) and c:IsAbleToGrave()
 end

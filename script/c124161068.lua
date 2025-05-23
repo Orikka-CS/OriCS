@@ -13,12 +13,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCategory(CATEGORY_TODECK)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_PHASE+PHASE_END)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(Cost.SelfBanish)
+	e2:SetCondition(function(e,tp) return Duel.IsTurnPlayer(tp) end)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -60,35 +60,32 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.tg2filter(c,e)
-	return c:IsSetCard(0xf24) and c:IsCanBeEffectTarget(e) and c:IsAbleToDeck()
+function s.tg2filter(c)
+	return c:IsSetCard(0xf24) and c:IsAbleToDeck()
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,e:GetHandler(),e)
-	if chk==0 then return #g>2 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,3,3,aux.TRUE,1,tp,HINTMSG_TODECK)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,3,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,0,LOCATION_DECK)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)  
+	local c=e:GetHandler()
+	local dg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,c)
+	if chk==0 then return #dg>1 and c:IsAbleToDeck() end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,dg+c,3,0,LOCATION_GRAVE)
 end
 
 function s.op2filter(c)
-	return c:IsSetCard(0xf24) and c:IsTrap() and c:IsAbleToHand()
+	return c:IsSetCard(0xf24) and c:IsTrap() and c:IsSSetable()
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tg=Duel.GetTargetCards(e)
-	if #tg>0 then
-		Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+	local dg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,c)
+	if #dg>1 and c:IsRelateToEffect(e) then
+		local dsg=aux.SelectUnselectGroup(dg,e,tp,2,2,aux.TRUE,1,tp,HINTMSG_TODECK)  
+		Duel.SendtoDeck(dsg+c,nil,SEQ_DECKSHUFFLE,REASON_EFFECT) 
 		local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_DECK,0,nil)
-		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-			Duel.SendtoHand(sg,nil,REASON_EFFECT)
-			Duel.ConfirmCards(1-tp,sg)
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
+			Duel.SSet(tp,sg)
 		end
 	end
 end

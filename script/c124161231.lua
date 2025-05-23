@@ -75,28 +75,30 @@ function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(sg,nil,SEQ_DECKTOP,REASON_COST)
 end
 
+function s.tg2filter(c,e,tp)
+	return c:IsSetCard(0xf2f) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,c,e,tp)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsAbleToDeck() and #g>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,c,1,0,LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,LOCATION_GRAVE)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SpecialSummonStep(c,0,tp,tp,false,false,POS_FACEUP) then
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,e:GetHandler(),e,tp)
+	if c:IsRelateToEffect(e) and Duel.SendtoDeck(c,nil,SEQ_DECKBOTTOM,REASON_EFFECT) and #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON):GetFirst()
+		Duel.SpecialSummonStep(sg,0,tp,tp,false,false,POS_FACEUP)
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_ADD_TYPE)
 		e1:SetValue(TYPE_TUNER)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-		c:RegisterEffect(e1)
+		sg:RegisterEffect(e1)
 		Duel.SpecialSummonComplete()
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_SINGLE)
-		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-		e2:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
-		e2:SetValue(LOCATION_DECKBOT)
-		e2:SetReset(RESET_EVENT+RESETS_REDIRECT)
-		c:RegisterEffect(e2)
 	end
 end

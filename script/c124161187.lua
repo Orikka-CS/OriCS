@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_REMOVE)
+	e1:SetCategory(CATEGORY_REMOVE+CATEGORY_SEARCH+CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_HAND)
@@ -43,10 +43,11 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rg=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 	if chk==0 then return #rg>0 end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,rg,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,0,LOCATION_DECK)
 end
 
 function s.op1filter(c)
-	return c:IsSetCard(0xf2c) and c:IsTrap() and c:IsSSetable()
+	return c:IsSetCard(0xf2c) and c:IsTrap() and c:IsAbleToHand()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -57,10 +58,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			Duel.BreakEffect()
 			Duel.ReturnToField(rsg)
 			local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_DECK,0,nil)
-			if rsg:IsControler(tp) and rsg:IsType(TYPE_XYZ) and #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			if rsg:IsControler(tp) and rsg:IsType(TYPE_XYZ) and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 				Duel.BreakEffect()
-				local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
-				Duel.SSet(tp,sg)
+				local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+				Duel.SendtoHand(sg,nil,REASON_EFFECT)
+				Duel.ConfirmCards(1-tp,sg)
 			end
 		end
 	end

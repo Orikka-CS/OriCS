@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetCode(EVENT_CHAINING)
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
@@ -26,8 +26,12 @@ function s.initial_effect(c)
 end
 
 --effect 1
+function s.con1filter(c,tp)
+	return c:IsSetCard(0xf2d) and not c:IsCode(id) and c:IsFaceup() and c:IsControler(tp)
+end
+
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return re:GetHandler():IsSetCard(0xf2d) and rp==tp
+	return eg:IsExists(s.con1filter,1,nil,tp)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
