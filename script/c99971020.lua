@@ -63,8 +63,13 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if ft>1 and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
 		and Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,60800381),tp,LOCATION_MZONE,0,1,nil) then ct=2 end
 	local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_DECK,0,1,ct,nil,e,tp)
-	if #g>0 then
-		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+	if #g>0 and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)~=0 then
+		local cg=Group.CreateGroup()
+		for i=1,2 do
+			local token=Duel.CreateToken(tp,60800382)
+			cg:AddCard(token)
+		end
+		Duel.SendtoHand(cg,nil,REASON_EFFECT)
 	end
 end
 
