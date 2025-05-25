@@ -41,5 +41,5 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(tp,2,REASON_EFFECT)
 	Duel.BreakEffect()
 	local g2=Duel.GetDecktopGroup(tp,2)
-	Duel.Remove(g,POS_FACEDOWN,REASON_EFFECT)
+	Duel.Remove(g2,POS_FACEDOWN,REASON_EFFECT)
 end
