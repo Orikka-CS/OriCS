@@ -18,10 +18,9 @@ function s.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_DRAW)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_TO_HAND)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_DRAW)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
 	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
@@ -55,20 +54,16 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsControler(tp) and not c:IsReason(REASON_DRAW)
+	return c:IsControler(tp) and c:IsLocation(LOCATION_HAND) and c:IsSetCard(0xf20) and not c:IsPublic()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.con2filter,1,nil,tp)
 end
 
-function s.cst2filter(c)
-	return c:IsSetCard(0xf20) and not c:IsPublic()
-end
-
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil)
+	local g=eg:Filter(s.con2filter,nil,tp)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)
@@ -76,7 +71,8 @@ function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) and e:GetHandler():GetFlagEffect(id)==0 end
+	e:GetHandler():RegisterFlagEffect(id,RESET_CHAIN,0,1)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 
