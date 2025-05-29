@@ -58,7 +58,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsSummonPlayer(tp) and c:IsFaceup() and c:IsSetCard(0xf2a)
+	return c:IsControler(tp) and c:IsFaceup() and c:IsSetCard(0xf2a)
 end
 
 function s.con2(e,tp,eg)

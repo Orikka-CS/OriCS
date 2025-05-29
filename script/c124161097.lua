@@ -17,7 +17,6 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	local e1a=e1:Clone()
 	e1a:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e1a:SetCode(EVENT_TO_HAND)
 	e1a:SetRange(LOCATION_MZONE)
 	e1a:SetCondition(s.con1)
 	c:RegisterEffect(e1a)
@@ -63,11 +62,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.con1filter(c,tp)
-	return c:IsControler(1-tp) and not c:IsReason(REASON_DRAW)
+	return c:IsControler(tp) and c:IsFaceup() and c:IsSetCard(0xf26)
 end
 
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con1filter,1,nil,tp)
+function s.con1(e,tp,eg)
+	return eg:IsExists(s.con1filter,1,nil,tp) and not eg:IsContains(e:GetHandler())
 end
 
 --effect 2

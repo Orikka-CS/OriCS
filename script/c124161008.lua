@@ -53,17 +53,21 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2filter(c,tp)
-	return c:IsControler(tp) and c:IsLocation(LOCATION_HAND) and c:IsSetCard(0xf20) and not c:IsPublic()
+function s.con2filter(c,e,tp,re)
+	return c:IsControler(tp) and c:IsLocation(LOCATION_HAND) and c:IsSetCard(0xf20) and not c:IsPublic() and c:IsReason(REASON_EFFECT) and e:GetHandler()==re:GetHandler()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,tp)
+	return eg:IsExists(s.con2filter,1,nil,e,tp,re)
 end
 
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tg2filter(c,e,tp)
+	return c:IsControler(tp) and c:IsLocation(LOCATION_HAND) and c:IsSetCard(0xf20) and not c:IsPublic() and c:IsReason(REASON_EFFECT)
+end
+
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk,re)
 	local c=e:GetHandler()
-	local g=eg:Filter(s.con2filter,nil,tp)
+	local g=eg:Filter(s.tg2filter,nil,e,tp)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)

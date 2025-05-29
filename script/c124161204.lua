@@ -44,7 +44,7 @@ end
 --effect 2
 function s.con2filter(c,tp)
 	local mg=c:GetMaterial()
-	return c:IsSummonPlayer(tp) and c:IsSummonType(SUMMON_TYPE_LINK) and #mg>0 and mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)==0
+	return c:IsControler(tp) and c:IsSummonType(SUMMON_TYPE_LINK) and #mg>0 and mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)==0
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)

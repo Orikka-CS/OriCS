@@ -59,11 +59,11 @@ end
 
 --effect 2
 function s.con2filter(c)
-	return c:IsSetCard(0xf20) and c:IsPublic()
+	return c:IsSetCard(0xf20) and c:IsFaceup()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_HAND,0,nil)
+	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_MZONE,0,nil)
 	return g>0
 end
 
