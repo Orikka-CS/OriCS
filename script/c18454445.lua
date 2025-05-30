@@ -6,11 +6,13 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_DAMAGE)
 	WriteEff(e1,1,"NTO")
 	c:RegisterEffect(e1)
-	local e2=MakeEff(c,"FC","HS")
+	local e2=MakeEff(c,"FC")
 	e2:SetCode(EFFECT_RCOUNTER_REPLACE+COUNTER_SPELL)
 	e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 	WriteEff(e2,2,"NO")
-	c:RegisterEffect(e2)
+	Duel.RegisterEffect(e2,0)
+	local e3=e2:Clone()
+	Duel.RegisterEffect(e3,1)
 end
 s.listed_names={id}
 function s.nfil1(c)
@@ -35,9 +37,10 @@ end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return r&REASON_COST~=0 and re:IsActivated() and ep==tp and ev==3 and c:IsAbleToDeck()
-		and (c:IsLoc("H") or c:IsFacedown())
+		and (c:IsLoc("H") or (c:IsFacedown() and c:IsLoc("S"))) and c:IsControler(tp)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
+	Duel.ConfirmCards(1-tp,c)
 	Duel.SendtoDeck(c,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 end

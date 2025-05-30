@@ -34,7 +34,7 @@ s.listed_names={70791313}
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return Duel.IsCanAdddCounter(tp,COUNTER_SPELL,3,c)
+		return Duel.IsCanAddCounter(tp,COUNTER_SPELL,3,c)
 	end
 	c:AddCounter(COUNTER_SPELL,3)
 end
