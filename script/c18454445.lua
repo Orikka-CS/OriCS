@@ -32,12 +32,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GMGroup(Card.IsType,tp,"G",0,nil,TYPE_SPELL)
 	Duel.Damage(1-tp,#g*200,REASON_EFFECT)
 end
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return r&REASON_COST~=0 and re:IsActivated() and ep==tp and ev==3 and c:IsAbleToDeck()
 		and (c:IsLoc("H") or c:IsFacedown())
 end
-function s.op3(e,tp,eg,ep,ev,re,r,rp)
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.SendtoDeck(c,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 end
