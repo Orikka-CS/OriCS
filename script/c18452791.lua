@@ -105,7 +105,7 @@ end
 function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	local g1=Duel.GMGroup(Card.IsAbleToDeck,tp,0,"H",nil)
 	local g2=Duel.GMGroup(Card.IsAbleToDeck,tp,0,"O",nil)
-	local g3=Duel.GMGroup(Card.IsAbleToDeck,tp,0,"G",nil)
+	local g3=Duel.GMGroup(aux.NecroValleyFilter(Card.IsAbleToDeck),tp,0,"G",nil)
 	if #g1>0 and #g2>0 and #g3>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 		local sg1=g1:RandomSelect(tp,1)
