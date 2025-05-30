@@ -19,9 +19,15 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SMCard(tp,s.cfil1,tp,"HO",0,1,1,c)
-	if Duel.SelectOption(tp,aux.Stringid(id,0),aux.Stringid(id,1))==0 then
+	local tc=g:GetFirst()
+	local b1=tc:IsAbleToGraveAsCost()
+	local b2=tc:IsAbleToDeckAsCost()
+	local op=Duel.SelectEffect(tp,
+		{b1,aux.Stringid(id,0)},
+		{b2,aux.Stringid(id,1)})
+	if op==1 then
 		Duel.SendtoGrave(g,REASON_COST)
-	else
+	elseif op==2 then
 		Duel.SendtoDeck(g,nil,SEQ_DECKBOTTOM,REASON_COST)
 	end
 end
