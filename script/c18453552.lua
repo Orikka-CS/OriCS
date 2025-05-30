@@ -44,12 +44,12 @@ function s.tfil2(c)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
-	local ct=Duel.GMGroup(s.tfil2,tp,"O",0,nil)
+	local ct=#Duel.GMGroup(s.tfil2,tp,"O",0,nil)
 	if chkc then
 		return chkc:IsControler(1-tp) and chkc:IsOnField()
 	end
 	if chk==0 then
-		return #ct>0 and Duel.IETarget(aux.TRUE,tp,0,"O",1,nil)
+		return ct>0 and Duel.IETarget(aux.TRUE,tp,0,"O",1,nil)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 	local g=Duel.STarget(tp,aux.TRUE,tp,0,"O",1,ct,nil)

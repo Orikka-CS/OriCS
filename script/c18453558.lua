@@ -20,7 +20,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SPOI(0,CATEGORY_TOHAND,nil,1,tp,"G")
 end
 function s.ofil1(c)
-	return c:IsType(TYPE_QUICKPLAY+TYPE_TRAP) and c:IsAbleToHand()
+	return c:IsSetCard(0x2f3) and c:IsType(TYPE_QUICKPLAY+TYPE_TRAP) and c:IsAbleToHand()
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.GetTurnCount()

@@ -48,7 +48,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	local dg=Duel.GMGroup(aux.NecroValleyFilter(Card.IsAbleToDeck),tp,0,"HOG",nil)
-	local sg=dg:CheckSubGroup(s.tfun2,3,3*ct)
+	local sg=dg:SelectSubGroup(tp,s.tfun2,false,3,3*ct)
 	if #sg>0 then
 		Duel.SendtoDeck(sg,nil,2,REASON_EFFECT)
 	end
