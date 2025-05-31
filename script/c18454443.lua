@@ -28,6 +28,9 @@ function s.initial_effect(c)
 	e5:SetCode(EVENT_CHAIN_SOLVED)
 	WriteEff(e5,5,"O")
 	c:RegisterEffect(e5)
+	local e6=MakeEff(c,"I","F")
+	WriteEff(e6,6,"CTO")
+	c:RegisterEffect(e6)
 end
 s.counter_place_list={COUNTER_SPELL}
 s.listed_names={70791313}
