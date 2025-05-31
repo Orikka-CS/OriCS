@@ -50,7 +50,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp,c)
-	c:RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD-RESET_TO_FIELD|RESET_PHASE|PHASE_END,0,1)
+	c:RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD-RESET_TOFIELD|RESET_PHASE|PHASE_END,0,1)
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	local tc=eg:GetFirst()
