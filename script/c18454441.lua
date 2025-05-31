@@ -43,7 +43,7 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if Duel.IsPlayerCanDraw(tp,2) and Duel.IEMCard(s.ofil1,tp,"OG",0,1,nil)
-		and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.Draw(tp,2,REASON_EFFECT)
 	else
 		Duel.Draw(tp,1,REASON_EFFECT)
