@@ -36,6 +36,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e6)
 end
 s.counter_place_list={COUNTER_SPELL}
+s.listed_names={70791313}
 function s.nfil1(c,tp)
 	return c:IsSetCard("µµ¼­°ü") and c:IsFaceup() and c:IsAbleToHandAsCost() and Duel.GetMZoneCount(tp,c)>0
 end
@@ -68,6 +69,7 @@ end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	return r&REASON_COST~=0 and re:IsActivated() and ep==tp and ev==3 and rc:GetCounter(COUNTER_SPELL)>=2
+		and rc:IsCode(70791313)
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
