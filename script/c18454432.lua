@@ -48,7 +48,7 @@ function s.con1(e,c)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,c)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
-	local g=Duel.SMCard(tp,s.tfil1,tp,"O",0,0,1,nil,tp)
+	local g=Duel.SMCard(tp,s.nfil1,tp,"O",0,0,1,nil,tp)
 	if #g>0 then
 		e:SetLabelObject(g)
 		g:KeepAlive()
