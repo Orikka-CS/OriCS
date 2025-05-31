@@ -43,6 +43,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,0)
 	local ac=Duel.AnnounceNumber(tp,table.unpack(tct))
+	Duel.RemoveCounter(tp,1,0,COUNTER_SPELL,ac,REASON_COST)
 	local sel=0
 	local off=0
 	repeat
@@ -75,6 +76,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 			sel=sel+4
 			b3=false
 		end
+		ac=ac-1
 	until ac==0
 	local tc1,tc2,tc3=nil,nil,nil
 	if sel&1~=0 then
