@@ -30,7 +30,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(0)
 	local ct=1
 	for i=2,3 do
-		if Duel.IsCanRemoveCounter(tp,1,0,COUNTER_SPELL,ct,REASON_COST) then
+		if Duel.IsCanRemoveCounter(tp,1,0,COUNTER_SPELL,i,REASON_COST) then
 			ct=i
 		end
 	end
