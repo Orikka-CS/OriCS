@@ -50,6 +50,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local mg=e:GetHandler():GetMaterial()
 	local ct=#mg-mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)
 	Duel.NegateActivation(ev)
+	if not e:GetHandler():IsSummonType(SUMMON_TYPE_LINK) then return end
 	local ag
 	local asg
 	ag=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)

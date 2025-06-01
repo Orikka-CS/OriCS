@@ -55,7 +55,7 @@ end
 --effect 2
 function s.con2filter(c)
 	local mg=c:GetMaterial()
-	return c:IsType(TYPE_LINK) and #mg>0 and mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)==0 and c:IsFaceup()
+	return c:IsSummonType(SUMMON_TYPE_LINK) and #mg>0 and mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)==0 and c:IsFaceup()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)

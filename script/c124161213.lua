@@ -50,7 +50,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateSummon(eg)
 	Duel.Remove(eg,POS_FACEUP,REASON_EFFECT)
 	local rg=Duel.GetMatchingGroup(s.op1rmfilter,tp,0,LOCATION_GRAVE,nil)
-	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_LINK)
+	local g=Duel.GetMatchingGroup(Card.IsSummonType,tp,LOCATION_MZONE,0,nil,SUMMON_TYPE_LINK)
 	local x=0
 	local mg
 	if #g==0 then return 0 end

@@ -49,7 +49,7 @@ end
 --effect 1
 function s.val1(e,c)
 	local tp=e:GetHandlerPlayer()
-	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_LINK)
+	local g=Duel.GetMatchingGroup(Card.IsSummonType,tp,LOCATION_MZONE,0,nil,SUMMON_TYPE_LINK)
 	local x=0
 	local mg
 	if #g==0 then return 0 end
