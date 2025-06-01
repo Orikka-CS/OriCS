@@ -113,6 +113,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		e1:SetValue(s.oval11)
 		tc1:RegisterEffect(e1)
+		if tc1:IsCanAddCounter(COUNTER_SPELL,1) and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
+			tc1:AddCounter(COUNTER_SPELL,1)
+		end
 	end
 	if tc2 and tc2:IsRelateToEffect(e) then
 		Duel.Destroy(tc2,REASON_EFFECT)
