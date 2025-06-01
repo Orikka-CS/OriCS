@@ -13,9 +13,10 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	return true
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local b1=Duel.IETarget(s.tfil1,tp,"O",0,1,nil)
-	local b2=Duel.IETarget(aux.TRUE,tp,"O","O",1,nil)
-	local b3=Duel.IETarget(Card.IsNegatable,tp,"O","O",1,nil)
+	local c=e:GetHandler()
+	local b1=Duel.IETarget(s.tfil1,tp,"O",0,1,c)
+	local b2=Duel.IETarget(aux.TRUE,tp,"O","O",1,c)
+	local b3=Duel.IETarget(Card.IsNegatable,tp,"O","O",1,c)
 	if chkc then
 		return false
 	end
@@ -81,18 +82,18 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local tc1,tc2,tc3=nil,nil,nil
 	if sel&1~=0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-		local g1=Duel.STarget(tp,s.tfil1,tp,"O",0,1,1,nil)
+		local g1=Duel.STarget(tp,s.tfil1,tp,"O",0,1,1,c)
 		tc1=g1:GetFirst()
 	end
 	if sel&2~=0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-		local g2=Duel.STarget(tp,aux.TRUE,tp,"O","O",1,1,nil)
+		local g2=Duel.STarget(tp,aux.TRUE,tp,"O","O",1,1,c)
 		tc2=g2:GetFirst()
 		Duel.SOI(0,CATEGORY_DESTROY,g2,1,0,0)
 	end
 	if sel&4~=0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_NEGATE)
-		local g3=Duel.STarget(tp,Card.IsNegatable,tp,"O","O",1,1,nil)
+		local g3=Duel.STarget(tp,Card.IsNegatable,tp,"O","O",1,1,c)
 		tc3=g3:GetFirst()
 		Duel.SOI(0,CATEGORY_DISABLE,g3,1,0,0)
 	end
