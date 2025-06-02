@@ -37,6 +37,9 @@ end
 function s.val3(e,re,tp)
 	local ep=e:GetHandlerPlayer()
 	local cc=Duel.GetCurrentChain()
+	if cc<=2 then
+		return false
+	end
 	local cp0=Duel.GetChainInfo(cc-2,CHAININFO_TRIGGERING_PLAYER)
 	local cp1=Duel.GetChainInfo(cc-1,CHAININFO_TRIGGERING_PLAYER)
 	local ce2,cp2=Duel.GetChainInfo(cc,CHAININFOF_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER)
