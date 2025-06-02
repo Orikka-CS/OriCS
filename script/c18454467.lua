@@ -32,7 +32,7 @@ function s.con2(e)
 	end
 	local cp0=Duel.GetChainInfo(cc-1,CHAININFO_TRIGGERING_PLAYER)
 	local cp1=Duel.GetChainInfo(cc,CHAININFO_TRIGGERING_PLAYER)
-	return tp==cp0 and tp==cp1
+	return tp==cp0 and tp~=cp1
 end
 function s.val3(e,re,tp)
 	local ep=e:GetHandlerPlayer()
