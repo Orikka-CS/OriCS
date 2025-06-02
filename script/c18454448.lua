@@ -81,7 +81,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()&(PHASE_MAIN1+PHASE_MAIN2)==0
+	return Duel.GetCurrentPhase()&(PHASE_MAIN1+PHASE_MAIN2)~=0
 end
 function s.tfil2(c)
 	return c:IsSetCard("sparkle.exe") and c:IsType(TYPE_TRAP) and c:IsSSetable()
