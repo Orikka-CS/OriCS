@@ -53,7 +53,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		end
 	else
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local g=Duel.SMCard(tp,s.tfil1,tp,"H",0,1,1,nil,e,tp)
+		local g=Duel.SMCard(tp,s.tfil11,tp,"H",0,1,1,nil,e,tp)
 		if #g>0 then
 			Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		end

@@ -39,7 +39,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.tfil2(c,e,tp)
-	return c:IsSetCard("sparkle.exe") and not c:IsCode(m) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard("sparkle.exe") and not c:IsCode(id) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
