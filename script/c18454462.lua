@@ -32,8 +32,9 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		return Duel.GetLocCount(tp,"M")>0 and (b1 or b2)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.STarget(tp,s.tfil12,tp,"G",0,0,1,nil,e,tp)
-	if #g>0 then
+	local minct=b1 and 0 or 1
+	local g=Duel.STarget(tp,s.tfil12,tp,"G",0,minct,1,nil,e,tp)
+	if g and #g>0 then
 		e:SetProperty(EFFECT_FLAG_CARD_TARGET)
 		Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 	else
