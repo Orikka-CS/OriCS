@@ -42,7 +42,8 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	if tc then
 		aux.ToHandOrElse(tc,tp)
 		if tc:IsLoc("HG") and c:IsRelateToEffect(e) and Duel.GetLocCount(tp,"S")>0 then
-			Duel.MoveToField(tc,tp,tp,LSTN("S"),POS_FACEUP,true)
+			Duel.BreakEffect()
+			Duel.MoveToField(c,tp,tp,LSTN("S"),POS_FACEUP,true)
 		end
 	end
 end

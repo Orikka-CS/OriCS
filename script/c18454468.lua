@@ -33,7 +33,7 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 	local g=Duel.SMCard(tp,s.tfil3,tp,"D",0,1,1,nil)
 	local tc=g:GetFirst()
 	local b1=tc:IsSSetable()
@@ -48,7 +48,8 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 		res=Duel.SendtoGrave(tc,REASON_EFFECT)>0 and tc:IsLoc("G")
 	end
 	if res and Duel.GetLocCount(tp,"S")>0 and c:IsRelateToEffect(e) then
-		Duel.MoveToField(tc,tp,tp,LSTN("S"),POS_FACEUP,true)
+		Duel.BreakEffect()
+		Duel.MoveToField(c,tp,tp,LSTN("S"),POS_FACEUP,true)
 	end
 end
 function s.tar2(e,c)
