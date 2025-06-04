@@ -5,7 +5,7 @@ function s.initial_effect(c)
 		s.global_check=true
 		aux.RegisterIdealMatter(c,id)
 	end
-	local e1=MakeEff(c,"S","H")
+	local e1=MakeEff(c,"S")
 	e1:SetCode(EFFECT_SUMMON_PROC)
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e1:SetD(id,0)
