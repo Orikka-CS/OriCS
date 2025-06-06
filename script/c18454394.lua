@@ -1,4 +1,5 @@
 --융함
-function c18454394.initial_effect(c)
-	
+local s,id=GetID()
+function s.initial_effect(c)
+	Fusion.RegisterSummonEff(c)
 end
