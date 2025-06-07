@@ -57,7 +57,7 @@ function s.con2(e,c)
 	return aux.SelectUnselectGroup(g,e,tp,2,2,aux.ChkfMMZ(1),0) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,c)
-	local g=Duel.GetMatchingGroup(s.spfilter,tp,LOCATION_GRAVE|LOCATION_MZONE|LOCATION_HAND,0,nil)
+	local g=Duel.GetMatchingGroup(s.nfil2,tp,LOCATION_GRAVE|LOCATION_MZONE|LOCATION_HAND,0,nil)
 	local rg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.ChkfMMZ(1),1,tp,HINTMSG_REMOVE,nil,nil,true)
 	if #rg>0 then
 		rg:KeepAlive()
