@@ -82,7 +82,7 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 				LOCATION_REMOVED,0,1,c,e,tp)
 			and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
 	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,2,tp,LOCATION_HAND_LOCATION_DECK+LOCATION_GRAVE+
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+
 		LOCATION_REMOVED)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
