@@ -73,14 +73,14 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			rc6=rg6:GetNext()
 		end
 		local e2=MakeEff(c,"FC")
-		e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
 		e2:SetCode(EVENT_PHASE+PHASE_END)
+		e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
 		e2:SetCountLimit(1)
 		e2:SetCondition(s.ocon12)
 		e2:SetOperation(s.oop12)
 		e2:SetLabel(fid)
-		e2:SetLabelObject(rg6)
-		e2:SetReset(RESET_PHASE|PHASE_END)
+		e2:SetLabelObject({rg6,Duel.GetTurnCount()})
+		e2:SetReset(RESET_PHASE|PHASE_END,2)
 		Duel.RegisterEffect(e2,tp)
 	end
 end
@@ -92,15 +92,16 @@ function s.onfil12(c,fid)
 end
 function s.ocon12(e,tp,eg,ep,ev,re,r,rp)
 	local fid=e:GetLabel()
-	local rg=e:GetLabelObject()
-	return rg:IsExists(s.onfil12,1,nil,fid)
+	local lo=e:GetLabelObject()
+	local rg,ct=lo[1],lo[2]
+	return rg:IsExists(s.onfil12,1,nil,fid) and Duel.GetTurnCount()~=ct
 end
 function s.oofil12(c,fid)
 	return c:GetFlagEffectLabel(id)==fid|0x80000000
 end
 function s.oop12(e,tp,eg,ep,ev,re,r,rp)
 	local fid=e:GetLabel()
-	local rg=e:GetLabelObject()
+	local rg=e:GetLabelObject()[1]
 	local ug=rg:Filter(s.oofil12,nil,fid)
 	rg:Sub(ug)
 	Duel.SendtoDeck(rg,nil,2,REASON_EFFECT+REASON_RETURN)
