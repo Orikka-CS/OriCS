@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetHintTiming(0,TIMING_END_PHASE)
-	e2:SetCL(1)
+	e2:SetCountLimit(1)
 	e2:SetTarget(s.drtg)
 	e2:SetOperation(s.drop)
 	c:RegisterEffect(e2)
@@ -77,7 +77,7 @@ function s.drop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsCode(CARD_CYCLONE)
+	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsCode(5318639)
 end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
@@ -120,7 +120,7 @@ end
 function s.con(e,tp,eg,ep,ev,re,r,rp)
 	if not re then return false end
 	local c=e:GetHandler()
-	return c:IsReason(REASON_EFFECT) and re:GetHandler():IsCode(CARD_CYCLONE)
+	return c:IsReason(REASON_EFFECT) and re:GetHandler():IsCode(5318639)
 end
 function s.tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsSSetable() end

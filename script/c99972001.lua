@@ -8,7 +8,7 @@ function s.initial_effect(c)
 	e6:SetCode(EFFECT_SPSUMMON_PROC)
 	e6:SetRange(LOCATION_HAND)
 	e6:SetCondition(s.con6)
-	e6:SetCL(1,id,EFFECT_COUNT_CODE_OATH)
+	e6:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	c:RegisterEffect(e6)
 	
 	local e3=Effect.CreateEffect(c)
@@ -30,13 +30,13 @@ function s.con6(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
 	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and ( Duel.IsExistingMatchingCard(Card.IsSetCard,tp,LOCATION_GRAVE,0,1,nil,CARD_CYCLONE)
+		and ( Duel.IsExistingMatchingCard(Card.IsSetCard,tp,LOCATION_GRAVE,0,1,nil,5318639)
 			or not Duel.IsExistingMatchingCard(Card.IsSpellTrap,tp,0,LOCATION_ONFIELD,1,nil) )
 end
 
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and ((rc:IsQuickPlaySpell() and rc:IsSetCard(0x6d71)) or rc:IsCode(CARD_CYCLONE))
+	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and ((rc:IsQuickPlaySpell() and rc:IsSetCard(0x6d71)) or rc:IsCode(5318639))
 end
 function s.spfilter(c,e,tp)
 	return c:IsSetCard(0x6d71)

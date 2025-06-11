@@ -46,14 +46,14 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.thfilter(c)
-	return (c:IsSetCard(0x6d71) and not c:IsCode(id)) or c:IsCode(CARD_CYCLONE) and c:IsAbleToHand()
+	return (c:IsSetCard(0x6d71) and not c:IsCode(id)) or c:IsCode(5318639) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
 function s.rescon(sg,e,tp,mg)
-	return sg:FilterCount(Card.IsCode,nil,CARD_CYCLONE)<=1
+	return sg:FilterCount(Card.IsCode,nil,5318639)<=1
 		and sg:FilterCount(Card.IsSetCard,nil,0x6d71)<=1
 end
 function s.splimit(e,c,tp,sumtp,sumpos)

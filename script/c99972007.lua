@@ -30,7 +30,7 @@ function s.effcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return b1 or b2 end
 end
 function s.tar1fil(c)
-	return c:IsCode(CARD_CYCLONE) and c:IsAbleToHand()
+	return c:IsCode(5318639) and c:IsAbleToHand()
 end
 function s.efftg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
@@ -51,7 +51,7 @@ function s.efftg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		if not cost_skip then Duel.RegisterFlagEffect(tp,id,RESET_PHASE|PHASE_END,0,1) end
 		Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
 	elseif op==2 then
-		e:SetCategory(CATEGORY_SEARCH_CARD)
+		e:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
 		if not cost_skip then Duel.RegisterFlagEffect(tp,id+1,RESET_PHASE|PHASE_END,0,1) end
 		Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 	end
@@ -87,7 +87,7 @@ end
 function s.con(e,tp,eg,ep,ev,re,r,rp)
 	if not re then return false end
 	local c=e:GetHandler()
-	return c:IsReason(REASON_EFFECT) and re:GetHandler():IsCode(CARD_CYCLONE)
+	return c:IsReason(REASON_EFFECT) and re:GetHandler():IsCode(5318639)
 end
 function s.tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsSSetable() end
