@@ -28,7 +28,6 @@ function s.initial_effect(c)
 	e3:SetOperation(s.op)
 	c:RegisterEffect(e3)
 	
-	
 	local e8=Effect.CreateEffect(c)
 	e8:SetDescription(aux.Stringid(id,2))
 	e8:SetCategory(CATEGORY_SPECIAL_SUMMON)
