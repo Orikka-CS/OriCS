@@ -92,10 +92,6 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,tp,1)
 end
 
-function s.op2filter(c)
-	return c:IsAbleToGrave()
-end
-
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
 	if #g>0 then
@@ -103,9 +99,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		if Duel.SendtoHand(sg,nil,REASON_EFFECT)>0 then
 			Duel.ConfirmCards(1-tp,sg)
 			Duel.BreakEffect()
-			local dg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,nil)
-			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
-			Duel.SendtoGrave(dsg,REASON_EFFECT+REASON_DISCARD)
+			local dg=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,LOCATION_HAND,0,nil)
+			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+			Duel.SendtoGrave(dsg,REASON_EFFECT)
 		end
 	end
 end
