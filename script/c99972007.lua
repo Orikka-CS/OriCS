@@ -29,6 +29,9 @@ function s.effcost(e,tp,eg,ep,ev,re,r,rp,chk)
 		and Duel.IsExistingMatchingCard(s.tar1fil,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil)
 	if chk==0 then return b1 or b2 end
 end
+function s.tar1fil(c)
+	return c:IsCode(CARD_CYCLONE) and c:IsAbleToHand()
+end
 function s.efftg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
 	local cost_skip=e:GetLabel()~=-100
@@ -53,11 +56,8 @@ function s.efftg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 	end
 end
-function s.tar1fil(c)
-	return c:IsCode(CARD_CYCLONE) and c:IsAbleToHand()
-end
 function s.op1filter(c)
-	return c:IsSetCard(0x6d71) or c:IsCode(CARD_CYCLONE)
+	return c:IsSetCard(0x6d71) or c:IsType(TYPE_QUICKPLAY)
 end
 function s.effop(e,tp,eg,ep,ev,re,r,rp)
 	local op=e:GetLabel()
