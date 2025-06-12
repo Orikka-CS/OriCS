@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_REMOVE+CATEGORY_TOHAND)
+	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -59,32 +59,31 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect2
-function s.tg2ofilter(c)
-	return c:IsSetCard(0xf2e) and c:IsMonster() and c:IsAbleToHand()
-end
-
-function s.tg2filter(c,e,tp)
-	return c:IsCanBeEffectTarget(e) and c:IsSetCard(0xf2e) and c:IsAbleToHand()
+function s.tg2filter(c,e)
+	return c:IsSetCard(0xf2e) and c:IsCanBeEffectTarget(e) and c:IsAbleToDeck() and c:IsAbleToHand()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e,tp) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e,tp)
-	local og=Duel.GetMatchingGroup(s.tg2ofilter,tp,LOCATION_DECK,0,nil,e,tp)
-	if chk==0 then return #g>0 and #og>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND):GetFirst()
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,LOCATION_GRAVE)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,og,1,0,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
+end
+
+function s.op2filter(c,tp)
+	return c:GetOwner()==tp and c:IsAbleToGrave()
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e):GetFirst()
-	local og=Duel.GetMatchingGroup(s.tg2ofilter,tp,LOCATION_DECK,0,nil)
-	if #og==0 then return end
-	local osg=aux.SelectUnselectGroup(og,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND):GetFirst()
-	if Duel.SendtoHand(osg,1-tp,REASON_EFFECT)>0 and tg then
-		 Duel.BreakEffect()
-		Duel.SendtoHand(tg,tp,REASON_EFFECT)
+	if not tg then return end
+	local dg=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_HAND,nil,tp)
+	if #dg>0 and tg:IsAbleToHand() and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then   
+		Duel.SendtoHand(tg,nil,REASON_EFFECT)
+	else
+		Duel.SendtoDeck(tg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
 end

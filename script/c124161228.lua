@@ -42,23 +42,27 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 
+function s.tg1filter(c)
+	return c:IsSetCard(0xf2e) and c:IsMonster()
+end
+
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(Card.IsSetCard,tp,LOCATION_HAND,0,nil,0xf2e)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
 	local og=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
 	if chk==0 then return #g>0 and #og>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_HAND)
 end
 
-function s.op1filter(c)
-	return not c:IsSetCard(0xf2e)
+function s.op1filter(c,tp)
+	return c:GetOwner()==1-tp 
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsSetCard,tp,LOCATION_HAND,0,nil,0xf2e)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
-		local og=Duel.GetMatchingGroup(s.op1filter,tp,0,LOCATION_HAND,nil)
+		local og=Duel.GetMatchingGroup(s.op1filter,tp,0,LOCATION_HAND,nil,tp)
 		if #og==0 then return end
 		Duel.BreakEffect()
 		local osg=aux.SelectUnselectGroup(og,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_ATOHAND)

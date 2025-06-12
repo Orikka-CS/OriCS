@@ -35,7 +35,7 @@ function s.con1filter(c)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)>0 and rp==1-tp and Duel.IsChainNegatable(ev)
+	return Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)>0 and rp==1-tp  and re:IsActiveType(TYPE_MONSTER) and Duel.IsChainNegatable(ev)
 end
 
 function s.tg1filter(c,tp)
