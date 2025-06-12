@@ -25,7 +25,7 @@ end
 s.listed_series={SET_GHOTI}
 function s.cfil1(c,tp)
 	return c:IsSetCard(SET_GHOTI) and (c:IsFaceup() or not c:IsOnField())
-		and (Duel.IsPlayerCanDraw(tp,2) or c:IsLocation(LOCATION_GRAVE))
+		and (Duel.IsPlayeryCanDraw(tp,2) or c:IsLocation(LOCATION_GRAVE))
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -37,7 +37,7 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectMatchingCard(tp,s.cfil1,tp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE,0,1,1,c,tp)
 	local tc=g:GetFirst()
-	if tc:IsLocation(LOCATION_HAND+LOCATION_GRAVE) then
+	if tc:IsLocation(LOCATION_HAND+LOCATION_ONFIELD) then
 		e:SetLabel(2)
 	else
 		e:SetLabel(1)
