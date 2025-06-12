@@ -25,7 +25,7 @@ end
 s.listed_series={SET_GHOTI}
 function s.cfil1(c,tp)
 	return c:IsSetCard(SET_GHOTI) and (c:IsFaceup() or not c:IsOnField())
-		and (Duel.IsPlayeryCanDraw(tp,2) or c:IsLocation(LOCATION_GRAVE))
+		and (Duel.IsPlayerCanDraw(tp,2) or c:IsLocation(LOCATION_GRAVE))
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
