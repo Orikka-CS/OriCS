@@ -81,7 +81,7 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.tfil41(c)
-	return c:IsSetCard(0x2e5) and c:IsType(TYPE_MONSTER) and c:IsCanOverlay()
+	return c:IsSetCard(0x2e5) and c:IsType(TYPE_MONSTER) and c:IsCanOverlay() and cm.tval41(c)~=0
 end
 function cm.tfil42(c,e,tp,m,exg)
 	if c:GetType()&0x81~=0x81 or not c:IsSetCard(0x2e5) or not c:IsCanBeSpecialSummoned(e,0,tp,false,true) then
@@ -98,6 +98,9 @@ function cm.tfil42(c,e,tp,m,exg)
 	local res=mg:CheckSubGroup(cm.tfun42,1,c:GetLevel(),tp,c,c:GetLevel())
 	Auxiliary.GCheckAdditional=nil
 	return res
+end
+function cm.tfil43(c)
+	return c:IsCanOverlay() and cm.tval41(c)~=0
 end
 function cm.tfun41(c,lv)
 	return
@@ -132,7 +135,7 @@ function cm.tval42(c,rc)
 end
 function cm.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		local mg=Duel.GetRitualMaterial(tp):Filter(Card.IsCanOverlay,nil)
+		local mg=Duel.GetRitualMaterial(tp):Filter(cm.tfil43,nil)
 		local exg=Duel.GMGroup(cm.tfil41,tp,"G",0,nil)
 		return Duel.IEMCard(cm.tfil42,tp,"H",0,1,nil,e,tp,mg,exg)
 	end
@@ -143,7 +146,7 @@ function cm.op4(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) then
 		return
 	end
-	local mg=Duel.GetRitualMaterial(tp):Filter(Card.IsCanOverlay,nil)
+	local mg=Duel.GetRitualMaterial(tp):Filter(cm.tfil43,nil)
 	local exg=Duel.GMGroup(aux.NecroValleyFilter(cm.tfil41),tp,"G",0,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local tg=Duel.SMCard(tp,cm.tfil42,tp,"H",0,1,1,nil,e,tp,mg,exg)

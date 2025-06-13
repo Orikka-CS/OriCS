@@ -57,7 +57,10 @@ function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 		c:RegisterEffect(e1)
 	end
 end
-function cm.tfil3(c,e,tp,m)
+function cm.tfil31(c)
+	return c:IsCanOverlay() and cm.tval31(c)~=0
+end
+function cm.tfil32(c,e,tp,m)
 	if c:GetType()&0x81~=0x81 or not c:IsSetCard(0x2e5) or not c:IsCanBeSpecialSummoned(e,0,tp,false,true) then
 		return false
 	end
@@ -105,8 +108,8 @@ function cm.tval32(c,rc)
 end
 function cm.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		local mg=Duel.GetRitualMaterial(tp):Filter(Card.IsCanOverlay,nil)
-		return Duel.IEMCard(cm.tfil3,tp,"HG",0,1,nil,e,tp,mg)
+		local mg=Duel.GetRitualMaterial(tp):Filter(cm.tfil31,nil)
+		return Duel.IEMCard(cm.tfil32,tp,"HG",0,1,nil,e,tp,mg)
 	end
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,"D")
 end
@@ -115,9 +118,9 @@ function cm.op3(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) then
 		return
 	end
-	local mg=Duel.GetRitualMaterial(tp):Filter(Card.IsCanOverlay,nil)
+	local mg=Duel.GetRitualMaterial(tp):Filter(cm.tfil31,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local tg=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil3),tp,"HG",0,1,1,nil,e,tp,mg)
+	local tg=Duel.SMCard(tp,aux.NecroValleyFilter(cm.tfil32),tp,"HG",0,1,1,nil,e,tp,mg)
 	local tc=tg:GetFirst()
 	if tc then
 		mg=mg:Filter(Card.IsCanBeRitualMaterial,tc,tc)

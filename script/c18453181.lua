@@ -14,7 +14,10 @@ function cm.initial_effect(c)
 	WriteEff(e2,2,"NCTO")
 	c:RegisterEffect(e2)
 end
-function cm.tfil1(c,e,tp,m)
+function cm.tfil11(c)
+	return c:IsCanOverlay() and cm.tval11(c)~=0
+end
+function cm.tfil12(c,e,tp,m)
 	if c:GetType()&0x81~=0x81 or not c:IsSetCard(0x2e5) or not c:IsCanBeSpecialSummoned(e,0,tp,false,true) then
 		return false
 	end
@@ -62,16 +65,16 @@ function cm.tval12(c,rc)
 end
 function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		local mg=Duel.GetRitualMaterial(tp):Filter(Card.IsCanOverlay,nil)
-		return Duel.IEMCard(cm.tfil1,tp,"D",0,1,nil,e,tp,mg)
+		local mg=Duel.GetRitualMaterial(tp):Filter(cm.tfil11,nil)
+		return Duel.IEMCard(cm.tfil12,tp,"D",0,1,nil,e,tp,mg)
 	end
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,"D")
 end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local mg=Duel.GetRitualMaterial(tp):Filter(Card.IsCanOverlay,nil)
+s		local mg=Duel.GetRitualMaterial(tp):Filter(cm.tfil11,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local tg=Duel.SMCard(tp,cm.tfil1,tp,"D",0,1,1,nil,e,tp,mg)
+	local tg=Duel.SMCard(tp,cm.tfil12,tp,"D",0,1,1,nil,e,tp,mg)
 	local tc=tg:GetFirst()
 	if tc then
 		mg=mg:Filter(Card.IsCanBeRitualMaterial,tc,tc)
