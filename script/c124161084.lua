@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	Link.AddProcedure(c,nil,2,3,s.linkfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_REMOVE+CATEGORY_ATKCHANGE)
+	e1:SetCategory(CATEGORY_ATKCHANGE)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_ATTACK_ANNOUNCE)
 	e1:SetRange(LOCATION_MZONE)
@@ -34,9 +34,7 @@ end
 
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tc=c:GetBattleTarget()
-	return c and tc
+	return e:GetHandler():IsRelateToBattle()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -44,10 +42,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local tc=c:GetBattleTarget()
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-	if chk==0 then return tc:IsAbleToRemove() or ug~=dg end
-	if tc:IsAbleToRemove() then
-		Duel.SetOperationInfo(0,CATEGORY_REMOVE,tc,1,0,LOCATION_MZONE)
-	end
+	if chk==0 then return tc:IsFaceup() or ug~=dg end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -55,18 +50,17 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tc=c:GetBattleTarget()
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-	if not c:IsFaceup() or not c:IsRelateToEffect(e) then return end	   
+	if not c:IsRelateToEffect(e) then return end
 	if ug~=dg then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_EXTRA_ATTACK_MONSTER)
+		e1:SetCode(EFFECT_EXTRA_ATTACK)
 		e1:SetValue(math.abs(ug-dg)-1)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		c:RegisterEffect(e1)
 	end
-	if tc~=nil then
-		local atk=tc:GetBaseAttack()
-		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
+	if tc:IsFaceup() then
+		local atk=tc:GetAttack()
 		c:UpdateAttack(atk,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 	end
 end
