@@ -78,7 +78,8 @@ function s.op4(e,tp,eg,ep,ev,re,r,rp)
 		return
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-	local tc=Duel.SelectMatchingCard(tp,s.tfil4,tp,LOCATION_DECK|LOCATION_GRAVE,0,1,1,nil,e,tp,c):GetFirst()
+	local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil4),tp,LOCATION_DECK|LOCATION_GRAVE,0,1,1,
+		nil,e,tp,c):GetFirst()
 	if tc and not tc:IsImmuneToEffect(e) then
 		Duel.Overlay(c,tc,true)
 	end
