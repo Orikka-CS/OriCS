@@ -53,7 +53,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsControler(tp) and c:IsPreviousLocation(LOCATION_HAND) and c:IsSetCard(0xf2e) and not c:IsType(TYPE_FIELD)
+	return c:IsControler(tp) and c:IsPreviousLocation(LOCATION_HAND) and c:IsSetCard(0xf2e)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
@@ -61,7 +61,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg2filter(c)
-	return c:IsAbleToHand()
+	return c:IsSetCard(0xf2e) and not c:IsType(TYPE_FIELD) and c:IsAbleToHand()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -77,11 +77,16 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
 		local fg=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
-		if #fg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			Duel.BreakEffect()
-			local fsg=aux.SelectUnselectGroup(fg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY):GetFirst()
-			Duel.Destroy(fsg,REASON_EFFECT)
+		local hg=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
+		if #fg+#hg==0 then return end
+		local dsg
+		if #fg==0 or (#hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0))) then
+			dsg=hg:RandomSelect(tp,1):GetFirst()
+		else
+			dsg=aux.SelectUnselectGroup(fg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY):GetFirst()
 		end
+		Duel.BreakEffect()
+		Duel.Destroy(dsg,REASON_EFFECT)
 	end 
 end
 
