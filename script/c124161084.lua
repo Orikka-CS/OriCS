@@ -34,33 +34,32 @@ end
 
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsRelateToBattle()
+	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
+	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
+	return e:GetHandler():IsRelateToBattle() and ug~=dg
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	local tc=c:GetBattleTarget()
-	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-	if chk==0 then return tc:IsFaceup() or ug~=dg end
+	if chk==0 then return true end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tc=c:GetBattleTarget()
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
 	if not c:IsRelateToEffect(e) then return end
 	if ug~=dg then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_EXTRA_ATTACK)
-		e1:SetValue(math.abs(ug-dg)-1)
+		e1:SetCode(EFFECT_EXTRA_ATTACK_MONSTER)
+		e1:SetValue(math.abs(ug-dg))
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		c:RegisterEffect(e1)
 	end
-	if tc:IsFaceup() then
-		local atk=tc:GetAttack()
+	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
+	if #g==0 then return end
+	local atk=g:GetMaxGroup(Card.GetAttack):GetFirst():GetAttack()
+	if atk>0 then
 		c:UpdateAttack(atk,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 	end
 end
