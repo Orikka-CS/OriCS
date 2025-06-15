@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_HANDES)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_SUMMON_SUCCESS)
@@ -36,7 +36,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,1-tp,LOCATION_HAND)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),1,tp,LOCATION_MZONE)
 end
 
 function s.op1filter(c,tp)
@@ -44,16 +44,23 @@ function s.op1filter(c,tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
-		local dg=Duel.GetMatchingGroup(s.op1filter,tp,0,LOCATION_HAND,nil,tp)
-		if Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) and #dg>0 then
-			Duel.BreakEffect()
-			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
-			Duel.SendtoGrave(dsg,REASON_EFFECT)
+		if not c:IsRelateToEffect(e) then return end
+		local b1=true
+		local b2=c:IsAbleToHand()
+		local b3=c:IsAbleToHand()
+		local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)},{b3,aux.Stringid(id,2)})
+		if b==1 then return end
+		Duel.BreakEffect()
+		if b==2 then
+			Duel.SendtoHand(c,tp,REASON_EFFECT)
+		else
+			Duel.SendtoHand(c,1-tp,REASON_EFFECT)
 		end
 	end
 end
@@ -79,7 +86,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 		local g=Duel.GetMatchingGroup(Card.IsNegatable,tp,0,LOCATION_ONFIELD,nil)
-		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and e:GetLabel()==1 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and e:GetLabel()==1 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
 			Duel.BreakEffect()
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_NEGATE):GetFirst()
 			sg:NegateEffects(c,nil,true)

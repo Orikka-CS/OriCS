@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	Fusion.AddProcMix(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf2e),aux.FilterBoolFunctionEx(Card.IsLocation,LOCATION_HAND))
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DRAW)
+	e1:SetCategory(CATEGORY_DRAW+CATEGORY_TOHAND+CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
@@ -27,23 +27,26 @@ end
 
 --effect 1
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0 and Duel.IsPlayerCanDraw(tp,1) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CODE)
-	local ac=Duel.AnnounceCard(tp)
-	e:SetLabel(ac)
-	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_HAND)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_HAND)
+end
+
+function s.op1filter(c)
+	return c:IsSetCard(0xf2e) and c:IsMonster()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsCode,tp,0,LOCATION_HAND,nil,e:GetLabel())
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
-		if Duel.SendtoGrave(sg,REASON_EFFECT)>0 and Duel.IsPlayerCanDraw(1,tp) then
-			Duel.Draw(tp,1,REASON_EFFECT)
-		end
-	end
+	if not Duel.Draw(tp,1,REASON_EFFECT) then return end
+	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil)
+	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.BreakEffect()
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
+		local dg=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,0,LOCATION_HAND,nil)
+		local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
+		Duel.SendtoGrave(dsg,REASON_EFFECT)
+	end 
 end
 
 --effect 2

@@ -28,16 +28,15 @@ end
 
 --effect 1
 function s.cst1filter(c,tp)
-	return c:IsSetCard(0xf2e) and not c:IsPublic() and c:GetOwner()==tp
+	return c:IsSetCard(0xf2e) and c:IsAbleToGraveAsCost() and c:GetOwner()==tp
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,c,tp)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.ShuffleHand(tp)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+	Duel.SendtoGrave(sg,REASON_COST)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

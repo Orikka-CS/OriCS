@@ -48,18 +48,18 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_HANDES,nil,1,0,0)
 end
 
-function s.op1filter(c,tp)
-	return c:GetOwner()==1-tp and c:IsAbleToGrave()
+function s.op1filter(c)
+	return c:IsMonster() and c:IsAbleToHand()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local dg=Duel.GetMatchingGroup(s.op1filter,tp,0,LOCATION_HAND,nil,tp)
-		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and e:GetLabel()==1 and Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) and #dg>0 then
+		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_GRAVE,0,c)
+		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and e:GetLabel()==1 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
-			Duel.SendtoGrave(dsg,REASON_EFFECT)
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+			Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		end
 	end
 end

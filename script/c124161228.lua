@@ -42,32 +42,26 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
 
-function s.tg1filter(c)
-	return c:IsSetCard(0xf2e) and c:IsMonster()
-end
-
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
-	local og=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
-	if chk==0 then return #g>0 and #og>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_HAND)
-end
-
-function s.op1filter(c,tp)
-	return c:GetOwner()==1-tp 
+	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0 and Duel.IsPlayerCanDraw(tp,1) end
+	s.announce_filter={TYPE_EXTRA,OPCODE_ISTYPE,TYPE_MONSTER,OPCODE_ISTYPE,OPCODE_AND,OPCODE_NOT}
+	local ac=Duel.AnnounceCard(tp,table.unpack(s.announce_filter))
+	e:SetLabel(ac)
+	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_HAND)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
+	local g=Duel.GetMatchingGroup(Card.IsCode,tp,0,LOCATION_HAND,nil,e:GetLabel())
 	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
-		local og=Duel.GetMatchingGroup(s.op1filter,tp,0,LOCATION_HAND,nil,tp)
-		if #og==0 then return end
-		Duel.BreakEffect()
-		local osg=aux.SelectUnselectGroup(og,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_ATOHAND)
-		Duel.SendtoHand(osg,tp,REASON_EFFECT)
-	end 
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE):GetFirst()
+		if Duel.SendtoGrave(sg,REASON_EFFECT)>0 and sg:IsLocation(LOCATION_GRAVE) then
+			Duel.BreakEffect()
+			local sp=sg:GetControler()
+			if Duel.IsPlayerCanDraw(sp) then Duel.Draw(sp,1,REASON_EFFECT) end
+		end
+	end
 end
 
 --effect 2

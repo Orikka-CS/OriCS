@@ -33,16 +33,8 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return rp==1-tp and Duel.IsChainNegatable(ev)
 end
 
-function s.tg1ffilter(c)
-	return c:IsSetCard(0xf2e) and c:IsType(TYPE_FUSION) and c:IsFaceup()
-end
-
-function s.tg1filter(c,tp)
-	return c:IsSetCard(0xf2e) or Duel.GetMatchingGroupCount(s.tg1ffilter,tp,0,LOCATION_MZONE,nil)>0
-end
-
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)>0 and Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0 end
+	if chk==0 then return (Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)>0  or Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0) and Duel.IsPlayerCanDraw(tp) and Duel.IsPlayerCanDraw(1-tp) end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -52,16 +44,15 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.op1op(e,tp,eg,ep,ev,re,r,rp)
-	local ig=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil,tp)
-	local og=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_HAND,nil,1-tp)
+	local ig=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
+	local og=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
 	if #ig>0 or #og>0 then
-		Duel.ConfirmCards(1-tp,Duel.GetFieldGroup(tp,LOCATION_HAND,0))
-		Duel.ConfirmCards(tp,Duel.GetFieldGroup(tp,0,LOCATION_HAND))
-		local isg=aux.SelectUnselectGroup(ig,e,tp,0,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
-		local osg=aux.SelectUnselectGroup(og,e,tp,0,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-		Duel.SendtoGrave(isg+osg,REASON_EFFECT)
-		Duel.ShuffleHand(1-tp)
-		Duel.ShuffleHand(tp)
+		Duel.SendtoGrave(ig+og,REASON_EFFECT+REASON_DISCARD)
+		ig:Merge(og)
+		og=ig:Filter(Card.IsControler,nil,1-tp)
+		ig=ig-og
+		Duel.Draw(tp,#ig,REASON_EFFECT)
+		Duel.Draw(1-tp,#og,REASON_EFFECT)
 	end
 end
 

@@ -47,13 +47,19 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,1-tp,2)
 end
 
+function s.op1filter(c,tp)
+	return c:GetOwner()==tp
+end
+
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,0,LOCATION_HAND,nil)
 	if #g>1 then
-		sg=g:RandomSelect(tp,2)
+		local sg=g:RandomSelect(tp,2)
 		Duel.ConfirmCards(tp,sg)
-		local ssg=aux.SelectUnselectGroup(sg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-		Duel.SendtoGrave(ssg,REASON_EFFECT)
+		if sg:FilterCount(s.op1filter,nil,tp)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then 
+			local ssg=aux.SelectUnselectGroup(sg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+			Duel.SendtoGrave(ssg,REASON_EFFECT)		  
+		end
 		Duel.ShuffleHand(1-tp)
 	end
 end

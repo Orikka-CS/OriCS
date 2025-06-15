@@ -77,16 +77,11 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
 		local fg=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
-		local hg=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
-		if #fg+#hg==0 then return end
-		local dsg
-		if #fg==0 or (#hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0))) then
-			dsg=hg:RandomSelect(tp,1):GetFirst()
-		else
-			dsg=aux.SelectUnselectGroup(fg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY):GetFirst()
+		if #fg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local fsg=aux.SelectUnselectGroup(fg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
+			Duel.Destroy(fsg,REASON_EFFECT)
 		end
-		Duel.BreakEffect()
-		Duel.Destroy(dsg,REASON_EFFECT)
 	end 
 end
 
