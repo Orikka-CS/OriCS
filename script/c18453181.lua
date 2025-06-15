@@ -72,7 +72,7 @@ function cm.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-s		local mg=Duel.GetRitualMaterial(tp):Filter(cm.tfil11,nil)
+	local mg=Duel.GetRitualMaterial(tp):Filter(cm.tfil11,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local tg=Duel.SMCard(tp,cm.tfil12,tp,"D",0,1,1,nil,e,tp,mg)
 	local tc=tg:GetFirst()
