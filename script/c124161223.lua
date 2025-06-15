@@ -43,14 +43,18 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ChangeChainOperation(ev,s.op1op)
 end
 
+function s.op1filter(c,tp)
+	return c:IsLocation(LOCATION_GRAVE) and c:IsControler(tp)
+end
+
 function s.op1op(e,tp,eg,ep,ev,re,r,rp)
 	local ig=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
 	local og=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
 	if #ig>0 or #og>0 then
-		Duel.SendtoGrave(ig+og,REASON_EFFECT+REASON_DISCARD)
+		Duel.SendtoGrave(ig+og,REASON_EFFECT)
 		ig:Merge(og)
-		og=ig:Filter(Card.IsControler,nil,1-tp)
-		ig=ig-og
+		og=ig:Filter(s.op1filter,nil,1-tp)
+		ig=ig:Filter(s.op1filter,nil,tp)
 		Duel.Draw(tp,#ig,REASON_EFFECT)
 		Duel.Draw(1-tp,#og,REASON_EFFECT)
 	end

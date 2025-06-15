@@ -8,7 +8,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND)
+	e1:SetCategory(CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_SZONE)
@@ -37,30 +37,25 @@ end
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_GRAVE,0,nil)
-	if chk==0 then return #g>1 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.TRUE,1,tp,HINTMSG_TODECK)
+	if chk==0 then return #g>2 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,3,3,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0 and Duel.IsPlayerCanDraw(tp,1) end
-	s.announce_filter={TYPE_EXTRA,OPCODE_ISTYPE,TYPE_MONSTER,OPCODE_ISTYPE,OPCODE_AND,OPCODE_NOT}
+	s.announce_filter={TYPE_MONSTER,OPCODE_ISTYPE,TYPE_EXTRA,OPCODE_ISTYPE,OPCODE_NOT,OPCODE_AND}
 	local ac=Duel.AnnounceCard(tp,table.unpack(s.announce_filter))
 	e:SetLabel(ac)
 	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_HAND)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsCode,tp,0,LOCATION_HAND,nil,e:GetLabel())
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE):GetFirst()
-		if Duel.SendtoGrave(sg,REASON_EFFECT)>0 and sg:IsLocation(LOCATION_GRAVE) then
-			Duel.BreakEffect()
-			local sp=sg:GetControler()
-			if Duel.IsPlayerCanDraw(sp) then Duel.Draw(sp,1,REASON_EFFECT) end
-		end
+		Duel.SendtoGrave(sg,REASON_EFFECT)
 	end
 end
 

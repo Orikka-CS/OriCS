@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_HANDES)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_REMOVE)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_TO_HAND)
@@ -45,21 +45,23 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 		e:SetLabel(0)
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,LOCATION_HAND) 
-	Duel.SetPossibleOperationInfo(0,CATEGORY_HANDES,nil,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_REMOVE,nil,1,0,LOCATION_GRAVE)
 end
 
 function s.op1filter(c)
-	return c:IsMonster() and c:IsAbleToHand()
+	return c:IsFaceup() and c:IsSetCard(0xf2e)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_GRAVE,0,c)
-		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and e:GetLabel()==1 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_ONFIELD,0,nil)
+		local rg=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
+		if e:GetLabel()==1 and #g>0 and #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-			Duel.SendtoHand(sg,nil,REASON_EFFECT)
+			local rsg=aux.SelectUnselectGroup(rg,e,tp,1,#g,aux.TRUE,1,tp,HINTMSG_REMOVE)
+			Duel.Remove(rsg,POS_FACEUP,REASON_EFFECT)
 		end
 	end
 end
