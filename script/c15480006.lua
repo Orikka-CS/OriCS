@@ -10,6 +10,7 @@ function s.initial_effect(c)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
 end
+s.listed_names={15480009}
 function s.tfil11(c)
 	return c:IsSetCard(0xffe) and c:IsAbleToHand() and not c:IsCode(id)
 end
@@ -24,7 +25,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local bc=Duel.GetBattleMonster(tp)
 	local b3_event,_,event_p,event_v,event_reff=Duel.CheckEvent(EVENT_CHAINING,true)
 	local tg=b3_event and Duel.GetChainInfo(event_v,CHAININFO_TARGET_CARDS) or nil
-	local b1=Duel.IsExistingMatchingCard(s.tfil11,tp,LOCATION_DECK,0,1,nil)
+	local b1=Duel.IsExistingMatchingCard(s.tfil11,tp,LOCATION_DECK+LOCATION_GRAVE,LOCATION_GRAVE,1,nil)
 	local b2=Duel.CheckEvent(EVENT_ATTACK_ANNOUNCE) and bc and bc:IsCode(15480009) and bc:IsFaceup()
 		and Duel.IsExistingTarget(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c)
 	local b3=b3_event and event_p==1-tp and event_reff:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and tg
@@ -41,7 +42,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		e:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 		e:SetProperty(0)
 		e:SetLabelObject(nil)
-		Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+		Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 	elseif op==2 then
 		e:SetCategory(CATEGORY_DESTROY)
 		e:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -65,7 +66,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local op,event_v=e:GetLabel()
 	if op==1 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g=Duel.SelectMatchingCard(tp,s.tfil11,tp,LOCATION_DECK,0,1,1,nil)
+		local g=Duel.SelectMatchingCard(tp,aux.NecroVallyFilter(s.tfil11),tp,LOCATION_DECK+LOCATION_GRAVE,
+			LOCATION_GRAVE,1,1,nil)
 		if #g>0 then
 			Duel.SendtoHand(g,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,g)

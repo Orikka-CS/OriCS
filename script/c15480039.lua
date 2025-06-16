@@ -24,7 +24,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetCode(EVENT_REMOVE)
+	e2:SetCode(EVENT_BE_MATERIAL)
 	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e3:SetCategory(CATEGORY_TODECK)
 	e3:SetCountLimit(1,{id,2})
@@ -83,7 +83,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsPreviousLocation(LOCATION_EXTRA)
+	return c:IsLocation(LOCATION_GRAVE) and (r&REASON_FUSION)==REASON_FUSION
 end
 function s.tfil3(c)
 	return c:IsType(TYPE_FUSION) and c:IsAbleToDeck()

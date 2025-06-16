@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetCode(EVENT_REMOVE)
+	e3:SetCode(EVENT_DESTROYED)
 	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e3:SetCategory(CATEGORY_TOHAND)
 	e3:SetCountLimit(1,id)
@@ -70,8 +70,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c:IsPreviousLocation(LOCATION_DECK)
+	return r&(REASON_BATTLE|REASON_EFFECT)>0
 end
 function s.tfil3(c)
 	return c:IsSetCard(0xffe) and c:IsAbleToHand()
