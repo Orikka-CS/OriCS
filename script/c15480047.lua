@@ -47,7 +47,7 @@ function s.pfil1(c,val,scard,sumtype,tp)
 		and c:IsType(TYPE_SYNCHRO,scard,sumtype,tp)
 end
 function s.tfil1(c,e,tp)
-	return c:IsAttribute(ATTRIBUTE_DARK) and c:IsRacec(RACE_DRAGON+RACE_FIEND)
+	return c:IsAttribute(ATTRIBUTE_DARK) and c:IsRace(RACE_DRAGON+RACE_FIEND)
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
