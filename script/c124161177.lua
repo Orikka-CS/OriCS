@@ -46,14 +46,27 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e3:SetCode(EVENT_CHAINING)
 	e3:SetRange(LOCATION_FZONE)
-	e3:SetTargetRange(0,1)
 	e3:SetCondition(s.con3)
-	e3:SetTarget(s.tg3)
+	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_PAY_LPCOST)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	if re and re:IsActiveType(TYPE_SPELL+TYPE_TRAP) then
+		re:GetHandler():RegisterFlagEffect(id,RESET_CHAIN,0,1)
+	end
 end
 
 --effect 1
@@ -105,8 +118,9 @@ function s.con3(e,tp,eg,ep,ev,re,r,rp)
 	return g>0
 end
 
-function s.tg3(e,c,sump,sumtype,sumpos,targetp)
-	local tp=e:GetHandlerPlayer()
-	local lp=math.min(Duel.GetLP(tp),Duel.GetLP(1-tp))
-	return c:GetAttack()+c:GetDefense()>=lp and c:IsLocation(LOCATION_GRAVE)
+function s.op3(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	if rc:HasFlagEffect(id) and re:GetOwnerPlayer()==tp then
+		Duel.SetChainLimit(function(e,ep,tp) return ep==tp end)
+	end
 end
