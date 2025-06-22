@@ -50,7 +50,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local fg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
 	if chk==0 then return #fg>0 end
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,fg,1,tp,0)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
