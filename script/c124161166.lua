@@ -74,7 +74,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetCode(EFFECT_SET_DEFENSE_FINAL)
 		sg2:RegisterEffect(e2)
 		if sg1:IsType(TYPE_XYZ) then
-			sg2:NegateEffects(e:GetHandler(),nil,true)
+			sg2:NegateEffects(e:GetHandler(),nil)
 		end
 	end
 end

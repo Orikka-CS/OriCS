@@ -56,7 +56,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if tg:IsNegatable() and tg then
-		tg:NegateEffects(c,nil,true)
+		tg:NegateEffects(c,nil)
 		if tg:GetAttack()>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.Damage(1-tp,tg:GetAttack(),REASON_EFFECT)
