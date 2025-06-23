@@ -11,7 +11,7 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetCondition(function(e) return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK) end)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -35,10 +35,6 @@ function s.linkfilter(g,lc,sumtype,tp)
 end
 
 --effect 1
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
-end
-
 function s.tg1filter(c,e)
 	return c:IsSetCard(0xf25) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
 end

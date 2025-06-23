@@ -33,7 +33,7 @@ end
 
 --effect 1
 function s.tg1filter(c,e,tp,diff)
-	return c:IsSetCard(0xf25) and c:IsMonster() and (not c:IsType(TYPE_LINK) or (c:IsType(TYPE_LINK) and c:GetLink()<=diff)) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP)
+	return c:IsSetCard(0xf25) and c:IsMonster() and (not c:IsType(TYPE_LINK) or (c:IsType(TYPE_LINK) and c:GetLink()<=diff)) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
