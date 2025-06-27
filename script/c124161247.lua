@@ -39,7 +39,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1filter(c,e,tp)
-	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)

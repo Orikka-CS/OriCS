@@ -78,7 +78,7 @@ end
 
 --effect 2
 function s.tg2filter(c,e,tp)
-	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

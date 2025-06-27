@@ -44,7 +44,7 @@ end
 
 --effect 1
 function s.val1filter(c,e,tp)
-	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.val1(e,c)

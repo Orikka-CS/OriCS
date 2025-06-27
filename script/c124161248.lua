@@ -43,7 +43,7 @@ function s.op1dfilter(c,tp)
 end
 
 function s.op1filter(c,e,tp)
-	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.op1con(sg,e,tp,mg)

@@ -25,7 +25,7 @@ end
 
 --effect 1
 function s.tg1filter(c,e,tp)
-	return c:IsSetCard(0xf30) and c:IsMonster() and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and ((c:IsCanBeSpecialSummoned(e,0,tp,true,false) and c:IsAbleToDeck()) or (not c:IsCanBeSpecialSummoned(e,0,tp,true,false) and Duel.IsPlayerCanDraw(tp,1)))
+	return c:IsSetCard(0xf30) and c:IsMonster() and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and ((c:IsCanBeSpecialSummoned(e,0,tp,true,false) and c:IsAbleToDeck()) or (not c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.IsPlayerCanDraw(tp,1)))
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -47,7 +47,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local tg=Duel.GetTargetCards(e):GetFirst()
 		if tg then
 			Duel.BreakEffect()
-			if tg:IsCanBeSpecialSummoned(e,0,tp,true,false) then
+			if tg:IsCanBeSpecialSummoned(e,0,tp,false,false) then
 				Duel.SendtoDeck(tg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 			else
 				Duel.Draw(tp,1,REASON_EFFECT)

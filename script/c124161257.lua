@@ -35,7 +35,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg1filter(c,e,tp)
-	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -56,7 +56,7 @@ end
 
 --effect 2
 function s.con2filter(c,e,tp)
-	return c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION) and c:IsControler(tp) and not c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+	return c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION) and c:IsControler(tp) and not c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
