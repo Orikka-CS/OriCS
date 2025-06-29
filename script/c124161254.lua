@@ -48,8 +48,13 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
-		if #xg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		local hg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,nil)
+		if #hg>0 and #xg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
+			Duel.ShuffleDeck(tp)
+			Duel.DisableShuffleCheck()
+			local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+			Duel.SendtoDeck(hsg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 			local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 			Duel.SendtoGrave(xsg,REASON_EFFECT)
 		end
