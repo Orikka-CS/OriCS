@@ -70,10 +70,15 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.tg2filter(c,e)
+	local te=c:GetActivateEffect()
+	return c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
+end
+
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
 	local c=e:GetHandler()
-	local g1=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_GRAVE,0,nil,e)
+	local g1=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e)
 	local g2=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return #g1>0 and #g2>0 end
 	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
