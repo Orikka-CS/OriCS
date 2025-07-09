@@ -110,11 +110,11 @@ end
 
 --effect 3
 function s.con3filter(c)
-	return c:IsSetCard(0xf2b)
+	return c:IsSetCard(0xf2b) and c:IsFaceup()
 end
 
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con3filter,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil)
+	local g=Duel.GetMatchingGroupCount(s.con3filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)
 	return g>0
 end
 

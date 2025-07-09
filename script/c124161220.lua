@@ -36,6 +36,10 @@ function s.op1filter(c)
 	return c:IsSetCard(0xf2e) and c:IsMonster()
 end
 
+function s.op1dfilter(c,tp)
+	return c:IsAbleToGrave() and c:GetOwner()==1-tp
+end
+
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.Draw(tp,1,REASON_EFFECT) then return end
 	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil)
@@ -43,7 +47,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.BreakEffect()
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
-		local dg=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,0,LOCATION_HAND,nil)
+		local dg=Duel.GetMatchingGroup(s.op1dfilter,tp,0,LOCATION_HAND,nil,tp)
+		if #dg==0 then return end
 		local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
 		Duel.SendtoGrave(dsg,REASON_EFFECT)
 	end 

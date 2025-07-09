@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_DAMAGE)
+	e2:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DAMAGE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
@@ -36,7 +36,7 @@ function s.con1()
 end
 
 function s.tg1filter(c,e)
-	return c:IsSetCard(0xf26) and c:IsMonster() and c:IsCanBeEffectTarget(e)
+	return c:IsSetCard(0xf26) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -78,7 +78,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local atk=x*400
 	local dg=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_MZONE,nil,atk)
 	if chk==0 then return #dg>0 and atk>0 end
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,dg,1,1-tp,LOCATION_MZONE)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,dg,1,1-tp,LOCATION_MZONE)
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,atk)
 end
 
@@ -91,8 +91,8 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local atk=x*400
 	local dg=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_MZONE,nil,atk)
 	if #dg>0 and atk>0 then
-		local sg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
-		if Duel.Destroy(sg,REASON_EFFECT)>0 then
+		local sg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+		if Duel.SendtoGrave(sg,REASON_EFFECT)>0 then
 			Duel.Damage(1-tp,atk,REASON_EFFECT)
 		end
 	end
