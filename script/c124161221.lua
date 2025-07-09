@@ -1,4 +1,4 @@
---란샤르드 리비도 브리스
+--란샤르드 리비도 브린
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

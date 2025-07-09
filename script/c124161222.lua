@@ -1,4 +1,4 @@
---란샤르드 그리프 오브
+--란샤르드 그리프 나스트로
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion
@@ -58,7 +58,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(tp,sg)
 		if sg:FilterCount(s.op1filter,nil,tp)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then 
 			local ssg=aux.SelectUnselectGroup(sg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-			Duel.SendtoGrave(ssg,REASON_EFFECT)		  
+			Duel.SendtoGrave(ssg,REASON_EFFECT)	   
 		end
 		Duel.ShuffleHand(1-tp)
 	end

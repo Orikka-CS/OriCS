@@ -1,4 +1,4 @@
---란샤르드 위즈 아딘
+--란샤르드 캄 미미르
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion
@@ -26,14 +26,15 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_HAND)
+function s.tg1filter(c)
+	return c:IsSetCard(0xf2e) and c:IsMonster()
 end
 
-function s.op1filter(c)
-	return c:IsSetCard(0xf2e) and c:IsMonster()
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
+	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp,2) end
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_HAND)
 end
 
 function s.op1dfilter(c,tp)
@@ -41,14 +42,15 @@ function s.op1dfilter(c,tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.Draw(tp,1,REASON_EFFECT) then return end
-	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil)
-	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.BreakEffect()
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
+	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
+		Duel.BreakEffect()
+		Duel.Draw(tp,2,REASON_EFFECT)
 		local dg=Duel.GetMatchingGroup(s.op1dfilter,tp,0,LOCATION_HAND,nil,tp)
 		if #dg==0 then return end
+		Duel.BreakEffect()
 		local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
 		Duel.SendtoGrave(dsg,REASON_EFFECT)
 	end 
