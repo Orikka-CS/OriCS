@@ -7,10 +7,10 @@ function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DRAW+CATEGORY_TOHAND+CATEGORY_TOGRAVE)
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
+	e1:SetCost(Cost.PayLP(600))
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -32,8 +32,8 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp,2) end
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
+	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp,1) end
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_HAND)
 end
 
@@ -47,12 +47,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
 		Duel.BreakEffect()
-		Duel.Draw(tp,2,REASON_EFFECT)
 		local dg=Duel.GetMatchingGroup(s.op1dfilter,tp,0,LOCATION_HAND,nil,tp)
-		if #dg==0 then return end
-		Duel.BreakEffect()
-		local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
-		Duel.SendtoGrave(dsg,REASON_EFFECT)
+		if Duel.Draw(tp,1,REASON_EFFECT)>0 and #dg>0 then
+			Duel.BreakEffect()
+			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
+			Duel.SendtoGrave(dsg,REASON_EFFECT)
+		end
 	end 
 end
 
