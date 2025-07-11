@@ -64,15 +64,15 @@ end
 
 --effect 2
 function s.cst2filter(c)
-	return c:IsSetCard(0xf2a) and c:IsAbleToRemoveAsCost()
+	return c:IsSetCard(0xf2a) and c:IsAbleToDeckOrExtraAsCost()
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_GRAVE,0,c)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-	Duel.Remove(sg,POS_FACEUP,REASON_COST)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
 
 function s.tg2filter(c)

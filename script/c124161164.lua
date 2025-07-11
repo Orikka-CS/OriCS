@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(s.cst2)
+	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -55,16 +55,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.cst2filter(c)
-	return c:IsSetCard(0xf2a) and c:IsAbleToDeckAsCost()
+function s.con2filter(c)
+	return c:IsSetCard(0xf2a)
 end
 
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_GRAVE,0,nil)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
-	Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_COST)
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_GRAVE,0,nil)>0
 end
 
 function s.tg2filter(c,e)
@@ -72,8 +68,8 @@ function s.tg2filter(c,e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chck:IsControler(tp) and s.tg2filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil,e)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
 	Duel.SetTargetCard(sg)
