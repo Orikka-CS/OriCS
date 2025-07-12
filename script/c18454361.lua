@@ -1,7 +1,7 @@
 --십이희 해머카이나
 local s,id=GetID()
 function s.initial_effect(c)
-	Xyz.AddProcedure(c,nil,3,3,s.pfil1,aux.Stringid(id,0),99,s.pop1)
+	Xyz.AddProcedure(c,nil,3,3,s.pfil1,aux.Stringid(id,0),Xyz.InfiniteMats,s.pop1)
 	c:EnableReviveLimit()
 	local e1=MakeEff(c,"S","M")
 	e1:SetCode(EFFECT_UPDATE_ATTACK)
