@@ -28,6 +28,15 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--effecr 3
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_OVERLAY_REMOVE_REPLACE)
+	e3:SetCountLimit(1,{id,2})
+	e3:SetRange(LOCATION_SZONE)
+	e3:SetCondition(s.con3)
+	e3:SetOperation(s.op3)
+	c:RegisterEffect(e3)
 end
 
 --effect 1
@@ -104,4 +113,21 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tg then
 		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP) 
 	end
+end
+
+--effect 3
+function s.con3filter(c)
+	return c:IsSetCard(0xf2c) and c:IsAbleToRemoveAsCost()
+end
+
+function s.con3(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	local g=Duel.GetMatchingGroup(s.con3filter,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil)
+	return #g>0 and (r&REASON_COST)~=0 and re:IsActivated() and re:IsActiveType(TYPE_XYZ) and rc:GetOverlayCount()==0 and ep==e:GetOwnerPlayer() and ev>=1 and rc:GetOverlayCount()>=ev-1
+end
+
+function s.op3(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.con3filter,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end

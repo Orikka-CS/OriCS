@@ -30,12 +30,11 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
-	e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e3:SetCode(EVENT_BE_MATERIAL)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_CANNOT_TO_HAND)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetCondition(s.con3)
-	e3:SetOperation(s.opc3)
+	e3:SetTargetRange(0,LOCATION_DECK)
 	c:RegisterEffect(e3)
 end
 
@@ -81,29 +80,10 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 3
-function s.con3filter(c,tp)
-	return c:IsCode(124161138) and c:IsControler(tp)
+function s.con3filter(c)
+	return c:IsFaceup() and c:IsSetCard(0xf29) and c:IsType(TYPE_SYNCHRO)
 end
 
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	return r==REASON_SYNCHRO and eg:IsExists(s.con3filter,1,nil,tp)
-end
-function s.opc3(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local rc=eg:GetFirst():GetReasonCard()
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-	e1:SetOperation(s.sumop)
-	rc:RegisterEffect(e1)
-end
-
-function s.sumop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.SetChainLimitTillChainEnd(s.chainlm)
-end
-
-function s.chainlm(e,rp,tp)
-	return tp==rp
+function s.con3(e)
+	return Duel.GetMatchingGroupCount(s.con3filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)>0
 end

@@ -94,7 +94,7 @@ end
 
 --effect 3
 function s.tg3filter(c)
-	return c:IsMonster() and c:IsSetCard(0xf26)
+	return c:IsSetCard(0xf26)
 end
 
 function s.tg3(e,c)

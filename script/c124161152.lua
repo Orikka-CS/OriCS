@@ -15,11 +15,11 @@ end
 
 --effect 1
 function s.con1filter(c)
-	return c:IsFaceup() and c:IsSetCard(0xf29) and c:IsType(TYPE_SYNCHRO)
+	return c:IsFaceup() and c:IsSetCard(0xf29)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)>0 and Duel.IsChainNegatable(ev) and rp==1-tp
+	return Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_ONFIELD,0,e:GetHandler())>0 and Duel.IsChainNegatable(ev) and rp==1-tp
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

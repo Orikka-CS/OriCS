@@ -20,6 +20,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
+	e2:SetCategory(CATEGORY_REMOVE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetCode(EVENT_REMOVE)
@@ -61,45 +62,38 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(Card.IsControler,1,nil,tp)
 end
 
-function s.tg2filter(c,e)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsCanBeEffectTarget(e)
+function s.tg2filter(c,e,tp)
+	return c:IsFaceup() and c:IsAbleToRemove() and c:IsCanBeEffectTarget(e)
 end
 
-function s.tg2xfilter(c)
-	return c:IsSetCard(0xf2c) and not c:IsType(TYPE_FIELD)
+function s.tg2gfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0xf2c) and not c:IsType(TYPE_FIELD)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil,e)
-	local xg=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_REMOVED,0,nil)
-	if chk==0 then return #g>0 and #xg>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tg2filter(chkc,e,tp) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e,tp)
+	local gg=Duel.GetMatchingGroup(s.tg2gfilter,tp,LOCATION_REMOVED,0,nil)
+	if chk==0 then return #g>0 and #gg>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,sg,#sg,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
-	local xg=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_REMOVED,0,nil)
-	if tg and #xg>0 then 
-		local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
-		Duel.Overlay(tg,xsg,true)
-		local c=e:GetHandler()
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e1:SetRange(LOCATION_MZONE)
-		e1:SetCode(EVENT_PHASE+PHASE_END)
-		e1:SetOperation(s.op2op)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		e1:SetCountLimit(1)
-		tg:RegisterEffect(e1)
-	end
-end
-
-function s.op2op(e,tp,eg,ep,ev,re,r,rp)
-	local og=e:GetHandler():GetOverlayGroup()
-	if #og>0 then 
-		Duel.SendtoGrave(og,REASON_EFFECT)
+	local gg=Duel.GetMatchingGroup(s.tg2gfilter,tp,LOCATION_REMOVED,0,nil)
+	if #gg>0 then
+		local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+		Duel.SendtoGrave(gsg,REASON_EFFECT+REASON_RETURN)
+		if tg then
+			aux.RemoveUntil(tg,nil,REASON_EFFECT,PHASE_END,id,e,tp,aux.DefaultFieldReturnOp)
+			if Duel.SelectYesNo(tp,aux.Stringid(id,0)) and tg:IsLocation(LOCATION_REMOVED) and not tg:IsReason(REASON_REDIRECT) then
+				Duel.BreakEffect()
+				Duel.ReturnToField(tg)
+			end
+		end
 	end
 end
 
