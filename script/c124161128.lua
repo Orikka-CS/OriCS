@@ -72,7 +72,7 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
-	local ct=Duel.GetFlagEffect(tp,124161128)
+	local ct=Duel.GetFlagEffect(tp,124161132)
 	if #g>0 and ct>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.dncheck,1,tp,HINTMSG_TOGRAVE)
 		Duel.SendtoGrave(sg,REASON_EFFECT)

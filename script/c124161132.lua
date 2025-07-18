@@ -90,11 +90,16 @@ function s.op2filter(c,tp)
 	return c:IsControler(tp) and c:IsContinuousTrap() and c:IsTrapMonster()
 end
 
+function s.op2sfilter(c)
+	return c:IsLocation(LOCATION_STZONE) and c:IsFacedown()
+end
+
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
 		Duel.SendtoGrave(sg,REASON_EFFECT)
+		eg=eg:Filter(s.op2sfilter,nil)
 		if sg:IsLocation(LOCATION_GRAVE) and #eg>0 then
 			local esg=aux.SelectUnselectGroup(eg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM):GetFirst()
 			Duel.ConfirmCards(1-esg:GetControler(),esg)
