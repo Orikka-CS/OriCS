@@ -47,7 +47,7 @@ end
 --effect 2
 function s.cst2filter(c,tp)
 	local g=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_DECK,0,nil,c:GetCode())
-	return c:IsContinuousTrap() and c:IsAbleToGraveAsCost() and g>0
+	return c:IsTrap() and c:IsAbleToGraveAsCost() and g>0
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)

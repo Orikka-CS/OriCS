@@ -35,21 +35,13 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		c:AddMonsterAttribute(TYPE_EFFECT+TYPE_TRAP)
 		Duel.SpecialSummonStep(c,1,tp,tp,true,false,POS_FACEUP)
 		local e1=Effect.CreateEffect(c)
-		e1:SetCategory(CATEGORY_ATKCHANGE)
+		e1:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_DESTROY)
 		e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
 		e1:SetProperty(EFFECT_FLAG_DELAY)
 		e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 		e1:SetOperation(s.op1atk)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		c:RegisterEffect(e1,true)
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_FIELD)
-		e2:SetCode(EFFECT_CANNOT_SELECT_BATTLE_TARGET)
-		e2:SetRange(LOCATION_MZONE)
-		e2:SetTargetRange(0,LOCATION_MZONE)
-		e2:SetValue(function(e,_c) return _c~=e:GetHandler() end)
-		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
-		c:RegisterEffect(e2,true)
 		c:AddMonsterAttributeComplete()
 	end
 	Duel.SpecialSummonComplete()
@@ -57,6 +49,10 @@ end
 
 function s.op1atkfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0xf28)
+end
+
+function s.op1desfilter(c,atk)
+	return c:IsFaceup() and c:IsAttackBelow(atk-1)
 end
 
 function s.op1atk(e,tp,eg,ep,ev,re,r,rp)
@@ -70,6 +66,13 @@ function s.op1atk(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue(atk)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
 		c:RegisterEffect(e1)
+		Duel.AdjustInstantly(c)
+		local dg=Duel.GetMatchingGroup(s.op1desfilter,tp,0,LOCATION_MZONE,nil,c:GetAttack())
+		if #dg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
+			Duel.Destroy(dsg,REASON_EFFECT)
+		end
 	end
 end
 

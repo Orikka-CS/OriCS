@@ -19,18 +19,6 @@ function s.initial_effect(c)
 	local e1a=e1:Clone()
 	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
 	c:RegisterEffect(e1a)
-	local e1b=Effect.CreateEffect(c)
-	e1b:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e1b:SetCode(EVENT_PAY_LPCOST)
-	e1b:SetRange(LOCATION_FZONE)
-	e1b:SetLabelObject(e1)
-	e1b:SetOperation(s.regop)
-	c:RegisterEffect(e1b)
-	local e1c=e1b:Clone()
-	e1c:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
-	e1c:SetCode(EVENT_LEAVE_FIELD_P)
-	e1c:SetOperation(function(e) e:GetLabelObject():SetLabel(0) end)
-	c:RegisterEffect(e1c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -71,14 +59,8 @@ end
 
 --effect 1
 function s.val1(e,c)
-	return e:GetLabelObject():GetLabel()*100
-end
-
-function s.regop(e,tp,eg,ep,ev,re,r,rp)
-	if ep==tp then
-		local val=e:GetLabelObject():GetLabel()
-		e:GetLabelObject():SetLabel(val+1)
-	end
+	local tp=e:GetHandlerPlayer()
+	return Duel.GetFlagEffect(tp,124161179)*300
 end
 
 --effect 2

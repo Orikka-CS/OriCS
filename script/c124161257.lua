@@ -41,6 +41,7 @@ end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ct=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e,tp)
 	if chk==0 then return ct>0 and Duel.GetMatchingGroupCount(Card.IsNegatable,tp,0,LOCATION_ONFIELD,nil)>0 end
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE,nil,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)

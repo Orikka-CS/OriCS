@@ -6,10 +6,10 @@ function s.initial_effect(c)
 	Link.AddProcedure(c,nil,2,4,s.linkfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_REMOVE)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetCategory(CATEGORY_POSITION)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_CHAINING)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
@@ -34,44 +34,46 @@ function s.linkfilter(g,lc,sumtype,tp)
 end
 
 --effect 1
-function s.con1filter(c,tp)
-	return c:IsTrapMonster() and c:IsContinuousTrap() and c:IsControler(tp) 
-end
-
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con1filter,1,nil,tp) and not eg:IsContains(e:GetHandler())
+	return re:GetHandler()~=e:GetHandler() and re:IsActiveType(TYPE_MONSTER)
 end
 
 function s.tg1filter(c,e)
-	return c:IsCanBeEffectTarget(e) and c:IsAbleToRemove()
+	return c:IsFaceup() and c:IsCanTurnSet() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD+LOCATION_GRAVE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil,e)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,sg,1,0,0)
-	if e:GetHandler():IsSummonType(SUMMON_TYPE_LINK) and e:GetHandler():GetMaterial():FilterCount(Card.IsSetCard,nil,0xf28)>0 then
-		Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,LOCATION_REMOVED)
+	local c=e:GetHandler()
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tg1filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)   
+	local ct=1
+	if c:IsSummonType(SUMMON_TYPE_LINK) then
+		ct=c:GetMaterial():FilterCount(Card.IsSetCard,nil,0xf28)+1
 	end
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,sg,#sg,0,0)
+end
+
+function s.op1filter(c,tp)
+	return c:IsTrap() and c:IsControler(tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local g=c:GetMaterial()
-	local tg=Duel.GetTargetCards(e):GetFirst()
-	if tg then
-		Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)
-		if not (tg:IsLocation(LOCATION_REMOVED) and not tg:IsReason(REASON_REDIRECT) and c:IsSummonType(SUMMON_TYPE_LINK) and g:FilterCount(Card.IsSetCard,nil,0xf28)>0) then return end
-		if tg:IsSpellTrap() and tg:IsSSetable() and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			Duel.BreakEffect()
-			Duel.SSet(tp,tg,tp)
-		end
-		if tg:IsMonster() and tg:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			Duel.BreakEffect()
-			Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)
+		tg=tg:Filter(s.op1filter,nil,tp)
+		if #tg>0 then
+			for tc in aux.Next(tg) do
+				local e1=Effect.CreateEffect(e:GetHandler())
+				e1:SetType(EFFECT_TYPE_SINGLE)
+				e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+				e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+				e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+				tc:RegisterEffect(e1)
+			end
 		end
 	end
 end
@@ -93,5 +95,5 @@ function s.tg2(e,c)
 end
 
 function s.val2(e,te)
-	return te:GetHandler():IsSpellTrap() and te:GetOwnerPlayer()~=e:GetHandlerPlayer()
+	return te:IsActiveType(TYPE_SPELL+TYPE_TRAP) and te:GetOwnerPlayer()~=e:GetHandlerPlayer()
 end
