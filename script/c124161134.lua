@@ -8,11 +8,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DRAW+CATEGORY_TODECK)
+	e1:SetCategory(CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e1:SetRange(LOCATION_SZONE)
+	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
 	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
@@ -41,7 +42,7 @@ function s.con1(e,tp,eg)
 end
 
 function s.cst1filter(c)
-	return ((c:IsSetCard(0xf28) and c:IsMonster()) or c:IsTrap()) and c:IsAbleToRemoveAsCost()
+	return c:IsSetCard(0xf28) and c:IsAbleToRemoveAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -53,18 +54,22 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) and e:GetHandler():GetFlagEffect(id)==0 end
-	e:GetHandler():RegisterFlagEffect(id,RESET_CHAIN,0,1)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	local ct=Duel.GetFlagEffect(tp,124161132)
+	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct and ct>0 end
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.Draw(tp,1,REASON_EFFECT)>0 then
-		Duel.BreakEffect()
-		local dg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,nil)
-		local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
-		Duel.SendtoDeck(dsg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+	local ct=Duel.GetFlagEffect(tp,124161132)
+	Duel.ConfirmDecktop(tp,ct)
+	local dt=Duel.GetDecktopGroup(tp,ct)
+	if #dt>0 and dt:IsExists(Card.IsAbleToHand,1,nil) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+		local sg=dt:FilterSelect(tp,Card.IsAbleToHand,1,1,nil)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
 	end
+	Duel.ShuffleDeck(tp)
 end
 
 --effect 2

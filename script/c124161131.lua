@@ -8,7 +8,6 @@ function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_POSITION)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
@@ -39,21 +38,20 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg1filter(c,e)
-	return c:IsFaceup() and c:IsCanTurnSet() and c:IsCanBeEffectTarget(e)
+	return c:IsFaceup() and c:IsCanTurnSet()
+end
+
+function s.tg1ctfilter(c)
+	return c:IsSetCard(0xf28) and c:IsMonster()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tg1filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)   
-	local ct=1
-	if c:IsSummonType(SUMMON_TYPE_LINK) then
-		ct=c:GetMaterial():FilterCount(Card.IsSetCard,nil,0xf28)+1
-	end
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,sg,#sg,0,0)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)   
+	local ct=Duel.GetMatchingGroupCount(s.tg1ctfilter,tp,LOCATION_GRAVE,0,nil)   
+	if chk==0 then return #g>0 and ct>0 end
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,1,0,0)
 end
 
 function s.op1filter(c,tp)
@@ -61,12 +59,14 @@ function s.op1filter(c,tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e)
-	if #tg>0 then
-		Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)
-		tg=tg:Filter(s.op1filter,nil,tp)
-		if #tg>0 then
-			for tc in aux.Next(tg) do
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)   
+	local ct=Duel.GetMatchingGroupCount(s.tg1ctfilter,tp,LOCATION_GRAVE,0,nil)   
+	if #g>0 and ct>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
+		Duel.ChangePosition(sg,POS_FACEDOWN_DEFENSE)
+		sg=sg:Filter(s.op1filter,nil,tp)
+		if #sg>0 then
+			for tc in aux.Next(sg) do
 				local e1=Effect.CreateEffect(e:GetHandler())
 				e1:SetType(EFFECT_TYPE_SINGLE)
 				e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
