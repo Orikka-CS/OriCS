@@ -77,7 +77,7 @@ end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+		return Duel.GetLocationCount(tp,LOCATION_MZONE)>1 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 			and Duel.IsExistingMatchingCard(s.tfil2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+
 				LOCATION_REMOVED,0,1,c,e,tp)
 			and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
