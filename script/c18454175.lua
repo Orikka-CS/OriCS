@@ -24,15 +24,16 @@ function s.tfil1(c)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
+	local exc=e:IsHasType(EFFECT_TYPE_ACTIVATE) and c or nil
 	if chkc then
-		return chkc:IsOnField() and chkc~=c
+		return chkc:IsOnField() and chkc~=exc
 	end
 	if chk==0 then
-		return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c)
+		return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,exc)
 			and Duel.IsExistingMatchingCard(s.tfil1,tp,LOCATION_DECK,0,1,nil)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,c)
+	Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,exc)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
