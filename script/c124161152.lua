@@ -19,7 +19,7 @@ function s.con1filter(c)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_ONFIELD,0,e:GetHandler())>0 and Duel.IsChainNegatable(ev) and rp==1-tp
+	return Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_ONFIELD,0,nil)>0 and Duel.IsChainNegatable(ev) and rp==1-tp
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
