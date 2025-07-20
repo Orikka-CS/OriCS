@@ -61,6 +61,7 @@ function s.cost3(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return c:IsAbleToDeckAsCost()
 	end
+	Duel.HintSelection(Group.FromCards(c))
 	Duel.SendtoDeck(c,nil,2,REASON_COST)
 end
 function s.cfil3(c,e,tp)

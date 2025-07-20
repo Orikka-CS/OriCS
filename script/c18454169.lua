@@ -103,6 +103,7 @@ function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	e:SetLabel(0)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectMatchingCard(tp,s.cfil4,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
+	Duel.HintSelection(g)
 	Duel.SendtoDeck(g,nil,2,REASON_COST)
 	local tc=g:GetFirst()
 	local eff={tc:GetCardEffect(18454166)}
