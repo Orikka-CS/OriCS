@@ -63,7 +63,7 @@ function c18452889.spop2(e,tp,eg,ep,ev,re,r,rp)
 		and Duel.IsExistingMatchingCard(aux.disfilter1,tp,0,LOCATION_MZONE,1,nil)
 		and Duel.SelectYesNo(tp,aux.Stringid(18452889,2)) then
 		Duel.BreakEffect()
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISABLE)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_NEGATE)
 		local g=Duel.SelectMatchingCard(tp,aux.disfilter1,tp,0,LOCATION_MZONE,1,1,nil)
 		Duel.HintSelection(g)
 		local tc=g:GetFirst()
