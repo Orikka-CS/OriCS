@@ -11,16 +11,27 @@ function s.initial_effect(c)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetRange(LOCATION_REMOVED)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
-	e2:SetCost(s.cost2)
 	e2:SetTarget(s.tar2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_QUICK_O)
+	e3:SetCode(EVENT_FREE_CHAIN)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e3:SetDescription(aux.Stringid(id,1))
+	e3:SetHintTiming(0,TIMINGS_CHECK_MONSTER|TIMING_MAIN_END)
+	e3:SetCountLimit(1,{id,2})
+	e3:SetCondition(s.con3)
+	e3:SetTarget(s.tar3)
+	e3:SetOperation(s.op3)
+	c:RegisterEffect(e3)
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -60,63 +71,48 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
+function s.nfil2(c)
+	return c:IsFaceup() and c:IsRace(RACE_FISH)
+end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp and Duel.IsMainPhase()
-end
-function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then
-		return Duel.IsExistingMatchingCard(Card.IsAbleToRemoveAsCost,tp,LOCATION_HAND,0,1,nil)
-	end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToRemoveAsCost,tp,LOCATION_HAND,0,1,1,nil)
-	Duel.Remove(g,POS_FACEUP,REASON_COST)
-end
-function s.tfil2(c,e,tp)
-	return c:IsRace(RACE_FISH) and c:IsLevelBelow(2) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return eg:IsExists(s.nfil2,1,nil)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return Duel.GetLocationCount(tp,LOCATION_MZONE)>1 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-			and Duel.IsExistingMatchingCard(s.tfil2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+
-				LOCATION_REMOVED,0,1,c,e,tp)
-			and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
+		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+			and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,2,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+
-		LOCATION_REMOVED)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
-end
-function s.ofil2(c,sc)
-	return c:IsRace(RACE_FISH) and c:IsSynchroSummonable(sc)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,tp,0)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	if ft>1 and Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
-		ft=1
+	if c:IsRelateToEffect(e) then
+		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 	end
-	if ft<=0 then
+end
+function s.con3(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsTurnPlayer(1-tp) and Duel.IsMainPhase() and e:GetHandler():IsStatus(STATUS_SPSUMMON_TURN)
+end
+function s.tfil3(c,must)
+	return c:IsRace(RACE_FISH) and c:IsSynchroSummonable(must)
+end
+function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then
+		return Duel.IsExistingMatchingCard(s.tfil3,tp,LOCATION_EXTRA,0,1,nil,c)
+	end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+end
+function s.op3(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsControler(1-tp) or not c:IsRelateToEffect(e) or c:IsFacedown() then
 		return
 	end
-	if not c:IsRelateToEffect(e) then
-		return
-	end
-	if Duel.SpecialSummonStep(c,0,tp,tp,false,false,POS_FACEUP) then
-		if ft>1 then
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-			local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil2),tp,LOCATION_HAND+
-				LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,c,e,tp)
-			local tc=g:GetFirst()
-			if tc then
-				Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP)
-			end
-		end
-		Duel.SpecialSummonComplete()
+	local g=Duel.GetMatchingGroup(s.tfil3,tp,LOCATION_EXTRA,0,nil,c)
+	if #g>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg=Duel.SelectMatchingCard(tp,s.ofil2,tp,LOCATION_EXTRA,0,0,1,nil,c)
-		local sc=sg:GetFirst()
-		if sc then
-			Duel.SynchroSummon(tp,sc,c)
-		end
+		local sg=g:Select(tp,1,1,nil)
+		Duel.SynchroSummon(tp,sg:GetFirst(),c)
 	end
 end
