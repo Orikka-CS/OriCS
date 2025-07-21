@@ -10,6 +10,7 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCategory(CATEGORY_DISABLE)
 	e1:SetCountLimit(1)
+	e1:SetCost(s.cost1)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -24,6 +25,18 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tar2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+end
+function s.cfil1(c,tp)
+	return c:IsRace(RACE_FISH) and c:IsFaceup() and c:IsAbleToDeckAsCost()
+end
+function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		return Duel.IsExistingMatchingCard(s.cfil1,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil)
+	end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectMatchingCard(tp,s.cfil1,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,c)
+	Duel.HintSelection(g)
+	Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
