@@ -86,6 +86,9 @@ function cm.tval31(c,rc)
 	if c:IsType(TYPE_XYZ) then
 		return c:GetRank()
 	end
+	if not rc then
+		return c:GetLevel()
+	end
 	local raw_level=c:GetRitualLevel(rc)
 	local lv1=raw_level&0xffff
 	local lv2=raw_level>>16
