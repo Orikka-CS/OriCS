@@ -29,7 +29,7 @@ function s.pfil1(c,tp,lc)
 		and not c:IsType(TYPE_XYZ,lc,SUMMON_TYPE_XYZ,tp)
 end
 function s.pofil1(c)
-	return c:IsSetCard("신천지") and c:IsType(TYPE_MONTSER) and c:IsReleasable()
+	return c:IsSetCard("신천지") and c:IsType(TYPE_MONSTER) and c:IsReleasable()
 end
 function s.pop1(e,tp,chk)
 	if chk==0 then
