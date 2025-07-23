@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetCode(EFFECT_ADD_ATTRIBUTE)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e1:SetValue(0x2f)
+	e1:SetValue(0xf)
 	c:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
@@ -39,12 +39,13 @@ function s.initial_effect(c)
 	e5:SetOperation(s.op5)
 	c:RegisterEffect(e5)
 end
+s.listed_names={15480005}
 function s.val2(e,te)
 	local tc=te:GetHandler()
 	return te:GetOwner()~=e:GetOwner() and te:IsActiveType(TYPE_MONSTER) and tc:IsAttribute(0x2f)
 end
 function s.val3(e,c)
-	return c:IsAttribute(0x2f)
+	return c:IsAttribute(0xf)
 end
 function s.val4(e,re)
 	local rc=re:GetHandler()

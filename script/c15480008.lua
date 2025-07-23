@@ -42,7 +42,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsSummonType(SUMMON_TYPE_XYZ)
 end
 function s.tfil2(c)
-	return c:IsCode(15480009) and c:IsAbleToGrave()
+	return c:IsType(TYPE_RITUAL) and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsRace(RACE_DRAGON) and c:IsAbleToGrave()
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
