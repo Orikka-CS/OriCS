@@ -9,8 +9,9 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCountLimit(1,id)
+	e1:SetCondition(function(e) return e:GetHandler():IsSummonLocation(LOCATION_EXTRA) end)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -27,17 +28,14 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1filter(c,e)
-	return c:IsFaceup() and c:IsSetCard(0xf30) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
+function s.tg1filter(c)
+	return c:IsSetCard(0xf30) and c:IsFaceup() and c:IsAbleToHand()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_GRAVE+LOCATION_REMOVED)
 end
 
 function s.op1filter(c,e,tp)
@@ -45,15 +43,18 @@ function s.op1filter(c,e,tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e):GetFirst()
-	if tg then
-		Duel.SendtoHand(tg,nil,REASON_EFFECT)
-		local g=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,0,LOCATION_EXTRA,nil)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND):GetFirst()
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		local gg=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,0,LOCATION_EXTRA,nil)
 		local nx=Duel.GetMatchingGroupCount(s.op1filter,tp,LOCATION_GRAVE,0,nil,e,tp)>0
-		if nx and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if sg:IsLocation(LOCATION_HAND) and nx and #gg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			local sg=g:RandomSelect(tp,1)
-			Duel.SendtoGrave(sg,REASON_EFFECT)
+			local gsg=gg:RandomSelect(tp,1)
+			Duel.SendtoGrave(gsg,REASON_EFFECT)
 		end
 	end
 end

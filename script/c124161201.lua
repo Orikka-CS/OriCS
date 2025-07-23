@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
+	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -25,17 +25,16 @@ end
 
 
 --effect 1
-function s.cst1filter(c)
-	return c:IsMonster() and not c:IsType(TYPE_EFFECT) and c:IsFacedown()
+function s.con1filter(c)
+	local mg=c:GetMaterial()
+	return #mg>0 and c:IsFaceup() and c:IsType(TYPE_EFFECT) and c:IsSummonLocation(LOCATION_EXTRA) and #mg==mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)
 end
 
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_EXTRA,0,nil)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.ShuffleExtra(tp)
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)
+	return g==0
 end
+
 
 function s.tg1filter(c)
 	return c:IsSetCard(0xf2d) and c:IsMonster() and not c:IsCode(id) and c:IsAbleToHand()

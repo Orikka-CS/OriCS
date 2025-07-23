@@ -23,7 +23,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
-	e2:SetCost(Cost.SelfBanish)
+	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -49,6 +49,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() and Duel.CheckLPCost(tp,800) end
+	Duel.PayLPCost(tp,800)
+	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
+end
+
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	return rp==tp and rc:IsType(TYPE_FUSION)

@@ -57,7 +57,7 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return 5-Duel.GetLocationCount(tp,LOCATION_MZONE)-Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)>0 or 5-Duel.GetLocationCount(1-tp,LOCATION_MZONE)-Duel.GetFieldGroupCount(1-tp,LOCATION_MZONE,0)>0
+	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 end
 
 function s.tg2filter(c)
