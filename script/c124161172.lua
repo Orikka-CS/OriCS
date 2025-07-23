@@ -51,7 +51,7 @@ end
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	return rp==tp and rc:IsRace(RACE_PLANT) and rc:IsType(TYPE_FUSION)
+	return rp==tp and rc:IsType(TYPE_FUSION)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

@@ -63,7 +63,7 @@ end
 --effect 1
 function s.val1(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetMatchingGroup(Card.HasFlagEffect,tp,LOCATION_MZONE,LOCATION_MZONE,nil,id):GetSum(Card.GetFlagEffect,id)*200
+	return Duel.GetMatchingGroup(Card.HasFlagEffect,tp,LOCATION_MZONE,LOCATION_MZONE,nil,id):GetSum(Card.GetFlagEffect,id)*100
 end
 
 --effect 2

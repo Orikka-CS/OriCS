@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(Cost.PayLP(1000))
+	e1:SetCost(Cost.PayLP(1200))
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -53,10 +53,10 @@ end
 --effect 2
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetMatchingGroupCount(Card.IsSetCard,tp,LOCATION_GRAVE,0,e:GetHandler(),0xf2b)>0 end
-	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,500)
+	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,600)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.GetMatchingGroupCount(Card.IsSetCard,tp,LOCATION_GRAVE,0,e:GetHandler(),0xf2b)
-	Duel.Recover(tp,ct*500,REASON_EFFECT)
+	Duel.Recover(tp,ct*600,REASON_EFFECT)
 end

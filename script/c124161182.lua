@@ -37,8 +37,8 @@ end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local cl=Duel.GetCurrentChain()
-	if chk==0 then return Duel.CheckLPCost(tp,cl*600) end
-	Duel.PayLPCost(tp,cl*600)
+	if chk==0 then return Duel.CheckLPCost(tp,cl*500) end
+	Duel.PayLPCost(tp,cl*500)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -66,10 +66,10 @@ end
 --effect 2
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFlagEffect(tp,124161179)>0 end
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,tp,600)
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,tp,500)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.GetFlagEffect(tp,124161179)
-	Duel.Damage(1-tp,ct*600,REASON_EFFECT)
+	Duel.Damage(1-tp,ct*500,REASON_EFFECT)
 end
