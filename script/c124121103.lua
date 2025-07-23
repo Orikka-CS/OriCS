@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function s.cfil1(c,tp)
-	return c:IsRace(RACE_FISH) and c:IsFaceup() and c:IsAbleToDeckAsCost()
+	return c:IsRace(RACE_FISH) and c:IsFaceup() and c:IsAbleToDeckOrExtraAsCost()
 end
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
