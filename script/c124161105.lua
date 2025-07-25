@@ -8,7 +8,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TODECK)
+	e1:SetCategory(CATEGORY_DAMAGE+CATEGORY_TODECK)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -30,36 +30,39 @@ function s.initial_effect(c)
 end
 
 --effect 1
+function s.tg1ffilter(c)
+	return c:IsSetCard(0xf26) and c:IsMonster() and c:IsAbleToDeck()
+end
+
 function s.tg1filter(c,e)
-	return c:IsType(TYPE_XYZ) and c:IsCanBeEffectTarget(e) and c:GetOverlayCount()>0
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayGroup():FilterCount(s.tg1ffilter,nil)>0
+end
+
+function s.tg1ofilter(c,e)
+	return c:IsAbleToDeck() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e,tp)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
-	Duel.SetTargetCard(sg)
-end
-
-function s.op1filter(c,tp)
-	return c:IsMonster() and c:IsSetCard(0xf26) and not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,c:GetCode()),tp,LOCATION_GRAVE,0,1,nil)
+	if chkc then return false end
+	local g1=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e)
+	local g2=Duel.GetMatchingGroup(s.tg1ofilter,tp,0,LOCATION_ONFIELD,nil,e)
+	if chk==0 then return #g1>0 and #g2>0 end
+	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+	sg1:Merge(sg2)
+	Duel.SetTargetCard(sg1)
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,100)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg1,2,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e):GetFirst()
-	if not tg then return end
-	if tg:GetOverlayCount()>0 then
-		tg:RemoveOverlayCard(tp,1,1,REASON_EFFECT)
-		local dg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_GRAVE,0,nil)
-		if #dg>0 then
-			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
-			if Duel.SendtoDeck(dsg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-				local xg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_DECK,0,nil,tp)
-				local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
-				Duel.Overlay(tg,xsg,true)
-			end
-		end
+	local tg=Duel.GetTargetCards(e)
+	local tg1=tg:Filter(Card.IsControler,nil,tp):GetFirst():GetOverlayGroup():Filter(s.tg1ffilter,nil)
+	local tg2=tg:Filter(Card.IsControler,nil,1-tp)
+	if #tg1>0 and Duel.Damage(1-tp,tg1:GetSum(Card.GetDefense),REASON_EFFECT)>0 and #tg2>0 then
+		Duel.BreakEffect()
+		local tsg=aux.SelectUnselectGroup(tg1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+		Duel.SendtoDeck(tsg+tg2,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	end
 end
 

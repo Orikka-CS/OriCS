@@ -64,7 +64,7 @@ end
 
 --effect 2
 function s.tg2ffilter(c)
-	return c:IsSetCard(0xf26) and not c:IsType(TYPE_FIELD)
+	return c:IsSetCard(0xf26)
 end
 
 function s.tg2filter(c,e)
@@ -72,7 +72,7 @@ function s.tg2filter(c,e)
 end
 
 function s.tg2xfilter(c,e)
-	return c:IsSetCard(0xf26)
+	return c:IsSetCard(0xf26) and not c:IsType(TYPE_FIELD)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -82,13 +82,13 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return #g>0 and #xg>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,400)
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,300)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local xg=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_DECK,0,nil)
 	local tg=Duel.GetTargetCards(e):GetFirst()
-	if tg and Duel.Damage(1-tp,tg:GetOverlayGroup():FilterCount(s.tg2ffilter,nil)*400,REASON_EFFECT)>0 and #xg>0 then
+	if tg and Duel.Damage(1-tp,tg:GetOverlayGroup():FilterCount(s.tg2ffilter,nil)*300,REASON_EFFECT)>0 and #xg>0 then
 		local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 		Duel.Overlay(tg,xsg,true)
 	end

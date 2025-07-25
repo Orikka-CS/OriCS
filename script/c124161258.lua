@@ -42,6 +42,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 
+--effect 1
 function s.tg1filter(c)
 	return c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION) and c:IsAbleToDeck()
 end
@@ -69,6 +70,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
+
+--effect 2
 function s.tg2(e,c)
 	return c:IsFaceup() and c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION)
 end

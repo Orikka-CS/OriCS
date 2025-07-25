@@ -13,7 +13,6 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetRange(LOCATION_GRAVE)
@@ -26,11 +25,11 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(id,1))
-	e3:SetCategory(CATEGORY_DAMAGE)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetCode(EVENT_TO_GRAVE)
-	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_PLAYER_TARGET)
+	e3:SetType(EFFECT_TYPE_QUICK_O)
+	e3:SetCode(EVENT_CHAINING)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e3:SetRange(LOCATION_GRAVE)
+	e3:SetCountLimit(1,{id,2})
 	e3:SetCondition(s.con3)
 	e3:SetTarget(s.tg3)
 	e3:SetOperation(s.op3)
@@ -83,15 +82,31 @@ end
 
 --effect 3
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c:IsPreviousLocation(LOCATION_OVERLAY) and (c:IsReason(REASON_COST) or c:IsReason(REASON_EFFECT))
+	return (Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&LOCATION_ONFIELD)~=0
 end
 
-function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,500)
+function s.tg3filter(c,e)
+	return c:IsSetCard(0xf26) and c:IsType(TYPE_XYZ) and c:IsFaceup() and c:IsCanBeEffectTarget()
+end
+
+function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,0,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,e:GetHandler(),1,tp,LOCATION_GRAVE)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,500)
 end
 
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Damage(1-tp,500,REASON_EFFECT)
+	local c=e:GetHandler()
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if c:IsRelateToEffect(e) and tg then
+		Duel.Overlay(tg,c,true)
+		if Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			Duel.Damage(1-tp,500,REASON_EFFECT)
+		end
+	end
 end

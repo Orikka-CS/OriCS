@@ -23,10 +23,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_DESTROY)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetCode(EVENT_TO_GRAVE)
-	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e3:SetCategory(CATEGORY_DISABLE)
+	e3:SetType(EFFECT_TYPE_QUICK_O)
+	e3:SetCode(EVENT_CHAINING)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e3:SetRange(LOCATION_GRAVE)
+	e3:SetCountLimit(1,{id,2})
 	e3:SetCondition(s.con3)
 	e3:SetTarget(s.tg3)
 	e3:SetOperation(s.op3)
@@ -80,23 +82,37 @@ end
 
 --effect 3
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c:IsPreviousLocation(LOCATION_OVERLAY) and (c:IsReason(REASON_COST) or c:IsReason(REASON_EFFECT))
+	return (Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&LOCATION_ONFIELD)~=0
+end
+
+function s.tg3filter(c,e)
+	return c:IsSetCard(0xf26) and c:IsType(TYPE_XYZ) and c:IsFaceup() and c:IsCanBeEffectTarget()
 end
 
 function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chkc:IsCanBeEffectTarget(e) end
-	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,0,nil,e)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,e:GetHandler(),1,tp,LOCATION_GRAVE)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DISABLE,g,1,tp,LOCATION_MZONE)
+end
+
+function s.op3filter(c)
+	return c:IsNegatable() and c:IsType(TYPE_EFFECT) and c:IsFaceup()
 end
 
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
-	if tg then
-		Duel.Destroy(tg,REASON_EFFECT)
+	if c:IsRelateToEffect(e) and tg then
+		Duel.Overlay(tg,c,true)
+		local g=Duel.GetMatchingGroup(s.op3filter,tp,0,LOCATION_MZONE,nil)
+		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_NEGATE):GetFirst()
+			sg:NegateEffects(c,RESET_PHASE+PHASE_END,false)
+		end
 	end
 end

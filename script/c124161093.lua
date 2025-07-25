@@ -27,9 +27,11 @@ function s.initial_effect(c)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_TOGRAVE)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetCode(EVENT_TO_GRAVE)
-	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetType(EFFECT_TYPE_QUICK_O)
+	e3:SetCode(EVENT_CHAINING)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e3:SetRange(LOCATION_GRAVE)
+	e3:SetCountLimit(1,{id,2})
 	e3:SetCondition(s.con3)
 	e3:SetTarget(s.tg3)
 	e3:SetOperation(s.op3)
@@ -82,24 +84,37 @@ end
 
 --effect 3
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c:IsPreviousLocation(LOCATION_OVERLAY) and (c:IsReason(REASON_COST) or c:IsReason(REASON_EFFECT))
+	return (Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&LOCATION_ONFIELD)~=0
 end
 
-function s.tg3filter(c)
+function s.tg3filter(c,e)
+	return c:IsSetCard(0xf26) and c:IsType(TYPE_XYZ) and c:IsFaceup() and c:IsCanBeEffectTarget()
+end
+
+function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,0,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,e:GetHandler(),1,tp,LOCATION_GRAVE)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_DECK)
+end
+
+function s.op3filter(c)
 	return c:IsSetCard(0xf26) and c:IsSpellTrap() and c:IsAbleToGrave() 
 end
 
-function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_DECK,0,nil)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_DECK)
-end
-
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_DECK,0,nil)
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-		Duel.SendtoGrave(sg,REASON_EFFECT)
+	local c=e:GetHandler()
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if c:IsRelateToEffect(e) and tg then
+		Duel.Overlay(tg,c,true)
+		local g=Duel.GetMatchingGroup(s.op3filter,tp,LOCATION_DECK,0,nil)
+		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+			Duel.SendtoGrave(sg,REASON_EFFECT)
+		end
 	end
 end
