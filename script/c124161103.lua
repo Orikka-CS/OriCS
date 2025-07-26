@@ -48,7 +48,7 @@ function s.tg1b2filter(c,e,tp)
 end
 
 function s.tg1b3filter(c)
-	return c:IsSetCard(0xf26) and c:IsFaceup() and c:IsAbleToGrave()
+	return c:IsSetCard(0xf26) and c:IsSpellTrap() and c:IsFaceup() and c:IsAbleToGrave()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
