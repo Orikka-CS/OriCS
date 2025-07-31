@@ -61,7 +61,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsSummonPlayer(tp) and c:IsSummonType(SUMMON_TYPE_LINK) and c:IsType(TYPE_LINK) and c:IsSetCard(0xf25)
+	return c:IsControler(tp) and c:IsSummonType(SUMMON_TYPE_LINK) and c:IsType(TYPE_LINK) and c:IsSetCard(0xf25)
 end
 
 function s.con2(e,tp,eg)
