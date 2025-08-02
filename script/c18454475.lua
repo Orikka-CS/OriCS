@@ -1,4 +1,4 @@
---ì§§ì€ ë°¤ ë³„ì˜ ê¿ˆ
+--ÂªÀº ¹ã º°ÀÇ ²Þ
 local s,id=GetID()
 function s.initial_effect(c)
 	local e1=MakeEff(c,"F","H")
@@ -24,15 +24,20 @@ function s.initial_effect(c)
 	WriteEff(e4,4,"TO")
 	c:RegisterEffect(e4)
 end
+function s.nfil1(c)
+	return not c:IsRace(RACE_FAIRY) or not c:IsAttribute(ATTRIBUTE_FIRE) or c:IsFacedown()
+end
 function s.con1(e,c)
 	if c==nil then
 		return true
 	end
 	local tp=c:GetControler()
-	return Duel.GetFieldGroupCount(tp,LSTN("M"),0)==0 and Duel.GetLocCount(tp,"M")>0
+	return not Duel.IEMCard(s.nfil1,tp,"M",0,1,nil) and Duel.GetLocCount(tp,"M")>0
 end
 function s.tfil2(c)
-	return c:IsRace(RACE_FAIRY) and c:IsAttribute(ATTRIBUTE_FIRE) and c:IsAbleToHand()
+	return ((c:IsRace(RACE_FAIRY) and c:IsAttribute(ATTRIBUTE_FIRE))
+		or (c:IsSetCard("¹ÌÄ«") and c:IsType(TYPE_SPELL+TYPE_TRAP)))
+		and c:IsAbleToHand()
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
