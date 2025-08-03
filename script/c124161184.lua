@@ -27,24 +27,6 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	--count
-	aux.GlobalCheck(s,function()
-		local cnt=Effect.CreateEffect(c)
-		cnt:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		cnt:SetCode(EVENT_REMOVE)
-		cnt:SetOperation(s.cnt)
-		Duel.RegisterEffect(cnt,0)
-	end)
-end
-
---count
-function s.cnt(e,tp,eg,ep,ev,re,r,rp)
-	local check=0
-	for tc in eg:Iter() do
-		if tc:IsType(TYPE_XYZ) then 
-			Duel.RegisterFlagEffect(tc:GetControler(),id,RESET_PHASE+PHASE_END,0,1)
-		end
-	end
 end
 
 --effect 1
@@ -77,16 +59,22 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.con2filter,1,nil,tp)
 end
 
+function s.tg2ctfilter(c)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayCount()==0
+end
+
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
-	if chk==0 then return #g>0 end
+	local ct=Duel.GetMatchingGroupCount(s.tg2ctfilter,tp,LOCATION_MZONE,0,nil)
+	if chk==0 then return #g>0 and ct>0 end
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,Duel.GetFlagEffect(tp,id),aux.TRUE,1,tp,HINTMSG_DESTROY)
+	local ct=Duel.GetMatchingGroupCount(s.tg2ctfilter,tp,LOCATION_MZONE,0,nil)
+	if #g>0 and ct>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_DESTROY)
 		Duel.Destroy(sg,REASON_EFFECT)
 	end
 end
