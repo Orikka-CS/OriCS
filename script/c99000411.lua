@@ -66,7 +66,7 @@ function s.valcheck(e,c)
 	local g=c:GetMaterial()
 	if not g then return end
 	local ct=g:FilterCount(Card.IsRace,nil,RACE_FAIRY)
-	if ct==#g then e:GetHandler():RegisterFlagEffect(id,RESETS_STANDARD-RESET_TOFIELD,0,1) end
+	if ct==#g then e:GetHandler():RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD&~(RESET_TOFIELD|RESET_TEMP_REMOVE|RESET_LEAVE),0,1) end
 end
 function s.checkop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.GetAttacker():RegisterFlagEffect(id+1,RESETS_STANDARD_PHASE_END,0,1)

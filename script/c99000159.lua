@@ -1,86 +1,116 @@
 --보이드 오브 네크로워커
-local m=99000159
-local cm=_G["c"..m]
-function cm.initial_effect(c)
-	--activate
+local s,id=GetID()
+function s.initial_effect(c)
+	--Special Summon this card as a Normal Monster
 	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(aux.Stringid(id,0))
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetHintTiming(0,TIMING_ATTACK)
-	e1:SetTarget(cm.target)
+	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
+	e1:SetCost(s.selfspcost)
+	e1:SetTarget(s.selfsptg)
+	e1:SetOperation(s.selfspop)
 	c:RegisterEffect(e1)
-	--destroy
+	--Can be activated the turn it was Set by discarding 1 Normal Trap
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(m,0))
-	e2:SetCategory(CATEGORY_REMOVE)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetRange(LOCATION_SZONE)
-	e2:SetCode(EVENT_ATTACK_ANNOUNCE)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetCountLimit(1)
-	e2:SetCondition(cm.condition)
-	e2:SetTarget(cm.atktarget)
-	e2:SetOperation(cm.operation)
+	e2:SetDescription(aux.Stringid(id,1))
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+	e2:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+	e2:SetValue(function(e,c) e:SetLabel(1) end)
+	e2:SetCondition(function(e) return Duel.IsExistingMatchingCard(s.selfspcostfilter,e:GetHandlerPlayer(),LOCATION_HAND,0,1,nil) end)
 	c:RegisterEffect(e2)
-	--destroy replace
+	e1:SetLabelObject(e2)
+	--덱에서 "네크로워커 라니아" 이외의 "네크로워커" 몬스터 1장을 특수 소환한다.
 	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_DESTROY_REPLACE)
-	e3:SetRange(LOCATION_SZONE)
-	e3:SetTarget(cm.reptg)
-	e3:SetValue(cm.repval)
-	e3:SetOperation(cm.repop)
+	e3:SetDescription(aux.Stringid(id,2))
+	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetCode(EVENT_REMOVE)
+	e3:SetCountLimit(1,{id,1})
+	e3:SetTarget(s.necro_tg2)
+	e3:SetOperation(s.necro_op2)
 	c:RegisterEffect(e3)
 end
-function cm.condition(e,tp,eg,ep,ev,re,r,rp)
-	return tp~=Duel.GetTurnPlayer()
+s.listed_series={0xc24}
+function s.selfspcostfilter(c)
+	return c:IsAttribute(ATTRIBUTE_DARK) and c:IsAbleToRemoveAsCost()
 end
-function cm.atkfilter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsSetCard(0xc24)
-end
-function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	local res,teg,tep,tev,tre,tr,trp=Duel.CheckEvent(EVENT_ATTACK_ANNOUNCE,true)
-	if res and cm.condition(e,tp,teg,tep,tev,tre,tr,trp)
-		and cm.atktarget(e,tp,teg,tep,tev,tre,tr,trp,0)
-		and Duel.SelectYesNo(tp,94) then
-		e:SetProperty(EFFECT_FLAG_CARD_TARGET)
-		cm.atktarget(e,tp,teg,tep,tev,tre,tr,trp,1)
-		e:SetOperation(cm.operation)
-	else
-		e:SetCategory(0)
-		e:SetProperty(0)
-		e:SetOperation(nil)
+function s.selfspcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	local label_obj=e:GetLabelObject()
+	if chk==0 then label_obj:SetLabel(0) return true end
+	if label_obj:GetLabel()>0 then
+		label_obj:SetLabel(0)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+		local g=Duel.SelectMatchingCard(tp,s.selfspcostfilter,tp,LOCATION_HAND,0,1,1,nil)
+		Duel.Remove(g,POS_FACEUP,REASON_COST)
 	end
 end
-function cm.atktarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(tp) and cm.atkfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(cm.atkfilter,tp,LOCATION_ONFIELD,0,1,nil) end
+function s.selfsptg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0xc24,TYPE_MONSTER|TYPE_EFFECT,1000,1000,5,RACE_ZOMBIE,ATTRIBUTE_DARK,POS_FACEUP) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,tp,0)
+end
+function s.selfspop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) and s.selfsptg(e,tp,eg,ep,ev,re,r,rp,0) then
+		c:AddMonsterAttribute(TYPE_EFFECT)
+		Duel.SpecialSummonStep(c,0,tp,tp,true,false,POS_FACEUP)
+		--그 배틀 페이즈를 종료한다. 추가로, 대상의 몬스터를 제외한다.
+		local e1=Effect.CreateEffect(c)
+		e1:SetDescription(aux.Stringid(id,4))
+		e1:SetCategory(CATEGORY_REMOVE)
+		e1:SetType(EFFECT_TYPE_QUICK_O)
+		e1:SetCode(EVENT_FREE_CHAIN)
+		e1:SetRange(LOCATION_MZONE)
+		e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+		e1:SetHintTiming(0,TIMING_BATTLE_START)
+		e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_DUEL)
+		e1:SetCondition(s.condition)
+		e1:SetTarget(s.target)
+		e1:SetOperation(s.operation)
+		e1:SetReset(RESET_EVENT|RESETS_STANDARD)
+		c:RegisterEffect(e1,true)
+		c:AddMonsterAttributeComplete()
+	end
+	Duel.SpecialSummonComplete()
+end
+function s.condition(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsTurnPlayer(1-tp) and Duel.IsBattlePhase()
+end
+function s.filter(c)
+	return c:IsSetCard(0xc24) and c:IsMonster() and c:IsAbleToRemove() and c:IsFaceup()
+end
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.thfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,LOCATION_MZONE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectTarget(tp,cm.atkfilter,tp,LOCATION_ONFIELD,0,1,1,nil)
+	local g=Duel.SelectTarget(tp,s.filter,tp,LOCATION_MZONE,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
 end
-function cm.operation(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
+function s.operation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.SkipPhase(1-tp,PHASE_BATTLE,RESET_PHASE|PHASE_BATTLE_STEP,1)
 	local tc=Duel.GetFirstTarget()
-	if Duel.NegateAttack() and Duel.SkipPhase(1-tp,PHASE_BATTLE,RESET_PHASE+PHASE_BATTLE,1) then
-		if not tc:IsRelateToEffect(e) then return end
+	if tc:IsRelateToEffect(e) then
 		Duel.BreakEffect()
 		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
 	end
 end
-function cm.repfilter(c,tp)
-	return c:IsFaceup() and c:IsControler(tp) and c:IsLocation(LOCATION_ONFIELD) and c:IsSetCard(0xc24)
-		and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT+REASON_BATTLE)
+function s.necro_spfilter(c,e,tp)
+	return c:IsSetCard(0xc24) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function cm.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return eg:IsExists(cm.repfilter,1,c,tp) and c:IsAbleToRemove(e) end
-	return Duel.SelectEffectYesNo(tp,c,96)
+function s.necro_tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(s.necro_spfilter,tp,LOCATION_REMOVED,0,1,nil,e,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_REMOVED)
 end
-function cm.repval(e,c)
-	return cm.repfilter(c,e:GetHandlerPlayer())
-end
-function cm.repop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_EFFECT)
+function s.necro_op2(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local g=Duel.SelectMatchingCard(tp,s.necro_spfilter,tp,LOCATION_REMOVED,0,1,1,nil,e,tp)
+	if #g>0 then
+		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+	end
 end
