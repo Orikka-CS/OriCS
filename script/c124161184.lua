@@ -19,10 +19,9 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_DESTROY)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_REMOVE)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
 	e2:SetCost(Cost.SelfBanish)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
@@ -51,14 +50,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2filter(c,tp)
-	return c:IsControler(tp) and c:IsType(TYPE_XYZ)
-end
-
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,tp)
-end
-
 function s.tg2ctfilter(c)
 	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayCount()==0
 end

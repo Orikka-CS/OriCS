@@ -35,7 +35,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg1filter(c,e,tp)
-	return c:IsSetCard(0xf25) and not c:IsCode(id) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
+	return c:IsSetCard(0xf25) and not c:IsCode(id) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -58,7 +58,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) or Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) or #g==0 then return end
 	if Duel.SpecialSummonStep(c,0,tp,tp,false,false,POS_FACEUP) and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON):GetFirst()
-		Duel.SpecialSummonStep(sg,0,tp,1-tp,false,false,POS_FACEDOWN_DEFENSE)
+		Duel.SpecialSummonStep(sg,0,tp,1-tp,false,false,POS_FACEUP)
 	end
 	Duel.SpecialSummonComplete()
 	local gg=Duel.GetOperatedGroup():Filter(Card.IsControler,nil,1-tp)

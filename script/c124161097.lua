@@ -87,6 +87,15 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_ATKCHANGE,ag,#ag,1-tp,-atk)
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,atk)
 end
+
+function s.op2filter(c)
+	return c:IsAttackAbove(1) and c:IsFaceup()
+end
+
+function s.op2rfilter(c)
+	return c:GetAttack()==0 and c:IsAbleToRemove()
+end
+
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_XYZ)
 	local x=0
@@ -94,7 +103,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		x=x+tc:GetOverlayCount()
 	end
 	local atk=x*400
-	local ag=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
+	local ag=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_MZONE,nil)
 	if #ag==0 or atk==0 then return end
 	for tc in ag:Iter() do
 		local e1=Effect.CreateEffect(e:GetHandler())
@@ -103,6 +112,12 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue(-atk)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		tc:RegisterEffect(e1)
+		Duel.AdjustInstantly(tc)
 	end
 	Duel.Damage(1-tp,atk,REASON_EFFECT)
+	ag=ag:Filter(s.op2rfilter,nil)
+	if #ag>0 then
+		Duel.BreakEffect()
+		Duel.Remove(ag,POS_FACEUP,REASON_EFFECT)
+	end
 end

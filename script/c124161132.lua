@@ -24,7 +24,7 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_TOGRAVE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_SSET)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
@@ -80,18 +80,21 @@ function s.tg2filter(c,e)
 	return c:IsSetCard(0xf28) and not c:IsType(TYPE_FIELD) and c:IsAbleToGrave()
 end
 
+function s.tg2sfilter(c)
+	return c:IsLocation(LOCATION_STZONE) and c:IsFacedown()
+end
+
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_DECKDES,nil,0,tp,1)
+	local cg=eg:Filter(s.tg2sfilter,nil)
+	if chk==0 then return #g>0 and #cg>0 end
+	local csg=aux.SelectUnselectGroup(cg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
+	Duel.SetTargetCard(csg)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_DECK)
 end
 
 function s.op2filter(c,tp)
 	return c:IsControler(tp) and c:IsContinuousTrap() and c:IsTrapMonster()
-end
-
-function s.op2sfilter(c)
-	return c:IsLocation(LOCATION_STZONE) and c:IsFacedown()
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -99,17 +102,16 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
 		Duel.SendtoGrave(sg,REASON_EFFECT)
-		eg=eg:Filter(s.op2sfilter,nil)
-		if sg:IsLocation(LOCATION_GRAVE) and #eg>0 then
-			local esg=aux.SelectUnselectGroup(eg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM):GetFirst()
-			Duel.ConfirmCards(1-esg:GetControler(),esg)
-			if s.op2filter(esg,tp) then
+		local tg=Duel.GetTargetCards(e):GetFirst()
+		if sg:IsLocation(LOCATION_GRAVE) and tg then
+			Duel.ConfirmCards(1-tg:GetControler(),tg)
+			if s.op2filter(tg,tp) then
 				local e1=Effect.CreateEffect(e:GetHandler())
 				e1:SetType(EFFECT_TYPE_SINGLE)
 				e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
 				e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 				e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-				esg:RegisterEffect(e1)
+				tg:RegisterEffect(e1)
 			end
 		end
 	end

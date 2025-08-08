@@ -62,7 +62,7 @@ function s.con2(e,tp,eg)
 end
 
 function s.tg2filter(c,e)
-	return c:IsFaceup() and c:IsCanTurnSet() and c:IsCanBeEffectTarget(e)
+	return ((c:IsFaceup() and c:IsCanTurnSet()) or c:IsFacedown()) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -79,6 +79,8 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e)
 	if #tg>0 then
-		Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)
+		for tc in tg:Iter() do
+			Duel.ChangePosition(tc,tc:IsFaceup() and POS_FACEDOWN_DEFENSE or POS_FACEUP_ATTACK)
+		end
 	end
 end

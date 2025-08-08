@@ -9,6 +9,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_POSITION+CATEGORY_TODECK)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
 	e1:SetCost(Cost.DetachFromSelf(1,1,nil))
@@ -42,26 +43,27 @@ function s.ovop(e,tp,chk)
 end
 
 --effect 1
-function s.tg1filter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0xf2a) and c:IsCanTurnSet()
+function s.tg1filter(c,e)
+	return c:IsFaceup() and c:IsSetCard(0xf2a) and c:IsCanTurnSet() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local fg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
-	if chk==0 then return #fg>0 end
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,fg,1,tp,0)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,#g,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,sg,#sg,tp,0)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local fg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
-	if #fg>0 then
-		local fsg=aux.SelectUnselectGroup(fg,e,tp,1,#fg,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
-		Duel.ChangePosition(fsg,POS_FACEDOWN_DEFENSE)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)
 		local rg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,nil)
 		if #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 			Duel.BreakEffect()
-			local rsg=aux.SelectUnselectGroup(rg,e,tp,1,#fsg,aux.TRUE,1,tp,HINTMSG_TODECK)
+			local rsg=aux.SelectUnselectGroup(rg,e,tp,1,#tg,aux.TRUE,1,tp,HINTMSG_TODECK)
 			Duel.SendtoDeck(rsg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 		end
 	end
