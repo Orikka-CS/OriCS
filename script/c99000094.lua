@@ -159,7 +159,7 @@ function s.dice_op(e,tp,eg,ep,ev,re,r,rp)
    	 		end
     		str=str .. "[" .. v .. "]"
 		end
-		Debug.Message("주사위 결과: " .. str)
+		Debug.ShowHint("주사위 결과: " .. str)
 	end
 end
 function s.coin_op(e,tp,eg,ep,ev,re,r,rp)
@@ -186,6 +186,6 @@ function s.coin_op(e,tp,eg,ep,ev,re,r,rp)
 				str=str .. "[뒷면]"
 			end
 		end
-		Debug.Message("코인 토스 결과: " .. str)
+		Debug.ShowHint("코인 토스 결과: " .. str)
 	end
 end

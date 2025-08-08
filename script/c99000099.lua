@@ -41,15 +41,15 @@ function s.start_op(e)
 	local tp=c:GetOwner()
 	if c:IsLocation(LOCATION_ALL) then
 		Duel.DisableShuffleCheck()
-		local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_ALL,LOCATION_ALL,c,id)
+		local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_ALL,LOCATION_ALL,nil,id)
 		if #g>0 then
 			Duel.SendtoDeck(g,nil,-2,REASON_RULE)
 		end
-		for i=0,4 do
-			local debug_card=Duel.CreateToken(tp,99000094+i)
-      			Duel.SendtoExtraP(debug_card,tp,REASON_RULE)
+		for i=1,5 do
+			Debug.AddCard(id-i,tp,tp,LOCATION_EXTRA,i,POS_FACEUP)
 		end
-		Duel.SendtoExtraP(c,tp,REASON_RULE)
+		Debug.AddCard(id,tp,tp,LOCATION_EXTRA,1,POS_FACEUP)
+		Debug.ReloadFieldEnd()
 		--오늘 이 도시는 전쟁터로 변한다!
 		local e1b=Effect.CreateEffect(c)
 		e1b:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
@@ -65,12 +65,11 @@ function s.debug_op(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SendtoDeck(g,nil,-2,REASON_RULE)
 	else
-		for i=0,4 do
-			local debug_card=Duel.CreateToken(tp,99000094+i)
-      			Duel.SendtoExtraP(debug_card,tp,REASON_RULE)
+		for i=1,5 do
+			Debug.AddCard(id-i,tp,tp,LOCATION_EXTRA,i,POS_FACEUP)
 		end
-		local debug_card=Duel.CreateToken(tp,id)
-      		Duel.SendtoExtraP(debug_card,tp,REASON_RULE)
+		Debug.AddCard(id,tp,tp,LOCATION_EXTRA,1,POS_FACEUP)
+		Debug.ReloadFieldEnd()
 	end
 end
 function s.actfilter(c,e,tp,eg,ep,ev,re,r,rp,chain)
