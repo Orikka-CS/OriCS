@@ -56,12 +56,11 @@ function s.regop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetReset(RESET_PHASE|PHASE_BATTLE|RESET_OPPO_TURN,1)
 	end
 	Duel.RegisterEffect(e1,tp)
-	--공격 대상을 그 상대 몬스터에 옮기고 데미지 계산을 실행한다.
+	--고른 몬스터의 컨트롤을 엔드 페이즈까지 얻고, 공격 대상을 그 몬스터로 옮긴다.
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_CONTROL)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EVENT_ATTACK_ANNOUNCE)
-	e2:SetCountLimit(2)
 	e2:SetCondition(s.atkcon)
 	e2:SetOperation(s.atkop)
 	Duel.RegisterEffect(e2,tp)
@@ -73,16 +72,19 @@ function s.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsTurnPlayer(1-tp) and s.regcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.atkop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local a=Duel.GetAttacker()
-	if Duel.IsExistingMatchingCard(Card.IsControlerCanBeChanged,tp,0,LOCATION_MZONE,1,a) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+	if not c:HasFlagEffect(id) and Duel.IsExistingMatchingCard(Card.IsControlerCanBeChanged,tp,0,LOCATION_MZONE,1,a)
+		and Duel.SelectEffectYesNo(tp,c) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
 		local tc=Duel.SelectMatchingCard(tp,Card.IsControlerCanBeChanged,tp,0,LOCATION_MZONE,1,1,a):GetFirst()
 		Duel.HintSelection(tc)
-		if Duel.GetControl(tc,tp,PHASE_BATTLE,2)~=0 then
+		if Duel.GetControl(tc,tp,PHASE_END,1)~=0 then
 			if a:CanAttack() and not a:IsImmuneToEffect(e) then
 				Duel.ChangeAttackTarget(tc,true)
 			end
 		end
+		c:RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD|RESET_PHASE|PHASE_BATTLE,0,1)
 	end
 end
 function s.doublebattlephase(e,tp,eg,ep,ev,re,r,rp)
