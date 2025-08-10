@@ -9,6 +9,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_POSITION)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_CHAINING)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
@@ -38,33 +39,33 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg1filter(c,e)
-	return c:IsFaceup() and c:IsCanTurnSet()
+	return c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanTurnSet()
 end
 
 function s.tg1ctfilter(c)
-	return c:IsSetCard(0xf28) and c:IsMonster()
+	return c:IsSetCard(0xf28)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tg1filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)   
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)   
 	local ct=Duel.GetMatchingGroupCount(s.tg1ctfilter,tp,LOCATION_GRAVE,0,nil)   
 	if chk==0 then return #g>0 and ct>0 end
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,1,0,0)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,sg,#sg,0,0)
 end
 
 function s.op1filter(c,tp)
-	return c:IsTrap() and c:IsControler(tp)
+	return c:IsContinuousTrap() and c:IsControler(tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)   
-	local ct=Duel.GetMatchingGroupCount(s.tg1ctfilter,tp,LOCATION_GRAVE,0,nil)   
-	if #g>0 and ct>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
-		Duel.ChangePosition(sg,POS_FACEDOWN_DEFENSE)
-		sg=sg:Filter(s.op1filter,nil,tp)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)
+		local sg=tg:Filter(s.op1filter,nil,tp)
 		if #sg>0 then
 			for tc in aux.Next(sg) do
 				local e1=Effect.CreateEffect(e:GetHandler())
