@@ -88,6 +88,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		if #mg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
 			local msg=aux.SelectUnselectGroup(mg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOFIELD):GetFirst()
 			Duel.MoveToField(msg,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+			aux.DelayedOperation(msg,PHASE_STANDBY,id,e,tp,function(ag) Duel.SendtoDeck(ag,nil,SEQ_DECKTOP,REASON_EFFECT) end,nil,0,1)
 		end
 		Duel.ShuffleDeck(tp)
 	end
