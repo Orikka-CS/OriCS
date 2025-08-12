@@ -66,7 +66,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local op,event_v=e:GetLabel()
 	if op==1 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g=Duel.SelectMatchingCard(tp,aux.NecroVallyFilter(s.tfil11),tp,LOCATION_DECK+LOCATION_GRAVE,
+		local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil11),tp,LOCATION_DECK+LOCATION_GRAVE,
 			LOCATION_GRAVE,1,1,nil)
 		if #g>0 then
 			Duel.SendtoHand(g,nil,REASON_EFFECT)
