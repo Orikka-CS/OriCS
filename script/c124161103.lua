@@ -48,13 +48,13 @@ function s.tg1b2filter(c,e,tp)
 end
 
 function s.tg1b3filter(c)
-	return c:IsSetCard(0xf26) and c:IsSpellTrap() and c:IsFaceup() and c:IsAbleToGrave()
+	return c:IsSetCard(0xf26) and c:IsSpellTrap() and (c:IsFaceup() or c:IsLocation(LOCATION_HAND)) and c:IsAbleToGrave()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g1=Duel.GetMatchingGroup(s.tg1b1filter,tp,LOCATION_DECK,0,nil)
 	local g2=Duel.GetMatchingGroup(s.tg1b2filter,tp,LOCATION_GRAVE,0,nil,e,tp)
-	local g3=Duel.GetMatchingGroup(s.tg1b3filter,tp,LOCATION_ONFIELD,0,nil)
+	local g3=Duel.GetMatchingGroup(s.tg1b3filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,nil)
 	local b1=#g1>0
 	local b2=#g2>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 	local b3=#g3>0 and Duel.IsPlayerCanDraw(tp,1)
@@ -69,7 +69,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 		Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE)
 	else
 		e:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DRAW)
-		Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_ONFIELD)
+		Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND+LOCATION_ONFIELD)
 		Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,1,tp,LOCATION_DECK)
 	end
 end
@@ -90,7 +90,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
 	else
-		g=Duel.GetMatchingGroup(s.tg1b3filter,tp,LOCATION_ONFIELD,0,nil)
+		g=Duel.GetMatchingGroup(s.tg1b3filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,nil)
 		if #g==0 then return end
 		sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 		if Duel.SendtoGrave(sg,REASON_EFFECT)>0 then

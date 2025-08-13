@@ -3,6 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetCondition(s.con1)
@@ -35,14 +36,12 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	if re:GetHandler():IsRelateToEffect(re) then
-		Duel.SetOperationInfo(0,CATEGORY_REMOVE,eg,1,1-tp,re:GetHandler():GetLocation())
+		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,1-tp,re:GetHandler():GetLocation())
 	end
 	if e:GetHandler():IsPreviousLocation(LOCATION_REMOVED) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
 		e:SetLabel(1)
-		e:SetCategory(CATEGORY_NEGATE+CATEGORY_TOGRAVE)
-		Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,rp,LOCATION_HAND+LOCATION_DECK+LOCATION_ONFIELD)
+		Duel.SetPossibleOperationInfo(0,CATEGORY_DESTROY,nil,1,0,LOCATION_ONFIELD)
 	else
-		e:SetCategory(CATEGORY_NEGATE)
 		e:SetLabel(0)
 	end 
 end
@@ -50,12 +49,13 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then return end
-	if Duel.Remove(rc,POS_FACEUP,REASON_EFFECT)==0 then return end
+	if Duel.Destroy(rc,REASON_EFFECT)==0 then return end
 	local cd=rc:GetCode()
-	local g=Duel.GetMatchingGroup(Card.IsCode,rp,LOCATION_HAND+LOCATION_DECK+LOCATION_ONFIELD,0,nil,cd)
-	if e:GetLabel()==1 and #g>0 then
+	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
+	if e:GetLabel()==1 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
-		Duel.SendtoGrave(g,REASON_EFFECT)
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
+		Duel.Destroy(sg,REASON_EFFECT)
 	end
 end
 

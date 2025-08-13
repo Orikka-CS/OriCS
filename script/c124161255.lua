@@ -7,14 +7,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_TO_DECK)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e2:SetCode(EFFECT_DESTROY_REPLACE)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
+	e2:SetValue(s.val2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
@@ -30,25 +28,19 @@ function s.extratg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 --effect 2
-function s.con2filter(c,tp)
-	return c:IsPreviousControler(tp) and c:IsMonster() and c:IsSetCard(0xf30) and c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousLocation(LOCATION_ONFIELD+LOCATION_GRAVE)
-end
-
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,tp)
+function s.tg2filter(c,tp)
+	return c:IsFaceup() and c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT+REASON_BATTLE)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsAbleToDeck() and Duel.IsPlayerCanDraw(tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,c,1,0,LOCATION_GRAVE)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	if chk==0 then return e:GetHandler():IsAbleToDeck() and eg:IsExists(s.tg2filter,1,nil,tp) end
+	return Duel.SelectEffectYesNo(tp,e:GetHandler(),aux.Stringid(id,0))
+end
+
+function s.val2(e,c)
+	return s.tg2filter(c,e:GetHandlerPlayer())
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then
-		Duel.SendtoDeck(c,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
-		Duel.Draw(tp,1,REASON_EFFECT)
-	end
+	Duel.SendtoDeck(e:GetHandler(),nil,SEQ_DECKSHUFFLE,POS_FACEUP,REASON_EFFECT)
 end

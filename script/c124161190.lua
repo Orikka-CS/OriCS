@@ -16,7 +16,7 @@ function s.initial_effect(c)
 	e1:SetCost(Cost.DetachFromSelf(1,1,nil))
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
-	c:RegisterEffect(e1,false,REGISTER_FLAG_DETACH_XMAT)
+	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_REMOVE)

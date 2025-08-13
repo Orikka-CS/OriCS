@@ -18,12 +18,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -65,36 +63,22 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.cst2filter(c,tp)
-	local g=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_DECK,0,nil,c:GetCode())
-	return c:IsSetCard(0xf30) and c:IsAbleToDeckAsCost() and g>0
-end
-
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil,tp)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK):GetFirst()
-	e:SetLabel(sg:GetCode())
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
-end
-
-function s.tg2filter(c,cd)
-	return c:IsSetCard(0xf30) and c:IsAbleToHand() and not c:IsCode(cd)
-end
-
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_DECK)
+	if chk==0 then return true end
+	s.announce_filter={TYPE_MONSTER,OPCODE_ISTYPE}
+	local ac=Duel.AnnounceCard(tp,table.unpack(s.announce_filter))
+	e:SetLabel(ac)
+	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e:GetLabel())
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
-	end
+	local ac=e:GetLabel()
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetTargetRange(1,1)
+	e1:SetTarget(function(e,c) return c:IsCode(ac) and c:IsLocation(LOCATION_GRAVE) end)
+	e1:SetReset(RESET_PHASE+PHASE_END,2)
+	Duel.RegisterEffect(e1,tp)
 end

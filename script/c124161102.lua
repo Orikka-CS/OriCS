@@ -13,11 +13,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
+	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
+	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -52,7 +53,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoGrave(sg,REASON_EFFECT)
 		Duel.Damage(1-tp,#sg*600,REASON_EFFECT)
 		local dg=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
-		if ssg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if #dg>0 and ssg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			dsg=aux.SelectUnselectGroup(dg,e,tp,1,ssg,aux.TRUE,1,tp,HINTMSG_DESTROY)
 			Duel.Destroy(dsg,REASON_EFFECT)
 		end
@@ -69,17 +70,27 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return g>0
 end
 
+function s.cst2filter(c)
+	return c:IsDiscardable() and c:IsSetCard(0xf26) and c:IsMonster()
+end
+
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
+	Duel.SendtoGrave(sg,REASON_COST+REASON_DISCARD)
+end
+
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return c:IsAbleToDeck() and Duel.IsPlayerCanDraw(tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,c,1,0,LOCATION_GRAVE)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	if chk==0 then return c:IsAbleToHand() end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,LOCATION_GRAVE)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		Duel.SendtoDeck(c,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
-		Duel.Draw(tp,1,REASON_EFFECT)
+		Duel.SendtoHand(c,nil,REASON_EFFECT)
 	end
 end

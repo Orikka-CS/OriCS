@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_TODECK+CATEGORY_TOGRAVE+CATEGORY_DRAW)
+	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_TODECK+CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetCountLimit(1,id)
@@ -38,39 +38,30 @@ end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler())
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE,0,e:GetHandler())
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp) end
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
-	if re:GetHandler():IsRelateToEffect(re) then
-		Duel.SetOperationInfo(0,CATEGORY_TODECK,eg,1,0,0)
-		Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
-		Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
-	end
-end
-
-function s.op1filter(c)
-	return c:IsContinuousSpell() and c:IsLocation(LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,eg,1,0,0) 
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then return end
-	rc:CancelToGrave()
-	Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	local ac=3
 	local g=Duel.GetDecktopGroup(tp,ac)
 	Duel.SendtoGrave(g,REASON_EFFECT)
-	g=g:Filter(s.op1filter,nil)
-	if #g>0 then
-		Duel.BreakEffect()
-		Duel.Draw(tp,#g,REASON_EFFECT)
-	end
+	g=g:Filter(Card.IsLocation,nil,LOCATION_GRAVE)
+	if #g==0 then return end
+	Duel.BreakEffect()
+	if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then return end
+	rc:CancelToGrave()
+	Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 end
 
 --effect 2

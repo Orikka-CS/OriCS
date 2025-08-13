@@ -14,7 +14,7 @@ function s.initial_effect(c)
 	e1:SetCost(Cost.DetachFromSelf(1,1,nil))
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
-	c:RegisterEffect(e1,false,REGISTER_FLAG_DETACH_XMAT)
+	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
@@ -54,7 +54,7 @@ function s.cst2ffilter(c,cd)
 end
 
 function s.cst2filter(c,tp)
-	return c:IsSetCard(0xf2c) and c:IsAbleToRemoveAsCost() and Duel.GetMatchingGroupCount(s.cst2ffilter,tp,LOCATION_DECK,0,nil,cd)>0
+	return c:IsSetCard(0xf2c) and c:IsAbleToRemoveAsCost() and Duel.GetMatchingGroupCount(s.cst2ffilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,cd)>0
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -67,12 +67,12 @@ end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local cd=e:GetLabel()
-	local hg=Duel.GetMatchingGroup(s.cst2ffilter,tp,LOCATION_DECK,0,nil,cd)
+	local hg=Duel.GetMatchingGroup(s.cst2ffilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,cd)
 	if #hg>0 then
 		local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(hsg,tp,REASON_EFFECT)

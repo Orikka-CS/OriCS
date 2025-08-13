@@ -30,6 +30,7 @@ end
 function s.cst1filter(c)
 	return c:IsDiscardable() and c:IsSetCard(0xf25)
 end
+
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,c)
