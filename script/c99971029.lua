@@ -23,7 +23,14 @@ end
 
 function s.cbtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not Duel.GetAttacker():IsHasEffect(EFFECT_CANNOT_DIRECT_ATTACK) end
+	if Duel.GetAttacker():IsSetCard(0x6d71) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
+		Duel.SetChainLimit(s.chainlm)
+	end
 end
+function s.chainlm(e,rp,tp)
+	return tp==rp
+end
+function
 function s.cbop(e,tp,eg,ep,ev,re,r,rp)
 	local at=Duel.GetAttacker()
 	local c=e:GetHandler()
