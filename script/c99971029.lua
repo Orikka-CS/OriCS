@@ -30,7 +30,6 @@ end
 function s.chainlm(e,rp,tp)
 	return tp==rp
 end
-function
 function s.cbop(e,tp,eg,ep,ev,re,r,rp)
 	local at=Duel.GetAttacker()
 	local c=e:GetHandler()
