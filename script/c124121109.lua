@@ -19,8 +19,8 @@ function s.initial_effect(c)
 	e3:SetCode(EVENT_FREE_CHAIN)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e3:SetCountLimit(1)
-	e3:SetCondition(s.con3)
+	e3:SetDescription(aux.Stringid(id,0))
+	e3:SetCountLimit(1,{id,1})
 	e3:SetTarget(s.tar3)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
@@ -54,9 +54,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		end)
 		tc:RegisterEffect(e1)
 	end
-end
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp
 end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()

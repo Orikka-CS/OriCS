@@ -18,7 +18,8 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e3:SetCountLimit(1)
+	e3:SetDescription(aux.Stringid(id,0))
+	e3:SetCountLimit(1,{id,1})
 	e3:SetTarget(s.tar3)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
@@ -68,7 +69,8 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
 		local g=Duel.GetFieldGroup(tp,LOCATION_HAND,0):Select(tp,1,1,nil)
-		if #g>0 and Duel.Overlay(c,g,true) then
+		if #g>0 then
+			Duel.Overlay(c,g,true)
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 			local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil3),tp,
 				LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)

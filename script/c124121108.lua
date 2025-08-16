@@ -19,7 +19,8 @@ function s.initial_effect(c)
 	e3:SetCode(EVENT_FREE_CHAIN)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetCategory(CATEGORY_TOGRAVE)
-	e3:SetCountLimit(1)
+	e3:SetDescription(aux.String(id,2))
+	e3:SetCountLimit(1,{id,1})
 	e3:SetTarget(s.tar3)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
@@ -60,25 +61,31 @@ end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return Duel.IsExistingMatchingCard(s.tfil3,tp,LOCATION_DECK+LOCATION_EXTRA,0,1,nil,c:IsType(TYPE_XYZ))
+		return Duel.IsExistingMatchingCard(s.tfil3,tp,LOCATION_DECK,0,1,nil,c:IsType(TYPE_XYZ))
+			and Duel.IsExistingMatchingCard(s.tfil3,tp,LOCATION_EXTRA,0,1,nil,c:IsType(TYPE_XYZ))
 	end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK+LOCATION_EXTRA)
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.tfil3,tp,LOCATION_DECK+LOCATION_EXTRA,0,1,1,nil,c:IsRelateToEffect(e))
-	local tc=g:GetFirst()
-	if tc then
+	local g1=Duel.SelectMatchingCard(tp,s.tfil3,tp,LOCATION_DECK,0,1,1,nil,c:IsRelateToEffect(e))
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g2=Duel.SelectMatchingCard(tp,s.tfil3,tp,LOCATION_EXTRA,0,1,1,nil,c:IsRelateToEffect(e))
+	g1:Merge(g2)
+	local tc=g1:GetFirst()
+	while tc do
+		Duel.Hint(HINT_CARD,0,tc:GetOriginalCode())
 		local b1=tc:IsAbleToHand()
 		local b2=c:IsRelateToEffect(e)
 		local op=Duel.SelectEffect(tp,
 			{b1,aux.Stringid(id,0)},
 			{b2,aux.Stringid(id,1)})
 		if op==1 then
-			Duel.SendtoGrave(g,REASON_EFFECT)
+			Duel.SendtoGrave(tc,REASON_EFFECT)
 		elseif op==2 then
-			Duel.Overlay(c,g,true)
+			Duel.Overlay(c,tc,true)
 		end
+		tc=g1:GetNext()
 	end
 end

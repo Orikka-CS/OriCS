@@ -68,7 +68,7 @@ function s.cost3(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	Duel.RemoveOverlayCard(tp,1,0,1,1,REASON_COST)
 end
-function s.tar3(e,tp,eg,ep,ev,re,r,rp)
+function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		return true
