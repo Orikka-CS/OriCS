@@ -93,6 +93,14 @@ end
 function s.cfil2(c)
 	return c:IsType(TYPE_XYZ) and c:IsAbleToExtraAsCost()
 end
+function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		return Duel.IsExistingMatchingCard(s.cfil2,tp,LOCATION_GRAVE,0,3,nil)
+	end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectMatchingCard(tp,s.cfil2,tp,LOCATION_GRAVE,0,3,3,nil)
+	Duel.SendtoDeck(g,nil,2,REASON_COST)
+end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
