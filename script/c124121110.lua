@@ -51,7 +51,7 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 			and Duel.IsExistingMatchingCard(s.tfil22,tp,LOCATION_DECK,0,1,nil)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectTargret(tp,s.tfil21,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectTarget(tp,s.tfil21,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
 end
@@ -94,7 +94,7 @@ function s.cost4(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	Duel.RemoveOverlayCard(tp,1,0,1,1,REASON_COST)
 end
-function s.tar4(e,tp,eg,ep,ev,re,r,rp)
+function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		return true

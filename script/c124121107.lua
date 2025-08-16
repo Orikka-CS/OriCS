@@ -68,7 +68,7 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
 		local g=Duel.GetFieldGroup(tp,LOCATION_HAND,0):Select(tp,1,1,nil)
-		if #g>0 and Duel.Overlay(c,g,true)>0 then
+		if #g>0 and Duel.Overlay(c,g,true) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 			local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil3),tp,
 				LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
