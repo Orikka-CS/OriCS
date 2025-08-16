@@ -12,10 +12,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)	
-	e2:SetCode(EVENT_TO_GRAVE)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCode(EVENT_CHAINING)
+	e2:SetRange(LOCATION_GRAVE)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TOHAND)
 	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(s.con2)
+	e2:SetCost(s.cost2)
 	e2:SetTarget(s.tar2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -83,26 +86,28 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		end)
 	end
 end
-function s.tfil2(c)
-	return c:IsType(TYPE_XYZ) and c:IsAbleToDeck()
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	return re:IsActiveType(TYPE_MONSTER) and rc:IsType(TYPE_XYZ)
 end
-function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function s.cfil2(c)
+	return c:IsType(TYPE_XYZ) and c:IsAbleToExtraAsCost()
+end
+function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chkc then
-		return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tfil2(chkc)
-	end
 	if chk==0 then
-		return c:IsAbleToHand() and Duel.IsExistingTarget(s.tfil2,tp,LOCATION_GRAVE,0,3,nil)
+		return c:IsAbleToHand()
 	end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,s.tfil2,tp,LOCATION_GRAVE,0,3,3,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,3,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_HAND)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GetTargetCards(e)
-	if #g>0 and Duel.SendtoDeck(g,nil,2,REASON_EFFECT)>0 and c:IsRelateToEffect(e) then
-		Duel.SendtoHand(c,nil,REASON_EFFECT)
+	if c:IsRelateToEffect(e) and Duel.SendtoHand(c,nil,REASON_EFFECT)>0 and c:IsLocation(LOCATION_HAND) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+		local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND,0,1,1,nil)
+		if #g>0 then
+			Duel.SendtoDeck(g,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+		end
 	end
 end
