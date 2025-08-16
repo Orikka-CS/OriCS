@@ -76,7 +76,7 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g1:GetFirst()
 	while tc do
 		Duel.Hint(HINT_CARD,0,tc:GetOriginalCode())
-		local b1=tc:IsAbleToHand()
+		local b1=tc:IsAbleToGrave()
 		local b2=c:IsRelateToEffect(e)
 		local op=Duel.SelectEffect(tp,
 			{b1,aux.Stringid(id,0)},
