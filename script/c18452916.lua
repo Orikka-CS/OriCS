@@ -12,6 +12,7 @@ function c18452916.initial_effect(c)
 	e1:SetOperation(c18452916.spop)
 	c:RegisterEffect(e1)
 end
+c18452916.listed_names={18452910}
 function c18452916.costfilter(c)
 	return (c:IsRace(RACE_REPTILE) or c:IsAttribute(ATTRIBUTE_FIRE)) and c:IsDiscardable()
 end

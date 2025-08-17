@@ -105,11 +105,15 @@ function c28170003.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
-
-
 function c28170003.cpcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,1000) end
-	Duel.PayLPCost(tp,1000)
+	if chk==0 then
+		return Duel.CheckLPCost(tp,1000) or Duel.IsPlayerAffectedByEffect(tp,28170018)
+	end
+	if Duel.IsPlayerAffectedByEffect(tp,28170018) then
+		Duel.Recover(tp,1000,REASON_EFFECT)
+	else
+		Duel.PayLPCost(tp,1000)
+	end
 end
 function c28170003.fil(c)
 	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsSetCard(0x2ce) and c:IsAbleToDeck() and c:CheckActivateEffect(true,true,false)~=nil

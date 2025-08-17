@@ -44,8 +44,14 @@ function c28170012.initial_effect(c)
 end
 
 function c28170012.cpcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,1000) end
-	Duel.PayLPCost(tp,1000)
+	if chk==0 then
+		return Duel.CheckLPCost(tp,1000) or Duel.IsPlayerAffectedByEffect(tp,28170018)
+	end
+	if Duel.IsPlayerAffectedByEffect(tp,28170018) then
+		Duel.Recover(tp,1000,REASON_EFFECT)
+	else
+		Duel.PayLPCost(tp,1000)
+	end
 end
 function c28170012.cpfilter(c)
 	return c:IsSetCard(0x2ce) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToDeck() and c:CheckActivateEffect(false,true,false)~=nil
