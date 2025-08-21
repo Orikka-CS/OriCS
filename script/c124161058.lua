@@ -21,15 +21,16 @@ function s.initial_effect(c)
 	e3:SetTarget(s.tg3)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
-	--equip count
+	--count
 	aux.GlobalCheck(s,function()
-		local cnt=Effect.CreateEffect(c)
-		cnt:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		cnt:SetCode(EVENT_EQUIP)
-		cnt:SetOperation(s.cnt)
-		Duel.RegisterEffect(cnt,0)
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_EQUIP)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
 	end)
 end
+
 --count
 function s.cnt(e,tp,eg,ep,ev,re,r,rp)
 	for tc in eg:Iter() do

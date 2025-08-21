@@ -85,12 +85,12 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 3
-function s.con3filter(c,tp)
+function s.con3filter(c)
 	return c:IsReason(REASON_EFFECT) and c:IsPreviousLocation(LOCATION_ONFIELD)
 end
 
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con3filter,1,nil,tp)
+	return eg:IsExists(s.con3filter,1,nil)
 end
 
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
