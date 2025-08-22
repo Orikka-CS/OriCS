@@ -47,6 +47,7 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
+	local rc=re:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if Duel.NegateActivation(ev) and rc:IsRelateToEffect(re) and tc:IsRelateToEffect(e) then
 		Duel.Overlay(tc,rc,true)
