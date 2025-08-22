@@ -1,4 +1,4 @@
---캘라피스 이그니션
+--캘라피스 엔듀런스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
