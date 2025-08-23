@@ -129,7 +129,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local ct=Duel.GetFlagEffect(tp,124161269)
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return e:GetHandler():IsAbleToDeck() and #g>0 and ct>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,eq,aux.TRUE,1,tp,HINTMSG_DESTROY)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_DESTROY)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_TOEXTRA,e:GetHandler(),1,0,LOCATION_GRAVE)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,sg,#sg,0,0)
