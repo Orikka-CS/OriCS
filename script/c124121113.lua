@@ -92,10 +92,10 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
 		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-			and Duel.IsExistingTarget(s.tfil3,tp,LOCATION_GRAVE,0,1,nil,e,tp,c)
+			and Duel.IsExistingTarget(s.tfil3,tp,LOCATION_GRAVE,0,1,c,e,tp,c)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectTarget(tp,s.tfil3,tp,LOCATION_GRAVE,0,1,1,nil,e,tp,c)
+	local g=Duel.SelectTarget(tp,s.tfil3,tp,LOCATION_GRAVE,0,1,1,c,e,tp,c)
 	g:AddCard(c)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
