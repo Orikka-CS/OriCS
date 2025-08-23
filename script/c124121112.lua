@@ -39,6 +39,8 @@ function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then
 		return Duel.IsExistingTarget(s.tfil2,tp,LOCATION_MZONE,0,1,nil)
 	end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
+	Duel.SelectTarget(tp,s.tfil2,tp,LOCATION_MZONE,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	local rc=re:GetHandler()
 	if rc:IsRelateToEffect(re) and rc:IsLocation(LOCATION_GRAVE) then

@@ -95,11 +95,13 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.tfil2(c,e,tp)
 	return c:IsSetCard("아세리마") and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsCode(id)
+		and ((c:IsLoc("E") and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0)
+			or (not c:IsLoc("E") and Duel.GetLocCount(tp,"M")>0))
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		return Duel.IEMCard(s.tfil2,tp,"DE",0,1,nil,e,tp) and Duel.GetLocCount(tp,"M")>0
+		return Duel.IEMCard(s.tfil2,tp,"DE",0,1,nil,e,tp)
 	end
 	Duel.SOI(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,"DE")
 end
