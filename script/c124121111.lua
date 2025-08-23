@@ -55,6 +55,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,sg)
 		local tg=sg:RandomSelect(1-tp,1)
 		local tc=tg:GetFirst()
+		Duel.Hint(HINT_CARD,0,tc:GetOriginalCode())
 		aux.ToHandOrElse(tc,tp,
 			function()
 				return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
