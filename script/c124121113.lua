@@ -110,6 +110,9 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 		local g=Group.FromCards(c,tc)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=g:FilterSelect(tp,s.ofil3,1,1,nil,e,tp,g)
+		if #sg==0 then
+			return
+		end
 		local tg=g:Sub(sg)
 		if Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)>0 then
 			Duel.SendtoDeck(tg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
