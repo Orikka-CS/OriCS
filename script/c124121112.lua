@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return re:IsMonsterEffect() and Duel.IsChainNegatable(ev)
+	return re:IsMonsterEffect() and Duel.IsChainNegatable(ev) and rp~=tp
 end
 function s.tfil2(c)
 	return c:IsFaceup() and c:IsSetCard(0xfa6) and c:IsType(TYPE_XYZ)
