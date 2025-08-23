@@ -81,7 +81,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,own,1,1,aux.TRUE,1,own,HINTMSG_DESTROY)
 		Duel.Destroy(sg,REASON_EFFECT)
-		local cg=Duel.GetMatchingGroup(s.op2dfilter,tp,LOCATION_ONFIELD,0,e:GetHandler())
+		local cg=Duel.GetMatchingGroup(s.op2dfilter,tp,LOCATION_MZONE,0,e:GetHandler())
 		if #cg>0 then return end
 		local dg=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_MZONE,0,e:GetHandler())
 		if #dg>1 then
