@@ -23,20 +23,21 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	--count
 	aux.GlobalCheck(s,function()
-		local cnt=Effect.CreateEffect(c)
-		cnt:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		cnt:SetCode(EVENT_DRAW)
-		cnt:SetOperation(s.cnt)
-		Duel.RegisterEffect(cnt,0)
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_DRAW)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
 	end)
 end
 
 --count
 function s.cnt(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.GetFlagEffect(ep,id)
+	if Duel.GetTurnCount()==0 then return end
 	if ev>ct then
 		for i=1,ev-ct do
-			Duel.RegisterFlagEffect(rp,id,0,0,1)
+			Duel.RegisterFlagEffect(ep,id,0,0,1)
 		end
 	end
 end
