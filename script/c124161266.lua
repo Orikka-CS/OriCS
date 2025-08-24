@@ -92,7 +92,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
 			Duel.Destroy(sg,REASON_EFFECT)
 			ac=ac-1
-			Duel.BreakEffect()
 			g=g-sg
 			g=g:Filter(Card.IsAbleToHand,nil)
 			if #g>0 then
