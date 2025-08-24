@@ -54,15 +54,14 @@ end
 
 --effect 1
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)
-	if chk==0 then return ct>0 and Duel.IsPlayerCanDraw(tp,1) end
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_ONFIELD+LOCATION_HAND)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_NEGATE,nil,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)
+	local ct=Duel.GetCurrentChain()
 	if Duel.IsPlayerCanDraw(tp) then
 		local dt=Duel.AnnounceNumberRange(tp,1,ct)
 		Duel.Draw(tp,dt,REASON_EFFECT)
