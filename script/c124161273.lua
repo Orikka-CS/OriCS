@@ -22,6 +22,25 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_DRAW)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	local ct=Duel.GetFlagEffect(ep,id)
+	if Duel.GetTurnCount()==0 then return end
+	if ev>ct then
+		for i=1,ev-ct do
+			Duel.RegisterFlagEffect(ep,id,0,0,1)
+		end
+	end
 end
 
 --effect 1
@@ -69,7 +88,7 @@ end
 --effect 2
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
-	local ct=Duel.GetFlagEffect(tp,124161269)
+	local ct=Duel.GetFlagEffect(tp,id)
 	if chk==0 then return #g>0 and ct>0 end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DESTROY,nil,0,tp,LOCATION_HAND)
 end
@@ -80,7 +99,7 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
-	local ct=Duel.GetFlagEffect(tp,124161269)
+	local ct=Duel.GetFlagEffect(tp,id)
 	if #g>0 and ct>0 then
 		ct=Duel.AnnounceNumberRange(tp,1,math.min(ct,#g))
 		local sg=g:RandomSelect(tp,ct)

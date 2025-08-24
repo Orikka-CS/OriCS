@@ -29,6 +29,27 @@ function s.initial_effect(c)
 	e2:SetTargetRange(0,1)
 	e2:SetValue(function(e,re,tp) return re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:IsActiveType(TYPE_TRAP) and not re:GetHandler():IsLocation(LOCATION_SZONE) end)
 	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_SPSUMMON_SUCCESS)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cntfilter(c)
+	return c:IsContinuousTrap() and c:IsTrapMonster()
+end
+
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	for tc in aux.Next(eg) do
+		if s.cntfilter(tc) then
+			Duel.RegisterFlagEffect(tc:GetControler(),id,RESET_PHASE+PHASE_END,0,1)
+		end
+	end
 end
 
 --effect 1
@@ -54,13 +75,13 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=Duel.GetFlagEffect(tp,124161132)
-	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct and ct>0 end
+	local ct=Duel.GetFlagEffect(tp,id)
+	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct and ct>0 and Duel.GetDecktopGroup(tp,ct):FilterCount(Card.IsAbleToHand,nil)>0 end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local ct=Duel.GetFlagEffect(tp,124161132)
+	local ct=Duel.GetFlagEffect(tp,id)
 	Duel.ConfirmDecktop(tp,ct)
 	local dt=Duel.GetDecktopGroup(tp,ct)
 	if #dt>0 and dt:IsExists(Card.IsAbleToHand,1,nil) then

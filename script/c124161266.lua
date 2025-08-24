@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_EFFECT),2,nil,s.linkfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetRange(LOCATION_MZONE)
@@ -30,6 +30,25 @@ function s.initial_effect(c)
 	e2a:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
 	e2a:SetValue(aux.tgoval)
 	c:RegisterEffect(e2a)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_DRAW)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	local ct=Duel.GetFlagEffect(ep,id)
+	if Duel.GetTurnCount()==0 then return end
+	if ev>ct then
+		for i=1,ev-ct do
+			Duel.RegisterFlagEffect(ep,id,0,0,1)
+		end
+	end
 end
 
 --link
@@ -56,31 +75,34 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=Duel.GetFlagEffect(tp,124161269)
-	if chk==0 then return ct>0 and Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct*2 end
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-end
-
-function s.op1filter(c)
-	return c:IsSetCard(0xf31) and c:IsAbleToHand()
+	local ct=Duel.GetFlagEffect(tp,id)*2
+	if chk==0 then return ct>0 and Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct and Duel.GetDecktopGroup(tp,ct):FilterCount(Card.IsAbleToHand,nil)>0 end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local ct=Duel.GetFlagEffect(tp,124161269)
+	local ct=Duel.GetFlagEffect(tp,id)
 	local ac=ct*2
 	if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ac then
 		local g=Duel.GetDecktopGroup(tp,ac)
 		Duel.ConfirmCards(tp,g)
-		g=g:Filter(s.op1filter,nil,e,tp)
-		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then	
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		if #g>0 then
 			Duel.DisableShuffleCheck()
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
+			Duel.Destroy(sg,REASON_EFFECT)
+			Duel.BreakEffect()
+			g=g-sg
+			g=g:Filter(Card.IsAbleToHand,nil)
+			sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 			Duel.SendtoHand(sg,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,sg)
 			Duel.ShuffleHand(tp)
-			ac=ac-1
+			ac=ac-2
 		end
-		Duel.SortDecktop(tp,tp,ac)
+		if ac>0 then
+			Duel.SortDecktop(tp,tp,ac)
+		end
 	end
 end
 

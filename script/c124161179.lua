@@ -34,7 +34,7 @@ end
 
 --effect 1
 function s.fcheck(tp,sg,fc)
-	return sg:FilterCount(Card.IsSetCard,nil,0xf2b)>0 and sg:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)<=Duel.GetFlagEffect(tp,124161179)
+	return sg:FilterCount(Card.IsSetCard,nil,0xf2b)>0 and sg:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)<=Duel.GetFlagEffect(tp,id)
 end
 
 function s.extrafil(e,tp,mg)

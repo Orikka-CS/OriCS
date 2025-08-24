@@ -39,11 +39,30 @@ function s.initial_effect(c)
 	e3:SetTargetRange(1,0)
 	e3:SetValue(s.val3)
 	c:RegisterEffect(e3)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_DRAW)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	local ct=Duel.GetFlagEffect(ep,id)
+	if Duel.GetTurnCount()==0 then return end
+	if ev>ct then
+		for i=1,ev-ct do
+			Duel.RegisterFlagEffect(ep,id,0,0,1)
+		end
+	end
 end
 
 --effect 1
 function s.val1(e,c)
-	return Duel.GetFlagEffect(e:GetHandlerPlayer(),124161269)*200
+	return Duel.GetFlagEffect(e:GetHandlerPlayer(),id)*200
 end
 
 --effect 2

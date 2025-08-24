@@ -63,7 +63,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
 		Duel.ShuffleDeck(tp)
-		local ct=Duel.GetFlagEffect(tp,124161269)
+		local ct=Duel.GetFlagEffect(tp,id)
 		local rg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,nil)
 		if #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()

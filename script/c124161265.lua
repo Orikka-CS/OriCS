@@ -26,6 +26,25 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_DRAW)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	local ct=Duel.GetFlagEffect(ep,id)
+	if Duel.GetTurnCount()==0 then return end
+	if ev>ct then
+		for i=1,ev-ct do
+			Duel.RegisterFlagEffect(ep,id,0,0,1)
+		end
+	end
 end
 
 --link
@@ -126,7 +145,7 @@ end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chkc:IsCanBeEffectTarget(e) end
-	local ct=Duel.GetFlagEffect(tp,124161269)
+	local ct=Duel.GetFlagEffect(tp,id)
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return e:GetHandler():IsAbleToDeck() and #g>0 and ct>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_DESTROY)

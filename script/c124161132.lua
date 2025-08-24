@@ -64,7 +64,7 @@ end
 --effect 1
 function s.val1(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetFlagEffect(tp,124161132)*200
+	return Duel.GetFlagEffect(tp,id)*200
 end
 
 --effect 2

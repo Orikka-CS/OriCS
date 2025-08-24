@@ -87,7 +87,7 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if not re:GetHandler():IsRelateToEffect(re) then return end
-	if Duel.Destroy(re:GetHandler(),REASON_EFFECT)>0 and Duel.HasFlagEffect(tp,id) then
+	if Duel.Destroy(re:GetHandler(),REASON_EFFECT)>0 and Duel.GetFlagEffect(tp,id)>0 then
 		local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
 		local b1=true
 		local b2=Duel.IsPlayerCanDraw(tp,1)

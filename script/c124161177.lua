@@ -52,6 +52,7 @@ end
 
 --count
 function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	Duel.RegisterFlagEffect(ep,id,RESET_PHASE+PHASE_END,0,1)
 	if re and re:IsActiveType(TYPE_SPELL+TYPE_TRAP) then
 		re:GetHandler():RegisterFlagEffect(id,RESET_CHAIN,0,1)
 	end
@@ -60,7 +61,7 @@ end
 --effect 1
 function s.val1(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetFlagEffect(tp,124161179)*300
+	return Duel.GetFlagEffect(tp,id)*300
 end
 
 --effect 2

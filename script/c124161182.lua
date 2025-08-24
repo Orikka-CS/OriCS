@@ -24,6 +24,19 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_PAY_LPCOST)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	Duel.RegisterFlagEffect(ep,id,RESET_PHASE+PHASE_END,0,1)
 end
 
 --effect 1
@@ -65,11 +78,11 @@ end
 
 --effect 2
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetFlagEffect(tp,124161179)>0 end
+	if chk==0 then return Duel.GetFlagEffect(tp,id)>0 end
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,tp,500)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local ct=Duel.GetFlagEffect(tp,124161179)
+	local ct=Duel.GetFlagEffect(tp,id)
 	Duel.Damage(1-tp,ct*500,REASON_EFFECT)
 end
