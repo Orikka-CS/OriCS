@@ -32,7 +32,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tar1f),tp,LOCATION_DECK|LOCATION_GRAVE,0,1,1,nil,e,tp)
 	if #g>0 and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)~=0 then
 		local ct=Duel.GetMatchingGroupCount(aux.FaceupFilter(Card.IsCode,99971031),tp,LOCATION_MZONE,0,nil)
-		if ct>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+		if ct>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_NEGATE)
 			local sg=Duel.SelectMatchingCard(tp,Card.IsNegatable,tp,0,LOCATION_ONFIELD,1,ct,nil)
