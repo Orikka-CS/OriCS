@@ -4,10 +4,12 @@ function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_REMOVE+CATEGORY_DRAW)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_TO_GRAVE)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -26,13 +28,21 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1filter(c,e)
-	return c:IsSetCard(0xf27) and c:IsCanBeEffectTarget(e) and c:IsAbleToRemove()
+function s.con1filter(c,tp)
+	return c:IsSetCard(0xf27) and c:IsAbleToRemove() and c:IsControler(tp)
+end
+
+function s.con1(e,tp,eg)
+	return eg:IsExists(s.con1filter,1,nil,tp)
+end
+
+function s.tg1filter(c,e,tp)
+	return c:IsSetCard(0xf27) and c:IsAbleToRemove() and c:IsControler(tp)and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp) end
+	local g=eg:Filter(s.tg1filter,nil,e,tp)
 	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp,1) end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.SetTargetCard(sg)

@@ -80,13 +80,14 @@ function s.tg2filter(c,e)
 	return c:IsSetCard(0xf28) and not c:IsType(TYPE_FIELD) and c:IsAbleToGrave()
 end
 
-function s.tg2sfilter(c)
-	return c:IsLocation(LOCATION_STZONE) and c:IsFacedown()
+function s.tg2sfilter(c,e)
+	return c:IsLocation(LOCATION_STZONE) and c:IsFacedown() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_SZONE) and chkc:IsControler(tp) and s.tg2sfilter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e)
-	local cg=eg:Filter(s.tg2sfilter,nil)
+	local cg=eg:Filter(s.tg2sfilter,nil,e)
 	if chk==0 then return #g>0 and #cg>0 end
 	local csg=aux.SelectUnselectGroup(cg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
 	Duel.SetTargetCard(csg)

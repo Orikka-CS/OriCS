@@ -55,7 +55,7 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_HAND,nil)
-	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(1-tp) end
+	if chk==0 then return #g>1 and Duel.IsPlayerCanDraw(1-tp) end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,0,1-tp,LOCATION_HAND)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,1,1-tp,1)
 end

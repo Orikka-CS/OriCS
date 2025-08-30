@@ -6,7 +6,6 @@ function s.initial_effect(c)
 	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_EFFECT),2,nil,s.linkfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetRange(LOCATION_MZONE)
@@ -76,33 +75,17 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ct=Duel.GetFlagEffect(tp,id)*2
-	if chk==0 then return ct>0 and Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct and Duel.GetDecktopGroup(tp,ct):FilterCount(Card.IsAbleToHand,nil)>0 end
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_DECK)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	if chk==0 then return ct>0 and Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.GetFlagEffect(tp,id)
 	local ac=ct*2
 	if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ac then
+		Duel.DisableShuffleCheck()
 		local g=Duel.GetDecktopGroup(tp,ac)
 		Duel.ConfirmCards(tp,g)
-		if #g>0 then
-			Duel.DisableShuffleCheck()
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
-			Duel.Destroy(sg,REASON_EFFECT)
-			ac=ac-1
-			g=g-sg
-			g=g:Filter(Card.IsAbleToHand,nil)
-			if #g>0 then
-				sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-				Duel.SendtoHand(sg,nil,REASON_EFFECT)
-				ac=ac-1
-			end
-		end
-		if ac>0 then
-			Duel.SortDecktop(tp,tp,ac)
-		end
+		Duel.SortDecktop(tp,tp,ac)
 	end
 end
 
