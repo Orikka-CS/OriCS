@@ -1,46 +1,87 @@
---렉스퀴아트 디키오
+--렉스퀴아트 인 파체
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
-	local e1=Fusion.CreateSummonEff({handler=c,fusfilter=aux.FilterBoolFunction(Card.IsSetCard,0xf30),matfilter=aux.FALSE,extrafil=s.extrafil,extraop=Fusion.ShuffleMaterial,extratg=s.extratg})
+	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TODECK+CATEGORY_TOGRAVE)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
+	e1:SetTarget(s.tg1)
+	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e2:SetCode(EFFECT_DESTROY_REPLACE)
+	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TOGRAVE)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
+	e2:SetCost(Cost.SelfBanish)
 	e2:SetTarget(s.tg2)
-	e2:SetValue(s.val2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
 
 --effect 1
-function s.extrafil(e,tp,mg)
-	return Duel.GetMatchingGroup(Fusion.IsMonsterFilter(Card.IsAbleToDeck),tp,LOCATION_HAND+LOCATION_MZONE+LOCATION_GRAVE,0,nil)
+function s.tg1filter(c)
+	return c:IsSetCard(0xf30) and not c:IsCode(id) and c:IsAbleToHand()
 end
 
-function s.extratg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return #g>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_HAND)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_EXTRA)
+end
+
+function s.op1filter(c)
+	return c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION) and c:IsAbleToGrave()
+end
+
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	local xg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_EXTRA,0,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		local hg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,sg)
+		if #hg>0 and #xg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			Duel.ShuffleDeck(tp)
+			Duel.DisableShuffleCheck()
+			local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+			Duel.SendtoDeck(hsg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+			local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+			Duel.SendtoGrave(xsg,REASON_EFFECT)
+		end
+	end
 end
 
 --effect 2
-function s.tg2filter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT+REASON_BATTLE)
+function s.tg2filter(c,e)
+	return c:IsType(TYPE_FUSION) and c:IsAbleToDeck() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToDeck() and eg:IsExists(s.tg2filter,1,nil,tp) end
-	return Duel.SelectEffectYesNo(tp,e:GetHandler(),aux.Stringid(id,0))
-end
-
-function s.val2(e,c)
-	return s.tg2filter(c,e:GetHandlerPlayer())
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,1,0,LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,sg,1,0,LOCATION_EXTRA)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	Duel.SendtoDeck(e:GetHandler(),nil,SEQ_DECKSHUFFLE,POS_FACEUP,REASON_EFFECT)
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg then
+		Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+		Duel.BreakEffect()
+		Duel.SendtoGrave(tg,REASON_EFFECT)
+	end
 end

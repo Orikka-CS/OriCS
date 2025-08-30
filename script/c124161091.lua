@@ -1,103 +1,90 @@
---아스타테리아 레비타스
+--아스타테리아 그라비타스
 local s,id=GetID()
 function s.initial_effect(c)
+	--hand active
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetCode(EFFECT_TRAP_ACT_IN_HAND)
+	e0:SetCondition(s.con0)
+	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DISABLE_SUMMON+CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_SUMMON)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	local e1a=e1:Clone()
-	e1a:SetCode(EVENT_SPSUMMON)
-	c:RegisterEffect(e1a)
-	--effect 2
-	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
-	e2:SetType(EFFECT_TYPE_ACTIVATE)
-	e2:SetCode(EVENT_CHAINING)
-	e2:SetCountLimit(1,id)
-	e2:SetCondition(s.con2)
-	e2:SetTarget(s.tg2)
-	e2:SetOperation(s.op2)
-	c:RegisterEffect(e2)
+end
+
+--hand active
+function s.con0(e)
+	local tp=e:GetHandlerPlayer()
+	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
+	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)  
+	return math.abs(ug-dg)>1
 end
 
 --effect 1
-function s.con1filter(c)
-	return c:IsSetCard(0xf25) and c:IsType(TYPE_LINK) and c:IsFaceup()
+function s.cst1filter(c)
+	return c:IsDiscardable() and c:IsSetCard(0xf25)
 end
 
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.con1filter,tp,LOCATION_MZONE,0,nil)
-	return Duel.GetCurrentChain(true)==0 and #g>0 and rp==1-tp
+function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,c)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
+	Duel.SendtoGrave(sg,REASON_COST+REASON_DISCARD)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_DISABLE_SUMMON,eg,#eg,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,#eg,0,0)
-	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)  
-	if math.abs(ug-dg)>1 then
-		e:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CANNOT_NEGATE+EFFECT_FLAG_CANNOT_INACTIVATE)
-	else
-		e:SetProperty(0)
-	end
+	local g1=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
+	local g2=Duel.GetMatchingGroup(Card.IsFacedown,tp,0,LOCATION_SZONE,nil)
+	local b1=#g1>0
+	local b2=#g2>0
+	if chk==0 then return (b1 or b2) end
+	local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)})
+	e:SetLabel(b)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	Duel.NegateSummon(eg)
-	Duel.Destroy(eg,REASON_EFFECT)
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	e1:SetTargetRange(0,1)
-	e1:SetTarget(function(e,c) return c:IsLocation(LOCATION_HAND) end)
-	Duel.RegisterEffect(e1,tp)
-end
-
-
---effect 2
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.con1filter,tp,LOCATION_MZONE,0,nil)
-	return #g>0 and re:IsHasType(EFFECT_TYPE_ACTIVATE) and Duel.IsChainNegatable(ev) and rp==1-tp and re:GetHandler():IsStatus(STATUS_ACT_FROM_HAND)
-end
-
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
-	if re:GetHandler():IsDestructable() and re:GetHandler():IsRelateToEffect(re) then
-		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
-	end
-	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)  
-	if math.abs(ug-dg)>1 then
-		e:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CANNOT_NEGATE+EFFECT_FLAG_CANNOT_INACTIVATE)
+	local g
+	local c=e:GetHandler()
+	if e:GetLabel()==1 then
+		g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
+		if #g>0 then 
+			for tc in g:Iter() do
+				local e1=Effect.CreateEffect(c)
+				e1:SetType(EFFECT_TYPE_SINGLE)
+				e1:SetCode(EFFECT_UNRELEASABLE_SUM)
+				e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
+				e1:SetValue(1)
+				tc:RegisterEffect(e1)
+				local e2=e1:Clone()
+				e2:SetCode(EFFECT_UNRELEASABLE_NONSUM)
+				tc:RegisterEffect(e2)
+				local e3=Effect.CreateEffect(c)
+				e3:SetType(EFFECT_TYPE_SINGLE)
+				e3:SetCode(EFFECT_CANNOT_BE_MATERIAL)
+				e3:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
+				e3:SetValue(aux.cannotmatfilter(SUMMON_TYPE_FUSION,SUMMON_TYPE_SYNCHRO,SUMMON_TYPE_XYZ,SUMMON_TYPE_LINK))
+				tc:RegisterEffect(e3)
+			end
+		end
 	else
-		e:SetProperty(0)
+		g=Duel.GetMatchingGroup(Card.IsFacedown,tp,0,LOCATION_SZONE,nil)
+		if #g>0 then
+			for tc in g:Iter() do
+				local e1=Effect.CreateEffect(c)
+				e1:SetDescription(aux.Stringid(id,0))
+				e1:SetType(EFFECT_TYPE_SINGLE)
+				e1:SetCode(EFFECT_CANNOT_TRIGGER)
+				e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
+				e1:SetValue(1)
+				tc:RegisterEffect(e1)
+			end
+		end
 	end
-end
-
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
-		Duel.Destroy(eg,REASON_EFFECT)
-	end
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetCode(EFFECT_CANNOT_SSET)
-	e1:SetTarget(s.tgo2)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	e1:SetTargetRange(0,1)
-	Duel.RegisterEffect(e1,tp)
-end
-
-function s.tgo2(e,c)
-	return not c:IsLocation(LOCATION_HAND)
-end
+end 

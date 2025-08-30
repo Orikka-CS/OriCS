@@ -1,16 +1,14 @@
---캘라피스 샌디
+--캘라피스 라임스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_REMOVE+CATEGORY_DRAW)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
-	e1:SetCode(EVENT_TO_GRAVE)
-	e1:SetRange(LOCATION_MZONE)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(EFFECT_DESTROY_REPLACE)
+	e1:SetRange(LOCATION_GRAVE)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
+	e1:SetValue(s.val1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
 	--effect 2
@@ -26,45 +24,22 @@ function s.initial_effect(c)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
-
 --effect 1
-function s.con1filter(c,tp)
-	return c:IsSetCard(0xf27) and c:IsAbleToRemove() and c:IsControler(tp)
+function s.tg1filter(c,tp)
+	return c:IsFaceup() and c:IsSetCard(0xf27) and c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT+REASON_BATTLE)
 end
 
-function s.con1(e,tp,eg)
-	return eg:IsExists(s.con1filter,1,nil,tp)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return e:GetHandler():IsAbleToRemove() and eg:IsExists(s.tg1filter,1,nil,tp) end
+	return Duel.SelectEffectYesNo(tp,e:GetHandler(),aux.Stringid(id,3))
 end
 
-function s.tg1filter(c,e,tp)
-	return c:IsSetCard(0xf27) and c:IsAbleToRemove() and c:IsControler(tp)and c:IsCanBeEffectTarget(e)
-end
-
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp) end
-	local g=eg:Filter(s.tg1filter,nil,e,tp)
-	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp,1) end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,sg,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
-end
-
-function s.op1filter(c)
-	return c:IsSetCard(0xf27) and c:IsSpellTrap() and c:IsSSetable() and c:IsFaceup()
+function s.val1(e,c)
+	return s.tg1filter(c,e:GetHandlerPlayer())
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tg=Duel.GetTargetCards(e):GetFirst()
-	if tg and Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)>0 and Duel.Draw(tp,1,REASON_EFFECT)>0 then
-		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_REMOVED,0,nil)
-		if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
-			Duel.BreakEffect()
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
-			Duel.SSet(tp,sg) 
-		end
-	end
+	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_EFFECT)
 end
 
 --effect 2

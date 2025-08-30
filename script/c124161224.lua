@@ -1,91 +1,90 @@
---란샤르드 미스틸테인
+--란샤르드 라스 니드헬
 local s,id=GetID()
 function s.initial_effect(c)
-	--activate
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_ACTIVATE)
-	e0:SetCode(EVENT_FREE_CHAIN)
-	c:RegisterEffect(e0)
+	--fusion
+	c:EnableReviveLimit()
+	Fusion.AddProcMix(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf2e),aux.FilterBoolFunctionEx(Card.IsSummonLocation,LOCATION_EXTRA))
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetRange(LOCATION_FZONE)
-	e1:SetTargetRange(LOCATION_MZONE,0)
-	e1:SetTarget(function(e,c) return c:IsSetCard(0xf2e) end)
-	e1:SetValue(s.val1)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_CHAINING)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
+	e1:SetTarget(s.tg1)
+	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	local e1a=e1:Clone()
-	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
-	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND+CATEGORY_TOHAND)
+	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
-	e2:SetRange(LOCATION_FZONE)
-	e2:SetCountLimit(1,id)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	--effect 3
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_CANNOT_DISCARD_HAND)
-	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e3:SetRange(LOCATION_FZONE)
-	e3:SetTargetRange(0,1)
-	e3:SetTarget(s.tg3)
-	c:RegisterEffect(e3)
 end
 
 --effect 1
-function s.val1filter(c,tp)
-	return c:IsPreviousLocation(LOCATION_HAND) and c:IsPreviousControler(1-tp)
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	return rp==1-tp and Duel.IsChainNegatable(ev)
 end
 
-function s.val1(e,c)
-	local tp=e:GetHandlerPlayer()
-	return Duel.GetMatchingGroupCount(s.val1filter,tp,LOCATION_GRAVE,0,nil,tp)*300
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return (Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)>0  or Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0) and Duel.IsPlayerCanDraw(tp) and Duel.IsPlayerCanDraw(1-tp) end
+end
+
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local g=Group.CreateGroup()
+	Duel.ChangeTargetCard(ev,g)
+	Duel.ChangeChainOperation(ev,s.op1op)
+end
+
+function s.op1filter(c,tp)
+	return c:IsLocation(LOCATION_GRAVE) and c:IsControler(tp)
+end
+
+function s.op1op(e,tp,eg,ep,ev,re,r,rp)
+	local ig=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
+	local og=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
+	if #ig>0 or #og>0 then
+		Duel.SendtoGrave(ig+og,REASON_EFFECT)
+		ig:Merge(og)
+		og=ig:Filter(s.op1filter,nil,1-tp)
+		ig=ig:Filter(s.op1filter,nil,tp)
+		Duel.Draw(tp,#ig,REASON_EFFECT)
+		Duel.Draw(1-tp,#og,REASON_EFFECT)
+	end
 end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsControler(tp) and c:IsPreviousLocation(LOCATION_HAND) and c:IsSetCard(0xf2e)
+	return c:IsControler(tp) and c:IsPreviousControler(1-tp) and c:IsPreviousLocation(LOCATION_HAND) and c:IsSetCard(0xf2e)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,tp)
+	return eg:IsExists(s.con2filter,1,nil,tp) and not eg:IsContains(e:GetHandler())
 end
 
-function s.tg2filter(c)
-	return c:IsSetCard(0xf2e) and not c:IsType(TYPE_FIELD) and c:IsAbleToHand()
+function s.tg2filter(c,e)
+	return c:IsCanBeEffectTarget(e) and c:IsAbleToHand() and not c:IsType(TYPE_EXTRA)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(1-tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_GRAVE,nil,e)
 	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_ONFIELD)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
-		local fg=Duel.GetMatchingGroup(Card.IsAbleToHand,tp,0,LOCATION_ONFIELD,nil)
-		if #fg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			Duel.BreakEffect()
-			local fsg=aux.SelectUnselectGroup(fg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
-			Duel.SendtoHand(fsg,nil,REASON_EFFECT)
-		end
-	end 
-end
-
---effect 3
-function s.tg3(e,c,tp)
-	return c:IsSetCard(0xf2e)
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg then
+		Duel.SendtoHand(tg,tp,REASON_EFFECT)
+	end
 end

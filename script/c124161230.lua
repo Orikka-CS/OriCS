@@ -1,4 +1,4 @@
---테일모어 사라드
+--테일모어 스튜어
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_DRAW)
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
@@ -58,33 +58,47 @@ end
 
 --effect 2
 function s.cst2filter(c)
-	return (c:IsSetCard(0xf2f) or c:IsContinuousSpell()) and not c:IsPublic()
+	return c:IsFaceup() and c:IsAbleToHandAsCost()
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,c)
+	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_ONFIELD,0,nil)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM):GetFirst()
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.ShuffleHand(tp)
-	e:SetLabelObject(sg)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND):GetFirst()
+	Duel.SendtoHand(sg,nil,REASON_COST)
+	if sg:IsSpellTrap() then
+		e:SetLabel(1)
+	else
+		e:SetLabel(0)
+	end
+end
+
+function s.tg2filter(c,e,tp)
+	return c:IsSetCard(0xf2f) and not c:IsCode(id) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,2) end
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_HAND)
-end
-
-function s.op2filter(c)
-	return c:IsContinuousSpell()
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e,tp)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0
+	end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,tp,LOCATION_DECK)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local sg=e:GetLabelObject()
-	if Duel.Draw(tp,2,REASON_EFFECT)>0 and sg:IsLocation(LOCATION_HAND) then
-		Duel.BreakEffect()
-		Duel.SendtoDeck(sg,nil,SEQ_DECKTOP,REASON_EFFECT)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e,tp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON) 
+		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP) 
+		Duel.ShuffleDeck(tp)
+		local gg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,nil)
+		if e:GetLabel()==1 and #gg>0 then
+			Duel.BreakEffect()
+			Duel.DisableShuffleCheck()
+			local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+			Duel.SendtoDeck(gsg,nil,SEQ_DECKTOP,REASON_EFFECT) 
+		end
 	end
 end

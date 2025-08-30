@@ -1,19 +1,19 @@
---메가히트 디스코드
+--메가히트 크레이즈
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
+	e1:SetCategory(CATEGORY_DESTROY+CATEGORY_DISABLE)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
-	c:RegisterEffect(e1)
+	c:RegisterEffect(e1)   
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_DESTROY)
+	e2:SetCategory(CATEGORY_POSITION)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_DESTROYED)
@@ -44,74 +44,65 @@ function s.cnt(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 1
-function s.con1filter(c)
-	return c:IsSetCard(0xf31) and c:IsType(TYPE_LINK) and c:IsFaceup()
+function s.tg1filter(c,e)
+	return c:IsNegatable() and c:IsCanBeEffectTarget(e) and c:IsFaceup()
 end
 
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)
-	return g>0
+function s.tg1dfilter(c)
+	return c:IsSetCard(0xf31) and (c:IsFaceup() or c:IsLocation(LOCATION_HAND))
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_HAND,nil)
-	if chk==0 then return #g>1 and Duel.IsPlayerCanDraw(1-tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,0,1-tp,LOCATION_HAND)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,1,1-tp,1)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
+	local ct=Duel.GetFlagEffect(tp,id)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD,nil,e)
+	local dg=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler())
+	if chk==0 then return #g>0 and ct>0 and #dg>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_NEGATE)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE,sg,#sg,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_HAND,nil)
-	if #g>0 then
-		Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-		Duel.ShuffleDeck(1-tp)
-		if #g>1 then
-			Duel.BreakEffect()
-			Duel.Draw(1-tp,#g-1,REASON_EFFECT)
+	local c=e:GetHandler()
+	local dg=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler())
+	local tg=Duel.GetTargetCards(e)
+	if #dg>0 then
+		local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
+		if Duel.Destroy(dsg,REASON_EFFECT)>0 and #tg>0 then
+			for tc in aux.Next(tg) do
+				tc:NegateEffects(c,RESET_PHASE+PHASE_END,true)
+			end
 		end
 	end
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_CANNOT_TO_HAND)
-	e1:SetTargetRange(0,LOCATION_DECK)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e1,tp)
-	local e2=Effect.CreateEffect(e:GetHandler())
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e2:SetCode(EFFECT_CANNOT_DRAW)
-	e2:SetReset(RESET_PHASE+PHASE_END)
-	e2:SetTargetRange(0,1)
-	Duel.RegisterEffect(e2,tp)
 end
 
 --effect 2
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
-	local ct=Duel.GetFlagEffect(tp,id)
-	if chk==0 then return #g>0 and ct>0 end
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DESTROY,nil,0,tp,LOCATION_HAND)
+function s.tg2filter(c)
+	return c:IsSetCard(0xf31) and not c:IsPublic()
 end
 
-function s.op2filter(c)
-	return c:IsSetCard(0xf31)
+function s.tg2dfilter(c)
+	return c:IsFaceup() and c:IsCanTurnSet()
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,nil)
+	local dg=Duel.GetMatchingGroup(s.tg2dfilter,tp,0,LOCATION_MZONE,nil)
+	if chk==0 then return #g>0 and #dg>0 end
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,dg,1,1-tp,LOCATION_MZONE)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
-	local ct=Duel.GetFlagEffect(tp,id)
-	if #g>0 and ct>0 then
-		ct=Duel.AnnounceNumberRange(tp,1,math.min(ct,#g))
-		local sg=g:RandomSelect(tp,ct)
-		Duel.ConfirmCards(tp,sg)
-		local dg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,nil)
-		if #dg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			Duel.BreakEffect()
-			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
-			Duel.Destroy(dsg,REASON_EFFECT)
-			local ssg=aux.SelectUnselectGroup(sg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
-			Duel.Destroy(ssg,REASON_EFFECT)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
+		Duel.ConfirmCards(1-tp,sg)
+		Duel.ShuffleHand(tp)
+		local dg=Duel.GetMatchingGroup(s.tg2dfilter,tp,0,LOCATION_MZONE,nil)
+		if #dg>0 then
+			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
+			Duel.ChangePosition(dsg,POS_FACEDOWN_DEFENSE)
 		end
-		Duel.ShuffleHand(1-tp)
-	end  
+	end
 end

@@ -1,26 +1,28 @@
---백연초의 파수 토바크
+--백연초의 원정
 local s,id=GetID()
 function s.initial_effect(c)
-	--fusion
-	c:EnableReviveLimit()
-	Fusion.AddProcMixN(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf2b),2)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetRange(LOCATION_MZONE)
+	e1:SetCategory(CATEGORY_TOGRAVE)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY)
+	e1:SetCode(EVENT_SUMMON_SUCCESS)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(Cost.PayLP(900))
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	local e1a=e1:Clone()
+	e1a:SetCode(EVENT_SPSUMMON_SUCCESS)
+	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_ATKCHANGE)
+	e2:SetCategory(CATEGORY_TOGRAVE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_BATTLE_START)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_CHAINING)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(s.con2)
 	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
@@ -29,54 +31,48 @@ end
 
 --effect 1
 function s.tg1filter(c)
-	return c:IsSetCard(0xf2b) and c:IsTrap() and c:IsAbleToHand()
+	return c:IsSetCard(0xf2b) and not c:IsCode(id) and c:IsAbleToGrave() 
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,e,tp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+		Duel.SendtoGrave(sg,REASON_EFFECT)
 	end
 end
 
 --effect 2
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() and Duel.CheckLPCost(tp,500) end
+	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() and Duel.CheckLPCost(tp,800) end
+	Duel.PayLPCost(tp,800)
 	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
-	local cost_options={}
-	for i=1,math.floor(math.min(Duel.GetLP(tp),2500)/500) do
-		cost_options[i]=i*500
-	end
-	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(id,0))
-	local lp_cost=Duel.AnnounceNumber(tp,cost_options)
-	e:SetLabel(lp_cost)
-	Duel.PayLPCost(tp,lp_cost)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local a,at=Duel.GetAttacker(),Duel.GetAttackTarget()
-	if a:IsControler(1-tp) then a,at=at,a end
-	if chk==0 then return a and at and a:IsSetCard(0xf2b) and a:IsFaceup() end
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	return rp==tp and rc:IsType(TYPE_FUSION)
 end
 
-function s.op2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local a,at=Duel.GetAttacker(),Duel.GetAttackTarget()
-	if a:IsControler(1-tp) then a,at=at,a end
-	if a and a:IsFaceup() and a:IsControler(tp) then
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetValue(e:GetLabel())
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		a:RegisterEffect(e1)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chck:IsCanBeEffectTarget(e) end
+	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,sg,1,0,0)
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg then
+		Duel.SendtoGrave(tg,REASON_EFFECT)
 	end
 end

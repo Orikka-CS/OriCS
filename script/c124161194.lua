@@ -1,9 +1,9 @@
---페더록스 패러독스
+--페더록스 어센션
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetCategory(CATEGORY_REMOVE+CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
@@ -12,76 +12,72 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_TO_GRAVE)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetRange(LOCATION_REMOVED)
+	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
+	e2:SetCost(Cost.SelfBanish)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
 
---effect 1
-function s.tg1filter(c)
-	return c:IsSetCard(0xf2c) and not c:IsCode(id) and c:IsAbleToHand()
+function s.tg1ffilter(c)
+	return c:IsSetCard(0xf2c) and c:IsAbleToRemove()
+end
+
+function s.tg1filter(c,e,tp)
+	return c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsRankAbove(4) and Duel.GetMatchingGroupCount(s.tg1ffilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,e:GetHandler())>=c:GetRank()-2 and Duel.GetLocationCountFromEx(tp,tp,nil,c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_EXTRA,0,nil,e,tp)
 	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-end
-
-function s.op1filter(c)
-	return c:IsSetCard(0xf2c) and c:IsMonster() and (c:IsLocation(LOCATION_HAND) or c:IsFaceup()) and c:IsAbleToRemove()
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON):GetFirst()
+	Duel.ConfirmCards(1-tp,sg)
+	e:SetLabelObject(sg)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,sg,1,tp,LOCATION_EXTRA)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
-		local rg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
-		local og=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
-		if #rg>0 and #og>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+	local x=e:GetLabelObject()
+	local rk=x:GetRank()
+	local g=Duel.GetMatchingGroup(s.tg1ffilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,e:GetHandler())
+	if #g>=rk-2 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,rk-2,rk-2,aux.TRUE,1,tp,HINTMSG_REMOVE)
+		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+		if Duel.GetLocationCountFromEx(tp,tp,nil,x) then
 			Duel.BreakEffect()
-			local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE):GetFirst()
-			if rsg:IsLocation(LOCATION_MZONE) then
-				aux.RemoveUntil(rsg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,aux.DefaultFieldReturnOp)
-			else
-				aux.RemoveUntil(rsg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
-			end
-			if rsg:IsLocation(LOCATION_REMOVED) then
-				local osg=og:RandomSelect(tp,1)
-				aux.RemoveUntil(osg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
-			end
+			Duel.SpecialSummon(x,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)
+			x:CompleteProcedure()
 		end
 	end
 end
 
 --effect 2
-function s.con2filter(c,tp)
-	return c:IsControler(tp) and c:IsPreviousLocation(LOCATION_OVERLAY) and c:IsReason(REASON_RULE) and c:IsMonster()
+function s.tg2filter(c,e)
+	return c:IsSetCard(0xf2c) and c:IsCanBeEffectTarget(e) and c:IsAbleToDeck() and c:IsFaceup()
 end
 
-function s.con2(e,tp,eg)
-	return eg:IsExists(s.con2filter,1,nil,tp)
-end
-
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsAbleToHand() end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,LOCATION_REMOVED)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,0,e:GetHandler(),e)
+	if chk==0 then return #g>3 and Duel.IsPlayerCanDraw(tp,1) end
+	local sg=aux.SelectUnselectGroup(g,e,tp,4,4,aux.TRUE,1,tp,HINTMSG_TODECK)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,#sg,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then
-		Duel.SendtoHand(c,nil,REASON_EFFECT)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+		Duel.ShuffleDeck(tp)
+		Duel.Draw(tp,1,REASON_EFFECT)
 	end
 end

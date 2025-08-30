@@ -1,80 +1,90 @@
---클라비쿨라 제르디알
+--제르디알 마우솔레움
 local s,id=GetID()
 function s.initial_effect(c)
+	--activate
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_ACTIVATE)
+	e0:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_REMOVE+CATEGORY_DRAW+CATEGORY_HANDES+CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,id)
-	e1:SetTarget(s.tg1)
-	e1:SetOperation(s.op1)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_UPDATE_ATTACK)
+	e1:SetRange(LOCATION_FZONE)
+	e1:SetTargetRange(LOCATION_MZONE,0)
+	e1:SetTarget(function(e,c) return c:IsSetCard(0xf29) end)
+	e1:SetValue(s.val1)
 	c:RegisterEffect(e1)
+	local e1a=e1:Clone()
+	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
+	c:RegisterEffect(e1a)
+	--effect 2
+	local e2=Effect.CreateEffect(c)
+	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetRange(LOCATION_FZONE)
+	e2:SetCountLimit(1,id)
+	e2:SetCost(s.cst2)
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
+	c:RegisterEffect(e2)
+	--effect 3
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_CANNOT_TO_HAND)
+	e3:SetRange(LOCATION_FZONE)
+	e3:SetCondition(s.con3)
+	e3:SetTargetRange(0,LOCATION_DECK)
+	c:RegisterEffect(e3)
 end
 
 --effect 1
-function s.tg1filter(c)
-	return c:IsSetCard(0xf29) and not c:IsCode(id) and c:IsAbleToHand()
+function s.val1(e,c)
+	local tp=e:GetHandlerPlayer()
+	if Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)>Duel.GetFieldGroupCount(tp,0,LOCATION_HAND) then
+		return (Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)-Duel.GetFieldGroupCount(tp,0,LOCATION_HAND))*300
+	else
+		return 0
+	end
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_GRAVE)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
+--effect 2
+function s.cst2filter(c)
+	return c:IsSetCard(0xf29) and not c:IsType(TYPE_FIELD) and not c:IsPublic()
 end
 
-function s.op1filter(c)
-	return c:IsSetCard(0xf29) and c:IsMonster() and not c:IsPublic()
-end
-
-function s.op1sfilter(c,e,tp)
-	return c:IsType(TYPE_TUNER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-end
-
-function s.op1(e,tp,eg,ep,ev,re,r,rp)
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if #g==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-	Duel.SendtoHand(sg,nil,REASON_EFFECT)
+	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,c)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)
-	local cg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil)
-	if not (#cg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0))) then return end
-	local csg=aux.SelectUnselectGroup(cg,e,tp,1,5,aux.dncheck,1,tp,HINTMSG_CONFIRM)
-	Duel.ConfirmCards(1-tp,csg)
 	Duel.ShuffleHand(tp)
-	local ag
-	local asg
-	ag=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
-	if #csg>0 and #ag>0 then
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,nil)
+	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp) end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,0,tp,LOCATION_HAND)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,Duel.GetFieldGroupCount(tp,LOCATION_HAND,0),aux.TRUE,1,tp,HINTMSG_TODECK)
+		Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+		Duel.ShuffleDeck(tp)
 		Duel.BreakEffect()
-		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-		Duel.Remove(asg,POS_FACEUP,REASON_EFFECT)
+		Duel.Draw(tp,#sg,REASON_EFFECT)
 	end
-	if #csg>1 and Duel.IsPlayerCanDraw(tp,1) then
-		Duel.BreakEffect()
-		Duel.Draw(tp,1,REASON_EFFECT)
-	end
-	ag=Duel.GetMatchingGroup(s.op1sfilter,tp,LOCATION_GRAVE,0,nil,e,tp)
-	if #csg>2 and #ag>0 then
-		Duel.BreakEffect()
-		asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
-		Duel.SpecialSummon(asg,0,tp,tp,false,false,POS_FACEUP)
-	end
-	ag=Duel.GetMatchingGroup(Card.IsDiscardable,tp,0,LOCATION_HAND,nil,REASON_EFFECT)
-	if #csg>3 and #ag>0 then
-		Duel.BreakEffect()
-		asg=ag:RandomSelect(tp,1)
-		Duel.SendtoGrave(asg,REASON_EFFECT+REASON_DISCARD)
-	end  
-	if #csg>4 and c:IsSSetable(true) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
-		Duel.BreakEffect()
-		c:CancelToGrave()
-		Duel.ChangePosition(c,POS_FACEDOWN)
-		Duel.RaiseEvent(c,EVENT_SSET,e,REASON_EFFECT,tp,tp,0)
-	end
+end
+
+--effect 3
+function s.con3filter(c)
+	return c:IsFaceup() and c:IsSetCard(0xf29) and c:IsType(TYPE_SYNCHRO)
+end
+
+function s.con3(e)
+	return Duel.GetMatchingGroupCount(s.con3filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)>0
 end

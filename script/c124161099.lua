@@ -1,14 +1,15 @@
---진의 고독훼귀의-하마
+--미의 고독훼귀-전갈
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz
 	c:EnableReviveLimit()
-	Xyz.AddProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_INSECT),4,3,s.ovfilter,0,Xyz.InfiniteMats,s.ovop)
+	Xyz.AddProcedure(c,nil,3,2,nil,nil,Xyz.InfiniteMats)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DISABLE)
+	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_CHAINING)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
@@ -17,57 +18,68 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e2:SetCode(EVENT_CHAINING)
+	e2:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DAMAGE)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e2:SetOperation(s.regop)
+	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(s.con2)
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e3:SetCode(EVENT_CHAIN_SOLVED)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetCondition(s.con2)
-	e3:SetOperation(s.op2)
-	c:RegisterEffect(e3)
-end
---xyz
-function s.ovfilter(c,tp,lc)
-	return c:IsFaceup() and c:IsCanBeXyzMaterial() and c:IsControler(tp) and c:GetRank()==3 and c:GetOverlayGroup():IsExists(Card.IsSetCard,1,nil,0xf26)
-end
-
-function s.ovop(e,tp,chk)
-	if chk==0 then return Duel.GetFlagEffect(tp,id)==0 end
-	Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
-	return true
 end
 
 --effect 1
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return rp==1-tp and Duel.IsChainDisablable(ev) and e:GetHandler():GetOverlayGroup():IsExists(Card.IsSetCard,1,nil,0xf26)
+function s.con1()
+	return Duel.IsMainPhase()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not re:GetHandler():IsDisabled() end
-	Duel.SetOperationInfo(0,CATEGORY_DISABLE,eg,1,0,0)
+function s.tg1filter(c,e)
+	return c:IsSetCard(0xf26) and c:IsCanBeEffectTarget(e)
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return false end
+	local g1=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e)
+	local g2=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_GRAVE,nil,e)
+	if chk==0 then return #g1>0 and #g2>0 end
+	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
+	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
+	sg1:Merge(sg2)
+	Duel.SetTargetCard(sg1)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local rc=re:GetHandler()
-	if Duel.NegateEffect(ev) and rc:IsRelateToEffect(re) then
-		rc:CancelToGrave()
-		Duel.Overlay(e:GetHandler(),rc,true)
+	local c=e:GetHandler()
+	local tg=Duel.GetTargetCards(e)
+	if c:IsRelateToEffect(e) and #tg>0 then
+		Duel.Overlay(c,tg,true)
 	end
 end
-
 --effect 2
-function s.regop(e,tp,eg,ep,ev,re,r,rp)
-	e:GetHandler():RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD&~RESET_TURN_SET|RESET_CHAIN,0,1)
+function s.con2filter(c,tp)
+	return c:IsControler(1-tp) and c:IsMonster()
+end
+function s.con2(e,tp,eg)
+	return eg:IsExists(s.con2filter,1,nil,tp)
 end
 
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return ep==1-tp and c:HasFlagEffect(id)
+function s.tg2filter(c,atk)
+	return c:IsFaceup() and c:GetAttack()<=atk
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_XYZ)
+	local x=0
+	for tc in aux.Next(g) do
+		x=x+tc:GetOverlayCount()
+	end
+	local atk=x*400
+	local dg=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_MZONE,nil,atk)
+	if chk==0 then return #dg>0 and atk>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,dg,1,1-tp,LOCATION_MZONE)
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,atk)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -76,5 +88,12 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	for tc in aux.Next(g) do
 		x=x+tc:GetOverlayCount()
 	end
-	Duel.Damage(1-tp,x*200,REASON_EFFECT)
+	local atk=x*400
+	local dg=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_MZONE,nil,atk)
+	if #dg>0 and atk>0 then
+		local sg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+		if Duel.SendtoGrave(sg,REASON_EFFECT)>0 then
+			Duel.Damage(1-tp,atk,REASON_EFFECT)
+		end
+	end
 end

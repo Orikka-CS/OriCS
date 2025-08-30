@@ -1,13 +1,13 @@
---캘라피스 그란
+--캘라피스 파이라
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_REMOVE+CATEGORY_SPECIAL_SUMMON)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TODECK)
 	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetRange(LOCATION_HAND)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(Cost.SelfDiscard)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -27,42 +27,35 @@ end
 
 --effect 1
 function s.tg1filter(c,e,tp)
-	return c:IsSetCard(0xf27) and not c:IsCode(id) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xf27) and not c:IsType(TYPE_SYNCHRO) and c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
-function s.tg1rfilter(c)
-	return c:IsSetCard(0xf27) and c:IsAbleToRemove()
+function s.tg1dfilter(c)
+	return c:IsSetCard(0xf27) and c:IsAbleToDeck() and c:IsFaceup() and c:IsMonster()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	local rg=Duel.GetMatchingGroup(s.tg1rfilter,tp,LOCATION_HAND,0,c)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 and #rg>0
-	end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,rg,1,tp,LOCATION_HAND)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,tp,LOCATION_DECK)
-end
-
-function s.op1filter(c)
-	return c:IsSetCard(0xf27) and c:IsSpellTrap() and c:IsSSetable() and c:IsFaceup()
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e,tp)
+	local dg=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_REMOVED,0,nil)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 and #dg>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,dg,1,tp,LOCATION_REMOVED)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
-	local rg=Duel.GetMatchingGroup(s.tg1rfilter,tp,LOCATION_HAND,0,c)
-	if #rg==0 then return end
-	local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-	Duel.Remove(rsg,POS_FACEUP,REASON_EFFECT)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
-		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
-		local tg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_REMOVED,0,nil)
-		if #tg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
-			Duel.BreakEffect()
-			local tsg=aux.SelectUnselectGroup(tg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
-			Duel.SSet(tp,tsg) 
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+		local tg=Duel.GetTargetCards(e):GetFirst()
+		if tg then
+			if Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)<1 then return end
+			local g=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_REMOVED,0,nil)
+			if #g>0 then
+				Duel.BreakEffect()
+				local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_TODECK)
+				Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+			end
 		end
 	end
 end

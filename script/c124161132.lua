@@ -1,126 +1,100 @@
---해저박물관 나우프라테
+--나우프라테 디렉터 사무엘
 local s,id=GetID()
 function s.initial_effect(c)
-	--activate
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_ACTIVATE)
-	e0:SetCode(EVENT_FREE_CHAIN)
-	c:RegisterEffect(e0)
+	--link
+	c:EnableReviveLimit()
+	Link.AddProcedure(c,nil,2,4,s.linkfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetRange(LOCATION_FZONE)
-	e1:SetLabelObject(e1)
-	e1:SetTargetRange(LOCATION_MZONE,0)
-	e1:SetTarget(function(e,c) return c:IsSetCard(0xf28) end)
-	e1:SetValue(s.val1)
+	e1:SetCategory(CATEGORY_POSITION)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_CHAINING)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
+	e1:SetTarget(s.tg1)
+	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	local e1a=e1:Clone()
-	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
-	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOGRAVE)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_SSET)
-	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
-	e2:SetRange(LOCATION_FZONE)
-	e2:SetCountLimit(1,{id,1})
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_IMMUNE_EFFECT)
+	e2:SetTargetRange(LOCATION_MZONE,0)
+	e2:SetRange(LOCATION_MZONE)
 	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
-	e2:SetOperation(s.op2)
+	e2:SetValue(s.val2)
 	c:RegisterEffect(e2)
-	--effect 3
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_CANNOT_DISEFFECT)
-	e3:SetRange(LOCATION_FZONE)
-	e3:SetValue(s.val3)
-	c:RegisterEffect(e3)
-	--count
-	aux.GlobalCheck(s,function()
-		local ge1=Effect.CreateEffect(c)
-		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		ge1:SetCode(EVENT_SPSUMMON_SUCCESS)
-		ge1:SetOperation(s.cnt)
-		Duel.RegisterEffect(ge1,0)
-	end)
 end
 
---count
-function s.cntfilter(c)
-	return c:IsContinuousTrap() and c:IsTrapMonster()
-end
-
-function s.cnt(e,tp,eg,ep,ev,re,r,rp)
-	for tc in aux.Next(eg) do
-		if s.cntfilter(tc) then
-			Duel.RegisterFlagEffect(tc:GetControler(),id,RESET_PHASE+PHASE_END,0,1)
-		end
-	end
+--link
+function s.linkfilter(g,lc,sumtype,tp)
+	return g:IsExists(Card.IsType,1,nil,TYPE_LINK,lc,sumtype,tp)
 end
 
 --effect 1
-function s.val1(e,c)
-	local tp=e:GetHandlerPlayer()
-	return Duel.GetFlagEffect(tp,id)*200
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	return re:GetHandler()~=e:GetHandler() and re:IsActiveType(TYPE_MONSTER)
 end
 
---effect 2
-function s.con2filter(c)
-	return c:IsLocation(LOCATION_STZONE)
+function s.tg1filter(c,e)
+	return c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanTurnSet()
 end
 
-function s.con2(e,tp,eg)
-	return eg:IsExists(s.con2filter,1,nil)
+function s.tg1ctfilter(c)
+	return c:IsSetCard(0xf28)
 end
 
-function s.tg2filter(c,e)
-	return c:IsSetCard(0xf28) and not c:IsType(TYPE_FIELD) and c:IsAbleToGrave()
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tg1filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)   
+	local ct=Duel.GetMatchingGroupCount(s.tg1ctfilter,tp,LOCATION_GRAVE,0,nil)   
+	if chk==0 then return #g>0 and ct>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,sg,#sg,0,0)
 end
 
-function s.tg2sfilter(c,e)
-	return c:IsLocation(LOCATION_STZONE) and c:IsFacedown() and c:IsCanBeEffectTarget(e)
+function s.op1filter(c,tp)
+	return c:IsContinuousTrap() and c:IsControler(tp)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_SZONE) and chkc:IsControler(tp) and s.tg2sfilter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e)
-	local cg=eg:Filter(s.tg2sfilter,nil,e)
-	if chk==0 then return #g>0 and #cg>0 end
-	local csg=aux.SelectUnselectGroup(cg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
-	Duel.SetTargetCard(csg)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_DECK)
-end
-
-function s.op2filter(c,tp)
-	return c:IsControler(tp) and c:IsContinuousTrap() and c:IsTrapMonster()
-end
-
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e)
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
-		Duel.SendtoGrave(sg,REASON_EFFECT)
-		local tg=Duel.GetTargetCards(e):GetFirst()
-		if sg:IsLocation(LOCATION_GRAVE) and tg then
-			Duel.ConfirmCards(1-tg:GetControler(),tg)
-			if s.op2filter(tg,tp) then
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)
+		local sg=tg:Filter(s.op1filter,nil,tp)
+		if #sg>0 then
+			for tc in aux.Next(sg) do
 				local e1=Effect.CreateEffect(e:GetHandler())
 				e1:SetType(EFFECT_TYPE_SINGLE)
 				e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
 				e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 				e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-				tg:RegisterEffect(e1)
+				tc:RegisterEffect(e1)
 			end
 		end
 	end
 end
 
---effect 3
-function s.val3(e,ct)
-	local p=e:GetHandler():GetControler()
-	local te,tp,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
-	return p==tp and te:GetHandler():IsTrapMonster() and te:GetHandler():IsContinuousTrap() and (loc&LOCATION_ONFIELD)>0
+--effect 2
+function s.con2filter(c)
+	return c:IsTrapMonster() and c:IsContinuousTrap()
+end
+
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local g=c:GetMaterial()
+	return c:IsSummonType(SUMMON_TYPE_LINK) and g:FilterCount(s.con2filter,nil)>0
+end
+
+function s.tg2(e,c)
+	local oc=e:GetHandler()
+	return c==oc or oc:GetLinkedGroup():IsContains(c)
+end
+
+function s.val2(e,te)
+	return te:IsActiveType(TYPE_SPELL+TYPE_TRAP) and te:GetOwnerPlayer()~=e:GetHandlerPlayer()
 end

@@ -1,86 +1,82 @@
---란샤르드 리비도 브린
+--란샤르드 캄 미미르
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion
 	c:EnableReviveLimit()
-	Fusion.AddProcMix(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf2e),s.mfilter)
+	Fusion.AddProcMix(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf2e),aux.FilterBoolFunctionEx(Card.IsLocation,LOCATION_HAND))
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_CONTROL)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCategory(CATEGORY_DRAW+CATEGORY_TOHAND+CATEGORY_TOGRAVE)
+	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(function() return Duel.IsMainPhase() end)
+	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_CANNOT_CHANGE_CONTROL)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetTargetRange(LOCATION_MZONE,0)
-	e2:SetTarget(function(e,c) return c:IsSetCard(0xf2e) end)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetCountLimit(1,{id,1})
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	local e2a=Effect.CreateEffect(c)
-	e2a:SetType(EFFECT_TYPE_FIELD)
-	e2a:SetCode(EFFECT_CANNOT_TO_DECK)
-	e2a:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e2a:SetRange(LOCATION_MZONE)
-	e2a:SetTargetRange(0,1)
-	e2a:SetTarget(s.tg2)
-	c:RegisterEffect(e2a)
-	local e2b=e2a:Clone()
-	e2b:SetCode(EFFECT_CANNOT_TO_HAND)
-	e2b:SetTarget(s.tg2ex)
-	c:RegisterEffect(e2b)
-end
-
---fusion
-function s.mfilter(c,sc,st,tp)
-	return c:IsType(TYPE_EFFECT,sc,st,tp) and c:IsLocation(LOCATION_MZONE)
 end
 
 --effect 1
-function s.tg1filter(c,e)
-	return c:IsFaceup() and c:IsAbleToChangeControler() and c:IsCanBeEffectTarget(e)
+function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsPlayerCanDiscardDeckAsCost(tp,1) and 
+	Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>0 end
+	Duel.DiscardDeck(tp,1,REASON_COST)
 end
 
-function s.tg1gfilter(c)
-	return c:IsSetCard(0xf2e) and c:IsMonster() and not c:IsType(TYPE_EXTRA)
+function s.tg1filter(c)
+	return c:IsSetCard(0xf2e) and c:IsMonster()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,e)
-	local gg=Duel.GetMatchingGroup(s.tg1gfilter,tp,LOCATION_GRAVE,0,nil)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
-	if chk==0 then return #gg>0 and #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONTROL)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,gg,1,tp,LOCATION_GRAVE)
-	Duel.SetOperationInfo(0,CATEGORY_CONTROL,sg,1,tp,0)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
+	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp,1) end
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_HAND)
+end
+
+function s.op1dfilter(c,tp)
+	return c:IsAbleToGrave() and c:GetOwner()==1-tp
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local gg=Duel.GetMatchingGroup(s.tg1gfilter,tp,LOCATION_GRAVE,0,nil)
-	local tg=Duel.GetTargetCards(e):GetFirst()
-	if #gg>0 then
-		local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONTROL):GetFirst()
-		Duel.SendtoHand(gsg,1-tp,REASON_EFFECT)
-		if gsg:IsLocation(LOCATION_HAND) and tg then
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		Duel.SendtoHand(sg,1-tp,REASON_EFFECT)
+		Duel.BreakEffect()
+		local dg=Duel.GetMatchingGroup(s.op1dfilter,tp,0,LOCATION_HAND,nil,tp)
+		if Duel.Draw(tp,1,REASON_EFFECT)>0 and #dg>0 then
 			Duel.BreakEffect()
-			Duel.GetControl(tg,tp)
+			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
+			Duel.SendtoGrave(dsg,REASON_EFFECT)
 		end
-	end
+	end 
 end
 
 --effect 2
-function s.tg2(e,c,tp,r)
-	return c:IsSetCard(0xf2e) and c:IsFaceup() and c:IsLocation(LOCATION_MZONE) and c:IsControler(e:GetHandlerPlayer())
+function s.tg2filter(c)
+	return c:IsSetCard(0xf2e) and c:IsSpellTrap() and c:IsSSetable()
 end
 
-function s.tg2ex(e,c)
-	return c:GetOriginalType()&TYPE_EXTRA~=0 and c:IsSetCard(0xf2e) and c:IsFaceup() and c:IsLocation(LOCATION_MZONE) and c:IsControler(e:GetHandlerPlayer())
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 end
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
+	if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
+		Duel.SSet(tp,sg) 
+	end
 end
