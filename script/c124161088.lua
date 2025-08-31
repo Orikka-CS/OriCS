@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_TOGRAVE)
+	e2:SetCategory(CATEGORY_TODECK)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_SSET)
 	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
@@ -41,10 +41,16 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e):GetFirst()
-	if Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 and tg then
-		Duel.SpecialSummon(tg,0,tp,1-tp,false,false,POS_FACEUP_ATTACK|POS_FACEDOWN_DEFENSE)
+	local p=1-tp
+	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
+	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
+	if ug~=dg and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		p=tp
+	end
+	if Duel.GetLocationCount(p,LOCATION_MZONE)>0 and tg then
+		Duel.SpecialSummon(tg,0,tp,p,false,false,POS_FACEUP_ATTACK|POS_FACEDOWN_DEFENSE)
 		local g=Duel.GetMatchingGroup(Card.IsAbleToChangeControler,tp,0,LOCATION_MZONE,nil)
-		if #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 			Duel.BreakEffect()
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONTROL)
 			Duel.GetControl(sg,tp)
@@ -57,8 +63,12 @@ function s.con2filter(c,tp)
 	return c:IsFacedown() and c:IsControler(1-tp)
 end
 
+function s.con2mfilter(c,tp)
+	return c:IsSetCard(0xf25) and c:IsMonster()
+end
+
 function s.con2(e,tp,eg)
-	return eg:IsExists(s.con2filter,1,nil,tp)
+	return eg:IsExists(s.con2filter,1,nil,tp) and Duel.GetMatchingGroupCount(s.con2mfilter,tp,LOCATION_GRAVE,0,nil)>0
 end
 
 function s.tg2filter(c,e,tp)
@@ -72,12 +82,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return #g>0 and c:IsAbleToDeck() end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,tp,LOCATION_ONFIELD)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
-end
-
-function s.op2filter(c)
-	return c:IsSetCard(0xf25) and c:IsFaceup()
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,2,tp,LOCATION_ONFIELD)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -86,13 +91,5 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if tg and c:IsRelateToEffect(e) then
 		local dg=Group.FromCards(c,tg)
 		Duel.SendtoDeck(dg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-		local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-		local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-		local ct=math.abs(ug-dg)
-		if ct>0 and Duel.IsPlayerCanDiscardDeck(tp,ct) and Duel.GetMatchingGroupCount(s.op2filter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,c)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-			Duel.ShuffleDeck(tp)
-			Duel.DisableShuffleCheck()
-			Duel.DiscardDeck(tp,ct,REASON_EFFECT)
-		end
 	end
 end
