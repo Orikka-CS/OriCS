@@ -26,12 +26,12 @@ end
 
 --effect 1
 function s.con1filter(c)
-	return c:IsSetCard(0xf25) and c:IsFaceup()
+	return not c:IsSetCard(0xf25) and c:IsFaceup()
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_ONFIELD,0,nil)
-	return g>0
+	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)
+	return g==0
 end
 
 function s.tg1filter(c,e,tp)

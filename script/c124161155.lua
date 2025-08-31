@@ -53,7 +53,6 @@ function s.tg2ffilter(c,cd)
 	return c:IsSetCard(0xf2a) and c:IsMonster() and not c:IsCode(cd) and c:IsAbleToHand()
 end
 
-
 function s.tg2filter(c,e,tp)
 	return c:IsFaceup() and c:IsSetCard(0xf2a) and c:IsCanBeEffectTarget(e) and Duel.GetMatchingGroupCount(s.tg2ffilter,tp,LOCATION_DECK,0,nil,c:GetCode())>0 and c:IsCanTurnSet()
 end

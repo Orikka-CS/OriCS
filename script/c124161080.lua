@@ -15,12 +15,10 @@ function s.initial_effect(c)
    --effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TOGRAVE)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_CHAINING)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -56,23 +54,31 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return re:GetHandler():IsSetCard(0xf25) and rp==tp
+function s.tg2ffilter(c,cd)
+	return c:IsSetCard(0xf25) and not c:IsCode(cd) and c:IsAbleToGrave()
 end
 
-function s.tg2filter(c)
-	return c:IsSetCard(0xf25) and not c:IsCode(id) and c:IsAbleToGrave()
+function s.tg2filter(c,e,tp)
+	return c:IsFaceup() and c:IsSetCard(0xf25) and c:IsCanBeEffectTarget(e) and Duel.GetMatchingGroupCount(s.tg2ffilter,tp,LOCATION_DECK,0,nil,c:GetCode())>0
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(tp) and s.tg2filter(chkc,e,tp) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_ONFIELD,0,e:GetHandler(),e,tp)
 	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_DECKDES,nil,0,tp,1)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
-	if #g==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
-	Duel.SendtoGrave(sg,REASON_EFFECT)
+	local c=e:GetHandler()
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg and tg:IsFaceup() then  
+		local g=Duel.GetMatchingGroup(s.tg2ffilter,tp,LOCATION_DECK,0,nil,tg:GetCode())
+		if #g>0 then
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+			Duel.SendtoGrave(sg,REASON_EFFECT)
+		end
+	end
 end

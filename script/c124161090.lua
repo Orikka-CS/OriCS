@@ -8,11 +8,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetCategory(CATEGORY_TOHAND)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_CHAINING)
 	e1:SetRange(LOCATION_SZONE)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -32,27 +34,33 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1filter(c,e,tp,diff)
-	return c:IsSetCard(0xf25) and c:IsMonster() and (not c:IsType(TYPE_LINK) or (c:IsType(TYPE_LINK) and c:GetLink()<=diff)) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	return re:IsActiveType(TYPE_MONSTER) and Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&LOCATION_MZONE>0
+end
+
+function s.tg1filter(c,e,d)
+	return c:IsSetCard(0xf25) and c:IsMonster() and c:IsFaceup() and c:IsCanBeEffectTarget(e) and (c:IsLocation(LOCATION_MZONE) or d)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp,math.abs(ug-dg)) end
+	if chkc then return false end
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e,tp,math.abs(ug-dg))
-	if chk==0 then return #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,sg,1,0,0)
+	local d=math.abs(ug-dg)>0
+	local g1=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,e,d)
+	local g2=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_MZONE,nil,e) 
+	if chk==0 then return #g1>0 and #g2>0 end
+	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+	sg1:Merge(sg2)
+	Duel.SetTargetCard(sg1)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg1,2,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local tg=Duel.GetTargetCards(e):GetFirst()
-		if tg then
-			Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
-		end
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 then
+		Duel.SendtoHand(tg,nil,REASON_EFFECT)
 	end
 end
 
@@ -61,7 +69,7 @@ function s.con2(e)
 	local tp=e:GetHandlerPlayer()
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-	return math.abs(ug-dg)>2
+	return math.abs(ug-dg)>1
 end
 
 function s.tg2(e,c)

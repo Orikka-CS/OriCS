@@ -24,9 +24,10 @@ function s.initial_effect(c)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
+
 --effect 1
 function s.con1filter(c)
-	return c:IsSetCard(0xf25) and c:IsMonster() and c:IsFaceup()
+	return c:IsSetCard(0xf25) and c:IsFaceup()
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
