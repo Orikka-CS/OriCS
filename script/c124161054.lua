@@ -33,7 +33,7 @@ end
 
 --xyz
 function s.ovffilter(c,tp)
-	return c:IsCode(124161058) and c:IsControler(tp)
+	return c:IsCode(124161059) and c:IsControler(tp)
 end
 
 function s.ovfilter(c,tp,lc)
@@ -49,7 +49,7 @@ end
 --effect 1
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and chkc:IsCanBeEffectTarget(e) end
-	local eq=Duel.GetFlagEffect(tp,124161058)
+	local eq=Duel.GetFlagEffect(tp,124161059)
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_ONFIELD,nil,e)
 	if chk==0 then return #g>0 and eq>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,eq,aux.TRUE,1,tp,HINTMSG_DESTROY)

@@ -54,7 +54,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetType(EFFECT_TYPE_SINGLE)
 		e2:SetCode(EFFECT_EXTRA_ATTACK)
 		e2:SetCondition(s.op1con)
-		e2:SetValue(Duel.GetFlagEffect(tp,124161058)-1)
+		e2:SetValue(Duel.GetFlagEffect(tp,124161059)-1)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		tg:RegisterEffect(e2)
 		local e3=Effect.CreateEffect(c)
@@ -73,7 +73,7 @@ function s.op1imfilter(e,te)
 end
 
 function s.op1confilter(c,tp)
-	return c:IsCode(124161058) and c:IsControler(tp)
+	return c:IsCode(124161059) and c:IsControler(tp)
 end
 
 function s.op1con(e)

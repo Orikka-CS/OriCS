@@ -37,7 +37,7 @@ function s.initial_effect(c)
 	e3:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetTargetRange(LOCATION_ONFIELD,0)
-	e3:SetTarget(function(e,c) return (c:GetEquipGroup():IsExists(Card.IsCode,1,nil,124161058) or c:IsCode(124161058)) and c:IsFaceup() end)
+	e3:SetTarget(function(e,c) return (c:GetEquipGroup():IsExists(Card.IsCode,1,nil,124161059) or c:IsCode(124161059)) and c:IsFaceup() end)
 	e3:SetValue(aux.tgoval)
 	c:RegisterEffect(e3)
 end
@@ -45,7 +45,7 @@ end
 --effect 1
 function s.val1(e,c)
 	local tp=e:GetHandler():GetControler()
-	return Duel.GetFlagEffect(tp,124161058)*100
+	return Duel.GetFlagEffect(tp,124161059)*100
 end
 
 --effect 2

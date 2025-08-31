@@ -35,7 +35,7 @@ end
 
 --effect 1
 function s.unendalf(c)
-	return c:IsCode(124161058) and c:IsFaceup()
+	return c:IsCode(124161059) and c:IsFaceup()
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
@@ -48,7 +48,7 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local mg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
-	local eg=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,124161058)
+	local eg=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,124161059)
 	if chk==0 then return #mg>0 and ((#eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0) or Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_SZONE,0,1,nil)) end
 	local ch=Duel.GetCurrentChain()-1
 	local trig_p,trig_e=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_EFFECT)
@@ -62,7 +62,7 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local mg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
-	local eg=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,124161058)
+	local eg=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,124161059)
 	if #mg>0 and ((#eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0) or Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil)) then
 		local seg=nil
 		if Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then

@@ -44,7 +44,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1filter(c,tp)
-	return c:GetAttack()<=Duel.GetFlagEffect(tp,124161058)*500 and c:IsFaceup() and c:IsCanBeXyzMaterial()
+	return c:GetAttack()<=Duel.GetFlagEffect(tp,124161059)*500 and c:IsFaceup() and c:IsCanBeXyzMaterial()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -64,7 +64,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsCode(124161058) and c:IsControler(tp) and c:GetEquipTarget():GetControler()==tp
+	return c:IsCode(124161059) and c:IsControler(tp) and c:GetEquipTarget():GetControler()==tp
 end
 
 function s.con2(e,tp,eg)

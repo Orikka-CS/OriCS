@@ -64,7 +64,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil,e)
 	local xg=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_GRAVE,0,nil)
-	local eq=Duel.GetFlagEffect(tp,124161058)
+	local eq=Duel.GetFlagEffect(tp,124161059)
 	if chk==0 then return #g>0 and #xg>0 and eq>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
 	Duel.SetTargetCard(sg)
@@ -73,7 +73,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local xg=Duel.GetMatchingGroup(s.tg2xfilter,tp,LOCATION_GRAVE,0,nil)
 	local sg=Duel.GetFirstTarget()
-	local eq=Duel.GetFlagEffect(tp,124161058)
+	local eq=Duel.GetFlagEffect(tp,124161059)
 	if sg:IsRelateToEffect(e) and #xg>0 and eq>0 then
 		local sxg=aux.SelectUnselectGroup(xg,e,tp,1,eq,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 		Duel.Overlay(sg,sxg,true)

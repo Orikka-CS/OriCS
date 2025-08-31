@@ -20,7 +20,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.cst1filter(c)
-	return c:IsCode(124161058) and c:IsFaceup() and c:IsAbleToRemoveAsCost()
+	return c:IsCode(124161059) and c:IsFaceup() and c:IsAbleToRemoveAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)

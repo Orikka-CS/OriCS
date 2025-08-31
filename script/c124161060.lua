@@ -27,7 +27,7 @@ end
 
 --effect 1
 function s.unendalf(c)
-	return c:IsCode(124161058) and c:IsFaceup()
+	return c:IsCode(124161059) and c:IsFaceup()
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
@@ -42,7 +42,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1filter(c,tp)
-	return c:GetAttack()<=Duel.GetFlagEffect(tp,124161058)*500 and c:IsFaceup()
+	return c:GetAttack()<=Duel.GetFlagEffect(tp,124161059)*500 and c:IsFaceup()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

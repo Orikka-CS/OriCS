@@ -29,18 +29,18 @@ end
 
 --effect 1
 function s.unendalf(c)
-	return c:IsCode(124161058) and c:IsFaceup()
+	return c:IsCode(124161059) and c:IsFaceup()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,124161058)
+	local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,124161059)
 	if chk==0 then return #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,124161058)
+	local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,124161059)
 	if c:IsRelateToEffect(e) and c:IsFaceup() and #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
 		Duel.Equip(tp,sg,c)
@@ -49,7 +49,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsCode(124161058) and c:IsControler(tp)
+	return c:IsCode(124161059) and c:IsControler(tp)
 end
 
 function s.con2(e,tp,eg)
@@ -57,7 +57,7 @@ function s.con2(e,tp,eg)
 end
 
 function s.tg2filter(c)
-	return c:IsSetCard(0xf23) and c:IsSpellTrap() and c:IsSSetable() and not c:IsCode(124161058)
+	return c:IsSetCard(0xf23) and c:IsSpellTrap() and c:IsSSetable() and not c:IsCode(124161059)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

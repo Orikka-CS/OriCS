@@ -28,7 +28,7 @@ end
 
 --effect 1
 function s.tg1filter(c)
-	return c:IsSetCard(0xf23) and not c:IsCode(124161058) and c:IsAbleToHand()
+	return c:IsSetCard(0xf23) and not c:IsCode(124161059) and c:IsAbleToHand()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -39,7 +39,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.unendalf(c)
-	return c:IsCode(124161058) and c:IsFaceup()
+	return c:IsCode(124161059) and c:IsFaceup()
 end
 
 function s.op1filter(c,e,tp)
@@ -53,7 +53,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
 		local ug=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp)  
-		if (Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) or Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,124161058)) and #ug>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if (Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) or Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,124161059)) and #ug>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			local sug=aux.SelectUnselectGroup(ug,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 			Duel.SpecialSummon(sug,0,tp,tp,false,false,POS_FACEUP)

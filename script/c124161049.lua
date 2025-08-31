@@ -26,7 +26,7 @@ end
 
 --effect 1
 function s.tg1filter(c,e)
-	return c:IsCode(124161058) and c:IsCanBeEffectTarget(e) and c:GetEquipTarget()
+	return c:IsCode(124161059) and c:IsCanBeEffectTarget(e) and c:GetEquipTarget()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)   

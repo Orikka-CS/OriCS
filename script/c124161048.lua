@@ -52,7 +52,7 @@ end
 
 --effect 2
 function s.con2filter(c)
-	return c:IsCode(124161058) and c:IsFaceup()
+	return c:IsCode(124161059) and c:IsFaceup()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)

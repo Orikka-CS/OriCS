@@ -67,13 +67,13 @@ end
 
 --effect 2
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local eq=Duel.GetFlagEffect(tp,124161058)
+	local eq=Duel.GetFlagEffect(tp,124161059)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=eq and eq>0 and Duel.GetDecktopGroup(tp,eq):FilterCount(Card.IsAbleToHand,nil)>0 end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local eq=Duel.GetFlagEffect(tp,124161058)
+	local eq=Duel.GetFlagEffect(tp,124161059)
 	Duel.ConfirmDecktop(tp,eq)
 	local dt=Duel.GetDecktopGroup(tp,eq)
 	if #dt>0 and dt:IsExists(Card.IsAbleToHand,1,nil) then
