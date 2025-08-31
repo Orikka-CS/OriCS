@@ -88,8 +88,7 @@ function s.tar2f(c,e,tp,code)
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local code=e:GetLabel()
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(s.tar2f,tp,LOCATION_GRAVE+LOCATION_HAND,0,1,nil,e,tp,code) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tar2f,tp,LOCATION_GRAVE+LOCATION_HAND,0,1,nil,e,tp,code) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_GRAVE+LOCATION_HAND)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
