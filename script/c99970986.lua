@@ -118,7 +118,7 @@ function s.tar4(e,tp,eg,ep,ev,re,r,rp,chk)
     Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LSTN("DG"))
 end
 function s.op4fil(c,def)
-    return c:IsFaceup() and (def>c:GetAttack() or def>c:GetDefense())
+    return c:IsFaceup() and c:IsAraneaFood(def)
 end
 function s.op4(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
