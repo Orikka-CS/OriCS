@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_DUEL)
 	e1:SetCondition(function(e) return e:GetHandler():IsSummonType(SUMMON_TYPE_ORDER) end)
-	e1:SetCost(aux.PayLPCost(1/2))
+	e1:SetCost(Cost.PayLP(1/2))
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
@@ -71,4 +71,5 @@ function s.rmop(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.atktarget(e,c)
 	return not c:IsRace(RACE_PSYCHIC) and c:IsAttackBelow(2000)
+
 end
