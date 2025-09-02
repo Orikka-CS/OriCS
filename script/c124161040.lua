@@ -31,16 +31,16 @@ end
 
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return re:IsHasType(EFFECT_TYPE_ACTIVATE)
+	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:IsActiveType(TYPE_SPELL+TYPE_TRAP)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
 	local b1=Duel.IsChainNegatable(ev)
 	local b2=false
-	if rc:GetOwner()==tp and rc:IsSetCard(0xf22) and rc:IsSpellTrap() and not rc:IsType(TYPE_FIELD) then
-		local eff=rc:GetActivateEffect()
-		local ta=eff:GetTarget()
+	local eff=rc:GetActivateEffect()
+	local ta=eff:GetTarget()
+	if rc:GetOwner()==tp and rc:IsSetCard(0xf22) and ta then
 		if rc:GetControler()==tp and ta(e,1-tp,eg,ep,ev,re,r,rp,0) then
 			b2=true
 		elseif rc:GetControler()==1-tp and ta(e,tp,eg,ep,ev,re,r,rp,0) then
