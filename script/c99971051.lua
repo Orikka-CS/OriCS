@@ -75,7 +75,7 @@ end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	for i=1,ev do
 		local te,tgp=Duel.GetChainInfo(i,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER)
-		if tgp~=tp and te:GetHandler():IsCode(99971048) then
+		if tgp==tp and te:GetHandler():IsCode(99971048) then
 			return true
 		end
 	end
