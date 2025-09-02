@@ -54,10 +54,10 @@ end
 
 --effect 1
 function s.tg1filter(c,e,tp)
-	if not (c:IsSetCard(0xf31) and c:IsSpellTrap() and c:IsFaceup() and c:IsAbleToHand() and not c:IsType(TYPE_FIELD)) then return false end
+	if not (c:IsSetCard(0xf31) and c:IsSpellTrap() and c:IsFaceup() and c:IsAbleToHand()) then return false end
 	local effs={c:GetOwnEffects()}
 	for _,eff in ipairs(effs) do
-		if eff:GetCode()==EVENT_DESTROYED then
+		if eff:GetCode()==EVENT_DESTROYED and eff:IsHasType(EFFECT_TYPE_SINGLE) then
 			local tg=eff:GetTarget()
 			if tg==nil or tg(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0) then
 				return true
@@ -75,7 +75,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local available_effs={}
 	local effs={tc:GetOwnEffects()}
 	for _,eff in ipairs(effs) do
-		if eff:GetCode()==EVENT_DESTROYED then
+		if eff:GetCode()==EVENT_DESTROYED and eff:IsHasType(EFFECT_TYPE_SINGLE) then
 			local tg=eff:GetTarget()
 			if tg==nil or tg(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0) then
 				table.insert(available_effs,eff)
