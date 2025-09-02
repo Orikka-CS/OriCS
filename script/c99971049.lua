@@ -50,9 +50,28 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			and Duel.IsBattlePhase() and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-			local sg=Duel.SelectMatchingCard(tp,s.op1f,tp,LOCATION_HAND|LOCATION_DECK,0,1,1,nil,e,tp)
-			if #sg>0 then
-				Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+			local tc=Duel.SelectMatchingCard(tp,s.op1f,tp,LOCATION_HAND|LOCATION_DECK,0,1,1,nil,e,tp):GetFirst()
+			if tc then
+				Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
+				local honglu=Duel.GetFirstMatchingCard(aux.FaceupFilter(Card.IsCode,99971041),tp,LOCATION_ONFIELD,0,nil)
+				local heishou=0
+				if tc:IsCode(99971042,99971043,99971044) then heishou=2
+					elseif tc:IsCode(99971045,99971046) then heishou=3
+					elseif tc:IsCode(99971047) then heishou=4
+					elseif tc:IsCode(99971048) then heishou=5
+				end
+				local e1=Effect.CreateEffect(e:GetHandler())
+				e1:SetDescription(aux.Stringid(id,heishou))
+				e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
+				e1:SetType(EFFECT_TYPE_SINGLE)
+				e1:SetReset(RESETS_STANDARD_PHASE_END)
+				honglu:RegisterEffect(e1)
+				local e2=Effect.CreateEffect(e:GetHandler())
+				e2:SetDescription(aux.Stringid(id,1))
+				e2:SetProperty(EFFECT_FLAG_CLIENT_HINT)
+				e2:SetType(EFFECT_TYPE_SINGLE)
+				e2:SetReset(RESETS_STANDARD_PHASE_END)
+				tc:RegisterEffect(e2)
 			end
 		end
 	end

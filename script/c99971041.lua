@@ -99,10 +99,18 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetDescription(aux.Stringid(id,2))
+		e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_DIRECT_ATTACK)
 		e1:SetReset(RESETS_STANDARD_PHASE_END)
 		g:GetFirst():RegisterEffect(e1)
+		local e2=Effect.CreateEffect(e:GetHandler())
+		e2:SetDescription(aux.Stringid(id,3))
+		e2:SetProperty(EFFECT_FLAG_CLIENT_HINT)
+		e2:SetType(EFFECT_TYPE_SINGLE)
+		e2:SetReset(RESETS_STANDARD_PHASE_END)
+		e:GetHandler():RegisterEffect(e2)
 	end
 end
 
