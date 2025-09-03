@@ -76,6 +76,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	for i=1,#bz do
 		og:AddCard(bz[i])
 	end
+	local ph=Duel.GetCurrentPhase()
 	return ((Duel.GetTurnPlayer()==tp and ph&(PHASE_MAIN1|PHASE_MAIN2)~=0)
 		or (Duel.GetTurnPlayer()~=tp and ph>PHASE_MAIN1 and ph<PHASE_MAIN2)) and og:IsContains(c)
 end
