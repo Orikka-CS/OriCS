@@ -76,7 +76,8 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	for i=1,#bz do
 		og:AddCard(bz[i])
 	end
-	return Duel.GetCurrentPhase()&(PHASE_MAIN1|PHASE_MAIN2)~=0 and og:IsContains(c)
+	return ((Duel.GetTurnPlayer()==tp and ph&(PHASE_MAIN1|PHASE_MAIN2)~=0)
+		or (Duel.GetTurnPlayer()~=tp and ph>PHASE_MAIN1 and ph<PHASE_MAIN2)) and og:IsContains(c)
 end
 function s.con4(e,tp,eg,ep,ev,re,r,rp)
 	return rp~=tp and re:IsActiveType(TYPE_MONSTER)
