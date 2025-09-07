@@ -66,8 +66,7 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local rc=re:GetHandler()
-	return rc:IsSetCard(0xf2a) and rp==tp
+	return rp==1-tp and re:IsActiveType(TYPE_MONSTER)
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
