@@ -1,83 +1,103 @@
---페더록스 어센션
+--페더록스 파라
 local s,id=GetID()
 function s.initial_effect(c)
+	--activate
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_ACTIVATE)
+	e0:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_REMOVE+CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,id)
-	e1:SetTarget(s.tg1)
-	e1:SetOperation(s.op1)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_UPDATE_ATTACK)
+	e1:SetRange(LOCATION_FZONE)
+	e1:SetTargetRange(LOCATION_MZONE,0)
+	e1:SetTarget(function(e,c) return c:IsSetCard(0xf2c) end)
+	e1:SetValue(s.val1)
 	c:RegisterEffect(e1)
+	local e1a=e1:Clone()
+	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
+	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(Cost.SelfBanish)
+	e2:SetCategory(CATEGORY_REMOVE)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetRange(LOCATION_FZONE)
+	e2:SetCode(EVENT_REMOVE)
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e2:SetCountLimit(1,id)
+	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--effect 3
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+	e3:SetRange(LOCATION_FZONE)
+	e3:SetTargetRange(LOCATION_MZONE,0)
+	e3:SetTarget(s.tg3)
+	e3:SetValue(1)
+	c:RegisterEffect(e3)
 end
 
-function s.tg1ffilter(c)
-	return c:IsSetCard(0xf2c) and c:IsAbleToRemove()
+--effect 1
+function s.val1filter(c)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayCount()==0
 end
 
-function s.tg1filter(c,e,tp)
-	return c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsRankAbove(4) and Duel.GetMatchingGroupCount(s.tg1ffilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,e:GetHandler())>=c:GetRank()-2 and Duel.GetLocationCountFromEx(tp,tp,nil,c)
+function s.val1(e,c)
+	local tp=e:GetHandlerPlayer()
+	local g=Duel.GetMatchingGroup(s.val1filter,tp,LOCATION_MZONE,0,nil)
+	local x=0
+	if #g==0 then return 0 end
+	for tc in aux.Next(g) do
+		x=x+tc.minxyzct
+	end
+	return x*200
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+--effect 2
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(Card.IsControler,1,nil,tp)
+end
+
+function s.tg2filter(c,e,tp)
+	return c:IsFaceup() and c:IsAbleToRemove() and c:IsCanBeEffectTarget(e)
+end
+
+function s.tg2gfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0xf2c) and not c:IsType(TYPE_FIELD)
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tg2filter(chkc,e,tp) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e,tp)
+	local gg=Duel.GetMatchingGroup(s.tg2gfilter,tp,LOCATION_REMOVED,0,nil)
+	if chk==0 then return #g>0 and #gg>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,sg,#sg,0,0)
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_EXTRA,0,nil,e,tp)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON):GetFirst()
-	Duel.ConfirmCards(1-tp,sg)
-	e:SetLabelObject(sg)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,sg,1,tp,LOCATION_EXTRA)
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE)
-end
-
-function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local x=e:GetLabelObject()
-	local rk=x:GetRank()
-	local g=Duel.GetMatchingGroup(s.tg1ffilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,e:GetHandler())
-	if #g>=rk-2 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,rk-2,rk-2,aux.TRUE,1,tp,HINTMSG_REMOVE)
-		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
-		if Duel.GetLocationCountFromEx(tp,tp,nil,x) then
-			Duel.BreakEffect()
-			Duel.SpecialSummon(x,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)
-			x:CompleteProcedure()
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	local gg=Duel.GetMatchingGroup(s.tg2gfilter,tp,LOCATION_REMOVED,0,nil)
+	if #gg>0 then
+		local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+		Duel.SendtoGrave(gsg,REASON_EFFECT+REASON_RETURN)
+		if tg then
+			aux.RemoveUntil(tg,nil,REASON_EFFECT,PHASE_END,id,e,tp,aux.DefaultFieldReturnOp)
+			if Duel.SelectYesNo(tp,aux.Stringid(id,0)) and tg:IsLocation(LOCATION_REMOVED) and not tg:IsReason(REASON_REDIRECT) then
+				Duel.BreakEffect()
+				Duel.ReturnToField(tg)
+			end
 		end
 	end
 end
 
---effect 2
-function s.tg2filter(c,e)
-	return c:IsSetCard(0xf2c) and c:IsCanBeEffectTarget(e) and c:IsAbleToDeck() and c:IsFaceup()
-end
-
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,0,e:GetHandler(),e)
-	if chk==0 then return #g>3 and Duel.IsPlayerCanDraw(tp,1) end
-	local sg=aux.SelectUnselectGroup(g,e,tp,4,4,aux.TRUE,1,tp,HINTMSG_TODECK)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,#sg,0,0)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
-end
-
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e)
-	if #tg>0 then
-		Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-		Duel.ShuffleDeck(tp)
-		Duel.Draw(tp,1,REASON_EFFECT)
-	end
+--effect 3
+function s.tg3(e,c)
+	return c:IsSetCard(0xf2c) and c:GetOverlayCount()==0
 end

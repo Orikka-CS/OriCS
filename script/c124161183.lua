@@ -1,88 +1,57 @@
---백연초가 인도하는 끝으로
+--백연초침식
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
+	e1:SetCategory(CATEGORY_HANDES)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_CHAINING)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
 	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	--effect 2
-	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_DAMAGE)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(aux.exccon)
-	e2:SetCost(Cost.SelfBanish)
-	e2:SetTarget(s.tg2)
-	e2:SetOperation(s.op2)
-	c:RegisterEffect(e2)
-	--count
-	aux.GlobalCheck(s,function()
-		local ge1=Effect.CreateEffect(c)
-		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		ge1:SetCode(EVENT_PAY_LPCOST)
-		ge1:SetOperation(s.cnt)
-		Duel.RegisterEffect(ge1,0)
-	end)
-end
-
---count
-function s.cnt(e,tp,eg,ep,ev,re,r,rp)
-	Duel.RegisterFlagEffect(ep,id,RESET_PHASE+PHASE_END,0,1)
 end
 
 --effect 1
 function s.con1filter(c)
-	return c:IsFaceup() and c:IsSetCard(0xf2b) and c:IsType(TYPE_FUSION)
+	return c:IsSetCard(0xf2b)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)>0 and Duel.IsChainNegatable(ev) and rp==1-tp
+	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_GRAVE,0,nil)
+	return g>0
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local cl=Duel.GetCurrentChain()
-	if chk==0 then return Duel.CheckLPCost(tp,cl*500) end
-	Duel.PayLPCost(tp,cl*500)
+	local g=Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,nil,REASON_COST)
+	if chk==0 then return #g>0 and Duel.CheckLPCost(tp,2000) end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
+	Duel.SendtoGrave(sg,REASON_DISCARD+REASON_COST)
+	Duel.PayLPCost(tp,2000)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
+	if chk==0 then return Duel.GetMatchingGroupCount(Card.IsDiscardable,tp,0,LOCATION_HAND,nil)>1 end
+	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,1-tp,2)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local dg=Group.CreateGroup()
-	for i=1,ev do
-		local te,tgp=Duel.GetChainInfo(i,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER)
-		if tgp~=tp then
-			Duel.NegateActivation(i) 
-			if te:GetHandler():IsRelateToEffect(te) then
-				dg:AddCard(te:GetHandler())
-			end
+	local c=e:GetHandler()
+	if Duel.CheckLPCost(1-tp,2000) and Duel.SelectYesNo(1-tp,aux.Stringid(id,0)) then
+		Duel.PayLPCost(1-tp,2000)
+		if c:IsSSetable(true) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
+			Duel.BreakEffect()
+			c:CancelToGrave()
+			Duel.ChangePosition(c,POS_FACEDOWN)
+			Duel.RaiseEvent(c,EVENT_SSET,e,REASON_EFFECT,tp,tp,0)
+		end
+	else
+		local g=Duel.GetMatchingGroup(Card.IsDiscardable,tp,0,LOCATION_HAND,nil)
+		if #g>1 then
+			local sg=g:RandomSelect(tp,2)
+			Duel.SendtoGrave(sg,REASON_DISCARD+REASON_EFFECT)
 		end
 	end
-	if #dg>0 then
-		Duel.Destroy(dg,REASON_EFFECT)
-	end
-end
-
---effect 2
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetFlagEffect(tp,id)>0 end
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,tp,500)
-end
-
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local ct=Duel.GetFlagEffect(tp,id)
-	Duel.Damage(1-tp,ct*500,REASON_EFFECT)
 end

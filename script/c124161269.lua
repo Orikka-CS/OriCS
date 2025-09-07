@@ -1,44 +1,31 @@
---메가히트 이빌스테이지
+--메가히트 디바 원더플람
 local s,id=GetID()
 function s.initial_effect(c)
-	--activate
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_ACTIVATE)
-	e0:SetCode(EVENT_FREE_CHAIN)
-	c:RegisterEffect(e0)
+	--link
+	c:EnableReviveLimit()
+	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_LINK),2,nil,s.linkfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetRange(LOCATION_FZONE)
-	e1:SetTargetRange(LOCATION_MZONE,0)
-	e1:SetTarget(function(e,c) return c:IsSetCard(0xf31) end)
-	e1:SetValue(s.val1)
+	e1:SetCategory(CATEGORY_DRAW+CATEGORY_DESTROY+CATEGORY_NEGATE)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCountLimit(1,id)
+	e1:SetTarget(s.tg1)
+	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	local e1a=e1:Clone()
-	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
-	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_DRAW)
+	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
-	e2:SetCode(EVENT_DESTROYED)
-	e2:SetRange(LOCATION_FZONE)
-	e2:SetCountLimit(1,id)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_TO_HAND)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	--effect 3
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_DRAW_COUNT)
-	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e3:SetRange(LOCATION_FZONE)
-	e3:SetTargetRange(1,0)
-	e3:SetValue(s.val3)
-	c:RegisterEffect(e3)
 	--count
 	aux.GlobalCheck(s,function()
 		local ge1=Effect.CreateEffect(c)
@@ -60,47 +47,62 @@ function s.cnt(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
+--link
+function s.linkfilter(g,lnkc,sumtype,sp)
+	return g:IsExists(Card.IsSetCard,1,nil,0xf31,lnkc,sumtype,sp)
+end
+
 --effect 1
-function s.val1(e,c)
-	return Duel.GetFlagEffect(e:GetHandlerPlayer(),id)*200
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_ONFIELD+LOCATION_HAND)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_NEGATE,nil,1,0,0)
 end
 
---effect 2
-function s.con2filter(c,tp)
-	return c:IsPreviousControler(tp) and c:IsSetCard(0xf31) and not c:IsType(TYPE_FIELD)
-end
-
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,tp)
-end
-
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsCanBeEffectTarget(e) end
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,e:GetHandler(),e)
-	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp,1) end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,sg,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
-end
-
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tg=Duel.GetTargetCards(e):GetFirst()
-	if tg and Duel.Destroy(tg,REASON_EFFECT)>0 then
-		Duel.Draw(tp,1,REASON_EFFECT)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local ct=Duel.GetCurrentChain()
+	if Duel.IsPlayerCanDraw(tp) then
+		local dt=Duel.AnnounceNumberRange(tp,1,ct)
+		Duel.Draw(tp,dt,REASON_EFFECT)
+		Duel.BreakEffect()
+		local dg=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_HAND+LOCATION_ONFIELD,0,nil)
+		local dsg=aux.SelectUnselectGroup(dg,e,tp,dt,dt,aux.TRUE,1,tp,HINTMSG_DESTROY)
+		Duel.Destroy(dsg,REASON_EFFECT)
+		local et=Duel.GetOperatedGroup():FilterCount(Card.IsSetCard,nil,0xf31)
+		local ch=Duel.GetCurrentChain()-1
+		local trig_p,trig_e=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_EFFECT)
+		if et>0 and ch>0 and trig_p==1-tp and Duel.IsChainNegatable(ch) then
+			Duel.BreakEffect()
+			Duel.NegateActivation(ch)
+			if trig_e:GetHandler():IsRelateToEffect(trig_e) then
+				Duel.Destroy(trig_e:GetHandler(),REASON_EFFECT)
+			end
+		end
 	end
 end
 
---effect 3
-function s.val3(e)
-	local tp=e:GetHandlerPlayer()
-	local g=Duel.GetMatchingGroup(Card.IsSetCard,tp,LOCATION_GRAVE,0,nil,0xf31)
-	if #g==0 then return 1 end
-	local ct=0
-	if g:FilterCount(Card.IsMonster,nil)>0 then ct=ct+1 end
-	if g:FilterCount(Card.IsSpell,nil)>0 then ct=ct+1 end
-	if g:FilterCount(Card.IsTrap,nil)>0 then ct=ct+1 end
-	return ct
+--effect 2
+function s.con2filter(c)
+	return c:IsReason(REASON_EFFECT)
+end
+
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.con2filter,1,nil)
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToHand,tp,0,LOCATION_ONFIELD,nil)
+	local ct=Duel.GetFlagEffect(tp,id)
+	if chk==0 then return #g>0 and ct>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToHand,tp,0,LOCATION_ONFIELD,nil)
+	local ct=Duel.GetFlagEffect(tp,id)
+	if #g>0 and ct>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+	end
 end

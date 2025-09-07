@@ -1,76 +1,84 @@
---렉스퀴아트 레퀴엠
+--렉스퀴아트 생츄어리
 local s,id=GetID()
 function s.initial_effect(c)
+	--activate
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_ACTIVATE)
+	e0:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_CHAINING)
-	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
+	e1:SetCode(EVENT_PHASE+PHASE_STANDBY)
+	e1:SetRange(LOCATION_SZONE)
+	e1:SetCountLimit(1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_SPECIAL_SUMMON)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(aux.exccon)
-	e2:SetCost(Cost.SelfBanish)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e2:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e2:SetRange(LOCATION_SZONE)
+	e2:SetTargetRange(LOCATION_MZONE+LOCATION_GRAVE,0)
 	e2:SetTarget(s.tg2)
-	e2:SetOperation(s.op2)
+	e2:SetValue(aux.tgoval)
 	c:RegisterEffect(e2)
+	local e2a=Effect.CreateEffect(c)
+	e2a:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e2a:SetCode(EVENT_CHAINING)
+	e2a:SetRange(LOCATION_SZONE)
+	e2a:SetOperation(s.op2a)
+	c:RegisterEffect(e2a)
+	--effect 3
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e3:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e3:SetRange(LOCATION_SZONE)
+	e3:SetTargetRange(1,0)
+	e3:SetTarget(function(e,c) return c:IsSetCard(0xf30) and c:IsLocation(LOCATION_GRAVE) end)
+	c:RegisterEffect(e3)
 end
 
 --effect 1
-function s.con1filter(c)
-	return c:IsFaceup() and c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION)
-end
-
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_GRAVE,0,nil)>0 and re:IsActivated() and re:IsHasCategory(CATEGORY_SPECIAL_SUMMON) and Duel.IsChainNegatable(ev) and rp==1-tp
+function s.tg1filter(c)
+	return c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION) and c:IsAbleToDeck()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil)
+	local b1=#g>0
+	local b2=e:GetHandler():IsNegatable()
 	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
+	if not (b1 or b2) then return end 
+	local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)})
+	e:SetLabel(b)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_MZONE,nil)
-	if Duel.NegateActivation(ev) and Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.BreakEffect()
-		Duel.Destroy(g,REASON_EFFECT)
+	local c=e:GetHandler()
+	local b=e:GetLabel()
+	if b==1 then
+		local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil)
+		if #g==0 then return end
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+		Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+	else
+		c:NegateEffects(c,RESET_PHASE+PHASE_END,true)
 	end
 end
 
+
 --effect 2
-function s.tg2filter(c,e)
-	return c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION) and c:IsAbleToDeck() and c:IsCanBeEffectTarget(e)
+function s.tg2(e,c)
+	return c:IsFaceup() and c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION)
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,1,0,LOCATION_GRAVE)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,LOCATION_EXTRA)
-end
-
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e):GetFirst()
-	if tg then
-		if Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tg:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-			Duel.BreakEffect()
-			Duel.SpecialSummonStep(tg,0,tp,tp,false,false,POS_FACEUP)
-			aux.DelayedOperation(tg,PHASE_END,id,e,tp,function(ag) Duel.Destroy(ag,REASON_EFFECT) end,nil,0,1)
-			Duel.SpecialSummonComplete()
-		end
+function s.op2a(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	if rc:IsType(TYPE_FUSION) and rc:IsSetCard(0xf30) and rc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and re:IsActiveType(TYPE_MONSTER) and re:GetOwnerPlayer()==tp then
+		Duel.SetChainLimit(function(e,ep,tp) return ep==tp or not e:IsActiveType(TYPE_SPELL+TYPE_TRAP) end)
 	end
 end
