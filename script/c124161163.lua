@@ -38,11 +38,11 @@ function s.initial_effect(c)
 	e3:SetTarget(s.tg3)
 	e3:SetValue(s.val3)
 	c:RegisterEffect(e3)
-	 --count
+	--count
 	aux.GlobalCheck(s,function()
 		local cnt=Effect.CreateEffect(c)
 		cnt:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		cnt:SetCode(EVENT_CHANGE_POS)
+		cnt:SetCode(EVENT_FLIP)
 		cnt:SetOperation(s.cnt)
 		Duel.RegisterEffect(cnt,0)
 	end)
@@ -50,20 +50,25 @@ end
 
 --count
 function s.cnt(e,tp,eg,ep,ev,re,r,rp)
-	local np
-	local pp
 	for tc in eg:Iter() do
-		np=tc:GetPosition()
-		pp=tc:GetPreviousPosition()
-		if np==POS_FACEDOWN_DEFENSE and pp~=np then 
-		tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET,0,1) end
+		if tc:IsFaceup() then tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1) end
 	end
 end
 
 --effect 1
+function s.val1filter(c)
+	return c:IsType(TYPE_XYZ) and (c:IsFacedown() or c:HasFlagEffect(id))
+end
+
 function s.val1(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetMatchingGroup(Card.HasFlagEffect,tp,LOCATION_MZONE,LOCATION_MZONE,nil,id):GetSum(Card.GetFlagEffect,id)*100
+	local g=Duel.GetMatchingGroup(s.val1filter,tp,LOCATION_MZONE,0,nil)
+	local x=0
+	if #g==0 then return 0 end
+	for tc in aux.Next(g) do
+		x=x+tc:GetOverlayCount()
+	end
+	return x*100
 end
 
 --effect 2
@@ -100,8 +105,7 @@ end
 
 --effect 3
 function s.tg3(e,c)
-	local tp=e:GetHandlerPlayer()
-	return c:IsFacedown() and (c:IsControler(1-tp) or c:GetOverlayCount()>0) 
+	return c:IsFacedown()
 end
 
 function s.val3(e,te)

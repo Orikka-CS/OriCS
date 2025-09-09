@@ -57,11 +57,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetDecktopGroup(tp,ac)
 	Duel.SendtoGrave(g,REASON_EFFECT)
 	g=g:Filter(Card.IsLocation,nil,LOCATION_GRAVE)
-	if #g==0 then return end
-	Duel.BreakEffect()
-	if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then return end
-	rc:CancelToGrave()
-	Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+	if #g>0 then
+		Duel.BreakEffect()
+		if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then return end
+		rc:CancelToGrave()
+		Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+	end
 end
 
 --effect 2

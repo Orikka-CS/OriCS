@@ -48,10 +48,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(Card.IsNegatable,tp,0,LOCATION_ONFIELD,nil)
 	local ct=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e,tp)
-	if #g==0 or ct==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_NEGATE)
-	for tc in aux.Next(sg) do
-		tc:NegateEffects(c,RESET_PHASE+PHASE_END,true)
+	if #g>0 and ct>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_NEGATE)
+		for tc in aux.Next(sg) do
+			tc:NegateEffects(c,RESET_PHASE+PHASE_END,true)
+		end
 	end
 end
 

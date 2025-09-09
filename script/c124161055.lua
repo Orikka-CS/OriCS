@@ -40,12 +40,27 @@ function s.initial_effect(c)
 	e3:SetTarget(function(e,c) return (c:GetEquipGroup():IsExists(Card.IsCode,1,nil,124161059) or c:IsCode(124161059)) and c:IsFaceup() end)
 	e3:SetValue(aux.tgoval)
 	c:RegisterEffect(e3)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_EQUIP)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	for tc in eg:Iter() do
+		if tc:IsType(TYPE_EQUIP) then Duel.RegisterFlagEffect(tc:GetControler(),id,0,0,1) end
+	end
 end
 
 --effect 1
 function s.val1(e,c)
 	local tp=e:GetHandler():GetControler()
-	return Duel.GetFlagEffect(tp,124161059)*100
+	return Duel.GetFlagEffect(tp,id)*100
 end
 
 --effect 2

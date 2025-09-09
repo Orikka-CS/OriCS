@@ -87,8 +87,9 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(Card.IsNegatable,tp,0,LOCATION_ONFIELD,nil)
-	if #g==0 then return end
-	for tc in aux.Next(g) do
-		tc:NegateEffects(c,RESET_PHASE+PHASE_END,true)
+	if #g>0 then
+		for tc in aux.Next(g) do
+			tc:NegateEffects(c,RESET_PHASE+PHASE_END,true)
+		end
 	end
 end

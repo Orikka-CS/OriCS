@@ -48,13 +48,14 @@ function s.op1(fustg,fusop)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		local c=e:GetHandler()
 		local g=Duel.GetMatchingGroup(aux.NOT(Card.IsPublic),tp,0,LOCATION_HAND,nil)
-		if #g==0 then return end
-		Duel.ConfirmCards(tp,g)
-		if fustg(e,tp,eg,ep,ev,re,r,rp,0) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			Duel.BreakEffect()
-			fusop(e,tp,eg,ep,ev,re,r,rp)
+		if #g>0 then
+			Duel.ConfirmCards(tp,g)
+			if fustg(e,tp,eg,ep,ev,re,r,rp,0) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+				Duel.BreakEffect()
+				fusop(e,tp,eg,ep,ev,re,r,rp)
+			end
+			Duel.ShuffleHand(1-tp)
 		end
-		Duel.ShuffleHand(1-tp)
 	end
 end
 

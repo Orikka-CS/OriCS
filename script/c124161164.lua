@@ -87,8 +87,9 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil)
-	if #g==0 or not c:IsRelateToEffect(e) then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEDOWN):GetFirst()
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.Overlay(sg,c,true)
+	if #g>0 and c:IsRelateToEffect(e) then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEDOWN):GetFirst()
+		Duel.ConfirmCards(1-tp,sg)
+		Duel.Overlay(sg,c,true)
+	end
 end

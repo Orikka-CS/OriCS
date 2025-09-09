@@ -41,13 +41,14 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
-	if #g==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM):GetFirst()
-	Duel.ConfirmCards(1-tp,sg)
-	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
-		Duel.BreakEffect()
-		re:GetHandler():CancelToGrave()
-		Duel.Overlay(sg,re:GetHandler(),true)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM):GetFirst()
+		Duel.ConfirmCards(1-tp,sg)
+		if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
+			Duel.BreakEffect()
+			re:GetHandler():CancelToGrave()
+			Duel.Overlay(sg,re:GetHandler(),true)
+		end
 	end
 end
 

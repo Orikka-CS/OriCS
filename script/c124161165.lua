@@ -94,6 +94,7 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
-	if #g==0 then return end
-	Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
+	if #g>0 then
+		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
+	end
 end

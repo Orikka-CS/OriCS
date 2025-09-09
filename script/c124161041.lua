@@ -72,14 +72,15 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetFieldGroup(ep,LOCATION_HAND,0)
-	if #g==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,ep,1,1,aux.TRUE,1,ep,HINTMSG_TOGRAVE):GetFirst()
-	Duel.SendtoGrave(sg,REASON_EFFECT)
-	local hg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,re:GetHandler():GetCode())
-	if sg:IsLocation(LOCATION_GRAVE) and #hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.BreakEffect()
-		local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-		Duel.SendtoHand(hsg,nil,REASON_EFFECT)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,ep,1,1,aux.TRUE,1,ep,HINTMSG_TOGRAVE):GetFirst()
+		Duel.SendtoGrave(sg,REASON_EFFECT)
+		local hg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,re:GetHandler():GetCode())
+		if sg:IsLocation(LOCATION_GRAVE) and #hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+			Duel.SendtoHand(hsg,nil,REASON_EFFECT)
+		end
 	end
 end
 

@@ -53,15 +53,16 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsSummonType,tp,LOCATION_MZONE,0,nil,SUMMON_TYPE_LINK)
 	local x=0
 	local mg
-	if #g==0 then return 0 end
-	for tc in aux.Next(g) do
-		mg=tc:GetMaterial()
-		x=x+#mg-mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)
-	end
-	if #rg>0 and x>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.BreakEffect()
-		local sg=aux.SelectUnselectGroup(rg,e,tp,1,x,aux.TRUE,1,tp,HINTMSG_REMOVE)
-		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+	if #g>0 then
+		for tc in aux.Next(g) do
+			mg=tc:GetMaterial()
+			x=x+#mg-mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)
+		end
+		if #rg>0 and x>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local sg=aux.SelectUnselectGroup(rg,e,tp,1,x,aux.TRUE,1,tp,HINTMSG_REMOVE)
+			Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+		end
 	end
 end
 

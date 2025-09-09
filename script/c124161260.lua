@@ -62,9 +62,10 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local b=e:GetLabel()
 	if b==1 then
 		local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil)
-		if #g==0 then return end
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
-		Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+		if #g>0 then
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+			Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+		end
 	else
 		c:NegateEffects(c,RESET_PHASE+PHASE_END,true)
 	end

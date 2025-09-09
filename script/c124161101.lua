@@ -55,9 +55,13 @@ function s.val1(e,c)
 	local tp=e:GetHandlerPlayer()
 	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_XYZ)
 	local x=0
+	local ct=0
 	if #g==0 then return 0 end
 	for tc in aux.Next(g) do
-		x=x+tc:GetOverlayCount()
+		ct=tc:GetOverlayCount()
+		if ct>x then
+			x=ct
+		end
 	end
 	return x*100
 end
