@@ -29,7 +29,7 @@ end
 
 --effect 1
 function s.cst1filter(c)
-	return c:IsSetCard(0xf30) and c:IsAbleToGraveAsCost() and (c:IsLocation(LOCATION_HAND) or c:IsFaceup())
+	return c:IsSetCard(0xf30) and c:IsAbleToGraveAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)

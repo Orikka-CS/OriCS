@@ -36,7 +36,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1filter(c)
-	return c:IsSetCard(0xf2c) and c:IsMonster() and (c:IsLocation(LOCATION_HAND) or c:IsFaceup()) and c:IsAbleToRemove()
+	return c:IsMonster() and c:IsAbleToRemove()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)

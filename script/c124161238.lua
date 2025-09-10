@@ -66,7 +66,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.cst2filter(c)
-	return c:IsContinuousSpell() and (c:IsFaceup() or c:IsLocation(LOCATION_HAND)) and c:IsAbleToDeckAsCost()
+	return c:IsContinuousSpell() and c:IsAbleToDeckAsCost()
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)

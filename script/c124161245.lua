@@ -33,7 +33,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.cst1filter(c)
-	return c:IsSetCard(0xf2f) and (c:IsFaceup() or c:IsLocation(LOCATION_HAND)) and c:IsAbleToDeckAsCost()
+	return c:IsSetCard(0xf2f) and c:IsAbleToDeckAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -41,6 +41,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE,0,e:GetHandler())
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+	Duel.ConfirmCards(1-tp,sg)
 	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
 
