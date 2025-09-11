@@ -67,7 +67,7 @@ end
 
 --effect 2
 function s.tg2filter(c,e)
-	return c:IsRace(RACE_PLANT) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
+	return Duel.GetTurnCount()==c:GetTurnID() and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -84,6 +84,5 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if tg then
 		Duel.SendtoHand(tg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,tg)
 	end
 end

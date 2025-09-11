@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
-	local params={fusfilter=aux.FilterBoolFunction(Card.IsRace,RACE_FIEND)}
+	local params={extrafil=s.extrafil}
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
@@ -25,6 +25,15 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+end
+
+--effect 1
+function s.fcheck(tp,sg,fc)
+	return sg:IsExists(Card.IsSetCard,1,nil,0xf24,fc,SUMMON_TYPE_FUSION,tp)
+end
+
+function s.extrafil(e,tp,mg,sumtype)
+	return nil,s.fcheck
 end
 
 --effect 2

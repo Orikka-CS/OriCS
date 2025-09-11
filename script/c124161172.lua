@@ -30,7 +30,7 @@ function s.tg1filter(c,e,tp)
 end
 
 function s.tg1dfilter(c,e)
-	return c:IsRace(RACE_PLANT) and c:IsFaceup() and c:IsCanBeEffectTarget(e)
+	return c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

@@ -55,7 +55,7 @@ end
 
 --efffect 2
 function s.con2filter(c,tp)
-	return c:IsAttribute(ATTRIBUTE_FIRE) and c:IsFaceup() and c:IsControler(tp)
+	return c:IsSetCard(0xf2b) and not c:IsSummonLocation(LOCATION_EXTRA) and c:IsFaceup() and c:IsControler(tp)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)

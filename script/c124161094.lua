@@ -58,7 +58,7 @@ end
 
 --effect 2
 function s.cst2filter(c)
-	return c:IsType(TYPE_XYZ) and c:IsRace(RACE_INSECT) and c:IsAbleToExtraAsCost()
+	return c:IsType(TYPE_XYZ) and c:IsAbleToExtraAsCost()
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)

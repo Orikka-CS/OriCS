@@ -40,7 +40,7 @@ end
 
 --effect 1
 function s.cst1filter(c)
-	return c:IsRace(RACE_INSECT) and c:IsAbleToGraveAsCost()
+	return c:IsMonster() and c:IsAbleToGraveAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)

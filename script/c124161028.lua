@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
-	local e1=Fusion.CreateSummonEff({handler=c,fusfilter=aux.FilterBoolFunction(Card.IsRace,RACE_BEAST),extrafil=s.extrafil,extraop=s.extraop,extratg=s.extratg})
+	local e1=Fusion.CreateSummonEff({handler=c,extrafil=s.extrafil,extratg=s.extratg,extraop=s.extraop})
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
@@ -18,17 +18,13 @@ end
 
 --effect 1
 function s.extrafil(e,tp,mg)
-	local unu=10-Duel.GetLocationCount(tp,LOCATION_MZONE)-Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)+Duel.GetFieldGroupCount(tp,LOCATION_EMZONE,0)-Duel.GetLocationCount(tp,LOCATION_SZONE)-Duel.GetFieldGroupCount(tp,LOCATION_SZONE,0)+Duel.GetFieldGroupCount(tp,LOCATION_FZONE,0)
-	if unu>0 then
-		local sg=Duel.GetMatchingGroup(Fusion.IsMonsterFilter(Card.IsAbleToRemove),tp,LOCATION_GRAVE,0,nil)
-		return sg,s.fcheck
-	end
+	return Duel.GetMatchingGroup(Fusion.IsMonsterFilter(Card.IsAbleToRemove),tp,LOCATION_GRAVE,0,nil),s.fcheck
 end
 
 function s.fcheck(tp,sg,fc)
 	local unu=10-Duel.GetLocationCount(tp,LOCATION_MZONE)-Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)+Duel.GetFieldGroupCount(tp,LOCATION_EMZONE,0)-Duel.GetLocationCount(tp,LOCATION_SZONE)-Duel.GetFieldGroupCount(tp,LOCATION_SZONE,0)+Duel.GetFieldGroupCount(tp,LOCATION_FZONE,0)
-	if not fc:IsSetCard(0xf21) then return sg:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)<=0 end
-	return sg:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)<=unu
+	if not fc:IsSetCard(0xf21) then return sg:FilterCount(Card.IsSetCard,nil,0xf21)>0 and sg:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)<=0 end
+	return sg:FilterCount(Card.IsSetCard,nil,0xf21)>0 and sg:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)<=unu
 end
 
 function s.extraop(e,tc,tp,sg)
