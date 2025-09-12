@@ -1,4 +1,4 @@
---전광형-강예의 클레어
+--전광형－강예의 클레어
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

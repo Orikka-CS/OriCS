@@ -1,4 +1,4 @@
---각의 독훼귀-오공
+--각의 독훼귀－오공
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

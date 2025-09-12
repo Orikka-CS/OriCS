@@ -1,4 +1,4 @@
---미의 고독훼귀-전갈
+--미의 고독훼귀－전갈
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

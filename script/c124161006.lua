@@ -1,4 +1,4 @@
---광형-인도의 에드롬
+--광형－인도의 에드롬
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

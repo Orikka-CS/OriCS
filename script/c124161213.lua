@@ -43,12 +43,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 		local tkt=Duel.GetOperatedGroup():FilterCount(Card.IsLocation,nil,LOCATION_DECK+LOCATION_EXTRA)
 		local ft=Duel.GetLocationCount(1-tp,LOCATION_MZONE)
-		if not Duel.IsPlayerCanSpecialSummonMonster(1-tp,124161199,0xf2d,TYPES_TOKEN,0,0,1,RACE_REPTILE,ATTRIBUTE_WIND) then return end
+		if not Duel.IsPlayerCanSpecialSummonMonster(1-tp,124161200,0xf2d,TYPES_TOKEN,0,0,1,RACE_REPTILE,ATTRIBUTE_WIND) then return end
 		tkt=math.min(tkt,ft)
 		if Duel.SelectYesNo(1-tp,aux.Stringid(id,1)) then
 			Duel.BreakEffect()
 			for i=1,tkt do
-				local token=Duel.CreateToken(1-tp,124161199)
+				local token=Duel.CreateToken(1-tp,124161200)
 				Duel.SpecialSummonStep(token,0,1-tp,1-tp,false,false,POS_FACEUP)
 			end
 			Duel.SpecialSummonComplete()

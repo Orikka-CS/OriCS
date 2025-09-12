@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
+	e2:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND+CATEGORY_TOGRAVE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
@@ -63,6 +63,7 @@ end
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=3 end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op2filter(c)
@@ -71,14 +72,18 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local ac=3
+	Duel.DisableShuffleCheck()
 	Duel.ConfirmDecktop(tp,ac)
-	local g=Duel.GetDecktopGroup(tp,ac)
-	g=g:Filter(s.op2filter,nil)
+	local gg=Duel.GetDecktopGroup(tp,ac)
+	g=gg:Filter(s.op2filter,nil)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then	
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND):GetFirst()
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		Duel.ShuffleHand(tp)
+		gg=gg-sg
 	end
-	Duel.ShuffleDeck(tp)
+	Duel.SendtoGrave(gg,REASON_EFFECT)
 end
 
 --effect 3

@@ -1,4 +1,4 @@
---광형-복음의 루크스
+--광형－복음의 루크스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

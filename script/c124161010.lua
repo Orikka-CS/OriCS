@@ -1,4 +1,4 @@
---월광형-정의의 메네스카
+--월광형－정의의 메네스카
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

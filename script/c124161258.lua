@@ -71,7 +71,7 @@ function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(sg,REASON_EFFECT)
+	Duel.SendtoGrave(sg,REASON_COST)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

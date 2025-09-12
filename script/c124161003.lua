@@ -1,4 +1,4 @@
---광형-환희의 릿트
+--광형－환희의 릿트
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---침의 독훼귀-작봉
+--침의 독훼귀－작봉
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

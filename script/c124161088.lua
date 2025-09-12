@@ -13,11 +13,11 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DRAW)
+	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(Cost.SelfToDeck)
+	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -52,32 +52,26 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.tg2filter(c)
-	return c:IsSetCard(0xf25) and c:IsDiscardable()
-end
-
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,nil,0xf25)
-	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-	if chk==0 then return #g>0 and math.abs(ug-dg)>0 and Duel.IsPlayerCanDraw(tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,tp,LOCATION_HAND)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
-end
-
-function s.op2con(sg)
-	return sg:IsExists(Card.IsSetCard,1,nil,0xf25)
-end
-
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,nil)
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
 	local ct=math.abs(ug-dg)
-	if #g>0 and ct>0 and g:FilterCount(s.tg2filter,nil)>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,s.op2con,1,tp,HINTMSG_DISCARD,s.op2con)
-		Duel.SendtoGrave(sg,REASON_EFFECT+REASON_DISCARD)
-		Duel.BreakEffect()
-		Duel.Draw(tp,#sg,REASON_EFFECT)
-	end
+	if chk==0 then return #g+ct>2 end
+	if ct>2 then return end
+	local sg=aux.SelectUnselectGroup(g,e,tp,3-ct,3-ct,aux.TRUE,1,tp,HINTMSG_DISCARD)
+	Duel.SendtoGrave(sg,REASON_COST+REASON_DISCARD)
 end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c:IsAbleToHand() end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,LOCATION_GRAVE)
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) then
+		Duel.SendtoHand(c,nil,REASON_EFFECT)
+	end
+end 

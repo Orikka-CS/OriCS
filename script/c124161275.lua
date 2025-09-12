@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_DESTROY)
+	e2:SetCategory(CATEGORY_TODECK)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_DESTROYED)
@@ -54,20 +54,26 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_HAND,nil)
-	if chk==0 then return #g>1 and Duel.IsPlayerCanDraw(1-tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,0,1-tp,LOCATION_HAND)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,1,1-tp,1)
+	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
+	local ct=Duel.GetFlagEffect(tp,id)
+	if chk==0 then return #g>0 and ct>0 end
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,0,tp,LOCATION_HAND)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,1,1-tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_HAND,nil)
-	if #g>0 then
-		Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-		Duel.ShuffleDeck(1-tp)
-		if #g>1 then
+	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
+	local ct=Duel.GetFlagEffect(tp,id)
+	if #g>0 and ct>0 then
+		ct=Duel.AnnounceNumberRange(tp,1,math.min(ct,#g))
+		local sg=g:RandomSelect(tp,ct)
+		Duel.ConfirmCards(tp,sg)
+		local ssg=aux.SelectUnselectGroup(sg,e,tp,0,#sg,aux.TRUE,1,tp,HINTMSG_TODECK)
+		if #ssg>0 then
+			Duel.SendtoDeck(ssg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+			Duel.ShuffleDeck(1-tp)
 			Duel.BreakEffect()
-			Duel.Draw(1-tp,#g-1,REASON_EFFECT)
+			Duel.Draw(1-tp,#ssg,REASON_EFFECT)
 		end
 	end
 	local e1=Effect.CreateEffect(e:GetHandler())
@@ -86,32 +92,22 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
-	local ct=Duel.GetFlagEffect(tp,id)
-	if chk==0 then return #g>0 and ct>0 end
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DESTROY,nil,0,tp,LOCATION_HAND)
-end
-
-function s.op2filter(c)
+function s.tg2filter(c)
 	return c:IsSetCard(0xf31)
 end
 
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_GRAVE,nil)
+	local ct=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
+	if chk==0 then return #g>0 and ct>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,LOCATION_GRAVE)
+end
+
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
-	local ct=Duel.GetFlagEffect(tp,id)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_GRAVE,nil)
+	local ct=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
 	if #g>0 and ct>0 then
-		ct=Duel.AnnounceNumberRange(tp,1,math.min(ct,#g))
-		local sg=g:RandomSelect(tp,ct)
-		Duel.ConfirmCards(tp,sg)
-		local dg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_HAND,0,nil)
-		if #dg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			Duel.BreakEffect()
-			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
-			Duel.Destroy(dsg,REASON_EFFECT)
-			local ssg=aux.SelectUnselectGroup(sg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
-			Duel.Destroy(ssg,REASON_EFFECT)
-		end
-		Duel.ShuffleHand(1-tp)
-	end  
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_TODECK)
+		Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+	end
 end
