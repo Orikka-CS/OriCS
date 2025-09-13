@@ -94,5 +94,5 @@ end
 
 function s.op2val(e,ct)
 	local eff,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_LOCATION)
-	return eff:GetHandler():HasFlagEffect(id) and (loc&LOCATION_ONFIELD)>0
+	return eff:GetHandler():GetFlagEffect(id)>0 and (loc&LOCATION_ONFIELD)>0
 end

@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetCondition(s.con1)
+	e1:SetCondition(function(e) return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION) end)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -30,13 +30,9 @@ function s.ffilter(c,fc,sumtype,tp)
 end
 
 --effect 1
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return (e:GetHandler():GetSummonType()&SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
-end
-
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ct=e:GetHandler():GetMaterialCount()
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE,PLAYER_NONE,0)
+	if chk==0 then return ct>0 and Duel.GetLocationCount(tp,LOCATION_MZONE,PLAYER_NONE,0)
 		+Duel.GetLocationCount(tp,LOCATION_SZONE,PLAYER_NONE,0)
 		+Duel.GetLocationCount(1-tp,LOCATION_MZONE,PLAYER_NONE,0)
 		+Duel.GetLocationCount(1-tp,LOCATION_SZONE,PLAYER_NONE,0)>=ct end

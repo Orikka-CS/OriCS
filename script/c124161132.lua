@@ -26,6 +26,23 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetValue(s.val2)
 	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD)
+		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
+		ge1:SetCode(EFFECT_MATERIAL_CHECK)
+		ge1:SetValue(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cnt(e,c)
+	local g=c:GetMaterial()
+	if c:IsType(TYPE_LINK) and g:IsExists(Card.IsContinuousTrap,1,nil) then
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+	end
 end
 
 --link
@@ -80,14 +97,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2filter(c)
-	return c:IsTrapMonster() and c:IsContinuousTrap()
-end
-
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local g=c:GetMaterial()
-	return c:IsSummonType(SUMMON_TYPE_LINK) and g:FilterCount(s.con2filter,nil)>0
+function s.con2(e)
+	return e:GetHandler():GetFlagEffect(id)>0
 end
 
 function s.tg2(e,c)

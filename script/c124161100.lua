@@ -67,7 +67,7 @@ end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return ep==1-tp and c:HasFlagEffect(id)
+	return ep==1-tp and c:GetFlagEffect(id)>0
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)

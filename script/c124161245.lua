@@ -47,22 +47,16 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,eg,1,0,0) 
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	local ac=3
-	local g=Duel.GetDecktopGroup(tp,ac)
-	Duel.SendtoGrave(g,REASON_EFFECT)
-	g=g:Filter(Card.IsLocation,nil,LOCATION_GRAVE)
-	if #g>0 then
-		Duel.BreakEffect()
-		if not Duel.NegateActivation(ev) or not rc:IsRelateToEffect(re) then return end
-		rc:CancelToGrave()
-		Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+	local ac=Duel.GetMatchingGroupCount(Card.IsContinuousSpell,tp,LOCATION_GRAVE,0,nil)   
+	if Duel.NegateActivation(ev) and ac>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		local g=Duel.GetDecktopGroup(tp,ac)
+		Duel.SendtoGrave(g,REASON_EFFECT)
 	end
 end
 

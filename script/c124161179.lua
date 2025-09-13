@@ -103,7 +103,7 @@ end
 
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	if rc:HasFlagEffect(id) and re:GetOwnerPlayer()==tp then
+	if rc:GetFlagEffect(id)>0 and re:GetOwnerPlayer()==tp then
 		Duel.SetChainLimit(function(e,ep,tp) return ep==tp end)
 	end
 end

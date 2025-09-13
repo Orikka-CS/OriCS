@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	e2:SetCode(EFFECT_CANNOT_BE_MATERIAL)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetTargetRange(0,LOCATION_MZONE)
-	e2:SetTarget(function(e,c) return c:HasFlagEffect(id) end)
+	e2:SetTarget(function(e,c) return c:GetFlagEffect(id)>0 end)
 	e2:SetValue(aux.cannotmatfilter(SUMMON_TYPE_FUSION,SUMMON_TYPE_SYNCHRO,SUMMON_TYPE_XYZ,SUMMON_TYPE_LINK))
 	c:RegisterEffect(e2)
 	--count
@@ -68,7 +68,7 @@ end
 
 --effect 1
 function s.tg1cfilter(c)
-	return c:IsFaceup() and c:IsAbleToChangeControler() and not c:HasFlagEffect(id)
+	return c:IsFaceup() and c:IsAbleToChangeControler() and not c:GetFlagEffect(id)>0
 end
 
 function s.tg1filter(c)

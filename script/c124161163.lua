@@ -57,7 +57,7 @@ end
 
 --effect 1
 function s.val1filter(c)
-	return c:IsType(TYPE_XYZ) and (c:IsFacedown() or c:HasFlagEffect(id))
+	return c:IsType(TYPE_XYZ) and (c:IsFacedown() or c:GetFlagEffect(id)>0)
 end
 
 function s.val1(e,c)
