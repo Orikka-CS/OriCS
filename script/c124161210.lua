@@ -68,7 +68,7 @@ end
 
 --effect 1
 function s.tg1cfilter(c)
-	return c:IsFaceup() and c:IsAbleToChangeControler() and not c:GetFlagEffect(id)>0
+	return c:IsFaceup() and c:IsAbleToChangeControler() and not (c:GetFlagEffect(id)>0)
 end
 
 function s.tg1filter(c)
