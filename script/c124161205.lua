@@ -21,8 +21,31 @@ function s.initial_effect(c)
 	e2:SetCode(EVENT_BE_MATERIAL)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
+	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD)
+		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
+		ge1:SetCode(EFFECT_MATERIAL_CHECK)
+		ge1:SetValue(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cntfilter(c)
+	return not c:IsType(TYPE_EFFECT)
+end
+
+function s.cnt(e,c)
+	local g=c:GetMaterial()
+	local ct=g:FilterCount(s.cntfilter,nil)
+	if c:IsType(TYPE_LINK) and ct>0 then
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+	end
 end
 
 --effect 1
@@ -52,12 +75,26 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsLocation(LOCATION_GRAVE) and r&REASON_LINK>0
 end
 
+function s.tg2filter(c)
+	return c:IsSetCard(0xf2d) and c:IsTrap() and c:IsSSetable()
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 end
+end
+
 function s.op2filter(e,c)
-	local mg=c:GetMaterial()
-	return not c:IsType(TYPE_EFFECT) or (#mg>0 and #mg~=mg:FilterCount(Card.IsType,nil,TYPE_EFFECT))
+	return not c:IsType(TYPE_EFFECT) or c:GetFlagEffect(id)>0
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
+	if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
+		Duel.SSet(tp,sg)
+	end
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)

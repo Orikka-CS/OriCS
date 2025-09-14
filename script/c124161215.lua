@@ -25,6 +25,27 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD)
+		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
+		ge1:SetCode(EFFECT_MATERIAL_CHECK)
+		ge1:SetValue(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cntfilter(c)
+	return not c:IsType(TYPE_EFFECT)
+end
+
+function s.cnt(e,c)
+	local g=c:GetMaterial()
+	if c:IsType(TYPE_LINK) and #g>0 and #g==g:FilterCount(s.cntfilter,nil) then
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+	end
 end
 
 --effect 1
@@ -43,33 +64,27 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1rmfilter(c)
-	return c:IsAbleToRemove() and c:IsType(TYPE_EFFECT)
+	return c:IsAbleToRemove() and c:IsType(TYPE_EFFECT) and c:IsMonster()
+end
+
+function s.op1filter(c)
+	return c:GetFlagEffect(id)>0 and c:IsFaceup()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateSummon(eg)
 	Duel.Remove(eg,POS_FACEUP,REASON_EFFECT)
 	local rg=Duel.GetMatchingGroup(s.op1rmfilter,tp,0,LOCATION_GRAVE,nil)
-	local g=Duel.GetMatchingGroup(Card.IsSummonType,tp,LOCATION_MZONE,0,nil,SUMMON_TYPE_LINK)
-	local x=0
-	local mg
-	if #g>0 then
-		for tc in aux.Next(g) do
-			mg=tc:GetMaterial()
-			x=x+#mg-mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)
-		end
-		if #rg>0 and x>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			Duel.BreakEffect()
-			local sg=aux.SelectUnselectGroup(rg,e,tp,1,x,aux.TRUE,1,tp,HINTMSG_REMOVE)
-			Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
-		end
+	local g=Duel.GetMatchingGroupCount(s.op1filter,tp,LOCATION_MZONE,0,nil)
+	if g>0 and #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.BreakEffect()
+		Duel.Remove(rg,POS_FACEUP,REASON_EFFECT)
 	end
 end
 
 --effect 2
 function s.tg2filter(c,e)
-	local mg=c:GetMaterial()
-	return c:IsType(TYPE_LINK) and #mg>0 and mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)==0 and c:IsFaceup()
+	return c:GetFlagEffect(id)>0 and c:IsFaceup()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

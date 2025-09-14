@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOGRAVE)
+	e2:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
@@ -26,6 +26,30 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD)
+		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
+		ge1:SetCode(EFFECT_MATERIAL_CHECK)
+		ge1:SetValue(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cntfilter(c)
+	return not c:IsType(TYPE_EFFECT)
+end
+
+function s.cnt(e,c)
+	local g=c:GetMaterial()
+	local ct=g:FilterCount(s.cntfilter,nil)
+	if c:IsType(TYPE_LINK) and ct>0 then
+		for i=1,ct do
+			c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+		end
+	end
 end
 
 --link
@@ -47,10 +71,8 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local mg=e:GetHandler():GetMaterial()
-	local ct=#mg-mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)
+	local ct=e:GetHandler():GetFlagEffect(id)
 	Duel.NegateActivation(ev)
-	if not e:GetHandler():IsSummonType(SUMMON_TYPE_LINK) then return end
 	local ag
 	local asg
 	ag=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
@@ -75,26 +97,35 @@ end
 
 --effect 2
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemoveAsCost,tp,LOCATION_GRAVE,0,nil)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemoveAsCost,tp,LOCATION_HAND+LOCATION_ONFIELD,0,nil)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 
-function s.tg2filter(c,e)
-	return c:IsSetCard(0xf2d) and c:IsAbleToGrave()
-end
-
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_DECKDES,nil,0,tp,1)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_LINK)
+	local ct=0
+	for tc in aux.Next(g) do
+		ct=ct+tc:GetFlagEffect(id)
+	end
+	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct and ct>0 and Duel.GetDecktopGroup(tp,ct):FilterCount(Card.IsAbleToHand,nil)>0 end
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil,e)
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-		Duel.SendtoGrave(sg,REASON_EFFECT)
+	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_LINK)
+	local ct=0
+	for tc in aux.Next(g) do
+		ct=ct+tc:GetFlagEffect(id)
 	end
+	Duel.ConfirmDecktop(tp,ct)
+	local dt=Duel.GetDecktopGroup(tp,ct)
+	if #dt>0 and dt:IsExists(Card.IsAbleToHand,1,nil) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+		local sg=dt:FilterSelect(tp,Card.IsAbleToHand,1,1,nil)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+	end
+	Duel.ShuffleDeck(tp)
 end

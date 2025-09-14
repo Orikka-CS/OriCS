@@ -4,6 +4,11 @@ function s.initial_effect(c)
 	--link
 	c:EnableReviveLimit()
 	Link.AddProcedure(c,nil,2,4,s.linkfilter)
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetCode(EFFECT_MATERIAL_CHECK)
+	e0:SetValue(s.cnt)
+	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_POSITION)
@@ -26,28 +31,18 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetValue(s.val2)
 	c:RegisterEffect(e2)
-	--count
-	aux.GlobalCheck(s,function()
-		local ge1=Effect.CreateEffect(c)
-		ge1:SetType(EFFECT_TYPE_FIELD)
-		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
-		ge1:SetCode(EFFECT_MATERIAL_CHECK)
-		ge1:SetValue(s.cnt)
-		Duel.RegisterEffect(ge1,0)
-	end)
-end
-
---count
-function s.cnt(e,c)
-	local g=c:GetMaterial()
-	if c:IsType(TYPE_LINK) and g:IsExists(Card.IsContinuousTrap,1,nil) then
-		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
-	end
 end
 
 --link
 function s.linkfilter(g,lc,sumtype,tp)
 	return g:IsExists(Card.IsType,1,nil,TYPE_LINK,lc,sumtype,tp)
+end
+
+function s.cnt(e,c)
+	local g=c:GetMaterial()
+	if g:IsExists(Card.IsContinuousTrap,1,nil) then
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+	end
 end
 
 --effect 1

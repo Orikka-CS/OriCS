@@ -35,29 +35,41 @@ function s.initial_effect(c)
 	e3:SetRange(LOCATION_FZONE)
 	e3:SetOperation(s.op3)
 	c:RegisterEffect(e3)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD)
+		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
+		ge1:SetCode(EFFECT_MATERIAL_CHECK)
+		ge1:SetValue(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
 end
 
 --count
-function s.cnt(e,tp,eg,ep,ev,re,r,rp)
-	local rc=re:GetHandler()
-	local loc=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)
-	if re:IsMonsterEffect() and rc:IsRelateToEffect(re) and loc==LOCATION_MZONE then
-		rc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+function s.cntfilter(c)
+	return not c:IsType(TYPE_EFFECT)
+end
+
+function s.cnt(e,c)
+	local g=c:GetMaterial()
+	local ct=g:FilterCount(s.cntfilter,nil)
+	if c:IsType(TYPE_LINK) and ct>0 then
+		for i=1,ct do
+			c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+		end
 	end
 end
 
 --effect 1
 function s.val1(e,c)
 	local tp=e:GetHandlerPlayer()
-	local g=Duel.GetMatchingGroup(Card.IsSummonType,tp,LOCATION_MZONE,0,nil,SUMMON_TYPE_LINK)
+	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_LINK)
 	local x=0
-	local mg
-	if #g==0 then return 0 end
 	for tc in aux.Next(g) do
-		mg=tc:GetMaterial()
-		x=x+#mg-mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)
+		x=x+tc:GetFlagEffect(id)
 	end
-	return x*200
+	return x*100
 end
 
 --effect 2
@@ -88,8 +100,7 @@ end
 --effect 3
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	local mg=rc:GetMaterial()
-	if rc:IsType(TYPE_LINK) and #mg>0 and #mg~=mg:FilterCount(Card.IsType,nil,TYPE_EFFECT) and re:IsActiveType(TYPE_MONSTER) and re:GetOwnerPlayer()==tp then
+	if rc:GetFlagEffect(id)>0 and re:IsActiveType(TYPE_MONSTER) and re:GetOwnerPlayer()==tp then
 		Duel.SetChainLimit(function(e,ep,tp) return ep==tp or not e:IsActiveType(TYPE_MONSTER) end)
 	end
 end

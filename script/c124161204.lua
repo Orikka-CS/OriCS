@@ -22,12 +22,28 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD)
+		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
+		ge1:SetCode(EFFECT_MATERIAL_CHECK)
+		ge1:SetValue(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cnt(e,c)
+	local g=c:GetMaterial()
+	if c:IsLocation(LOCATION_EXTRA) and #g>0 and #g==g:FilterCount(Card.IsType,nil,TYPE_EFFECT) then
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+	end
 end
 
 --effect 1
 function s.tg1filter(c,e,cl)
-	local mg=c:GetMaterial()
-	return c:IsCanBeEffectTarget(e) and c:IsNegatable() and ((cl and c:IsSpellTrap()) or (c:IsLocation(LOCATION_MZONE) and #mg>0 and c:IsSummonLocation(LOCATION_EXTRA) and #mg==mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)))
+	return c:IsCanBeEffectTarget(e) and c:IsNegatable() and ((cl and c:IsSpellTrap()) or (c:IsLocation(LOCATION_MZONE) and c:IsType(TYPE_EFFECT) and c:GetFlagEffect(id)>0))
 end
 
 function s.tg1clfilter(c)
@@ -54,8 +70,7 @@ end
 
 --effect 2
 function s.con2filter(c)
-	local mg=c:GetMaterial()
-	return c:IsSummonType(SUMMON_TYPE_LINK) and #mg>0 and mg:FilterCount(Card.IsType,nil,TYPE_EFFECT)==0 and c:IsFaceup()
+	return c:IsSetCard(0xf2d) and not c:IsType(TYPE_EFFECT) and c:IsFaceup()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
