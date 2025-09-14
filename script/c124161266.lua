@@ -43,7 +43,7 @@ function s.cnt(e,tp,eg,ep,ev,re,r,rp)
 	local g=eg:Filter(s.cntfilter,nil)
 	if #g==0 then return end
 	for p=0,1 do
-		if g:IsExists(Card.IsPreviousControler,1,nil,p) and not Duel.GetFlagEffect(p,id)>0 then
+		if g:IsExists(Card.IsPreviousControler,1,nil,p) and not (Duel.GetFlagEffect(p,id)>0) then
 			Duel.RegisterFlagEffect(p,id,RESET_PHASE+PHASE_END,0,1)
 		end
 	end
