@@ -139,16 +139,18 @@ function s.penumbra_op3(e,tp,eg,ep,ev,re,r,rp)
 	c:RegisterFlagEffect(99000417,RESET_EVENT|RESETS_STANDARD,0,1)
 	e:Reset()
 end
-function s.cfilter(c)
-	return c:IsFaceup() and c:IsAbleToRemoveAsCost()
+function s.cfilter(c,convulsion)
+	return (c:IsFaceup() or (convulsion and c:IsFacedown())) and c:IsAbleToRemoveAsCost()
 end
 function s.costchk(e,te_or_c,tp)
 	local ct=#{Duel.GetPlayerEffect(tp,id)}
-	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_DECK,0,ct,nil)
+	local convulsion=Duel.IsPlayerAffectedByEffect(tp,EFFECT_REVERSE_DECK)
+	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_DECK,0,ct,nil,convulsion)
 end
 function s.costop(e,tp,eg,ep,ev,re,r,rp)
+	local convulsion=Duel.IsPlayerAffectedByEffect(tp,EFFECT_REVERSE_DECK)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_DECK,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_DECK,0,1,1,nil,convulsion)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function s.rmcon(e,tp,eg,ep,ev,re,r,rp)

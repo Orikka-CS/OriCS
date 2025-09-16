@@ -41,11 +41,15 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 s.listed_series={0xc11}
+function s.sheya_filter(c,convulsion)
+	return (c:IsFaceup() or (convulsion and c:IsFacedown()))
+end
 function s.spcon(e,c)
 	if c==nil then return true end
 	local tp=e:GetHandlerPlayer()
+	local convulsion=Duel.IsPlayerAffectedByEffect(tp,EFFECT_REVERSE_DECK)
 	return Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(Card.IsFaceup,tp,LOCATION_DECK,LOCATION_DECK,1,nil)
+		and Duel.IsExistingMatchingCard(s.sheya_filter,tp,LOCATION_DECK,LOCATION_DECK,1,nil,convulsion)
 end
 function s.extra_target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

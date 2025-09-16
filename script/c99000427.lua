@@ -44,9 +44,13 @@ function s.initial_effect(c)
 end
 s.listed_series={0xc11}
 s.listed_names={99000417}
+function s.sheya_filter(c,convulsion)
+	return (c:IsFaceup() or (convulsion and c:IsFacedown()))
+end
 function s.actcon(e)
 	local tp=e:GetHandlerPlayer()
-	return Duel.IsExistingMatchingCard(Card.IsFaceup,tp,LOCATION_DECK,LOCATION_DECK,1,nil)
+	local convulsion=Duel.IsPlayerAffectedByEffect(tp,EFFECT_REVERSE_DECK)
+	return Duel.IsExistingMatchingCard(s.sheya_filter,tp,LOCATION_DECK,LOCATION_DECK,1,nil,convulsion)
 end
 function s.exfilter(c,lsc,rsc)
 	local lv=c:GetLevel()

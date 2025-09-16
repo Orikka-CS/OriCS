@@ -18,8 +18,12 @@ end
 function s.fextrafilter(c)
 	return c:IsSetCard(0xc11) and c:IsMonster() and c:IsReleasable()
 end
+function s.sheya_filter(c,convulsion)
+	return (c:IsFaceup() or (convulsion and c:IsFacedown()))
+end
 function s.fextra(e,tp,mg)
-	if Duel.IsExistingMatchingCard(Card.IsFaceup,tp,LOCATION_DECK,LOCATION_DECK,1,nil) then
+	local convulsion=Duel.IsPlayerAffectedByEffect(tp,EFFECT_REVERSE_DECK)
+	if Duel.IsExistingMatchingCard(s.sheya_filter,tp,LOCATION_DECK,LOCATION_DECK,1,nil,convulsion) then
 		local eg=Duel.GetMatchingGroup(s.fextrafilter,tp,LOCATION_DECK|LOCATION_EXTRA,0,nil)
 		if #eg>0 then
 			return eg,s.fcheck
