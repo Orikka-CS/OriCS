@@ -74,7 +74,7 @@ function s.silmang_op(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoGrave(g,REASON_EFFECT)
 	--릴리스한다
 	elseif op==13 then
-		Duel.Release(g,REASON_EFFECT)
+		Duel.SendtoGrave(g,REASON_EFFECT|REASON_RELEASE)
 	--패에 넣는다
 	elseif op==14 then
 		op=Duel.SelectOption(tp,aux.Stringid(99000098,12),aux.Stringid(99000098,13))+30
