@@ -33,8 +33,8 @@ function s.initial_effect(c)
 	e5:SetRange(LOCATION_FZONE)
 	e5:SetCategory(CATEGORY_FUSION_SUMMON+CATEGORY_SPECIAL_SUMMON)
 	e5:SetCountLimit(1,{id,1})
-	e2:SetTarget(Fusion.SummonEffTG(params))
-	e2:SetOperation(Fusion.SummonEffOP(params))
+	e5:SetTarget(Fusion.SummonEffTG(params))
+	e5:SetOperation(Fusion.SummonEffOP(params))
 	c:RegisterEffect(e5)
 end
 s.listed_names={0xfa7}
