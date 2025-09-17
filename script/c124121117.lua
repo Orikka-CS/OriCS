@@ -1,9 +1,7 @@
 --청명한 폭포의 요화
 local s,id=GetID()
 function s.initial_effect(c)
-	local params={function(c)
-		return c:IsSetCard(0xfa7)
-	end}
+	local params={matfilter=aux.FilterBoolFunction(Card.IsSetCard,0xfa7),gc=Fusion.ForcedHandler}
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -12,8 +10,8 @@ function s.initial_effect(c)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
 	e1:SetCost(Cost.SelfReveal)
-	e1:SetTarget(Fusion.SummonEffTG(table.unpack(params)))
-	e1:SetOperation(Fusion.SummonEffOP(table.unpack(params)))
+	e1:SetTarget(Fusion.SummonEffTG(params))
+	e1:SetOperation(Fusion.SummonEffOP(params))
 	c:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
