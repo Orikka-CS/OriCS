@@ -75,7 +75,7 @@ function s.tfil3(c)
 end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.IsExistingMatcingCard(s.tfil3,tp,LOCATION_GRAVE,0,1,nil)
+		return Duel.IsExistingMatchingCard(s.tfil3,tp,LOCATION_GRAVE,0,1,nil)
 	end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
 end

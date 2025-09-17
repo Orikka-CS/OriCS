@@ -18,8 +18,8 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_FUSION_SUMMON+CATEGORY_SPECIAL_SUMMON)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCost(Cost.SelfBanish)
-	e2:SetTarget(Fusion.SummonEffTG(table.unpack(params)))
-	e2:SetOperation(Fusion.SummonEffOP(table.unpack(params)))
+	e2:SetTarget(Fusion.SummonEffTG(params))
+	e2:SetOperation(Fusion.SummonEffOP(params))
 	c:RegisterEffect(e2)
 end
 s.listed_series={0xfa7}
