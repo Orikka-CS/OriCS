@@ -45,7 +45,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local sg=Duel.SelectMatchingCard(tp,s.ofil1,tp,LOCATION_DECK+LOCATION_EXTRA,0,0,1,nil,tc)
 		if #sg>0 then
 			Duel.BreakEffect()
-			Duel.SendtoGarve(sg,REASON_EFFECT)
+			Duel.SendtoGrave(sg,REASON_EFFECT)
 		end
 	end
 end
