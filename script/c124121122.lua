@@ -84,7 +84,7 @@ function s.tg5(e,tp,mg)
 end
 function s.tar5(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return tru
+		return true
 	end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,0,tp,LOCATION_DECK)
 end
