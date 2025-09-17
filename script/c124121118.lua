@@ -63,7 +63,11 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-		Duel.SendtoHand(tc,tp,REASON_EFFECT)
+		local p=tp
+		if tc:IsAbleToExtra() then
+			p=nil
+		end
+		Duel.SendtoHand(tc,p,REASON_EFFECT)
 	end
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)

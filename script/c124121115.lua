@@ -92,7 +92,12 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 			,1,1,nil)
 		if #g>0 then
 			Duel.HintSelection(g)
-			Duel.SendtoHand(g,tp,REASON_EFFECT)
+			local tc=g:GetFirst()
+			local p=tp
+			if tc:IsAbleToExtra() then
+				p=nil
+			end
+			Duel.SendtoHand(g,p,REASON_EFFECT)
 		end
 	end
 end
