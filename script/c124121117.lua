@@ -41,7 +41,7 @@ function s.tfil22(c)
 	return c:IsFaceup() and c:IsMonster() and c:IsAbleToHand()
 end
 function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local b1=Duel.IsExistingMatchingCard(s.tfil21,tp,LOCATION_DECK+LOCATION_GRAVE,1,nil,e,tp)
+	local b1=Duel.IsExistingMatchingCard(s.tfil21,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp)
 		and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 	local b2=Duel.IsExistingMatchingCard(s.tfil22,tp,0,LOCATION_GRAVE+LOCATION_REMOVED,1,nil)
 	if chk==0 then
@@ -67,8 +67,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil21),tp,
-			LOCATION_DECK+LOCATION_GRAVE,0,1,1,
-			nil,e,tp)
+			LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
 		if #g>0 then
 			Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		end

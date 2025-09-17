@@ -77,13 +77,15 @@ function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local op=e:GetLabel()
 	if op==1 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_NEGATE)
 		local g=Duel.SelectMatchingCard(tp,s.tfil31,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
 		if #g>0 then
 			Duel.HintSelection(g)
-			Duel.Destroy(g,REASON_EFFECT)
+			local tc=g:GetFirst()
+			tc:NegateEffects(c,RESET_PHASE|PHASE_END)
 		end
 	elseif op==2 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
