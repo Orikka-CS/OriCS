@@ -10,7 +10,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCategory(CATEGORY_FUSION_SUMMON+CATEGORY_SPECIAL_SUMMON)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(Duel.IsMainPhase)
+	e1:SetCondition(s.con1)
 	e1:SetCost(Cost.SelfReveal)
 	e1:SetTarget(Fusion.SummonEffTG(table.unpack(params)))
 	e1:SetOperation(Fusion.SummonEffOP(table.unpack(params)))
@@ -31,6 +31,9 @@ function s.initial_effect(c)
 end
 s.listed_series={0xfa7}
 s.listed_names={124121114}
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetCurrentPhase()&(PHASE_MAIN1|PHASE_MAIN2)~=0
+end
 function s.tfil21(c,e,tp)
 	return c:IsCode(124121114) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
