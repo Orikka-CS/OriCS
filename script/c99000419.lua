@@ -130,7 +130,7 @@ function s.penumbra_op(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.sheya_check(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetLabelObject()
+	--[[local c=e:GetLabelObject()
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0x3fe,0x3fe,nil)
 	for gc in g:Iter() do
 		if c:GetFlagEffect(99000417)==0 then
@@ -139,7 +139,7 @@ function s.sheya_check(e,tp,eg,ep,ev,re,r,rp)
 			c:CancelCardTarget(gc)
 			e:Reset()
 		end
-	end
+	end]]--
 end
 function s.penumbra_op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
