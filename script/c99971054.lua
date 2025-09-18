@@ -2,6 +2,9 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	
+	RevLim(c)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRainbowFishCard),4,2)
+	
 	local e1=MakeEff(c,"STo")
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
