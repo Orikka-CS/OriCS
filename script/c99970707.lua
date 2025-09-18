@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 
-	YuL.NosferatuDR(1000,1500)
+	YuL.NosferatuDR(c,1000,1500)
 
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
