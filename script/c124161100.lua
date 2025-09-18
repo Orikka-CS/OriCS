@@ -33,7 +33,7 @@ function s.initial_effect(c)
 end
 --xyz
 function s.ovfilter(c,tp,lc)
-	return c:IsFaceup() and c:IsCanBeXyzMaterial() and c:IsControler(tp) and c:GetRank()==3 and c:GetOverlayGroup():IsExists(Card.IsSetCard,1,nil,0xf26)
+	return c:IsFaceup() and c:IsCanBeXyzMaterial() and c:IsControler(tp) and not c:IsCode(id) and c:GetOverlayGroup():IsExists(Card.IsSetCard,1,nil,0xf26)
 end
 
 function s.ovop(e,tp,chk)
