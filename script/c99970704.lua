@@ -10,6 +10,7 @@ function s.initial_effect(c)
 	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
+	e1:SetCL(1,id)
 	c:RegisterEffect(e1)
 	
 	local e2=MakeEff(c,"Qo","M")

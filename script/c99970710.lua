@@ -64,14 +64,13 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local sp_chk=Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 	local tc=Duel.SelectMatchingCard(tp,s.tar1f,tp,LOCATION_DECK,0,1,1,nil,e,tp,sp_chk):GetFirst()
 	if not tc then return end
-	if aux.ToHandOrElse(tc,tp,
+	aux.ToHandOrElse(tc,tp,
 		function() return sp_chk and tc:IsCanBeSpecialSummoned(e,0,tp,false,false) end,
 		function() Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP) end,
 		aux.Stringid(id,0)
-	)>0 then
-		Duel.BreakEffect()
-		Duel.Damage(tp,2000,REASON_EFFECT)
-	end
+	)
+	Duel.BreakEffect()
+	Duel.Damage(tp,2000,REASON_EFFECT)
 end
 
 function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
