@@ -4,7 +4,7 @@ function s.initial_effect(c)
 
 	YuL.NosferatuDR(c,1000,1500)
 	
-	local e1=MakeEff(c,"I","H")
+	local e1=MakeEff(c,"FTo","H")
 	e1:SetD(id,0)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_DAMAGE)
 	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
