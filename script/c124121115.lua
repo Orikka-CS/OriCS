@@ -49,7 +49,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tfil1),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,
 		nil,e,tp)
-	if #g>0 and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)>0 and c:IsAbleToHand()
+	if #g>0 and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)>0
+		and c:IsRelateToEffect(e) and c:IsAbleToHand()
 		and Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
 		Duel.SendtoHand(c,nil,REASON_EFFECT)

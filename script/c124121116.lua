@@ -46,7 +46,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 	local g=Duel.SelectMatchingCard(tp,s.tfil1,tp,LOCATION_DECK+LOCATION_REMOVED,0,1,1,nil,e,tp)
-	if #g>0 and Duel.SSet(tp,g)>0 and c:IsAbleToHand()
+	if #g>0 and Duel.SSet(tp,g)>0 and c:IsRelateToEffect(e) and c:IsAbleToHand()
 		and Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
 		Duel.SendtoHand(c,nil,REASON_EFFECT)
