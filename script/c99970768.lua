@@ -70,6 +70,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local ct=math.floor(s[tp]/2000)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
