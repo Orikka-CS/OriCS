@@ -42,7 +42,7 @@ function s.tar2fil(c,tp,g)
 			or (c:IsPosition(POS_FACEDOWN_DEFENSE) and c:IsPreviousPosition(POS_FACEUP)))
 end
 function s.ovfil(c,sc,tp)
-	return not c:IsCode(99970999) and c:IsSetCard(0x5d71) and c:IsCanBeXyzMaterial(sc,tp,REASON_EFFECT)
+	return not c:IsCode(99970999) and c:IsSetCard(0x5d71) and c:IsM() and c:IsCanBeXyzMaterial(sc,tp,REASON_EFFECT)
 end
 function s.tar2fil2(c,e,tp)
 	local pg=aux.GetMustBeMaterialGroup(tp,Group.CreateGroup(),tp,c,nil,REASON_XYZ)
