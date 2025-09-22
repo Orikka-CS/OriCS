@@ -100,6 +100,18 @@ function s.sptg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 	c:ResetFlagEffect(id)
 end
+function s.op1(e,tp,oc,mg)
+	local c=e:GetHandler()
+	if c:IsControler(tp) and not mg:IsContains(c) then
+		return Group.FromCards(c)
+	else
+		return nil
+	end
+end
+function s.val1(e,tp,mc,oc)
+	local seq=mc:GetSequence()
+	return 2*seq-9
+end
 function s.spop2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
@@ -108,12 +120,14 @@ function s.spop2(e,tp,eg,ep,ev,re,r,rp)
 		--이 효과로 특수 소환한 몬스터는, 그 몬스터와 같은 세로열의 메인 몬스터 존의 몬스터로서 오더 소재로 할 수 있다.
 		local e1=Effect.CreateEffect(c)
 		e1:SetDescription(aux.Stringid(id,3))
-		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetType(EFFECT_TYPE_FIELD)
 		e1:SetCode(EFFECT_EXTRA_ORDER_MATERIAL)
-		e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
+		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CLIENT_HINT)
 		e1:SetRange(LOCATION_EMZONE)
-		e1:SetValue(aux.TRUE)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		e1:SetTargetRange(1,0)
+		e1:SetOperation(s.op1)
+		e1:SetValue(s.val1)
 		g:RegisterEffect(e1,true)
 	end
 	Duel.SpecialSummonComplete()
