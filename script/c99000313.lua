@@ -45,14 +45,14 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.op2(e,tp,oc,mg)
 	local c=e:GetHandler()
-	if c:IsControler(tp) and c:GetSequence()>5 and c:IsLocation(LOCATION_MZONE) then
+	if c:IsControler(tp) and not mg:IsContains(c) then
 		return Group.FromCards(c)
 	else
 		return nil
 	end
 end
 function s.val2(e,tp,mc,oc)
-	local seq=c:GetSequence()
+	local seq=mc:GetSequence()
 	return 2*seq-9
 end
 function s.ordertg(e,tp,eg,ep,ev,re,r,rp,chk)
