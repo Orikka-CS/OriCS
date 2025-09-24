@@ -43,8 +43,7 @@ function s.tempregister(e,tp,eg,ep,ev,re,r,rp,chk)
 	return e1
 end
 function s.extraop(e,tp,oc,mg)
-	local g=Duel.GetMatchingGroup(aux.TRUE,0,LOCATION_EMZONE,LOCATION_EMZONE,nil)
-	return g
+	return Duel.GetMatchingGroup(Card.IsFaceup,0,LOCATION_EMZONE,LOCATION_EMZONE,nil)
 end
 function s.extraval(e,tp,mc,oc)
 	local seq=mc:GetSequence()

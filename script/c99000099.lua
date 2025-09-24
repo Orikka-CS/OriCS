@@ -116,27 +116,27 @@ function s.create_op(e,tp,eg,ep,ev,re,r,rp)
 		if you_and_i==0 then
 			if announce_token:IsMonster() then
 				--자신 몬스터 존에 낸다 / 자신의 패에 넣는다 / 자신 덱의 맨 위에 놓는다 / 자신 덱의 맨 아래에 놓는다
-				op=Duel.SelectOption(tp,aux.Stringid(id,4),aux.Stringid(id,5),aux.Stringid(id,6),aux.Stringid(id,7))+1
+				op=Duel.SelectOption(tp,aux.Stringid(id,4),aux.Stringid(id,5),aux.Stringid(id,6),aux.Stringid(id,7),aux.Stringid(99000094,15))+1
 			end
 			if announce_token:IsSpellTrap() then
 				--자신 필드에 발동한다 / 자신의 패에 넣는다 / 자신 덱의 맨 위에 놓는다 / 자신 덱의 맨 아래에 놓는다
-				op=Duel.SelectOption(tp,aux.Stringid(id,8),aux.Stringid(id,5),aux.Stringid(id,6),aux.Stringid(id,7))+10
+				op=Duel.SelectOption(tp,aux.Stringid(id,8),aux.Stringid(id,5),aux.Stringid(id,6),aux.Stringid(id,7),aux.Stringid(99000094,15))+10
 			end
 		elseif you_and_i==1 then
 			if announce_token:IsMonster() then
 				--상대 몬스터 존에 낸다 / 상대의 패에 넣는다 / 상대 덱의 맨 위에 놓는다 / 상대 덱의 맨 아래에 놓는다
-				op=Duel.SelectOption(tp,aux.Stringid(id,9),aux.Stringid(id,10),aux.Stringid(id,11),aux.Stringid(id,12))+50
+				op=Duel.SelectOption(tp,aux.Stringid(id,9),aux.Stringid(id,10),aux.Stringid(id,11),aux.Stringid(id,12),aux.Stringid(99000094,15))+50
 			end
 			if announce_token:IsSpellTrap() then
 				--상대 필드에 발동한다 / 상대의 패에 넣는다 / 상대의 덱 맨 위에 놓는다
-				op=Duel.SelectOption(tp,aux.Stringid(id,13),aux.Stringid(id,10),aux.Stringid(id,11),aux.Stringid(id,12))+60
+				op=Duel.SelectOption(tp,aux.Stringid(id,13),aux.Stringid(id,10),aux.Stringid(id,11),aux.Stringid(id,12),aux.Stringid(99000094,15))+60
 			end
 		end
 	until you_and_i==3
-		or op==1 or op==2 or op==3 or op==4
-		or op==10 or op==11 or op==12 or op==13
-		or op==50 or op==51 or op==52 or op==53
-		or op==60 or op==61 or op==62 or op==63
+		or op==1 or op==2 or op==3 or op==4 or op==5
+		or op==10 or op==11 or op==12 or op==13 or op==14
+		or op==50 or op==51 or op==52 or op==53 or op==54
+		or op==60 or op==61 or op==62 or op==63 or op==64
 	local token=Duel.CreateToken(tp,ac)
 	local oppo_token=Duel.CreateToken(1-tp,ac)
 	-- Monster Card
