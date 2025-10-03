@@ -73,7 +73,7 @@ function s.gysptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		and Duel.IsExistingTarget(s.gyspfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
 	local max=math.min(2,ft)
 	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
-		or not Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_ONFIELD,0,1,nil,99000417) then
+		or not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,99000417),tp,LOCATION_ONFIELD,0,1,nil) then
 		max=1
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
