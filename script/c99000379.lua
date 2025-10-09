@@ -78,14 +78,14 @@ function s.tktg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0
 		and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,16946850,0,TYPES_TOKEN,300,300,1,RACE_FAIRY,ATTRIBUTE_LIGHT)
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,16946850,0,TYPES_TOKEN,300,300,1,RACE_FAIRY,ATTRIBUTE_LIGHT,1-tp) end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,16946850,0,TYPES_TOKEN,300,300,1,RACE_FAIRY,ATTRIBUTE_LIGHT,POS_FACEUP,1-tp) end
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,2,tp,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,0)
 end
 function s.tkop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,16946850,0,TYPES_TOKEN,300,300,1,RACE_FAIRY,ATTRIBUTE_LIGHT)
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,16946850,0,TYPES_TOKEN,300,300,1,RACE_FAIRY,ATTRIBUTE_LIGHT,1-tp) then
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,16946850,0,TYPES_TOKEN,300,300,1,RACE_FAIRY,ATTRIBUTE_LIGHT,POS_FACEUP,1-tp) then
 		local tk1=Duel.CreateToken(tp,16946850)
 		local tk2=Duel.CreateToken(tp,16946850)
 		Duel.SpecialSummonStep(tk1,0,tp,tp,false,false,POS_FACEUP)
