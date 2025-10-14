@@ -77,14 +77,11 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
-function s.tar3f(c)
-	return c:IsCanAddCounter(0x1d72,3) and c:IsRace(RACE_MACHINE)
-end
 function s.tar3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsOnfield() and s.tar3f(chkc) and chkc:IsControler(1-tp) end 
+	if chkc then return chkc:IsOnfield() and chkc:IsCanAddCounter(0x1d72,3) and chkc:IsControler(1-tp) end 
 	if chk==0 then return Duel.IsExistingTarget(s.tar3f,tp,0,LOCATION_ONFIELD,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	local g=Duel.SelectTarget(tp,s.tar3f,tp,0,LOCATION_ONFIELD,1,1,nil)
+	local g=Duel.SelectTarget(tp,Card.IsCanAddCounter,tp,0,LOCATION_ONFIELD,1,1,nil,0x1d72,3)
 	Duel.SetOperationInfo(0,CATEGORY_COUNTER,g,1,0x1d72,1)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DISABLE,g,1,tp,0)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DESTROY,g,1,tp,0)
