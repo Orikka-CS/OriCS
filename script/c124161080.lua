@@ -77,7 +77,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if tg and tg:IsFaceup() then  
 		local g=Duel.GetMatchingGroup(s.tg2ffilter,tp,LOCATION_DECK,0,nil,tg:GetCode())
 		if #g>0 then
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 			Duel.SendtoGrave(sg,REASON_EFFECT)
 		end
 	end

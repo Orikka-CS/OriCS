@@ -72,7 +72,7 @@ function s.op2filter(c)
 end
 
 function s.op2dfilter(c)
-	return c:IsSetCard(0xf31) and c:IsFaceup()
+	return c:IsSetCard(0xf31) and c:IsType(TYPE_LINK) and c:IsFaceup()
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -81,10 +81,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,own,1,1,aux.TRUE,1,own,HINTMSG_DESTROY)
 		Duel.Destroy(sg,REASON_EFFECT)
-		local cg=Duel.GetMatchingGroup(s.op2dfilter,tp,LOCATION_MZONE,0,e:GetHandler())
-		if #cg>0 then return end
+		local cg=Duel.GetMatchingGroup(s.op2dfilter,tp,0,LOCATION_MZONE,e:GetHandler())
 		local dg=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_MZONE,0,e:GetHandler())
-		if #dg>1 then
+		if #cg>0 and #dg>1 then
 			Duel.BreakEffect()
 			local dsg=aux.SelectUnselectGroup(dg,e,tp,2,2,aux.TRUE,1,tp,HINTMSG_DESTROY)
 			Duel.Destroy(dsg,REASON_EFFECT)
