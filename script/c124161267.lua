@@ -83,16 +83,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		end
 	end
 	local eff=nil
-	if #available_effs>1 then
-		local available_effs_desc={}
-		for _,eff in ipairs(available_effs) do
-			table.insert(available_effs_desc,eff:GetDescription())
-		end
-		local op=Duel.SelectOption(tp,table.unpack(available_effs_desc))
-		eff=available_effs[op+1]
-	else
-		eff=available_effs[1]
-	end
+	eff=available_effs[1]
 	if eff then
 		Duel.Hint(HINT_OPSELECTED,1-tp,eff:GetDescription())
 		Duel.ClearTargetCard()
