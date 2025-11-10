@@ -7,10 +7,10 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_IGNITION)
@@ -24,23 +24,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1filter(c)
-	local te=c:GetActivateEffect()
-	return c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY) and not c:IsPublic() and c:IsAbleToDeck()
-end
-
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return true end
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND,0,nil)
-	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) and Duel.IsPlayerCanDraw(tp,2) then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM):GetFirst()
-		Duel.ConfirmCards(1-tp,sg)
-		Duel.ShuffleHand(tp)
-		e:SetLabelObject(sg)
-	end
-end
-
 function s.tg1filter(c)
 	return c:IsSetCard(0xf24) and not c:IsCode(id) and c:IsAbleToHand()
 end
@@ -52,6 +35,11 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,2,tp,1)
 end
 
+function s.op1filter(c)
+	local te=c:GetActivateEffect()
+	return (c:IsSetCard(0xf24) or (c:IsSpell() and te and te:IsHasCategory(CATEGORY_DESTROY))) and c:IsAbleToDeck()
+end
+
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if #g>0 then
@@ -59,11 +47,13 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
 		Duel.ShuffleDeck(tp)
-		local lg=e:GetLabelObject()
-		if lg and lg:IsLocation(LOCATION_HAND) then
+		local dg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,sg)
+		if #dg>0 and Duel.IsPlayerCanDraw(tp,2) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.DisableShuffleCheck()
-			Duel.SendtoDeck(lg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+			Duel.ConfirmCards(1-tp,dsg)
+			Duel.SendtoDeck(dsg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 			Duel.Draw(tp,2,REASON_EFFECT)
 		end
 	end

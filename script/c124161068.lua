@@ -41,7 +41,7 @@ end
 
 function s.tg1sfilter(c)
 	local te=c:GetActivateEffect()
-	return c:IsSpell() and te:IsHasCategory(CATEGORY_DESTROY) and c:IsAbleToHand()
+	return c:IsSpell() and te and te:IsHasCategory(CATEGORY_DESTROY) and c:IsAbleToHand()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
