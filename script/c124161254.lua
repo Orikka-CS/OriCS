@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
@@ -78,24 +78,25 @@ end
 
 --effect 2
 function s.tg2filter(c,e,tp)
-	return c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xf30) and c:IsMonster() and not c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+
+function s.tg2hfilter(c)
+	return c:IsSetCard(0xf30) and c:IsAbleToHand()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg2hfilter,tp,LOCATION_REMOVED,0,nil)
 	local ct=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_GRAVE,0,e:GetHandler(),e,tp)
-	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct and ct>0 end
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	if chk==0 then return #g>0 and ct>0 end
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_REMOVED)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.tg2hfilter,tp,LOCATION_REMOVED,0,nil)
 	local ct=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_GRAVE,0,e:GetHandler(),e,tp)
-	Duel.ConfirmDecktop(tp,ct)
-	local dt=Duel.GetDecktopGroup(tp,ct)
-	if #dt>0 and dt:IsExists(Card.IsAbleToHand,1,nil) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local sg=dt:FilterSelect(tp,Card.IsAbleToHand,1,1,nil)
+	if #g>0 and ct>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
 	end
-	Duel.ShuffleDeck(tp)
 end

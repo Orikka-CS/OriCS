@@ -72,6 +72,15 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e1,tp)
 end
 
+function s.op2filter(c)
+	return c:IsSetCard(0xf2b) and c:IsFaceup()
+end
+
 function s.op2e(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Recover(tp,1400,REASON_EFFECT)
+	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_REMOVED,0,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+		Duel.SendtoGrave(sg,REASON_EFFECT+REASON_RETURN)
+	end
 end

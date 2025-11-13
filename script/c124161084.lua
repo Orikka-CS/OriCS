@@ -39,24 +39,36 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsRelateToBattle() and ug~=dg
 end
 
+function s.tg1filter(c)
+	return c:IsSetCard(0xf25) and c:IsFaceup()
+end
+
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_REMOVED,0,nil)
+	if chk==0 then return #g>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,0,LOCATION_REMOVED)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_REMOVED,0,nil)
+	local ct=math.abs(ug-dg)
+	if #g>0 and ct>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+		Duel.SendtoGrave(sg,REASON_EFFECT+REASON_RETURN)
+	end
 	if not c:IsRelateToEffect(e) then return end
-	if ug~=dg then
+	if ct>0 then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_EXTRA_ATTACK)
-		e1:SetValue(math.abs(ug-dg))
+		e1:SetValue(ct)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		c:RegisterEffect(e1)
 	end
-	c:UpdateAttack(math.abs(ug-dg)*800,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+	c:UpdateAttack(ct*800,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 end
 
 --effect 2

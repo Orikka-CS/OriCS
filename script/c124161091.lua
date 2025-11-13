@@ -16,6 +16,17 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	--effect 2
+	local e2=Effect.CreateEffect(c)
+	e2:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DRAW)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetRange(LOCATION_GRAVE)
+	e2:SetCountLimit(1,{id,1})
+	e2:SetCost(Cost.SelfBanish)
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
+	c:RegisterEffect(e2)
 end
 
 --hand active
@@ -88,3 +99,22 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end 
+
+--effect 2
+function s.con2filter(c)
+	return c:IsSetCard(0xf25) and c:IsFaceup()
+end
+
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_ONFIELD,0,nil)
+	return g>0
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Draw(tp,1,REASON_EFFECT) 
+end

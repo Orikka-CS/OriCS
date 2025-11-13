@@ -48,7 +48,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
 		if sg:IsLocation(LOCATION_REMOVED) then 
-			Duel.SendtoGrave(sg,REASON_RETURN) 
+			Duel.SendtoGrave(sg,REASON_EFFECT+REASON_RETURN) 
 		end
 		if sg:IsLocation(LOCATION_DECK) then 
 			Duel.SendtoGrave(sg,REASON_EFFECT) 
