@@ -34,11 +34,11 @@ end
 
 --effect 1
 function s.tg1g1filter(c,e)
-	return c:IsFaceup() and c:IsMonster() and c:IsSetCard(0xf21) and c:IsCanBeEffectTarget(e)
+	return c:IsFaceup() and c:IsSetCard(0xf21) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1g2filter(c,e)
-	return c:IsMonster() and c:IsCanBeEffectTarget(e)
+	return c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

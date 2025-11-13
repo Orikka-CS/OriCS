@@ -26,18 +26,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1filter(c)
-	return c:IsSetCard(0xf31) and c:IsMonster() and c:IsType(TYPE_LINK) and c:IsFacedown()
-end
-
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_EXTRA,0,nil)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.ShuffleExtra(tp)
-end
-
 function s.tg1filter(c)
 	return c:IsSetCard(0xf31) and c:IsSpell() and c:IsAbleToHand()
 end

@@ -64,7 +64,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1rmfilter(c)
-	return c:IsAbleToRemove() and c:IsType(TYPE_EFFECT) and c:IsMonster()
+	return c:IsAbleToRemove() and c:IsType(TYPE_EFFECT)
 end
 
 function s.op1filter(c)

@@ -71,7 +71,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op2filter(c,e,tp)
-	return c:IsSetCard(0xf20) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xf20) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)

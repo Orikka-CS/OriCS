@@ -23,11 +23,11 @@ end
 
 --effect 1
 function s.tg1ifilter(c) 
-	return c:IsMonster() and c:IsSetCard(0xf22) and c:IsFaceup()
+	return c:IsSetCard(0xf22) and c:IsFaceup()
 end
 
 function s.tg1ofilter(c)
-	return c:IsFaceup() and c:IsMonster() and c:IsCanTurnSet() and c:IsStatus(STATUS_SPSUMMON_TURN)
+	return c:IsFaceup() and c:IsCanTurnSet() and c:IsStatus(STATUS_SPSUMMON_TURN)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

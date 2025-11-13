@@ -23,11 +23,11 @@ end
 
 --effect 1
 function s.tg1ifilter(c,e,tp) 
-	return c:IsMonster() and c:IsSetCard(0xf22) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0xf22) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.tg1ofilter(c,tp)
-	return c:IsFaceup() and c:IsMonster() and c:IsAbleToRemove(tp,POS_FACEDOWN,REASON_EFFECT)
+	return c:IsFaceup() and c:IsAbleToRemove(tp,POS_FACEDOWN,REASON_EFFECT)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

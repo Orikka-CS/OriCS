@@ -58,7 +58,7 @@ end
 
 --effect 2
 function s.cst2filter(c)
-	return c:IsSetCard(0xf30) and c:IsMonster() and c:IsType(TYPE_FUSION) and c:IsFacedown()
+	return c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION) and c:IsFacedown()
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
