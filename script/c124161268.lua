@@ -62,14 +62,14 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.cst1filter(c)
-	return c:IsSetCard(0xf31) and c:IsAbleToDeckAsCost()
+	return c:IsSetCard(0xf31) and c:IsAbleToRemoveAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_GRAVE,0,nil)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
-	Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_COST)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

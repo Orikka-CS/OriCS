@@ -85,7 +85,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op2filter(c)
-	return c:IsSetCard(0xf20) and c:IsAbleToDeck()
+	return c:IsSetCard(0xf20) and c:IsFaceup() and c:IsAbleToDeck()
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -98,7 +98,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetCode(EFFECT_PUBLIC)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 	c:RegisterEffect(e1)
-	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_GRAVE,0,nil)
+	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
 	if #g>=3 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.BreakEffect()
 		local sg=aux.SelectUnselectGroup(g,e,tp,3,3,nil,1,tp,HINTMSG_TODECK)

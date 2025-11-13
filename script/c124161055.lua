@@ -64,12 +64,12 @@ function s.val1(e,c)
 end
 
 --effect 2
-function s.con2filter(c,tp,re,r,rp)
-	return c:IsReason(REASON_COST) and re:IsActivated() and rp==tp and c:IsSetCard(0xf23) and not c:IsType(TYPE_FIELD) and c:IsControler(tp)
+function s.con2filter(c,tp,re,rp)
+	return re and c:IsReason(REASON_COST) and re:IsActivated() and rp==tp and c:IsSetCard(0xf23) and not c:IsType(TYPE_FIELD) and c:IsControler(tp)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,tp,re,r,rp)
+	return eg:IsExists(s.con2filter,1,nil,tp,re,rp)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

@@ -37,17 +37,23 @@ function s.tg1filter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_DECK,0,nil)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_REMOVED,0,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_HAND+LOCATION_DECK)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_DECK,0,nil)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_REMOVED,0,nil)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
-		if Duel.SendtoGrave(sg,REASON_EFFECT)>0 and Duel.IsPlayerCanDraw(tp,1) and sg:GetLocation()==LOCATION_GRAVE and sg:GetPreviousLocation()==LOCATION_HAND then
+		if sg:IsLocation(LOCATION_REMOVED) then 
+			Duel.SendtoGrave(sg,REASON_RETURN) 
+		end
+		if sg:IsLocation(LOCATION_DECK) then 
+			Duel.SendtoGrave(sg,REASON_EFFECT) 
+		end
+		if sg:IsLocation(LOCATION_HAND) and Duel.SendtoGrave(sg,REASON_EFFECT)>0 and Duel.IsPlayerCanDraw(tp,1) and sg:GetLocation()==LOCATION_GRAVE then
 			Duel.BreakEffect()
 			Duel.Draw(tp,1,REASON_EFFECT)
 		end

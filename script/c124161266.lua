@@ -57,7 +57,7 @@ end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	if not re then return false end
-	return eg:IsExists(s.con1filter,1,nil,tp,re) and re:GetHandler():IsSetCard(0xf31)
+	return eg:IsExists(s.con1filter,1,nil,tp) and re:GetHandler():IsSetCard(0xf31)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

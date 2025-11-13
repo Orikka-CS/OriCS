@@ -61,9 +61,7 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	if not (e:GetHandler():IsReason(REASON_COST) and re:IsActivated() and rp==tp) then return false end
-	local rc=re:GetHandler()
-	return rc:IsSetCard(0xf23)
+	return re and e:GetHandler():IsReason(REASON_COST) and re:IsActivated() and rp==tp and re:GetHandler():IsSetCard(0xf23)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

@@ -56,7 +56,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_MZONE,0,nil)
 		if #g>0 and c:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEDOWN):GetFirst()
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP):GetFirst()
 			Duel.Overlay(sg,c,true)
 		end
 	end
