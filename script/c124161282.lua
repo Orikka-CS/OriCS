@@ -1,0 +1,86 @@
+--체어라키 유저 리프
+local s,id=GetID()
+function s.initial_effect(c)
+	--xyz
+	c:EnableReviveLimit()
+	Xyz.AddProcedure(c,nil,3,2)
+	--effect 1
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY)
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetCountLimit(1,id)
+	e1:SetTarget(s.tg1)
+	e1:SetOperation(s.op1)
+	c:RegisterEffect(e1)
+	--effect 2
+	local e2=Effect.CreateEffect(c)
+	e2:SetCategory(CATEGORY_REMOVE)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCost(Cost.DetachFromSelf(1,1,nil))
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
+	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_SPSUMMON_SUCCESS)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+--count
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	if not (re and re:IsActiveType(TYPE_TRAP)) then return end
+	for tc in eg:Iter() do
+		tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET,0,1)
+	end
+end
+
+--effect 1
+function s.tg1filter(c)
+	return c:IsTrap() and c:IsSetCard(0xf32) and c:IsSSetable()
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 end
+end
+
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
+	if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET):GetFirst()
+		Duel.SSet(tp,sg)
+	end
+end
+
+--effect 2
+function s.tg2filter(c)
+	return c:IsSetCard(0xf32) and c:IsFaceup()
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local ct=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_ONFIELD,0,nil)
+	if chk==0 then return ct>0 and Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>=ct end
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,0,tp,LOCATION_HAND)
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
+	local ct=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_ONFIELD,0,nil)
+	if #g>=ct then
+		local sg=g:RandomSelect(tp,ct)
+		Duel.ConfirmCards(tp,sg)
+		if c:IsRelateToEffect(e) and c:GetFlagEffect(id)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			local ssg=aux.SelectUnselectGroup(sg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+			Duel.SendtoGrave(ssg,REASON_EFFECT)
+		end
+		Duel.ShuffleHand(1-tp)
+	end
+end
