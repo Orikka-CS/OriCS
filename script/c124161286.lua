@@ -105,7 +105,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if tg then
 		local g=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_MZONE,nil)
-		if Duel.SendtoHand(tg,nil,REASON_EFFECT)>0 and tg:IsAbleToRemove() and #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if Duel.SendtoHand(tg,nil,REASON_EFFECT)>0 and tg:IsLocation(LOCATION_HAND) and tg:IsAbleToRemove() and #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONTROL)
 			Duel.GetControl(sg,tp)

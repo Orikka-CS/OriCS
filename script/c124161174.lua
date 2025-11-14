@@ -49,15 +49,15 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	return rp==tp and rc:IsType(TYPE_FUSION) and re:IsActiveType(TYPE_MONSTER)
+end
+
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() and Duel.CheckLPCost(tp,800) end
 	Duel.PayLPCost(tp,800)
 	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
-end
-
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local rc=re:GetHandler()
-	return rp==tp and rc:IsType(TYPE_FUSION)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
