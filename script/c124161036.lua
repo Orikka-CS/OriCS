@@ -23,12 +23,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsAbleToGraveAsCost() end
-	Duel.SendtoGrave(c,REASON_COST)
-end
-
 function s.tg1filter(c,e)
 	return c:IsCanBeEffectTarget(e) and c:IsFacedown()
 end

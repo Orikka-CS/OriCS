@@ -55,7 +55,6 @@ function s.op1filter(c)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if tg and Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)>0 and Duel.Draw(tp,1,REASON_EFFECT)>0 then
 		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_REMOVED,0,nil)

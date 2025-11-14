@@ -59,7 +59,6 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e)
 	if #tg>0 then
 		Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)

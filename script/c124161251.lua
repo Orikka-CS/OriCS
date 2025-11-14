@@ -46,7 +46,6 @@ function s.op1filter(c,e,tp)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if tg then
 		Duel.SendtoHand(tg,nil,REASON_EFFECT)
