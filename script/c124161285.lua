@@ -90,6 +90,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 				e2:SetCountLimit(1)
 				e2:SetTarget(s.op1tg)
 				e2:SetOperation(s.op1op)
+				e2:SetReset(RESET_EVENT|(RESETS_STANDARD&~RESET_TURN_SET))
 				tc:RegisterEffect(e2)
 			end
 		end
