@@ -30,7 +30,7 @@ end
 
 --effect 1
 function s.con1(e,tp,eg)
-	return eg:IsExists(Card.IsControler,1,nil,1-tp)
+	return eg:FilterCount(Card.IsControler,nil,1-tp)>0
 end
 
 function s.tg1filter(c)

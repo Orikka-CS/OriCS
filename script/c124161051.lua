@@ -53,7 +53,7 @@ function s.con2filter(c,tp)
 end
 
 function s.con2(e,tp,eg)
-	return eg:IsExists(s.con2filter,1,nil,tp)
+	return eg:FilterCount(s.con2filter,nil,tp)>0
 end
 
 function s.tg2filter(c)

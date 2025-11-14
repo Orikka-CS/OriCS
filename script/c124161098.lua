@@ -67,12 +67,12 @@ function s.con1filter(c,tp)
 end
 
 function s.con1(e,tp,eg)
-	return eg:IsExists(s.con1filter,1,nil,tp) and not eg:IsContains(e:GetHandler())
+	return eg:FilterCount(s.con1filter,nil,tp)>0 and not eg:IsContains(e:GetHandler())
 end
 
 --effect 2
 function s.con2(e,tp,eg)
-	return eg:IsExists(Card.IsControler,1,nil,1-tp)
+	return eg:FilterCount(Card.IsControler,nil,1-tp)>0
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

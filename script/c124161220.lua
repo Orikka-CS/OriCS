@@ -67,7 +67,7 @@ end
 
 function s.con2(e,tp,eg)
 	local c=e:GetHandler()
-	return eg:IsExists(s.con2filter,1,nil,tp) and c:IsPreviousControler(1-tp) and c:IsPreviousLocation(LOCATION_HAND)
+	return eg:FilterCount(s.con2filter,nil,tp)>0 and c:IsPreviousControler(1-tp) and c:IsPreviousLocation(LOCATION_HAND)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

@@ -37,7 +37,7 @@ function s.con1filter(c,tp)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con1filter,1,nil,tp)
+	return eg:FilterCount(s.con1filter,nil,tp)>0
 end
 
 function s.tg1filter(c,e)

@@ -54,7 +54,7 @@ function s.con1filter(c)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentChain(true)==0 and eg:IsExists(Card.IsSummonPlayer,1,nil,1-tp) and Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)>0
+	return Duel.GetCurrentChain(true)==0 and eg:FilterCount(Card.IsSummonPlayer,nil,1-tp)>0 and Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)>0
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

@@ -59,7 +59,7 @@ end
 
 function s.con1(e,tp,eg)
 	local c=e:GetHandler()
-	return not eg:IsContains(c) and eg:IsExists(s.con1filter,1,nil,tp)
+	return not eg:IsContains(c) and eg:FilterCount(s.con1filter,nil,tp)>0
 end
 
 function s.cst1filter(c)

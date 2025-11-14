@@ -39,7 +39,7 @@ function s.con1filter(c,e,tp,re)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con1filter,1,nil,e,tp,re)
+	return eg:FilterCount(s.con1filter,nil,e,tp,re)>0
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -58,7 +58,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(tp,sg)
 		if sg:FilterCount(s.op1filter,nil,tp)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then 
 			local ssg=aux.SelectUnselectGroup(sg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-			Duel.SendtoGrave(ssg,REASON_EFFECT)	   
+			Duel.SendtoGrave(ssg,REASON_EFFECT)	
 		end
 		Duel.ShuffleHand(1-tp)
 	end

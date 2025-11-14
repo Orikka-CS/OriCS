@@ -59,7 +59,7 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(Card.IsControler,1,nil,tp)
+	return eg:FilterCount(Card.IsControler,nil,tp)>0
 end
 
 function s.tg2filter(c,e,tp)

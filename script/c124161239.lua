@@ -57,7 +57,7 @@ function s.con2filter(c,tp)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,tp)
+	return eg:FilterCount(s.con2filter,nil,tp)>0
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -97,7 +97,7 @@ end
 
 function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_GRAVE,0,eg)
-	if chk==0 then return eg:IsExists(s.val3filter,1,nil,e,tp) and #g>0 end
+	if chk==0 then return eg:FilterCount(s.val3filter,nil,e,tp)>0 and #g>0 end
 	return Duel.SelectYesNo(tp,aux.Stringid(id,1))
 end
 

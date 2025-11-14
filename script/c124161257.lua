@@ -33,7 +33,7 @@ function s.tg2filter(c,tp)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToDeck() and eg:IsExists(s.tg2filter,1,nil,tp) end
+	if chk==0 then return e:GetHandler():IsAbleToDeck() and eg:FilterCount(s.tg2filter,nil,tp)>0 end
 	return Duel.SelectEffectYesNo(tp,e:GetHandler(),aux.Stringid(id,0))
 end
 

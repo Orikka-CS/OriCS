@@ -66,7 +66,7 @@ function s.con2filter(c,tp)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,tp) and not eg:IsContains(e:GetHandler())
+	return eg:FilterCount(s.con2filter,nil,tp)>0 and not eg:IsContains(e:GetHandler())
 end
 
 function s.tg2filter(c,e)

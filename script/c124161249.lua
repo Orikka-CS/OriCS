@@ -69,7 +69,7 @@ function s.con2rfilter(c)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return ep==1-tp and Duel.GetCurrentChain()==0 and eg:IsExists(s.con2filter,1,nil) and Duel.GetMatchingGroupCount(s.con2rfilter,tp,LOCATION_MZONE,0,nil)>0
+	return ep==1-tp and Duel.GetCurrentChain()==0 and eg:FilterCount(s.con2filter,nil)>0 and Duel.GetMatchingGroupCount(s.con2rfilter,tp,LOCATION_MZONE,0,nil)>0
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

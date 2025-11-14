@@ -61,7 +61,7 @@ function s.con2filter(c,tp)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,tp)
+	return eg:FilterCount(s.con2filter,nil,tp)>0
 end
 
 function s.tg2filter(c)
@@ -90,7 +90,7 @@ function s.con3filter(c)
 end
 
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con3filter,1,nil)
+	return eg:FilterCount(s.con3filter,nil)>0
 end
 
 function s.op3(e,tp,eg,ep,ev,re,r,rp)

@@ -52,12 +52,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2filter(c,e,tp)
+function s.con2filter(c,tp)
 	return c:IsControler(tp) and c:IsLocation(LOCATION_HAND) and c:IsSetCard(0xf20) and not c:IsPublic()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con2filter,1,nil,e,tp)
+	return eg:FilterCount(s.con2filter,nil,tp)>0
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk,re)
