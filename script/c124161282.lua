@@ -66,14 +66,14 @@ end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_ONFIELD,0,nil)>0 end
-	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,800)
+	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,500)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local ct=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_ONFIELD,0,nil)
-	Duel.Recover(tp,ct*800,REASON_EFFECT)
+	Duel.Recover(tp,ct*500,REASON_EFFECT)
 	if c:GetFlagEffect(id)>0 and c:IsRelateToEffect(e) and Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		Duel.Draw(tp,1,REASON_EFFECT)
