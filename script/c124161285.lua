@@ -55,7 +55,7 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and s.tg1filter(chkc,e) end
-	local ct=math.min(Duel.GetLocationCount(tp,LOCATION_SZONE),Duel.GetMatchingGroupCount(s.tg1ctfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil))
+	local ct=math.min(Duel.GetLocationCount(tp,LOCATION_SZONE),Duel.GetMatchingGroup(s.tg1ctfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil):GetClassCount(Card.GetCode))
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE+LOCATION_GRAVE,LOCATION_MZONE+LOCATION_GRAVE,e:GetHandler(),e)
 	if chk==0 then return ct>0 and #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_TARGET)
@@ -100,14 +100,14 @@ end
 function s.op1tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) end
+		and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
 
 function s.op1op(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 	end
 end
 
