@@ -17,7 +17,7 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetRange(LOCATION_GRAVE)
+	e2:SetRange(LOCATION_HAND+LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
@@ -87,9 +87,19 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
 
+function s.op2filter(c)
+	return c:IsType(TYPE_XYZ) and c:IsSetCard(0xf32) and c:GetFlagEffect(id)>0 and c:IsFaceup()
+end
+
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+		local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_MZONE,0,nil)
+		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP):GetFirst()
+			Duel.Overlay(sg,c,true)
+		end
 	end
 end
