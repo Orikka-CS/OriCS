@@ -22,15 +22,6 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	--effect 3
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_UPDATE_LEVEL)
-	e3:SetRange(LOCATION_SZONE)
-	e3:SetCondition(s.con3)
-	e3:SetTargetRange(0,LOCATION_MZONE)
-	e3:SetValue(1)
-	c:RegisterEffect(e3)
 end
 
 --effect 1
@@ -55,10 +46,10 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)})
 		if b==1 then
 			Duel.SendtoHand(sg,nil,REASON_EFFECT)
-			Duel.ConfirmCards(1-tp,sg)		 
+			Duel.ConfirmCards(1-tp,sg)	   
 		else
 			Duel.SendtoGrave(sg,REASON_EFFECT)
-		end	 
+		end  
 	end
 end
 
@@ -101,15 +92,4 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if tg then
 		Duel.Destroy(tg,REASON_EFFECT)
 	end
-end
-
---effect 3
-function s.con3filter(c)
-	return c:IsSetCard(0xf32) and c:IsTrap() and c:IsFaceup()
-end
-
-function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	local tp=e:GetHandlerPlayer()
-	local g=Duel.GetMatchingGroupCount(s.con3filter,tp,LOCATION_REMOVED,0,nil)
-	return g>0
 end

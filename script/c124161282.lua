@@ -65,22 +65,17 @@ function s.tg2filter(c)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_ONFIELD,0,nil)
-	if chk==0 then return ct>0 and Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>=ct end
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,0,tp,LOCATION_HAND)
+	if chk==0 then return Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_ONFIELD,0,nil)>0 end
+	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,800)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_HAND,nil)
 	local ct=Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_ONFIELD,0,nil)
-	if #g>=ct then
-		local sg=g:RandomSelect(tp,ct)
-		Duel.ConfirmCards(tp,sg)
-		if c:IsRelateToEffect(e) and c:GetFlagEffect(id)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			local ssg=aux.SelectUnselectGroup(sg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-			Duel.SendtoGrave(ssg,REASON_EFFECT)
-		end
-		Duel.ShuffleHand(1-tp)
+	Duel.Recover(tp,ct*800,REASON_EFFECT)
+	if c:GetFlagEffect(id)>0 and c:IsRelateToEffect(e) and Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.BreakEffect()
+		Duel.Draw(tp,1,REASON_EFFECT)
 	end
 end

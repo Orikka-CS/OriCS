@@ -88,6 +88,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 				e2:SetCode(EVENT_FREE_CHAIN)
 				e2:SetRange(LOCATION_SZONE)
 				e2:SetCountLimit(1)
+				e2:SetCost(s.op1cst)
 				e2:SetTarget(s.op1tg)
 				e2:SetOperation(s.op1op)
 				e2:SetReset(RESET_EVENT|(RESETS_STANDARD&~RESET_TURN_SET))
@@ -95,6 +96,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			end
 		end
 	end
+end
+
+function s.op1cst(e,tp,eg,ep,ev,re,r,rp,chk)
+	local def=e:GetHandler():GetDefense()
+	if chk==0 then return def>0 and Duel.CheckLPCost(tp,def) end
+	Duel.PayLPCost(tp,def)
 end
 
 function s.op1tg(e,tp,eg,ep,ev,re,r,rp,chk)
