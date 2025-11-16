@@ -1,4 +1,4 @@
---엄브라레 에나
+--엄브라레 사야
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

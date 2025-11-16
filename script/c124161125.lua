@@ -1,4 +1,4 @@
---나우프라테 클리너 디아
+--나우프라테 클리너 디아나
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---엄브라레 그림
+--엄브라레 센카
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

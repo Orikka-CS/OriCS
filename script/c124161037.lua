@@ -1,4 +1,4 @@
---엄브라레 스카
+--엄브라레 섀튼
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

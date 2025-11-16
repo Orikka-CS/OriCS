@@ -1,4 +1,4 @@
---린의 독훼귀－비아
+--린의 독훼귀－유접
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

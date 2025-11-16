@@ -1,4 +1,4 @@
---광형－헌신의 큐안나
+--광형－헌신의 알라샤
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

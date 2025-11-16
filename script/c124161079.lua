@@ -1,4 +1,4 @@
---아스타테리아 테라
+--아스타테리아 파텔
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
