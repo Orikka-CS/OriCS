@@ -1,4 +1,4 @@
---테일모어 사라드
+--테일모어 샐라드
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

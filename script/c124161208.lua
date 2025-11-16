@@ -1,4 +1,4 @@
---클라랑슈의 목동 요한
+--클라랑슈의 목동 다윗
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

@@ -1,4 +1,4 @@
---아스타테리아 베넬
+--아스타테리아 아큘
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

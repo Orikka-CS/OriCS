@@ -1,4 +1,4 @@
---렉스퀴아트 룩스상투르스
+--렉스퀴아트 루캄상투르스
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

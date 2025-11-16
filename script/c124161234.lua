@@ -1,4 +1,4 @@
---테일모어 로스트
+--테일모어 로사트
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
