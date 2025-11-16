@@ -1,4 +1,4 @@
---란샤르드 클로
+--란샤르드 칼로파
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

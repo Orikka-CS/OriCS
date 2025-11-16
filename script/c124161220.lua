@@ -1,4 +1,4 @@
---란샤르드 시트
+--란샤르드 시트루
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

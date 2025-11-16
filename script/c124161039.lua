@@ -1,4 +1,4 @@
---시엄브라레 라후
+--시엄브라레 라아후
 local s,id=GetID()
 function s.initial_effect(c)
 	--link
