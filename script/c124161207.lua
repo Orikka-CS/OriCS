@@ -1,4 +1,4 @@
---클라랑슈의 소녀 엘라
+--클라랑슈의 소녀 알마
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

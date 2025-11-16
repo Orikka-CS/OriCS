@@ -1,4 +1,4 @@
---나우프라테 디렉터 사무엘
+--나우프라테 디렉터 새뮤얼
 local s,id=GetID()
 function s.initial_effect(c)
 	--link
@@ -55,7 +55,7 @@ function s.tg1filter(c,e)
 end
 
 function s.tg1ctfilter(c)
-	return c:IsSetCard(0xf28)
+	return c:IsSetCard(0xf28) and c:IsMonster()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
