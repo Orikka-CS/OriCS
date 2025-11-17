@@ -1,4 +1,4 @@
---레베르테레 아드 제르디알
+--제르디알 레베르테레스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
