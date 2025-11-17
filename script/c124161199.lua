@@ -1,4 +1,4 @@
---페더록스 라이
+--페더록스 팔리노디아
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

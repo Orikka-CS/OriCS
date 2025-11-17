@@ -1,4 +1,4 @@
---제르디알 설퍼레인
+--파멸의 염화－제르디알 설퍼레인
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

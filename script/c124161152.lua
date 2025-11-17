@@ -1,4 +1,4 @@
---제르디알 리콜
+--제르디알의 속삭임 “레베르레테”
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

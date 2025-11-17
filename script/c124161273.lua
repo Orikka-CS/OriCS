@@ -1,4 +1,4 @@
---메가히트 피버
+--메가히트 피버!
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

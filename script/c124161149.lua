@@ -1,4 +1,4 @@
---리본 제르디알
+--제르디알 리저렉션
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
