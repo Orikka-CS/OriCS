@@ -1,4 +1,4 @@
---렉스퀴아트 퀴 베니트
+--렉스퀴아트 콘세크라티오
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
