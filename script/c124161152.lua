@@ -1,4 +1,4 @@
---제르디알 레베르테루멘
+--제르디알 레베르텔
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
