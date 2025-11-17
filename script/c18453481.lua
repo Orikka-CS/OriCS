@@ -3,7 +3,7 @@ local m=18453481
 local cm=_G["c"..m]
 function cm.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddXyzProcedure(c,nil,3,2,nil,nil,7)
+	aux.AddXyzProcedure(c,nil,3,2,nil,nil,Xyz.InfiniteMats)
 	local e1=MakeEff(c,"Qo","M")
 	e1:SetCode(EVENT_FREE_CHAIN)
 	WriteEff(e1,1,"CTO")
