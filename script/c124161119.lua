@@ -43,6 +43,10 @@ function s.op1filter(c)
 	return c:IsSetCard(0xf27) and c:IsAbleToRemove()
 end
 
+function s.op1ctfilter(c)
+	return c:IsSetCard(0xf27) and c:IsFaceup()
+end
+
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
@@ -54,7 +58,14 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		if e:GetLabel()==1 and #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-			Duel.Remove(rsg,POS_FACEUP,REASON_EFFECT) 
+			Duel.Remove(rsg,POS_FACEUP,REASON_EFFECT)
+			local ct=Duel.GetMatchingGroupCount(s.op1ctfilter,tp,LOCATION_REMOVED,0,nil)
+			local og=Duel.GetDecktopGroup(1-tp,ct)
+			if #og>0 and og:FilterCount(Card.IsAbleToRemove,nil)==ct then
+				Duel.ShuffleDeck(tp)
+				Duel.DisableShuffleCheck()
+				Duel.Remove(og,POS_FACEUP,REASON_EFFECT)		 
+			end
 		end
 	end
 end

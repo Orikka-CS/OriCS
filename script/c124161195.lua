@@ -70,7 +70,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local sg=aux.SelectUnselectGroup(g,e,tp,4,4,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,#sg,0,0)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)

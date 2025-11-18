@@ -1,4 +1,4 @@
---캘라피스 서멀버스트
+--캘라피스 서멀쇼크
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
@@ -12,12 +12,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_REMOVE)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetRange(LOCATION_GRAVE)
+	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_SSET)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetRange(LOCATION_REMOVED)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -60,28 +60,25 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.cst2filter(c)
-	return c:IsSetCard(0xf27) and c:IsAbleToRemoveAsCost()
+function s.tg2filter(c)
+	return c:IsSetCard(0xf27) and c:IsFaceup() and c:IsAbleToDeck()
 end
 
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)  
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_GRAVE,0,c)
-	if chk==0 then return c:IsAbleToRemoveAsCost() and #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-	Duel.Remove(c+sg,POS_FACEUP,REASON_COST)
-end
-
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,1-tp,LOCATION_GRAVE)
+	local dg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,0,c)
+	if chk==0 then return #dg>0 and c:IsAbleToDeck() end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,dg+c,1,0,LOCATION_REMOVED)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,nil,1,tp,HINTMSG_REMOVE)
-		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+	local c=e:GetHandler()
+	local dg=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,0,c)
+	if #dg>0 and c:IsRelateToEffect(e) then
+		local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)  
+		Duel.SendtoDeck(dsg+c,nil,SEQ_DECKSHUFFLE,REASON_EFFECT) 
+		Duel.ShuffleDeck(tp)
+		Duel.Draw(tp,1,REASON_EFFECT)
 	end
 end

@@ -19,22 +19,6 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	--count
-	aux.GlobalCheck(s,function()
-		local ge1=Effect.CreateEffect(c)
-		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		ge1:SetCode(EVENT_SPSUMMON_SUCCESS)
-		ge1:SetOperation(s.cnt)
-		Duel.RegisterEffect(ge1,0)
-	end)
-end
-
---count
-function s.cnt(e,tp,eg,ep,ev,re,r,rp)
-	if not (re and re:IsActiveType(TYPE_TRAP)) then return end
-	for tc in eg:Iter() do
-		tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET,0,1)
-	end
 end
 
 --effect 1
@@ -49,7 +33,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1filter(c)
-	return c:GetFlagEffect(id)>0
+	return c:IsSetCard(0xf32) and c:IsMonster()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -59,17 +43,49 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
-		local ct=Duel.GetMatchingGroupCount(s.op1filter,tp,LOCATION_MZONE,0,nil)		   
-		if ct>0 and Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct then
-			Duel.ShuffleDeck(tp)
-			Duel.ConfirmDecktop(tp,ct)
-			local dt=Duel.GetDecktopGroup(tp,ct)
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-			local sg=dt:FilterSelect(tp,Card.IsAbleToHand,1,1,nil)
-			Duel.SendtoHand(sg,nil,REASON_EFFECT)
-			Duel.ConfirmCards(1-tp,sg)
-			Duel.ShuffleDeck(tp)
-		end		
+		local cg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND+LOCATION_REMOVED,0,sg)
+		if #cg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			local csg=aux.SelectUnselectGroup(cg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SELECT):GetFirst()
+			Duel.MoveToField(csg,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+			e1:SetCode(EFFECT_CHANGE_TYPE)
+			e1:SetValue(TYPE_TRAP+TYPE_CONTINUOUS)
+			e1:SetReset(RESET_EVENT|(RESETS_STANDARD&~RESET_TURN_SET))
+			csg:RegisterEffect(e1)
+			local e2=Effect.CreateEffect(e:GetHandler())
+			e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
+			e2:SetType(EFFECT_TYPE_QUICK_O)
+			e2:SetCode(EVENT_FREE_CHAIN)
+			e2:SetRange(LOCATION_SZONE)
+			e2:SetCountLimit(1)
+			e2:SetCost(s.op1cst)
+			e2:SetTarget(s.op1tg)
+			e2:SetOperation(s.op1op)
+			e2:SetReset(RESET_EVENT|(RESETS_STANDARD&~RESET_TURN_SET))
+			csg:RegisterEffect(e2)
+		end
+	end
+end
+
+function s.op1cst(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsPlayerCanDiscardDeckAsCost(tp,1) and 
+	Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>0 end
+	Duel.DiscardDeck(tp,1,REASON_COST)
+end
+
+function s.op1tg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
+end
+
+function s.op1op(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) then
+		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
 

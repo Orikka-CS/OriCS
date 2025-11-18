@@ -44,25 +44,19 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,tp,LOCATION_DECK)
 end
 
-function s.op1filter(c)
-	return c:IsSetCard(0xf27) and c:IsSpellTrap() and c:IsSSetable() and c:IsFaceup()
-end
-
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil,e,tp)
 	local rg=Duel.GetMatchingGroup(s.tg1rfilter,tp,LOCATION_HAND,0,c)
 	if #rg==0 then return end
-	local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE):GetFirst()
 	Duel.Remove(rsg,POS_FACEUP,REASON_EFFECT)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
-		local tg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_REMOVED,0,nil)
-		if #tg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
+		if rsg:IsSpellTrap() and not rsg:IsType(TYPE_FIELD) and rsg:IsSSetable() and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
 			Duel.BreakEffect()
-			local tsg=aux.SelectUnselectGroup(tg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
-			Duel.SSet(tp,tsg) 
+			Duel.SSet(tp,rsg) 
 		end
 	end
 end

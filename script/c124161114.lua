@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	Synchro.AddProcedure(c,nil,1,1,Synchro.NonTuner(nil),1,99)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOGRAVE+CATEGORY_REMOVE)
+	e1:SetCategory(CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
@@ -30,14 +30,13 @@ end
 
 --effect 1
 function s.tg1filter(c)
-	return c:IsSetCard(0xf27) and c:IsSpellTrap() and (c:IsAbleToGrave() and c:IsAbleToRemove())
+	return c:IsSetCard(0xf27) and c:IsSpellTrap() and c:IsAbleToGrave()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 end
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_REMOVE,g,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_DECK)
 end
 
 function s.op1filter(c)
@@ -47,17 +46,11 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local rg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if #rg>0 then
-		local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SELECT):GetFirst()
-		local b1=rsg:IsAbleToGrave()
-		local b2=rsg:IsAbleToRemove()
-		local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)})
-		if b==1 then
-			Duel.SendtoGrave(rsg,REASON_EFFECT)
-		else
-			Duel.Remove(rsg,POS_FACEUP,REASON_EFFECT)
-		end
+		local rsg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+		Duel.SendtoGrave(rsg,REASON_EFFECT)
 		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_REMOVED,0,nil)
-		if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+		g=g+rsg
+		if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
 			Duel.SSet(tp,sg)

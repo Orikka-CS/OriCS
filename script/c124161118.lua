@@ -57,7 +57,7 @@ function s.tg2ffilter(c,cd)
 end
 
 function s.tg2filter(c,e,tp)
-	return Duel.IsExistingMatchingCard(s.tg2ffilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,c:GetCode()) and c:IsCanBeEffectTarget(e) and c:IsFaceup() and c:IsSetCard(0xf27) and not c:IsType(TYPE_FIELD)
+	return Duel.IsExistingMatchingCard(s.tg2ffilter,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE,0,1,nil,c:GetCode()) and c:IsCanBeEffectTarget(e) and c:IsFaceup() and c:IsSetCard(0xf27) and not c:IsType(TYPE_FIELD)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -66,14 +66,14 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET):GetFirst()
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,0,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,0,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,sg,1,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Duel.GetFirstTarget()
 	if not sg or not sg:IsRelateToEffect(e) then return end
-	local rg=Duel.GetMatchingGroup(s.tg2ffilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,sg:GetCode())
+	local rg=Duel.GetMatchingGroup(s.tg2ffilter,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE,0,nil,sg:GetCode())
 	if #rg==0 then return end
 	local srg=aux.SelectUnselectGroup(rg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE):GetFirst()
 	Duel.Remove(srg,POS_FACEUP,REASON_EFFECT)

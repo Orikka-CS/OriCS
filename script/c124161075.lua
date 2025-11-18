@@ -37,7 +37,7 @@ end
 
 function s.op1filter(c)
 	local te=c:GetActivateEffect()
-	return (c:IsSetCard(0xf24) or (c:IsSpell() and te and te:IsHasCategory(CATEGORY_DESTROY))) and c:IsAbleToDeck()
+	return (c:IsSetCard(0xf24) or (te and te:IsHasCategory(CATEGORY_DESTROY))) and c:IsSpell() and c:IsAbleToDeck()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
