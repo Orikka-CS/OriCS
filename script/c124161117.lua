@@ -25,7 +25,19 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--effect 3
+	local e3=Effect.CreateEffect(c)
+	e3:SetCategory(CATEGORY_TOGRAVE)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e3:SetCode(EVENT_SSET)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCondition(s.con3)
+	e3:SetTarget(s.tg3)
+	e3:SetOperation(s.op3)
+	c:RegisterEffect(e3)
 end
+
 --effect 1
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -67,5 +79,30 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+	end
+end
+
+--effect 3
+function s.con3filter(c,tp)
+	return c:IsLocation(LOCATION_STZONE) and c:IsPreviousLocation(LOCATION_REMOVED) and c:IsControler(tp)
+end
+
+function s.con3(e,tp,eg,ep,ev,re,r,rp)
+	return eg:FilterCount(s.con3filter,nil,tp)>0
+end
+
+function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and chck:IsCanBeEffectTarget(e) end
+	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,LOCATION_REMOVED,0,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,sg,1,0,0)
+end
+
+function s.op3(e,tp,eg,ep,ev,re,r,rp)
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg then
+		Duel.SendtoGrave(tg,REASON_EFFECT+REASON_RETURN)
 	end
 end
