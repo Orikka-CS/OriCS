@@ -3,12 +3,11 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DISABLE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_CHAINING)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
 	e1:SetCost(Cost.SelfDiscard)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
@@ -39,21 +38,37 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local ch=ev-1
-	if ch==0 or not (ep==1-tp and Duel.IsChainDisablable(ev)) or re:GetHandler():IsDisabled() then return false end
-	local ch_player,ch_eff=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_EFFECT)
-	local ch_c=ch_eff:GetHandler()
-	return ch_player==tp and ch_c:IsSetCard(0xf26) and ch_eff:IsActiveType(TYPE_MONSTER)
+function s.tg1filter(c,e)
+	return c:IsSetCard(0xf26) and c:IsFaceup()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_DISABLE,eg,1,0,0)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
+	Duel.SetTargetCard(sg)
 end
 
-function s.op1(e,tp,eg,ep,ev,re,r,rp) 
-	Duel.NegateEffect(ev)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if not (tg and tg:IsFaceup()) then return end
+	local c=e:GetHandler()
+	if not tg:IsImmuneToEffect(e) then
+		local e1=Effect.CreateEffect(c)
+		e1:SetDescription(aux.Stringid(id,0))
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CLIENT_HINT)
+		e1:SetCode(EFFECT_IMMUNE_EFFECT)
+		e1:SetRange(LOCATION_MZONE)
+		e1:SetValue(s.op1imfilter)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+		tg:RegisterEffect(e1)
+	end
+end
+
+function s.op1imfilter(e,te)
+	return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() and te:IsActiveType(TYPE_MONSTER)
 end
 
 --effect 2
@@ -110,7 +125,7 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	if c:IsRelateToEffect(e) and tg then
 		Duel.Overlay(tg,c,true)
 		local g=Duel.GetMatchingGroup(s.op3filter,tp,LOCATION_DECK,0,nil)
-		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 			Duel.BreakEffect()
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 			Duel.SendtoGrave(sg,REASON_EFFECT)

@@ -89,6 +89,6 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if tg then
-		Duel.Destroy(tg,REASON_EFFECT)
+		Duel.Destroy(tg,REASON_EFFECT,LOCATION_REMOVED)
 	end
 end
