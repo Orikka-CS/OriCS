@@ -32,7 +32,7 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and chkc:IsCanBeEffectTarget(e) end
-	local ct=Duel.GetMatchingGroupCount(s.tg1filter,tp,0,LOCATION_MZONE,nil)
+	local ct=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_MZONE,0,nil)
 	local g=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_MZONE,nil,e)
 	if chk==0 then return #g>0 and ct>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_DESTROY)
