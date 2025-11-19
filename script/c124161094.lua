@@ -44,7 +44,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	if ch==0 or not (ep==1-tp and Duel.IsChainDisablable(ev)) or re:GetHandler():IsDisabled() then return false end
 	local ch_player,ch_eff=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_EFFECT)
 	local ch_c=ch_eff:GetHandler()
-	return ch_player==tp and (ch_c:IsSetCard(0xf26) and ch_eff:IsMonsterEffect())
+	return ch_player==tp and ch_c:IsSetCard(0xf26) and ch_eff:IsActiveType(TYPE_MONSTER)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
