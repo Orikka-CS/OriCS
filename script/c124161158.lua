@@ -44,21 +44,10 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,sg,#sg,0,0)
 end
 
-function s.op1filter(c)
-	return c:IsType(TYPE_XYZ) and c:IsSetCard(0xf2a) and c:IsFaceup()
-end
-
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e)
 	if #tg>0 then
 		Duel.Remove(tg,POS_FACEDOWN,REASON_EFFECT)
-		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_MZONE,0,nil)
-		if #g>0 and c:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			Duel.BreakEffect()
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP):GetFirst()
-			Duel.Overlay(sg,c,true)
-		end
 	end
 end
 
