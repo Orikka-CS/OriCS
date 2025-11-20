@@ -54,7 +54,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
-		if rsg:IsSpellTrap() and not rsg:IsType(TYPE_FIELD) and rsg:IsSSetable() and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
+		if rsg:IsSpellTrap() and not rsg:IsType(TYPE_FIELD) and rsg:IsSSetable() and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.SSet(tp,rsg) 
 		end
@@ -88,18 +88,15 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 			c:RegisterEffect(e1)
 		end
 	end
-	local b1=true
-	local b2=c:IsLevelAbove(2)
-	local b3=c:IsLevelAbove(3)
-	local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)},{b3,aux.Stringid(id,2)}) 
-	if b==1 then return end
-	local val
-	if b==2 then val=-1 else val=-2 end
-	Duel.BreakEffect()
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_UPDATE_LEVEL)
-	e2:SetValue(val)
-	e2:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
-	c:RegisterEffect(e2)
+	local lv=Duel.AnnounceNumberRange(tp,0,2)
+	if lv>0 then
+		Duel.BreakEffect()
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_SINGLE)
+		e2:SetProperty(EFFECT_FLAG_COPY_INHERIT)
+		e2:SetCode(EFFECT_UPDATE_LEVEL)
+		e2:SetValue(-lv)
+		e2:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
+		c:RegisterEffect(e2)
+	end
 end
