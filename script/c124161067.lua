@@ -49,7 +49,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if not tg then return end
 	if Duel.Destroy(tg,REASON_EFFECT)>0 and c:IsRelateToEffect(e) then
-		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) and #g>0 then
+		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and #g>0 then
 			Duel.BreakEffect()
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 			Duel.SendtoHand(sg,nil,REASON_EFFECT)
