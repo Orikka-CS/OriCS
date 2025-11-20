@@ -38,12 +38,12 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE)
 end
 
-function s.unendalf(c)
-	return c:IsCode(124161059) and c:IsFaceup()
-end
-
 function s.op1filter(c,e,tp)
 	return c:IsSetCard(0xf23) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+
+function s.op1ctfilter(c)
+	return c:IsCode(124161059) and c:IsFaceup()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -53,7 +53,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
 		local ug=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp)  
-		if (Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) or Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,124161059)) and #ug>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if Duel.GetMatchingGroupCount(s.op1ctfilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)>0 and #ug>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			local sug=aux.SelectUnselectGroup(ug,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 			Duel.SpecialSummon(sug,0,tp,tp,false,false,POS_FACEUP)

@@ -61,16 +61,12 @@ function s.tg3filter(c,e)
 	return c:IsFaceup() and c:IsCanBeEffectTarget(e)
 end
 
-function s.unendalf(c)
-	return c:IsCode(124161059) and c:IsFaceup()
-end
-
 function s.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg3filter(chck,e) end
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg3filter,tp,LOCATION_MZONE,0,nil,e) 
-	if chk==0 then return c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP)
+	if chk==0 then return c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 and c:CheckUniqueOnField(tp) end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,c,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,c,1,0,0)
@@ -79,7 +75,7 @@ end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
-	if c:IsRelateToEffect(e) and tg and tg:IsFaceup() and c:CheckUniqueOnField(tp) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then
+	if c:IsRelateToEffect(e) and tg and tg:IsFaceup() and c:CheckUniqueOnField(tp) and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
 		Duel.Equip(tp,c,tg)
 	end
 end
