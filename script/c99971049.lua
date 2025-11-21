@@ -57,8 +57,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 				local heishou=0
 				if tc:IsCode(99971042,99971043,99971044) then heishou=2
 					elseif tc:IsCode(99971045,99971046) then heishou=3
-					elseif tc:IsCode(99971047) then heishou=4
+					elseif tc:IsCode(99971047,99971055) then heishou=4
 					elseif tc:IsCode(99971048) then heishou=5
+					elseif tc:IsCode(99971056) then heishou=6
 				end
 				local e1=Effect.CreateEffect(e:GetHandler())
 				e1:SetDescription(aux.Stringid(id,heishou))
