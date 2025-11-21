@@ -35,7 +35,7 @@ function s.tg1filter(c,e)
 end
 
 function s.tg1afilter(c)
-	return c:IsSetCard(0xf33) and c:GetAttack()>=1000 and c:IsFaceup()
+	return c:IsSetCard(0xf33) and c:GetAttack()>=800 and c:IsFaceup()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -58,8 +58,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetValue(-1000)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+		e1:SetValue(-800)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		asg:RegisterEffect(e1)
 		if tg:IsNegatable() and tg then
 			tg:NegateEffects(e:GetHandler(),RESET_PHASE+PHASE_END,true)
