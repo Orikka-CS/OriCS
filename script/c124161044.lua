@@ -92,15 +92,14 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.GetLocationCount(1-tp,LOCATION_SZONE)>0 then
-		if Duel.SSet(tp,c,1-tp)>0 then
-			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
-			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-			e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
-			e1:SetValue(LOCATION_DECKBOT)
-			c:RegisterEffect(e1)
-		end
+	if c:IsRelateToEffect(e) and Duel.GetLocationCount(1-tp,LOCATION_SZONE)>0 and c:IsSSetable() then
+		Duel.SSet(tp,c,1-tp)
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
+		e1:SetValue(LOCATION_DECKBOT)
+		e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
+		c:RegisterEffect(e1)
 	end
 end
