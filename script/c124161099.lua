@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetCondition(function() return Duel.IsMainPhase() end)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -31,10 +31,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1()
-	return Duel.IsMainPhase()
-end
-
 function s.tg1filter(c,e)
 	return c:IsSetCard(0xf26) and c:IsCanBeEffectTarget(e)
 end

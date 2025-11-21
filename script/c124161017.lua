@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_HAND+LOCATION_MZONE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetCondition(function() return Duel.IsMainPhase() end)
 	e1:SetTarget(Fusion.SummonEffTG(params))
 	e1:SetOperation(Fusion.SummonEffOP(params))
 	c:RegisterEffect(e1)
@@ -28,10 +28,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsMainPhase()
-end
-
 function s.stage2(e,tc,tp,sg,chk)
 	local c=e:GetHandler()
 	if chk==1 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
