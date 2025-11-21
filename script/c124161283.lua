@@ -67,7 +67,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if tg:IsNegatable() and tg then
-		tg:NegateEffects(e:GetHandler(),nil,true)
+		tg:NegateEffects(e:GetHandler(),RESET_PHASE+PHASE_END,true)
 	end
 end
 
