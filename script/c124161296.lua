@@ -21,7 +21,6 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
-	e2:SetCost(Cost.SelfToGrave)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -67,21 +66,21 @@ function s.con2(e,tp,eg)
 end
 
 function s.tg2filter(c,e,tp)
-	return c:IsSetCard(0xf33) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsControler(tp) and c:IsCanBeEffectTarget(e)
+	return c:IsSetCard(0xf33) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e,tp) end
-	local g=eg:Filter(s.tg2filter,nil,e,tp)
-	if chk==0 then return #g>0 end 
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e,tp)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,sg,1,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e):GetFirst()
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and tg then
+	local tg=Duel.GetTargetCards(e):GetFirst()	   
+	if tg and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
