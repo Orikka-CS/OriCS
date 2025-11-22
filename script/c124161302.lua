@@ -86,7 +86,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			e4:SetCode(EFFECT_CANNOT_ACTIVATE)
 			e4:SetRange(LOCATION_MZONE)
 			e4:SetTargetRange(0,1)
-			e4:SetValue(function(e,re,tp) return re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsFacedown() end)
+			e4:SetValue(function(e,re,tp) return re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsFacedown() and re:GetHandler():IsLocation(LOCATION_SZONE) end)
 			e4:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 			c:RegisterEffect(e4)
 			b4=false
