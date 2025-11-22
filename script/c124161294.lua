@@ -1,4 +1,4 @@
---시데로파구스 메간트
+--시데르파그 메간트
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

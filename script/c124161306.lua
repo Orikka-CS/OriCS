@@ -1,4 +1,4 @@
---시데로파구스의 상흔
+--시데르파그의 상흔
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

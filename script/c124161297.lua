@@ -1,4 +1,4 @@
---시데로파구스 메이지
+--시데르파그 메이지
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

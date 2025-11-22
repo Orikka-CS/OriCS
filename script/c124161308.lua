@@ -1,4 +1,4 @@
---불가살의 시데로파구스
+--불가살의 시데르파그
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

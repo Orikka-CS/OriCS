@@ -1,4 +1,4 @@
---마부술사 시데로파구스 아핀드
+--마부술사 시데르파그 아핀드
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

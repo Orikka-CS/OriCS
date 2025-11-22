@@ -1,4 +1,4 @@
---시데로파구스의 검약
+--시데르파그의 검약
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

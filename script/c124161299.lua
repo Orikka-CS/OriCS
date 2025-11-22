@@ -1,4 +1,4 @@
---시데로파구스 다이몬
+--시데르파그 다이몬
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---영결투사 시데로파구스 아수라
+--천력투사 시데르파그 아수라
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

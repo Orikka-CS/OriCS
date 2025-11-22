@@ -1,4 +1,4 @@
---섬휘기사 시데로파구스 아르젠
+--욱광기사 시데르파그 아르젠
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

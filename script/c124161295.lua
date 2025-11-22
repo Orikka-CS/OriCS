@@ -1,4 +1,4 @@
---시데로파구스 말레브
+--시데르파그 말레브
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
