@@ -6,12 +6,11 @@ function s.initial_effect(c)
 	Link.AddProcedure(c,nil,2,2,s.linkfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_TOGRAVE)
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e1:SetCategory(CATEGORY_TOHAND)
+	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(function(e) return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK) end)
+	e1:SetRange(LOCATION_MZONE)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -36,7 +35,7 @@ end
 
 --effect 1
 function s.tg1filter(c,e)
-	return c:IsSetCard(0xf25) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
+	return c:IsSetCard(0xf25) and not c:IsCode(id) and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -46,21 +45,12 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,1-tp,LOCATION_HAND)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if tg then
 		Duel.SendtoHand(tg,nil,REASON_EFFECT)
-		local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-		local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-		local g=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,0,LOCATION_HAND,nil)
-		if ug~=dg and #g>0 then
-			Duel.BreakEffect()
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,1-tp,HINTMSG_TOGRAVE)
-			Duel.SendtoGrave(sg,REASON_EFFECT)
-		end
 	end
 end
 

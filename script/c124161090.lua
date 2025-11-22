@@ -38,19 +38,17 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return re:IsActiveType(TYPE_MONSTER) and Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&LOCATION_MZONE>0
 end
 
-function s.tg1filter(c,e,d)
-	return c:IsSetCard(0xf25) and c:IsMonster() and c:IsFaceup() and c:IsCanBeEffectTarget(e) and (c:IsLocation(LOCATION_MZONE) or d)
+function s.tg1filter(c,e)
+	return c:IsSetCard(0xf25) and c:GetOwner()==e:GetHandlerPlayer() and c:IsFaceup() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
-	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
-	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
-	local d=math.abs(ug-dg)>0
-	local g1=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,e,d)
-	local g2=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_MZONE,nil,e) 
-	if chk==0 then return #g1>0 and #g2>0 end
+	local g1=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
+	local g2=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,e:GetHandler(),e) 
+	if chk==0 then return #g1>0 and #g2>1 end
 	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+	g2=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,sg1+e:GetHandler(),e) 
 	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
 	sg1:Merge(sg2)
 	Duel.SetTargetCard(sg1)

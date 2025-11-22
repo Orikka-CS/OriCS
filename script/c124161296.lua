@@ -53,6 +53,14 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+		if c:IsSummonLocation(LOCATION_GRAVE) then
+			local e1=Effect.CreateEffect(c)
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetCode(EFFECT_ADD_TYPE)
+			e1:SetValue(TYPE_TUNER)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
+			c:RegisterEffect(e1)
+		end
 	end
 end
 
@@ -79,7 +87,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e):GetFirst()	   
+	local tg=Duel.GetTargetCards(e):GetFirst()	 
 	if tg and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
 	end
