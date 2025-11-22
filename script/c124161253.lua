@@ -1,4 +1,4 @@
---렉스퀴아트 루캄상투르스
+--렉스퀴아트 루캄상투루스
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion
@@ -50,12 +50,12 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD+LOCATION_GRAVE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil,e)
 	if chk==0 then return #g>0 end
-	local ct=1
-	local nx=Duel.GetMatchingGroupCount(s.nxfilter,tp,LOCATION_GRAVE,0,nil,e,tp)>0
-	if nx then ct=2 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,2,aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,sg,1,0,0)
+	if Duel.GetMatchingGroupCount(s.nxfilter,tp,LOCATION_GRAVE,0,nil,e,tp)>0 then
+		Duel.SetChainLimit(function(e,ep,tp) return ep==tp end)
+	end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
