@@ -57,7 +57,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			b1=false
 		end
 		if b==2 then
-			local e1=Effect.CreateEffect(c)
+			local e2=Effect.CreateEffect(c)
 			e2:SetType(EFFECT_TYPE_FIELD)
 			e2:SetCode(EFFECT_MUST_ATTACK)
 			e2:SetTargetRange(0,LOCATION_MZONE)
@@ -78,7 +78,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			e3:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 			c:RegisterEffect(e3)
 			b3=false
-		end		
+		end	 
 		if b==4 then
 			local e4=Effect.CreateEffect(c)
 			e4:SetType(EFFECT_TYPE_FIELD)
