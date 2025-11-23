@@ -31,7 +31,6 @@ end
 
 --effect 1
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	local gc=Duel.GetMatchingGroupCount(Card.IsPublic,tp,LOCATION_HAND,0,nil)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,gc+1) end
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,gc+1)
@@ -61,8 +60,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk,re)
-	local c=e:GetHandler()
-	local g=eg:Filter(s.con2filter,nil,e,tp)
+	local g=eg:Filter(s.con2filter,nil,tp)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
 	Duel.ConfirmCards(1-tp,sg)

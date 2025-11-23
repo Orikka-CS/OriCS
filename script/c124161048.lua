@@ -26,17 +26,21 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1filter(c,e,tp,re,r,rp)
-	return re and c:IsReason(REASON_COST) and re:IsActivated() and rp==tp and re:GetHandler():IsSetCard(0xf23) and c:IsControler(tp) and c:IsAbleToHand() and c:IsLocation(LOCATION_GRAVE)
+function s.con1filter(c,e,tp,re,rp)
+	return re and c:IsReason(REASON_COST) and re:IsActivated() and rp==tp and re:GetHandler():IsSetCard(0xf23) and c:IsControler(tp) and c:IsLocation(LOCATION_GRAVE)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.con1filter,1,nil,e,tp,re,r,rp)
+	return eg:FilterCount(s.con1filter,nil,e,tp,re,rp)>0
+end
+
+function s.tg1filter(c,e,tp,re,rp)
+	return re and c:IsReason(REASON_COST) and re:IsActivated() and rp==tp and re:GetHandler():IsSetCard(0xf23) and c:IsControler(tp) and c:IsAbleToHand() and c:IsLocation(LOCATION_GRAVE) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.con1filter(chkc,e,tp,re,r,rp) end
-	local g=eg:Filter(s.con1filter,nil,e,tp,re,r,rp)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp,re,rp) end
+	local g=eg:Filter(s.tg1filter,nil,e,tp,re,rp)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 	Duel.SetTargetCard(sg)

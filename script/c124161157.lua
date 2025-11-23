@@ -53,9 +53,13 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.con2filter(c)
+	return c:IsFaceup() and c:IsCanTurnSet()
+end
+
 function s.con2(e,tp,eg)
 	local c=e:GetHandler()
-	return not eg:IsContains(c)
+	return not eg:IsContains(c) and eg:FilterCount(s.con2filter,nil)>0
 end
 
 function s.tg2filter(c,e)

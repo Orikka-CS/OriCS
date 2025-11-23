@@ -63,12 +63,12 @@ function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 --effect 2
-function s.con2filter(c,e,tp)
+function s.con2filter(c,tp)
 	return c:IsSetCard(0xf2b) and c:IsType(TYPE_FUSION) and c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousControler(tp) and c:GetAttack()>0 and c:GetReasonPlayer()==1-tp
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:FilterCount(s.con2filter,nil,e,tp)>0
+	return eg:FilterCount(s.con2filter,nil,tp)>0
 end
 
 function s.tg2filter(c,e,tp)
