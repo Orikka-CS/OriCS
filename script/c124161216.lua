@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_DRAW)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
@@ -74,9 +74,8 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 		e:SetLabel(0)
 	end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
-	if chk==0 then return c:IsAbleToDeck() and #g>0 or (Duel.IsPlayerCanDraw(tp,1) and e:GetLabel()==1) end
+	if chk==0 then return c:IsAbleToDeck() and #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,c,1,tp,LOCATION_GRAVE)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 
@@ -87,13 +86,12 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ShuffleDeck(tp)
 	Duel.BreakEffect()
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
-	if e:GetLabel()==0 or (e:GetLabel()==1 and #g>0 and (not Duel.IsPlayerCanDraw(tp,1) or not Duel.SelectYesNo(tp,aux.Stringid(id,0)))) then
+	if e:GetLabel()==0 or (e:GetLabel()==1 and #g>0 and (not c:IsAbleToHand() or not Duel.SelectYesNo(tp,aux.Stringid(id,0)))) then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
 	else
-		if Duel.IsPlayerCanDraw(tp,1) then
-			Duel.Draw(tp,1,REASON_EFFECT)
-		end
+		Duel.SendtoHand(c,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,c)
 	end
 end

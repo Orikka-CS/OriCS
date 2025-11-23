@@ -18,7 +18,6 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DRAW)
 	e2:SetType(EFFECT_TYPE_QUICK_O)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_GRAVE)
@@ -101,20 +100,21 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end 
 
 --effect 2
-function s.con2filter(c)
-	return c:IsSetCard(0xf25) and c:IsFaceup()
-end
-
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_ONFIELD,0,nil)
-	return g>0
+function s.tg2filter(c)
+	return c:IsSetCard(0xf25)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return #g>0 end
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Draw(tp,1,REASON_EFFECT) 
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SELECT):GetFirst()
+		Duel.ShuffleDeck(tp)
+		Duel.MoveSequence(sg,0)
+		Duel.ConfirmDecktop(tp,1)
+	end
 end

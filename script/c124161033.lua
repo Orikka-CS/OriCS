@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -23,13 +23,16 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1filter(c)
-	return c:IsSetCard(0xf22) and c:IsFaceup()
+function s.cst1filter(c)
+	return c:IsSetCard(0xf22) and c:IsType(TYPE_LINK) and c:IsFacedown()
 end
 
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,e:GetHandler())
-	return g>0
+function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_EXTRA,0,nil)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
+	Duel.ConfirmCards(1-tp,sg)
+	Duel.ShuffleExtra(tp)
 end
 
 function s.tg1filter(c)

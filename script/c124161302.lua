@@ -47,38 +47,38 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)},{b3,aux.Stringid(id,2)},{b4,aux.Stringid(id,3)})
 		if b==1 then
 			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_FIELD)
-			e1:SetCode(EFFECT_MUST_ATTACK)
-			e1:SetTargetRange(0,LOCATION_MZONE)
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+			e1:SetCode(EFFECT_UPDATE_ATTACK)
 			e1:SetRange(LOCATION_MZONE)
+			e1:SetValue(function(e,c) return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),LOCATION_ONFIELD,LOCATION_ONFIELD)*200 end)
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 			c:RegisterEffect(e1)
-			local e1a=e1:Clone()
-			e1a:SetCode(EFFECT_MUST_ATTACK_MONSTER)
-			e1a:SetValue(function(e,c) return c==e:GetHandler() end)
-			c:RegisterEffect(e1a)
 			b1=false
 		end
 		if b==2 then
-			local e2=Effect.CreateEffect(c)
-			e2:SetType(EFFECT_TYPE_SINGLE)
-			e2:SetCode(EFFECT_ATTACK_ALL)
-			e2:SetValue(1)
+			local e1=Effect.CreateEffect(c)
+			e2:SetType(EFFECT_TYPE_FIELD)
+			e2:SetCode(EFFECT_MUST_ATTACK)
+			e2:SetTargetRange(0,LOCATION_MZONE)
+			e2:SetRange(LOCATION_MZONE)
 			e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 			c:RegisterEffect(e2)
+			local e2a=e2:Clone()
+			e2a:SetCode(EFFECT_MUST_ATTACK_MONSTER)
+			e2a:SetValue(function(e,c) return c==e:GetHandler() end)
+			c:RegisterEffect(e2a)
 			b2=false
 		end
 		if b==3 then
 			local e3=Effect.CreateEffect(c)
 			e3:SetType(EFFECT_TYPE_SINGLE)
-			e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-			e3:SetCode(EFFECT_UPDATE_ATTACK)
-			e3:SetRange(LOCATION_MZONE)
-			e3:SetValue(function(e,c) return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),LOCATION_ONFIELD,LOCATION_ONFIELD)*200 end)
+			e3:SetCode(EFFECT_ATTACK_ALL)
+			e3:SetValue(1)
 			e3:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 			c:RegisterEffect(e3)
 			b3=false
-		end
+		end		
 		if b==4 then
 			local e4=Effect.CreateEffect(c)
 			e4:SetType(EFFECT_TYPE_FIELD)

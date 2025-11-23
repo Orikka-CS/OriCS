@@ -8,7 +8,6 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_SUMMON_SUCCESS)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -31,24 +30,26 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1filter(c)
-	return c:IsSetCard(0xf2b) and not c:IsCode(id) and c:IsAbleToGraveAsCost()
-end
-
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_DECK,0,nil)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(sg,REASON_COST)
+function s.tg1filter(c)
+	return c:IsSetCard(0xf2b) and not c:IsCode(id) and c:IsAbleToGrave() 
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,800) and Duel.CheckLPCost(1-tp,800) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return #g>0 and Duel.CheckLPCost(tp,800) and Duel.CheckLPCost(1-tp,800) end
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,tp,LOCATION_DECK)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	Duel.PayLPCost(tp,800)
-	Duel.PayLPCost(1-tp,800)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
+		Duel.SendtoGrave(sg,REASON_EFFECT)
+		if sg:IsLocation(LOCATION_GRAVE) then
+			Duel.PayLPCost(tp,800)
+			Duel.PayLPCost(1-tp,800)
+		end
+	end
 end
 
 --effect 2
