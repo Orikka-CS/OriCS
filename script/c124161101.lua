@@ -72,7 +72,7 @@ function s.tg2ffilter(c)
 end
 
 function s.tg2filter(c,e)
-	return c:IsType(TYPE_XYZ) and c:GetOverlayGroup():FilterCount(s.tg2ffilter,nil)>0 and c:IsCanBeEffectTarget(e)
+	return c:IsType(TYPE_XYZ) and c:GetOverlayGroup():FilterCount(s.tg2ffilter,nil)>0 and c:IsFaceup() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2xfilter(c,e)

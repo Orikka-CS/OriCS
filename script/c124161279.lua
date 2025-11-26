@@ -73,7 +73,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg2filter(c)
-	return c:GetFlagEffect(id)>0 and c:IsFaceup()
+	return c:IsSetCard(0xf32) and c:GetFlagEffect(id)>0 and c:IsFaceup()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
