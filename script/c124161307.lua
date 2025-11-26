@@ -35,7 +35,7 @@ function s.tg1filter(c,e)
 end
 
 function s.tg1afilter(c)
-	return c:IsSetCard(0xf33) and c:GetAttack()>=800 c:GetAttack()>c:GetBaseAttack() and c:IsFaceup()
+	return c:IsSetCard(0xf33) and c:GetAttack()>=800 and c:GetAttack()>c:GetBaseAttack() and c:IsFaceup()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
