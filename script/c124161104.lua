@@ -75,7 +75,6 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local b=e:GetLabel()
 	local g
 	local sg
@@ -105,7 +104,7 @@ function s.tg2filter(c,e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chkc then return chkc:IsControler(tp) end
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,e:GetHandler(),e)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,5,aux.TRUE,1,tp,HINTMSG_TODECK)
