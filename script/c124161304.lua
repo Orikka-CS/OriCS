@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
@@ -62,7 +62,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,1)},{b2,aux.Stringid(id,2)})
 			if b==1 then
 				Duel.SendtoHand(qsg,nil,REASON_EFFECT)
-				Duel.ConfirmCards(1-tp,qsg)	 
+				Duel.ConfirmCards(1-tp,qsg)  
 			else
 				Duel.SendtoGrave(qsg,REASON_EFFECT)
 			end  
