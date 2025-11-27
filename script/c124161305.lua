@@ -23,18 +23,15 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1ffilter(c,atk)
-	return c:IsFaceup() and c:IsAbleToHand() and atk>c:GetAttack()
-end
-
 function s.tg1filter(c,e,tp)
-	return c:IsSetCard(0xf33) and c:GetAttack()>c:GetBaseAttack() and c:IsFaceup() and c:IsCanBeEffectTarget(e) and Duel.GetMatchingGroupCount(s.tg1ffilter,tp,0,LOCATION_MZONE,nil,c:GetAttack())>0
+	return c:IsSetCard(0xf33) and c:GetAttack()-c:GetBaseAttack()>=500 and c:IsFaceup() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e,tp)
-	if chk==0 then return #g>0 end
+	local rg=Duel.GetMatchingGroup(Card.IsAbleToHand,tp,0,LOCATION_MZONE,nil)
+	if chk==0 then return #g>0 and #rg>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET):GetFirst()
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_MZONE)
@@ -45,9 +42,11 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e):GetFirst()
-	if tg then
-		local g=Duel.GetMatchingGroup(s.tg1ffilter,tp,0,LOCATION_MZONE,nil,tg:GetAttack())
-		if #g>0 then Duel.SendtoHand(g,nil,REASON_EFFECT) end
+	local ct=(tg:GetAttack()-tg:GetBaseAttack())//500
+	local g=Duel.GetMatchingGroup(Card.IsAbleToHand,tp,0,LOCATION_MZONE,nil)
+	if tg and ct>0 and #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 	end
 end
 

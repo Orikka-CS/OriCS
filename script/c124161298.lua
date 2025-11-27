@@ -54,7 +54,7 @@ end
 --effect 2
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsPlayerCanSpecialSummonMonster(tp,124161293,0xf33,TYPES_TOKEN,0,0,1,RACE_FIEND,ATTRIBUTE_EARTH) end
+	if chk==0 then return c:GetEquipCount()>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsPlayerCanSpecialSummonMonster(tp,124161293,0xf33,TYPES_TOKEN,0,0,1,RACE_FIEND,ATTRIBUTE_EARTH) end
 	local dt=(c:GetAttack()-c:GetBaseAttack())//500
 	e:SetLabel(dt)
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
