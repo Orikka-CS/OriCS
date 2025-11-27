@@ -85,7 +85,7 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_SZONE+LOCATION_GRAVE,0,nil)
-	if Duel.Draw(tp,1,REASON_EFFECT)>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+	if Duel.Draw(tp,1,REASON_EFFECT)>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
