@@ -55,6 +55,10 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if not (b1 or b2) then return end 
 	local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)})
 	e:SetLabel(b)
+	if b==1 then
+		e:SetCategory(CATEGORY_TODECK)
+		Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,LOCATION_GRAVE)
+	end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -70,7 +74,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		c:NegateEffects(c,RESET_PHASE+PHASE_END,true)
 	end
 end
-
 
 --effect 2
 function s.tg2(e,c)

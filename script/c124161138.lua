@@ -40,12 +40,18 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetProperty(EFFECT_FLAG_DELAY)
 		e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 		e1:SetCondition(function(e) return e:GetHandler():IsPreviousLocation(LOCATION_SZONE) end)
-		e1:SetOperation(s.op1atk)
+		e1:SetTarget(s.op1tg)
+		e1:SetOperation(s.op1op)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		c:RegisterEffect(e1,true)
 		c:AddMonsterAttributeComplete()
 	end
 	Duel.SpecialSummonComplete()
+end
+
+function s.op1tg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,0,LOCATION_MZONE)
 end
 
 function s.op1atkfilter(c)
@@ -56,7 +62,7 @@ function s.op1desfilter(c,atk)
 	return c:IsFaceup() and c:IsAttackBelow(atk-1)
 end
 
-function s.op1atk(e,tp,eg,ep,ev,re,r,rp)
+function s.op1op(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.op1atkfilter,tp,LOCATION_MZONE,0,c)
 	if #g>0 and c:IsFaceup() and c:IsRelateToEffect(e) then
