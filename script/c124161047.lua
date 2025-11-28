@@ -1,4 +1,4 @@
---언엔달 모노리스 랑페르
+--언엔달 모노리스 렘니트
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
