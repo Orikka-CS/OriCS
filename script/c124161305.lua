@@ -42,9 +42,10 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e):GetFirst()
+	if not tg then return end
 	local ct=(tg:GetAttack()-tg:GetBaseAttack())//500
 	local g=Duel.GetMatchingGroup(Card.IsAbleToHand,tp,0,LOCATION_MZONE,nil)
-	if tg and ct>0 and #g>0 then
+	if ct>0 and #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_RTOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 	end
