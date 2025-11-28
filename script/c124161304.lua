@@ -34,7 +34,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1filter(c)
-	if not (c:IsType(TYPE_EQUIP) and (c:IsAbleToHand() or c:IsAbleToGrave())) then return false end
+	if not (c:IsType(TYPE_EQUIP) and c:IsAbleToHand()) then return false end
 	local effs={c:GetOwnEffects()}
 	for _,eff in ipairs(effs) do
 		if eff:GetCode()==EFFECT_UPDATE_ATTACK and eff:IsHasType(EFFECT_TYPE_EQUIP) then
@@ -56,16 +56,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,sg)
 		local qg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_DECK,0,nil)
 		if Duel.GetMatchingGroupCount(s.op1ctfilter,tp,LOCATION_MZONE,0,nil)>0 and #qg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-			local qsg=aux.SelectUnselectGroup(qg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SELECT):GetFirst()
-			local b1=qsg:IsAbleToHand()
-			local b2=qsg:IsAbleToGrave()
-			local b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,1)},{b2,aux.Stringid(id,2)})
-			if b==1 then
-				Duel.SendtoHand(qsg,nil,REASON_EFFECT)
-				Duel.ConfirmCards(1-tp,qsg)  
-			else
-				Duel.SendtoGrave(qsg,REASON_EFFECT)
-			end  
+			local qsg=aux.SelectUnselectGroup(qg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+			Duel.SendtoHand(qsg,nil,REASON_EFFECT)
+			Duel.ConfirmCards(1-tp,qsg)  
 		end
 	end
 end
@@ -81,7 +74,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 or not Duel.IsPlayerCanSpecialSummonMonster(tp,124161293,0xf33,TYPES_TOKEN,0,0,1,RACE_FIEND,ATTRIBUTE_EARTH) then return end
 	local token=Duel.CreateToken(tp,124161293)
 	Duel.SpecialSummon(token,0,tp,tp,false,false,POS_FACEUP)
-	if Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
+	if Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
