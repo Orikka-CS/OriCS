@@ -17,6 +17,7 @@ function s.initial_effect(c)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
 	e2:SetCost(Cost.SelfBanish)
+	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
@@ -54,6 +55,10 @@ function s.con2(e,tp)
 	local ug=Duel.GetMatchingGroupCount(Card.IsFaceup,tp,0,LOCATION_ONFIELD,nil)
 	local dg=Duel.GetMatchingGroupCount(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
 	return math.abs(ug-dg)>2
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
 end
 
 function s.op2filter(e,ct)

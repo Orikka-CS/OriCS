@@ -10,6 +10,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
 	e1:SetCost(s.cst1)
+	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
 	--effect 2
@@ -19,6 +20,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
+	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
@@ -34,6 +36,10 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,4,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
 	e:SetLabel(#sg)
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -78,7 +84,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			e3:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,2)
 			c:RegisterEffect(e3)
 			b3=false
-		end	 
+		end  
 		if b==4 then
 			local e4=Effect.CreateEffect(c)
 			e4:SetType(EFFECT_TYPE_FIELD)
@@ -97,6 +103,10 @@ end
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsMainPhase() and Duel.IsTurnPlayer(1-tp) and e:GetHandler():GetEquipCount()>0
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
