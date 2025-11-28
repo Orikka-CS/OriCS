@@ -41,7 +41,6 @@ function s.cst1filter(c,tp)
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	e:SetLabel(100)
 	local label_obj=e:GetLabelObject()
 	if chk==0 then label_obj:SetLabel(0) return true end
 	if label_obj:GetLabel()>0 then
