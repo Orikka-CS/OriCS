@@ -76,7 +76,6 @@ function s.op2filter(c)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if tg then
 		if Duel.GetMatchingGroupCount(s.op2filter,tp,LOCATION_ONFIELD,0,nil,0)>0 and tg:IsFaceup() and tg:IsCanTurnSet() and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then

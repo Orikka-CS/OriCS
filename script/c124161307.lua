@@ -39,7 +39,6 @@ function s.tg1afilter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD,nil,e)
 	local ag=Duel.GetMatchingGroup(s.tg1afilter,tp,LOCATION_MZONE,0,nil)

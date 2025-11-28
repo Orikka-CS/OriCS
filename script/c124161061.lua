@@ -86,7 +86,6 @@ end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
-	local c=e:GetHandler()
 	local g1=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_ONFIELD,0,e:GetHandler(),e)
 	local g2=Duel.GetMatchingGroup(Card.IsCanBeEffectTarget,tp,0,LOCATION_SZONE,e:GetHandler(),e) 
 	if chk==0 then return #g1>0 and #g2>0 end

@@ -42,7 +42,6 @@ function s.op1filter(c)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	local xg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_EXTRA,0,nil)
 	if #g>0 then

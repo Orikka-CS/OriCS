@@ -45,7 +45,6 @@ function s.tg1filter(c,e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(1-tp) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_GRAVE,nil,e)
 	if chk==0 then return #g>0 end

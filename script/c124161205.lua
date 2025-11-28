@@ -80,7 +80,6 @@ function s.tg2filter(c)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 end
 end

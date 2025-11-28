@@ -41,7 +41,6 @@ function s.tg1filter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 end
 end
@@ -74,7 +73,6 @@ function s.tg2filter(c,n)
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil)
 	local n=g:GetClassCount(Card.GetCode)
 	local cg=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_MZONE,nil,n)

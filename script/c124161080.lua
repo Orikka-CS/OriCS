@@ -72,7 +72,6 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if tg and tg:IsFaceup() then  
 		local g=Duel.GetMatchingGroup(s.tg2ffilter,tp,LOCATION_DECK,0,nil,tg:GetCode())

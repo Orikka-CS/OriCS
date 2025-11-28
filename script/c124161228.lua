@@ -45,7 +45,6 @@ end
 
 function s.op1(fustg,fusop)
 	return function(e,tp,eg,ep,ev,re,r,rp)
-		local c=e:GetHandler()
 		local g=Duel.GetMatchingGroup(aux.NOT(Card.IsPublic),tp,0,LOCATION_HAND,nil)
 		if #g>0 then
 			Duel.ConfirmCards(tp,g)

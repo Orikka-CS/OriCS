@@ -80,7 +80,6 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.NegateActivation(ev) then return end
-	local c=e:GetHandler()
 	local g=Duel.GetFieldGroup(tp,0,LOCATION_ONFIELD)
 	local rg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_GRAVE,0,nil)
 	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then

@@ -61,6 +61,7 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and s.tg1filter(chkc,e,tp) end
+	local c=e:GetHandler()
 	if chk==0 then return Duel.IsExistingTarget(s.tg1filter,tp,LOCATION_MZONE,0,1,c,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 	Duel.SelectTarget(tp,s.tg1filter,tp,LOCATION_MZONE,0,1,1,c,e,tp)

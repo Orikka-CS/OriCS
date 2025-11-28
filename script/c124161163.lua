@@ -82,7 +82,6 @@ function s.tg2filter(c,e,tp)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,nil,e,tp)
 	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp,1) end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,tp,LOCATION_HAND)
@@ -90,7 +89,6 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,nil,e,tp)
 	if #g==0 then return end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET):GetFirst()

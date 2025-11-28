@@ -74,18 +74,6 @@ function s.op1tg(e,c)
 end
 
 --effect 2
-function s.cst2filter(c)
-	return c:IsAbleToGraveAsCost() and c:IsSetCard(0xf32)
-end
-
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(sg,REASON_COST)
-end
-
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return c:IsAbleToHand() end

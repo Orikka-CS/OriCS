@@ -71,7 +71,6 @@ function s.tg2filter(c,e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil,e)
 	if chk==0 then return #g>0 end

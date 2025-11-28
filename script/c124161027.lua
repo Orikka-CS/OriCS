@@ -28,7 +28,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	c=e:GetHandler()
+	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	local ct=g:GetClassCount(Card.GetCode)
 	if ct>=2 then 

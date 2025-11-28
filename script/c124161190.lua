@@ -43,7 +43,6 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e)
 	if #tg>0 then
 		Duel.SendtoGrave(tg,REASON_EFFECT+REASON_RETURN)	  

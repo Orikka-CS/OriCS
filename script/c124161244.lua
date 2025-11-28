@@ -74,7 +74,7 @@ function s.tg2filter(c,e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and c:IsControler(1-tp) and s.tg2filter(chkc,e) end
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(1-tp) and s.tg2filter(chkc,e) end
 	local ct=Duel.GetMatchingGroupCount(Card.IsContinuousSpell,tp,LOCATION_GRAVE,0,nil)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_GRAVE,nil,e)
 	if chk==0 then return #g>0 and ct>0 end

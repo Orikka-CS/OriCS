@@ -70,7 +70,6 @@ function s.cst2filter(c)
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	local ct=0
 	if Duel.GetMatchingGroupCount(Card.IsAbleToDeck,tp,0,LOCATION_HAND,nil)>0 then ct=ct+1 end
 	if Duel.GetMatchingGroupCount(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,nil)>0 then ct=ct+1 end

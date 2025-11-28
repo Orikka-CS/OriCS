@@ -59,7 +59,6 @@ function s.tg1ctfilter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local c=e:GetHandler()
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tg1filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)   
 	local ct=Duel.GetMatchingGroupCount(s.tg1ctfilter,tp,LOCATION_GRAVE,0,nil)   

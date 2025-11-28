@@ -46,7 +46,6 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rc=re:GetHandler()
-	local c=e:GetHandler()
 	if chk==0 then return rc:IsAbleToHand() end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,rc,1,tp,LOCATION_MZONE)
 end

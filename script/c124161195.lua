@@ -32,7 +32,6 @@ function s.tg1filter(c,e,tp)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_EXTRA,0,nil,e,tp)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON):GetFirst()
@@ -43,7 +42,6 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local x=e:GetLabelObject()
 	local rk=x:GetRank()
 	local g=Duel.GetMatchingGroup(s.tg1ffilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,e:GetHandler())

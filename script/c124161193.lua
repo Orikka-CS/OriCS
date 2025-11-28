@@ -69,7 +69,6 @@ function s.con2(e,tp,eg)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,eg,#eg,tp,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,eg,#eg,1-tp,LOCATION_REMOVED)

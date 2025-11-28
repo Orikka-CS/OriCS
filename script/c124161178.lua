@@ -94,7 +94,6 @@ function s.tg2setfilter(c)
 end
 
 function s.tg2set(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg2setfilter,tp,LOCATION_GRAVE,0,nil)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g>0 end
 end

@@ -77,7 +77,6 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	local g=Duel.GetMatchingGroup(s.tg2eqfilter,tp,LOCATION_DECK,0,nil,tp)
 	if tg and tg:IsFaceup() and #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
