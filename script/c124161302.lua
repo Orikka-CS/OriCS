@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
+	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -20,22 +20,27 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
+	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
 
---effect1
-function s.cst1filter(c)
-	return c:IsSetCard(0xf33) and c:IsFaceup() and c:IsAbleToDeckOrExtraAsCost()
+--effect 1
+function s.con1filter(c)
+	if not (c:IsType(TYPE_EQUIP) and (c:IsFaceup() or c:GetEquipTarget())) then return false end
+	local effs={c:GetOwnEffects()}
+	for _,eff in ipairs(effs) do
+		if eff:GetCode()==EFFECT_UPDATE_ATTACK and eff:IsHasType(EFFECT_TYPE_EQUIP) then
+			return true
+		end
+	end
+	return false 
 end
 
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,4,aux.TRUE,1,tp,HINTMSG_TODECK)
-	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
-	e:SetLabel(#sg)
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_SZONE,0,nil)
+	return g>0
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -44,12 +49,14 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
+	local ct=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_SZONE,0,nil)
+	if ct==0 or ct>4 then return end
 	local b1=true
 	local b2=true
 	local b3=true
 	local b4=true
 	local b 
-	for i=1,e:GetLabel() do
+	for i=1,ct do
 		b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)},{b3,aux.Stringid(id,2)},{b4,aux.Stringid(id,3)})
 		if b==1 then
 			local e1=Effect.CreateEffect(c)
@@ -102,7 +109,18 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsMainPhase() and Duel.IsTurnPlayer(1-tp) and e:GetHandler():GetEquipCount()>0
+	return Duel.IsMainPhase() and Duel.IsTurnPlayer(1-tp)
+end
+
+function s.cst2filter(c)
+	return c:IsSetCard(0xf33) and c:IsReleasable()
+end
+
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_MZONE,0,e:GetHandler())
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RELEASE)
+	Duel.Release(sg,REASON_COST)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
