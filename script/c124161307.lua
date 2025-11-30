@@ -82,6 +82,7 @@ end
 --effect 2
 function s.cst2filter(c)
 	return c:IsSetCard(0xf33) and c:IsFaceup() and c:IsAbleToDeckOrExtraAsCost()
+end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
