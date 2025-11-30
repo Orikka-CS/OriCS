@@ -80,7 +80,7 @@ end
 
 --effect 2
 function s.tg2filter(c,e,tp)
-	return c:IsSetCard(0xf32) and c:IsType(TYPE_XYZ) and c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsType(TYPE_XYZ) and c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

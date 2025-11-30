@@ -4,10 +4,11 @@ function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetRange(LOCATION_HAND+LOCATION_GRAVE)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
+	e1:SetCondition(function() return Duel.IsMainPhase() end)
 	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
@@ -27,8 +28,8 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1filter(c,tp)
-	if not (c:IsType(TYPE_EQUIP) and c:GetEquipTarget() and c:GetEquipTarget():IsControler(tp) and c:GetEquipTarget():IsSetCard(0xf33)) then return false end
+function s.cst1filter(c,tp)
+	if not (c:IsType(TYPE_EQUIP) and c:IsAbleToHandAsCost() and c:GetEquipTarget() and c:GetEquipTarget():IsControler(tp) and c:GetEquipTarget():IsSetCard(0xf33)) then return false end
 	local effs={c:GetOwnEffects()}
 	for _,eff in ipairs(effs) do
 		if eff:GetCode()==EFFECT_UPDATE_ATTACK and eff:IsHasType(EFFECT_TYPE_EQUIP) then
@@ -38,17 +39,8 @@ function s.con1filter(c,tp)
 	return false 
 end
 
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_SZONE,LOCATION_SZONE,nil,tp)
-	return g>0
-end
-
-function s.cst1filter(c)
-	return c:IsFaceup() and c:IsAbleToHandAsCost()
-end
-
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_ONFIELD,0,nil)
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_SZONE,0,nil,tp)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
 	Duel.SendtoHand(sg,nil,REASON_COST)
