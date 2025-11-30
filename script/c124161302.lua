@@ -15,12 +15,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
+	e2:SetCategory(CATEGORY_DESTROY)
 	e2:SetType(EFFECT_TYPE_QUICK_O)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
-	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -109,24 +109,25 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsMainPhase() and Duel.IsTurnPlayer(1-tp)
+	return Duel.IsPhase(PHASE_MAIN1) and Duel.IsTurnPlayer(1-tp)
 end
 
-function s.cst2filter(c)
-	return c:IsSetCard(0xf33) and c:IsReleasable()
-end
-
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_MZONE,0,e:GetHandler())
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RELEASE)
-	Duel.Release(sg,REASON_COST)
+function s.tg2filter(c)
+	return c:IsFaceup() and c:IsSetCard(0xf33)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_ONFIELD,0,e:GetHandler())
+	if chk==0 then return #g>0 end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_ONFIELD)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	Duel.SkipPhase(1-tp,Duel.GetCurrentPhase(),RESET_PHASE+PHASE_END,1)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_ONFIELD,0,e:GetHandler())
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
+		if Duel.Destroy(sg,REASON_EFFECT)>0 then
+			Duel.SkipPhase(Duel.GetTurnPlayer(),Duel.GetCurrentPhase(),RESET_PHASE+PHASE_END,1)
+		end
+	end
 end
