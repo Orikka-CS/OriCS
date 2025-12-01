@@ -40,7 +40,7 @@ end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_SZONE,0,nil)
-	return g>0
+	return g>0 and 5>g
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
