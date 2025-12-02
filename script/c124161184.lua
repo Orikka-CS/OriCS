@@ -1,4 +1,4 @@
---백연초가 인도하는 끝으로
+--백연초가 이끄는 끝으로
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

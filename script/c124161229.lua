@@ -1,4 +1,4 @@
---란샤르드 더스크
+--란샤르드 패러시티즘
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

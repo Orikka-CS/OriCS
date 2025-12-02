@@ -1,4 +1,4 @@
---나우프라테 트레저
+--나우프라테 테바아
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

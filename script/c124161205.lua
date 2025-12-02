@@ -1,4 +1,4 @@
---클라랑슈 티엔
+--클라랑슈 파시엔타
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

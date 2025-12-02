@@ -1,4 +1,4 @@
---백연초침식
+--백연초고폐
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

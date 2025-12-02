@@ -1,4 +1,4 @@
---페더록스 파라
+--페더록스 바라미타
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

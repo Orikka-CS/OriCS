@@ -1,4 +1,4 @@
---전광형의 일격
+--전광형의 뇌격
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

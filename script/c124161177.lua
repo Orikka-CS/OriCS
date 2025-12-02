@@ -1,4 +1,4 @@
---백연초의 시원 실베스트
+--백연초의 시근 실베스트
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

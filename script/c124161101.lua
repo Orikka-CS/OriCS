@@ -1,4 +1,4 @@
---독훼귀투기명
+--독훼귀투기항
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

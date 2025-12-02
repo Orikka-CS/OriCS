@@ -1,4 +1,4 @@
---백연초의 마녀
+--백연초의 애녀
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

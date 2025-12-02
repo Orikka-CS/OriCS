@@ -1,4 +1,4 @@
---독훼귀개전
+--독훼귀저투
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

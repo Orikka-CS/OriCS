@@ -1,4 +1,4 @@
---정결하고도 고혹적인 클라랑슈
+--고결하고도 고혹스런 클라랑슈
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

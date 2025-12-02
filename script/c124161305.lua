@@ -1,4 +1,4 @@
---시데르파그의 압도
+--시데르파그의 강기
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

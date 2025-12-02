@@ -1,4 +1,4 @@
---일광형의 성전
+--일광형의 현전
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

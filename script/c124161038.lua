@@ -1,4 +1,4 @@
---시엄브라레 스콜
+--시엄브라레 스쾰
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

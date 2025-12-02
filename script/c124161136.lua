@@ -1,4 +1,4 @@
---나우프라테 커스
+--나우프라테 택시더미
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

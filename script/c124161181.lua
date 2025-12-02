@@ -1,4 +1,4 @@
---혼화의 백연초
+--혼화하는 백연초
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

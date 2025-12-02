@@ -1,4 +1,4 @@
---고독훼귀살
+--독훼귀고살
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
