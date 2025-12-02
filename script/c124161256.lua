@@ -1,4 +1,4 @@
---렉스퀴아트 인 파체
+--렉스퀴아트 인파체
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

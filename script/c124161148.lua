@@ -1,4 +1,4 @@
---클라비쿨라 제르디알
+--제르디알 클라비쿨라
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

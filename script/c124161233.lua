@@ -1,4 +1,4 @@
---테일모어 프레이
+--테일모어 퓨라이
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

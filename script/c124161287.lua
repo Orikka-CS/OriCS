@@ -1,4 +1,4 @@
---패스 체어라키
+--체어라키 패스키
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
