@@ -19,6 +19,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCost(Cost.SelfBanish)
+	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
@@ -80,6 +81,10 @@ function s.op1imfilter(e,te)
 end
 
 --effect 2
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+end
+
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD)

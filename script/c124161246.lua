@@ -7,6 +7,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
 	e1:SetCost(s.cst1)
+	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
 	--effect 2
@@ -31,6 +32,10 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 	Duel.SendtoGrave(sg,REASON_COST)
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
