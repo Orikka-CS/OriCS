@@ -12,11 +12,6 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	local e1a=e1:Clone()
-	e1a:SetType(EFFECT_TYPE_IGNITION)
-	e1a:SetRange(LOCATION_MZONE)
-	e1a:SetCondition(s.con1)
-	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
@@ -75,15 +70,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 		Duel.SendtoGrave(sg,REASON_EFFECT)
 	end
-end
-
-function s.con1filter(c)
-	return c:GetFlagEffect(id)>0
-end
-
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)
-	return g>0
 end
 
 --effect 2
