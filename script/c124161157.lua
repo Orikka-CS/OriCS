@@ -63,7 +63,7 @@ function s.con2(e,tp,eg)
 end
 
 function s.tg2filter(c,e)
-	return c:IsFaceup() and c:IsCanTurnSet() and c:IsCanBeEffectTarget(e)
+	return s.con2filter(c) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

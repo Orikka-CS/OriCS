@@ -37,7 +37,7 @@ function s.con1(e,tp,eg)
 end
 
 function s.tg1filter(c,e,tp)
-	return c:IsSetCard(0xf27) and c:IsAbleToRemove() and c:IsControler(tp) and c:IsCanBeEffectTarget(e)
+	return s.con1filter(c,tp) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

@@ -72,7 +72,7 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg2filter(c,e,tp)
-	return c:IsSetCard(0xf2b) and c:IsType(TYPE_FUSION) and c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousControler(tp) and c:GetAttack()>0 and c:GetReasonPlayer()==1-tp and c:IsCanBeEffectTarget(e)
+	return s.con2filter(c,tp) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

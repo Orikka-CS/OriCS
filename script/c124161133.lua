@@ -81,7 +81,7 @@ function s.tg2filter(c,e)
 end
 
 function s.tg2sfilter(c,e)
-	return c:IsLocation(LOCATION_STZONE) and c:IsFacedown() and c:IsCanBeEffectTarget(e)
+	return s.con2filter(c) and c:IsFacedown() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

@@ -35,7 +35,7 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.tg1filter(c,e,tp,re,rp)
-	return re and c:IsReason(REASON_COST) and re:IsActivated() and rp==tp and re:GetHandler():IsSetCard(0xf23) and c:IsControler(tp) and c:IsAbleToHand() and c:IsLocation(LOCATION_GRAVE) and c:IsCanBeEffectTarget(e)
+	return s.con1filter(c,e,tp,re,rp) and c:IsAbleToHand() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
