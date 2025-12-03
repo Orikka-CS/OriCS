@@ -1,9 +1,9 @@
---진의 고독훼귀의－하마
+--진의 고독훼귀－하마
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz
 	c:EnableReviveLimit()
-	Xyz.AddProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_INSECT),4,3,s.ovfilter,0,Xyz.InfiniteMats,s.ovop)
+	Xyz.AddProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_INSECT),3,4,s.ovfilter,0,Xyz.InfiniteMats,s.ovop)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DISABLE)
