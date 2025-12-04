@@ -33,12 +33,11 @@ function s.initial_effect(c)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e3:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e3:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 	e3:SetRange(LOCATION_SZONE)
 	e3:SetTargetRange(LOCATION_SZONE,0)
 	e3:SetTarget(s.tg3)
-	e3:SetValue(aux.tgoval)
+	e3:SetValue(aux.indoval)
 	c:RegisterEffect(e3)
 end
 
