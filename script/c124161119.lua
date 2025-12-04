@@ -61,7 +61,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			local ct=Duel.GetMatchingGroupCount(s.op1ctfilter,tp,LOCATION_REMOVED,0,nil)
 			local og=Duel.GetDecktopGroup(1-tp,ct)
 			if #og>0 and og:FilterCount(Card.IsAbleToRemove,nil)==ct then
-				Duel.ShuffleDeck(tp)
 				Duel.DisableShuffleCheck()
 				Duel.Remove(og,POS_FACEUP,REASON_EFFECT)		 
 			end

@@ -41,9 +41,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		if Duel.SendtoHand(sg,nil,REASON_EFFECT)>0 then
 			Duel.ConfirmCards(1-tp,sg)
-			Duel.ShuffleDeck(tp)
 			if e:GetHandler():IsRelateToEffect(e) then
 				Duel.BreakEffect()
+				Duel.ShuffleDeck(tp)
 				Duel.DisableShuffleCheck()
 				Duel.SendtoDeck(e:GetHandler(),nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 			end

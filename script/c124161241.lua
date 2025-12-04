@@ -65,8 +65,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(hsg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,hsg)
-		Duel.ShuffleDeck(tp)
 		if tg then
+			Duel.ShuffleDeck(tp)
 			Duel.DisableShuffleCheck()
 			Duel.SendtoDeck(tg,nil,SEQ_DECKTOP,REASON_EFFECT)
 		end

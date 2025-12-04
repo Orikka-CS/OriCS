@@ -81,7 +81,6 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
 	Duel.SendtoDeck(c,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-	Duel.ShuffleDeck(tp)
 	Duel.BreakEffect()
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
 	if e:GetLabel()==0 or (e:GetLabel()==1 and #g>0 and (not c:IsAbleToHand() or not Duel.SelectYesNo(tp,aux.Stringid(id,0)))) then

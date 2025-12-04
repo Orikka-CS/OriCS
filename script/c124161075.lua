@@ -45,11 +45,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
-		Duel.ShuffleDeck(tp)
+		Duel.ConfirmCards(1-tp,sg)	   
 		local dg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,sg)
 		if #dg>0 and Duel.IsPlayerCanDraw(tp,2) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
+			Duel.ShuffleDeck(tp)
 			Duel.DisableShuffleCheck()
 			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 			Duel.ConfirmCards(1-tp,dsg)
