@@ -64,7 +64,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsSetCard(0xf2b) and c:IsType(TYPE_FUSION) and c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousControler(tp) and c:GetAttack()>0 and c:GetReasonPlayer()==1-tp
+	return c:IsSetCard(0xf2b) and c:IsType(TYPE_FUSION) and c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousControler(tp) and c:GetAttack()>0 and c:GetReasonPlayer()==1-tp and c:IsLocation(LOCATION_GRAVE)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)

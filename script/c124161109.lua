@@ -29,7 +29,7 @@ end
 
 --effect 1
 function s.con1filter(c,tp)
-	return c:IsSetCard(0xf27) and c:IsAbleToRemove() and c:IsControler(tp)
+	return c:IsSetCard(0xf27) and c:IsAbleToRemove() and c:IsControler(tp) and c:IsLocation(LOCATION_GRAVE)
 end
 
 function s.con1(e,tp,eg)

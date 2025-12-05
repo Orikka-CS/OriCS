@@ -54,7 +54,7 @@ end
 
 --effect 2
 function s.con2filter(c)
-	return c:IsFaceup() and c:IsCanTurnSet()
+	return c:IsFaceup() and c:IsCanTurnSet() and c:IsLocation(LOCATION_MZONE)
 end
 
 function s.con2(e,tp,eg)
