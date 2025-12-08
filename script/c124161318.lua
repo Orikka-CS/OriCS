@@ -1,4 +1,4 @@
---허월상을 비추는 지수
+--허월상을 비추는 명경
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

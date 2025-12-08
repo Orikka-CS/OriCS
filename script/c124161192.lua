@@ -1,4 +1,4 @@
---페더록스리벨 아피오
+--니르페더록스 아피오
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

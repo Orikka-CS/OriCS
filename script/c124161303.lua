@@ -1,4 +1,4 @@
---시데르파그의 마창진
+--시데르파그의 마참진
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

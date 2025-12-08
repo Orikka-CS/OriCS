@@ -1,4 +1,4 @@
---어스름해지는허월상
+--어스름해지는 허월상
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

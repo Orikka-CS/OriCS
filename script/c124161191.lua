@@ -1,4 +1,4 @@
---페더록스리스 리얼리
+--니르페더록스 리얼리
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

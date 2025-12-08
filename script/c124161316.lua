@@ -1,4 +1,4 @@
---허월상의 명경 카날리
+--허월상의 심주 카날리
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

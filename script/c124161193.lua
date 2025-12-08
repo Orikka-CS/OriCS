@@ -1,4 +1,4 @@
---페더록스리더 라피더스
+--니르페더록스 라피더스
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

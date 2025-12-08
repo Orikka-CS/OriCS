@@ -1,4 +1,4 @@
---백연초가 피어오르는 화단
+--백연초가 피어오르는 화원
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate

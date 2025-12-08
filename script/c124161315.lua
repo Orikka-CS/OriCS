@@ -1,4 +1,4 @@
---허월상의 주귀 하아쿠
+--허월상의 행귀 하아쿠
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion
