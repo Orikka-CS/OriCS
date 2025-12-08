@@ -48,7 +48,7 @@ function s.tg1filter(c,e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil,e)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,e:GetHandler(),e)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,#g,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
 	Duel.SetTargetCard(sg)
