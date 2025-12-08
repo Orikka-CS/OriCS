@@ -64,7 +64,7 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return re:IsActiveType(TYPE_SPELL+TYPE_TRAP)
+	return re:IsActiveType(TYPE_SPELL+TYPE_TRAP) and rp==1-tp
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)

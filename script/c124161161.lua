@@ -64,8 +64,7 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local rc=re:GetHandler()
-	return rc:IsSetCard(0xf2a) and rp==tp
+	return re:IsHasCategory(CATEGORY_DESTROY) and rp==1-tp
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
