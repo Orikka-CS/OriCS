@@ -60,7 +60,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil,e)
-	if chk==0 then return #g>0 end
+	if chk==0 then return #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,sg,#sg,0,0)
