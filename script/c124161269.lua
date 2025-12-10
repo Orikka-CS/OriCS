@@ -8,9 +8,11 @@ function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DRAW+CATEGORY_DESTROY+CATEGORY_NEGATE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCode(EVENT_CHAINING)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
+	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -53,6 +55,16 @@ function s.linkfilter(g,lnkc,sumtype,sp)
 end
 
 --effect 1
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	return re:GetHandler()~=e:GetHandler()
+end
+
+function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local cl=Duel.GetCurrentChain()
+	if chk==0 then return Duel.CheckLPCost(tp,cl*100) end
+	Duel.PayLPCost(tp,cl*100)
+end
+
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)

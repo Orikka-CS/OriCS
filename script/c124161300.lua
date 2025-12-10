@@ -23,6 +23,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
+	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -71,6 +72,19 @@ end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_MZONE,0,nil)
 	return g>0
+end
+
+function s.cst2filter(c)
+	return c:IsSetCard(0xf33) and not c:IsPublic()
+end
+
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,c)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
+	Duel.ConfirmCards(1-tp,sg)
+	Duel.ShuffleHand(tp)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

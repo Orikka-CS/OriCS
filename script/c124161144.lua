@@ -22,7 +22,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(function(e) return Duel.IsMainPhase() end)
-	e2:SetCost(s.cst2)
+	e2:SetCost(Cost.PayLP(700))
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -64,34 +64,40 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.cst2filter(c)
+function s.tg2filter(c)
 	return c:IsSetCard(0xf29) and c:IsMonster() and not c:IsPublic()
 end
 
-function s.tg2filter(c,n)
+function s.tg2ffilter(c,n)
 	return c:IsAbleToChangeControler() and c:IsFaceup() and c:GetAttack()<700*n
 end
 
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND,0,nil)
-	local n=g:GetClassCount(Card.GetCode)
-	local cg=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_MZONE,nil,n)
-	if chk==0 then return #g>0 and #cg>0 end
-	local mg=cg:GetMinGroup(Card.GetAttack):GetFirst()
-	local sg=aux.SelectUnselectGroup(g,e,tp,mg:GetAttack()//700+1,5,aux.dncheck,1,tp,HINTMSG_CONFIRM)
-	Duel.ConfirmCards(1-tp,sg)
-	Duel.ShuffleHand(tp)
-	e:SetLabel(#sg)
-end
-
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,nil)
+	local n=g:GetClassCount(Card.GetCode)
+	if n>5 then n=5 end
+	local cg=Duel.GetMatchingGroup(s.tg2ffilter,tp,0,LOCATION_MZONE,nil,n)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 and #cg>0 end
 	Duel.SetOperationInfo(0,CATEGORY_CONTROL,nil,1,tp,0)
 end
 
+function s.op2check(sg,e,tp,mg)
+	return aux.dncheck(sg,e,tp,mg) and Duel.IsExistingMatchingCard(s.tg2ffilter,tp,0,LOCATION_MZONE,1,nil,#sg)
+end
+
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,0,LOCATION_MZONE,nil,e:GetLabel())
-	if g==0 or Duel.GetLocationCount(tp,LOCATION_MZONE)==0 then return end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONTROL)
-	Duel.GetControl(sg,tp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_HAND,0,nil)
+	if #g==0 then return end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,5,s.op2check,1,tp,HINTMSG_CONFIRM)
+	if #sg>0 then
+		Duel.ConfirmCards(1-tp,sg)
+		Duel.ShuffleHand(tp)
+		local n=#sg
+		local cg=Duel.GetMatchingGroup(s.tg2ffilter,tp,0,LOCATION_MZONE,nil,n)
+		if #cg>0 then
+			local csg=aux.SelectUnselectGroup(cg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONTROL)
+			Duel.GetControl(csg,tp)
+		end
+	end
 end
