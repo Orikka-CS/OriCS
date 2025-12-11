@@ -43,7 +43,7 @@ end
 
 --effect 1
 function s.tg1filter(c,e)
-	return c:IsSpellTrap() and c:IsCanBeEffectTarget(e) and c:IsNegatable()
+	return c:IsCanBeEffectTarget(e) and c:IsNegatable()
 end
 
 function s.tg1afilter(c)
@@ -69,7 +69,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetValue(-1000)
+		e1:SetValue(-500)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		asg:RegisterEffect(e1)
 		if tg:IsNegatable() and tg then
@@ -84,7 +84,7 @@ function s.cst2filter(c)
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
+	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_REMOVED,0,nil)
 	if chk==0 then return #g>1 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)

@@ -15,12 +15,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_SPECIAL_SUMMON)
+	e2:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
+	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -53,28 +53,30 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2filter(c)
-	return c:IsSetCard(0xf33)
+function s.cst2filter(c)
+	return c:IsSetCard(0xf33) and c:IsAbleToRemoveAsCost()
 end
 
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_GRAVE,0,c)
-	return g>0
+	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_GRAVE,0,c)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 
 function s.tg2filter(c,e)
-	return c:IsFaceup() and c:IsCanBeEffectTarget(e) 
+	return c:IsFaceup() and c:IsAttackAbove(1) and c:IsCanBeEffectTarget(e) 
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.tg2filter(chkc,e) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
-	if chk==0 then return #g>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_MZONE,0,nil,e)
+	if chk==0 then return #g>0 and c:IsAbleToHand() end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -88,14 +90,8 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue(tg:GetAttack()//2)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		tg:RegisterEffect(e1)
-		if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
-			local e2=Effect.CreateEffect(c)
-			e2:SetType(EFFECT_TYPE_SINGLE)
-			e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-			e2:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
-			e2:SetValue(LOCATION_REMOVED)
-			e2:SetReset(RESET_EVENT+RESETS_REDIRECT)
-			c:RegisterEffect(e2)
+		if c:IsRelateToEffect(e) then
+			Duel.SendtoHand(c,nil,REASON_EFFECT)
 		end
 	end
 end
