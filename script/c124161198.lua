@@ -8,7 +8,6 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -26,17 +25,8 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.cst1filter(c)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayCount()==0 and c:IsAbleToRemoveAsCost()
-end
-
-function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_MZONE,0,nil)
-	local ft=Duel.GetMatchingGroupCount(s.tg1filter,tp,0,LOCATION_MZONE,nil,e)
-	if chk==0 then return #g>0 and ft>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,ft,aux.TRUE,1,tp,HINTMSG_REMOVE)
-	e:SetLabel(#sg)
-	aux.RemoveUntil(sg,nil,REASON_COST,PHASE_END,id,e,tp,aux.DefaultFieldReturnOp)
+function s.tg1ctfilter(c)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetOverlayCount()==0
 end
 
 function s.tg1filter(c,e)
@@ -44,13 +34,14 @@ function s.tg1filter(c,e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and s.tg2filter(chkc,e) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
+	local ct=Duel.GetMatchingGroupCount(s.tg1ctfilter,tp,LOCATION_MZONE,0,nil)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,e)
-	if chk==0 then return #g>0 end
-	local ct=e:GetLabel()
+	ct=math.min(ct,Duel.GetLocationCount(tp,LOCATION_MZONE))
+	if chk==0 then return ct>0 and #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_CONTROL)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_CONTROL,sg,#sg,tp,0)
+	Duel.SetOperationInfo(0,CATEGORY_CONTROL,sg,#sg,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)

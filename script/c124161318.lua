@@ -33,12 +33,13 @@ function s.initial_effect(c)
 	--effect 3
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e3:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e3:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE+EFFECT_FLAG_IGNORE_IMMUNE)
+	e3:SetCode(EFFECT_TO_GRAVE_REDIRECT)
 	e3:SetRange(LOCATION_FZONE)
-	e3:SetTargetRange(LOCATION_MZONE,0)
+	e3:SetTargetRange(0,LOCATION_ALL)
+	e3:SetCondition(s.con3)
 	e3:SetTarget(s.tg3)
-	e3:SetValue(function(e,re,rp) return rp==1-e:GetHandlerPlayer() and re:IsMonsterEffect() end)
+	e3:SetValue(LOCATION_REMOVED)
 	c:RegisterEffect(e3)
 end
 
@@ -101,14 +102,16 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 3
-function s.tg3filter(c,e,tp,fusc,mg)
-	return c:IsControler(tp) and c:IsLocation(LOCATION_GRAVE)
-		and (c:GetReason()&(REASON_FUSION+REASON_MATERIAL))==(REASON_FUSION+REASON_MATERIAL) and c:GetReasonCard()==fusc and fusc:CheckFusionMaterial(mg,c,PLAYER_NONE+FUSPROC_NOTFUSION)
+function s.con3filter(c)
+	return c:IsSummonType(SUMMON_TYPE_FUSION) and c:GetMaterial():FilterCount(Card.IsSetCard,nil,0xf34)>0 and c:IsFaceup()
+end
+
+function s.con3(e)
+	local tp=e:GetHandlerPlayer()
+	return Duel.GetMatchingGroupCount(s.con3filter,tp,LOCATION_MZONE,0,nil)>0
 end
 
 function s.tg3(e,c)
-	if not (c:IsSummonType(SUMMON_TYPE_FUSION) and c:IsFaceup()) then return false end
-	local mg=c:GetMaterial()
-	local ct=mg:FilterCount(s.tg3filter,nil,e,e:GetHandlerPlayer(),c,mg)
-	return ct==0
+	local tp=e:GetHandlerPlayer()
+	return c:GetOwner()==1-tp and Duel.IsPlayerCanRemove(tp,c) and c:IsReason(REASON_FUSION+REASON_SYNCHRO+REASON_LINK)
 end

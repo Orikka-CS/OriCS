@@ -80,7 +80,7 @@ end
 
 --effect 2
 function s.cst2filter(c)
-	return c:IsSetCard(0xf33) and c:IsFaceup() and c:IsAbleToDeckOrExtraAsCost()
+	return c:IsSetCard(0xf33) and c:IsFaceup() and c:IsAbleToDeckAsCost()
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
