@@ -30,8 +30,7 @@ end
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	return rp==tp and re:GetActivateLocation()&(LOCATION_HAND)>0
-end
+	return rp==tp and Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&(LOCATION_HAND)>0
 end
 
 function s.tg1filter(c)

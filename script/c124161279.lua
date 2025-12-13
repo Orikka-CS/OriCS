@@ -69,7 +69,7 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return re:GetActivateLocation()&(LOCATION_ONFIELD)>0 and rp==1-tp and Duel.IsChainNegatable(ev)
+	return Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&(LOCATION_ONFIELD)>0 and rp==1-tp and Duel.IsChainNegatable(ev)
 end
 
 function s.tg2filter(c)

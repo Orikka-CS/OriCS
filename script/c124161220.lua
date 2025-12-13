@@ -41,7 +41,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return re:GetActivateLocation()&(LOCATION_MZONE)>0 and rp==1-tp and re:GetHandler():IsRelateToEffect(re)
+	return Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&(LOCATION_MZONE)>0 and rp==1-tp and re:GetHandler():IsRelateToEffect(re)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

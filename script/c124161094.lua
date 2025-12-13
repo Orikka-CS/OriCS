@@ -98,7 +98,7 @@ end
 
 --effect 3
 function s.con3(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&LOCATION_ONFIELD>0
+	return Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)&(LOCATION_ONFIELD)>0
 end
 
 function s.tg3filter(c,e)
