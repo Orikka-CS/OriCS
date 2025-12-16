@@ -1,7 +1,7 @@
 --무한검 언엔달
 local s,id=GetID()
 function s.initial_effect(c)
-	--activate
+	--equip
 	aux.AddEquipProcedure(c,0)
 	--effect 1
 	c:SetUniqueOnField(LOCATION_ONFIELD,0,id)
