@@ -35,7 +35,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1filter(c)
-	return c:IsType(TYPE_XYZ) and (c:GetSequence()==0 or c:GetSequence()==4) and c:IsFaceup()
+	return (c:GetSequence()==0 or c:GetSequence()==4) and c:IsAbleToHand()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -45,12 +45,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
-		local xg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_MZONE,0,nil)
-		if c:IsRelateToEffect(e) and #xg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		local hg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
+		if #hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP):GetFirst()
-			c:CancelToGrave()
-			Duel.Overlay(xsg,c)
+			local hsg=aux.SelectUnselectGroup(hg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND):GetFirst()
+			Duel.SendtoHand(hsg,nil,REASON_EFFECT)
 		end
 	end
 end
