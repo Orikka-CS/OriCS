@@ -66,12 +66,12 @@ function s.val1(e,c)
 end
 
 --effect 2
-function s.con2filter(c,tp)
-	return c:IsSetCard(0xf34) and c:IsControler(tp)
+function s.con2filter(c)
+	return c:IsReason(REASON_EFFECT)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:FilterCount(s.con2filter,nil,tp)>0
+	return eg:FilterCount(s.con2filter,nil)>0
 end
 
 function s.tg2filter(c,e)

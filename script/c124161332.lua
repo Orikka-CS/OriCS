@@ -89,6 +89,13 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOZONE)
 	Duel.MoveSequence(tc,math.log(Duel.SelectDisableField(tp,1,p1,p2,0),2)-i)
+	local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
+	if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.BreakEffect()
+		local sg=g:RandomSelect(tp,1)
+		Duel.ConfirmCards(tp,sg)
+		Duel.ShuffleHand(1-tp)
+	end
 end
 
 --effect 3

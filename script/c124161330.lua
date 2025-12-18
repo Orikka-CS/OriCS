@@ -6,7 +6,6 @@ function s.initial_effect(c)
 	Xyz.AddProcedure(c,s.xyzfilter,5,2)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_CONTROL)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_CHAINING)
@@ -55,7 +54,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SwapSequence(swap_g:GetFirst(),swap_g:GetNext())
 	local ct=Duel.GetMatchingGroupCount(s.op1filter,tp,0,LOCATION_ONFIELD,nil)
 	local cg=Duel.GetMatchingGroup(Card.IsAbleToChangeControler,tp,0,LOCATION_MZONE,nil)
-	if ct>0 and #cg>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+	if ct>0 and #cg>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 		Duel.BreakEffect()
 		local csg=aux.SelectUnselectGroup(cg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONTROL)
 		Duel.GetControl(csg,tp)
