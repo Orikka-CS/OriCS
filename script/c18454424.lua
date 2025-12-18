@@ -80,6 +80,8 @@ function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 		local sg=g:Select(tp,1,1,nil)
 		sc=sg:GetFirst()
 	end
+	local lv=c:GetLevel()
+	e:SetLabel(lv)
 	if sc==c then
 		Duel.SendtoGrave(c,REASON_COST)
 	else
@@ -113,7 +115,7 @@ end
 function s.ofil1(c,e,tp,tc)
 	return Duel.GetLocationCountFromEx(tp,tp,tc,c)>0
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SYNCHRO,tp,false,false)
-		and c:IsLevel(tc:GetLevel()+8) and c:IsType(TYPE_SYNCHRO)
+		and c:IsLevel(tc:GetLevel()+e:GetLabel()) and c:IsType(TYPE_SYNCHRO)
 		and (c:IsRace(RACE_FAIRY|RACE_DRAGON) or c:IsAttribute(ATTRIBUTE_WIND|ATTRIBUTE_WATER))
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
