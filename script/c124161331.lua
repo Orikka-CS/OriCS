@@ -5,7 +5,7 @@ function s.initial_effect(c)
 	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf35),5,2)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DESTROY)
+	e1:SetCategory(CATEGORY_REMOVE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -26,32 +26,29 @@ function s.initial_effect(c)
 end
 
 --effect 2
-function s.tg1filter(c,e)
-	return c:IsAbleToGrave() and c:IsCanBeEffectTarget(e)
+function s.tg1filter(c,e,tp)
+	return c:IsAbleToRemove(tp,POS_FACEDOWN) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and c:IsControler(1-tp) and s.tg1filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MMZONE+LOCATION_STZONE,nil,e)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and c:IsControler(1-tp) and s.tg1filter(chkc,e,tp) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD,nil,e,tp)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,sg,1,0,0)
-end
-
-function s.op1filter(c,sq,tsq)
-	local seq=c:GetSequence()
-	return (seq>sq and tsq>seq) or (seq>tsq and sq>seq ) 
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,sg,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
+	local seq=c:GetSequence()
+	local tseq=tg:GetSequence()
 	if tg then
-		local sq=4-c:GetSequence()
-		local tsq=tg:GetSequence()
-		local g=Duel.GetMatchingGroup(s.op1filter,tp,0,LOCATION_MMZONE+LOCATION_STZONE,nil,sq,tsq)
-		Duel.SendtoGrave(g+tg,REASON_EFFECT)
+		if Duel.Remove(tg,POS_FACEDOWN,REASON_EFFECT)>0 and c:IsRelateToEffect(e) and (seq==0 or seq==4) and seq==tseq then
+			Duel.BreakEffect()
+			Duel.SetLP(1-tp,Duel.GetLP(1-tp)//2)
+		end
 	end
 end
 
@@ -68,7 +65,7 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	if rc:IsSetCard(0xf35) and re:IsActiveType(TYPE_SPELL+TYPE_TRAP) and re:GetOwnerPlayer()==tp then
+	if rc:IsSetCard(0xf35) and re:GetOwnerPlayer()==tp then
 		Duel.SetChainLimit(function(e,ep,tp) return ep==tp end)
 	end
 end

@@ -37,21 +37,29 @@ function s.tg1filter(c)
 	return c:IsFaceup() and c:IsCanTurnSet()
 end
 
+function s.tg1cfilter(c)
+	return c:IsSetCard(0xf35) and c:IsFaceup()
+end
+
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	local ct=Duel.GetMatchingGroupCount(s.tg1cfilter,tp,LOCATION_ONFIELD,0,c)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,#g,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_ATKCHANGE,e:GetHandler():GetEquipTarget(),1,tp,500)
+	if chk==0 then return ct>0 and #g>0 end
+	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_ATKCHANGE,c:GetEquipTarget(),1,tp,500)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local ec=c:GetEquipTarget()
+	local ct=Duel.GetMatchingGroupCount(s.tg1cfilter,tp,LOCATION_ONFIELD,0,c)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil)
-	if #g>0 then
-		Duel.ChangePosition(g,POS_FACEDOWN_DEFENSE)
+	if ct>0 and #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
+		Duel.ChangePosition(sg,POS_FACEDOWN_DEFENSE)
 		local og=Duel.GetOperatedGroup()
-		if og:FilterCount(Card.IsPosition,nil,POS_FACEDOWN_DEFENSE)>0 then
+		if og:FilterCount(Card.IsPosition,nil,POS_FACEDOWN_DEFENSE)>0 and ec and ec:IsFaceup() then
 			Duel.BreakEffect()
 			local e1=Effect.CreateEffect(c)
 			e1:SetType(EFFECT_TYPE_SINGLE)
