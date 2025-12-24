@@ -67,7 +67,7 @@ end
 
 --effect 2
 function s.tg2filter(c,e)
-	return Duel.GetTurnCount()==c:GetTurnID() and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
+	return Duel.GetTurnCount()==c:GetTurnID() and c:IsMonster() and c:IsCanBeEffectTarget(e) and c:IsAbleToHand()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
