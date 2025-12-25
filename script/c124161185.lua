@@ -58,7 +58,6 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	return r==REASON_XYZ 
 end
 

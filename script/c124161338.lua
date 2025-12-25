@@ -42,7 +42,6 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD+LOCATION_GRAVE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
-	local c=e:GetHandler()
 	local dg=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil,e)
 	if chk==0 then return #dg>0 and #g>0 end
@@ -55,7 +54,6 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e)
 	local g=Duel.GetMatchingGroup(s.tg1dfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
 	if #tg>0 and #g>0 then
