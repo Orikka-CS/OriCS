@@ -32,12 +32,12 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,2,tp,1)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,1,tp,1)
 end
 
 function s.op1filter(c)
 	local te=c:GetActivateEffect()
-	return (c:IsSetCard(0xf24) or (te and te:IsHasCategory(CATEGORY_DESTROY))) and c:IsSpell() and c:IsAbleToDeck()
+	return te and te:IsHasCategory(CATEGORY_DESTROY) and c:IsSpell() and c:IsAbleToDeck()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -45,16 +45,16 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)	   
+		Duel.ConfirmCards(1-tp,sg)	 
 		local dg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,sg)
-		if #dg>0 and Duel.IsPlayerCanDraw(tp,2) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if #dg>0 and Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			Duel.ShuffleDeck(tp)
 			Duel.DisableShuffleCheck()
 			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
 			Duel.ConfirmCards(1-tp,dsg)
 			Duel.SendtoDeck(dsg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
-			Duel.Draw(tp,2,REASON_EFFECT)
+			Duel.Draw(tp,1,REASON_EFFECT)
 		end
 	end
 end
