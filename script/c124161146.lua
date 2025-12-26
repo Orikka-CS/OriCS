@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--synchro
 	c:EnableReviveLimit()
-	Synchro.AddProcedure(c,s.tfilter,1,1,Synchro.NonTuner(Card.IsType,TYPE_SYNCHRO),1,99)
+	Synchro.AddProcedure(c,s.tfilter,1,1,Synchro.NonTunerEx(Card.IsType,TYPE_SYNCHRO),1,99)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_QUICK_O)

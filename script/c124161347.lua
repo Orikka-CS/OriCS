@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--synchro
 	c:EnableReviveLimit()
-	Synchro.AddProcedure(c,nil,1,1,Synchro.NonTunerEx(Card.IsSetCard,0xf36),1,99)
+	Synchro.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf36),1,1,Synchro.NonTunerEx(Card.IsType,TYPE_SYNCHRO),1,99)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_LVCHANGE+CATEGORY_DISABLE+CATEGORY_REMOVE)
