@@ -32,6 +32,8 @@ function s.initial_effect(c)
 	
 end
 
+s.listed_names={CARD_CYCLONE_SPACE}
+
 function s.ovfilter(c,tp,lc)
 	return c:IsFaceup() and c:IsSetCard(0xcd70,lc,SUMMON_TYPE_XYZ,tp)
 end
