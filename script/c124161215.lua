@@ -84,7 +84,7 @@ end
 
 --effect 2
 function s.tg2filter(c,e)
-	return c:GetFlagEffect(id)>0 and c:IsFaceup()
+	return c:GetFlagEffect(id)>0 and c:IsFaceup() and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

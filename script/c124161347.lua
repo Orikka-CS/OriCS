@@ -6,12 +6,11 @@ function s.initial_effect(c)
 	Synchro.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf36),1,1,Synchro.NonTunerEx(Card.IsType,TYPE_SYNCHRO),1,99)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_LVCHANGE+CATEGORY_DISABLE+CATEGORY_REMOVE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -36,26 +35,18 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1filter(c)
-	return c:IsSetCard(0xf36) and c:IsFaceup()
+function s.tg1filter(c,e)
+	return c:IsFaceup() and c:IsSetCard(0xf36) and c:IsCanBeEffectTarget(e)
 end
 
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_ONFIELD,0,e:GetHandler())
-	return g>0
-end
-
-function s.tg1filter(c)
-	return c:IsFaceup() and c:IsNegatable() and c:IsAbleToRemove()
-end
-
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroupCount(s.tg1filter,tp,0,LOCATION_ONFIELD,nil)
-	if chk==0 then return g>0 and c:GetLevel()>0 end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_ONFIELD,0,nil,e)
+	if chk==0 then return #g>0 and c:GetLevel()>1 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
+	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_LVCHANGE,c,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DISABLE,nil,1,1-tp,LOCATION_ONFIELD)
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_ONFIELD)
 	if c:GetOriginalLevel()-c:GetLevel()>=3 then
 		Duel.SetChainLimit(function(e,ep,tp) return ep==tp end)
 	end
@@ -63,23 +54,32 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and c:IsFaceup() and c:IsLevelAbove(2) then
+	if c:IsRelateToEffect(e) and c:IsFaceup() and c:GetLevel()>1 then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_LEVEL)
 		e1:SetValue(-1)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD_DISABLE)
 		c:RegisterEffect(e1)
-		local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_ONFIELD,nil)
-		if #g>0 then
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_NEGATE):GetFirst()
-			sg:NegateEffects(c)
-			Duel.AdjustInstantly(sg)
-			if sg:IsDisabled() then
-				Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
-			end
-		end
 	end
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if not (tg and tg:IsFaceup()) then return end
+	local c=e:GetHandler()
+	if not tg:IsImmuneToEffect(e) then
+		local e1=Effect.CreateEffect(c)
+		e1:SetDescription(aux.Stringid(id,0))
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CLIENT_HINT)
+		e1:SetCode(EFFECT_IMMUNE_EFFECT)
+		e1:SetRange(LOCATION_MZONE)
+		e1:SetValue(s.op1imfilter)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+		tg:RegisterEffect(e1)
+	end
+end
+
+function s.op1imfilter(e,te)
+	return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() and te:IsActivated()
 end
 
 --effect 2

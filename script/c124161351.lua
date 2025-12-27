@@ -15,10 +15,13 @@ function s.initial_effect(c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_LVCHANGE+CATEGORY_DAMAGE)
-	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
+	e2:SetCondition(s.con2)
+	e2:SetCost(Cost.SelfBanish)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -60,6 +63,14 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.con2filter(c,tp)
+	return c:IsControler(tp) and c:IsFaceup() and c:IsSetCard(0xf36)
+end
+
+function s.con2(e,tp,eg)
+	return eg:FilterCount(s.con2filter,nil,tp)>0
+end
+
 function s.tg2filter(c)
 	return c:IsFaceup() and c:IsSetCard(0xf36) and c:IsLevelAbove(2)
 end
