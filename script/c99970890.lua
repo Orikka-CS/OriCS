@@ -50,7 +50,7 @@ end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local tc=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_HAND,0,1,1,nil,e,tp):GetFirst()
+	local tc=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp):GetFirst()
 	local pos=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
 	if tc then
 		if pos&POS_FACEDOWN>0 then
