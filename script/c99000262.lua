@@ -35,7 +35,7 @@ function s.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_TO_GRAVE)
 	e3:SetCountLimit(1,id)
-	e3:SetCost(s.cost)
+	e3:SetCost(s.viruscost)
 	e3:SetTarget(s.virustg)
 	e3:SetOperation(s.virusop)
 	c:RegisterEffect(e3)
@@ -92,7 +92,7 @@ end
 function s.costfilter(c)
 	return c:IsLevelAbove(6) and c:IsAttribute(ATTRIBUTE_DARK)
 end
-function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.viruscost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckReleaseGroupCost(tp,s.costfilter,1,false,nil,nil) end
 	local g=Duel.SelectReleaseGroupCost(tp,s.costfilter,1,1,false,nil,nil)
 	Duel.Release(g,REASON_COST)
