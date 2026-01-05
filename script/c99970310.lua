@@ -85,7 +85,7 @@ function s.op99(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 		local sg=g:FilterSelect(p,s.op99fil,1,1,nil)
 		Duel.SSet(tp,sg)
-		Duel.ConfirmCards(1-tp,sg)
+		 
 		tc=sg:GetFirst()
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)

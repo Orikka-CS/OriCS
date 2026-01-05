@@ -44,6 +44,7 @@ function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_CONTROL,g,1,0,0)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and Duel.GetControl(tc,tp) then
 		Duel.NegateRelatedChain(tc,RESET_TURN_SET)
@@ -69,8 +70,8 @@ function s.concon(e)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)==LOCATION_GRAVE
-		and rp~=tp and c:IsSpellTrapEffect() and Duel.IsChainDisablable(ev)
+	local loc=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)
+	return loc==LOCATION_GRAVE and rp~=tp and re:IsSpellTrapEffect() and Duel.IsChainDisablable(ev)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
@@ -101,7 +102,7 @@ function s.op99(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 		local sg=g:FilterSelect(p,s.op99fil,1,1,nil)
 		Duel.SSet(tp,sg)
-		Duel.ConfirmCards(1-tp,sg)
+		 
 		tc=sg:GetFirst()
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
