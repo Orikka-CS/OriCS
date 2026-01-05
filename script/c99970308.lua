@@ -1,94 +1,86 @@
---The Book of Truth: Shine
-local m=99970308
-local cm=_G["c"..m]
-function cm.initial_effect(c)
-	
-	--발동
+--[ The Book of Truth ]
+local s,id=GetID()
+function s.initial_effect(c)
+
 	YuL.Activate(c)
 
-	--덱 조작
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetRange(LOCATION_SZONE)
+	e1:SetCountLimit(1)
+	e1:SetTarget(s.tar1)
+	e1:SetOperation(s.op1)
+	c:RegisterEffect(e1)
+	
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(m,0))
-	e2:SetCategory(CATEGORY_TODECK)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetRange(LOCATION_SZONE)
-	e2:SetHintTiming(0,TIMING_END_PHASE)
-	e2:SetCountLimit(1)
-	e2:SetTarget(cm.target)
-	e2:SetOperation(cm.operation)
+	e2:SetCode(EVENT_ADJUST)
+	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 	
-	--Truth: Shine
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e3:SetRange(LOCATION_SZONE)
-	e3:SetCode(EVENT_ATTACK_ANNOUNCE)
-	e3:SetOperation(cm.truthop)
-	c:RegisterEffect(e3)
-	
-	--To the Path of Truth
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_SINGLE)
-	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_DELAY)
-	e4:SetCode(EVENT_TO_GRAVE)
-	e4:SetCondition(cm.Tsetcon)
-	e4:SetTarget(cm.Tsettg)
-	e4:SetOperation(cm.Tsetop)
-	c:RegisterEffect(e4)
+	local e99=Effect.CreateEffect(c)
+	e99:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_SINGLE)
+	e99:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_DELAY)
+	e99:SetCode(EVENT_TO_GRAVE)
+	e99:SetCondition(s.con99)
+	e99:SetTarget(s.tar99)
+	e99:SetOperation(s.op99)
+	c:RegisterEffect(e99)
 	
 end
 
---덱 조작
-function cm.filter(c)
-	return c:IsSetCard(0xe07) and c:IsAbleToDeck() and c:IsType(YuL.ST)
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.op99fil(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.op99fil,tp,LOCATION_GRAVE,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
+	local g=Duel.SelectTarget(tp,s.op99fil,tp,LOCATION_GRAVE,0,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,g,1,0,0)
 end
-function cm.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and cm.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(cm.filter,tp,LOCATION_GRAVE,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,cm.filter,tp,LOCATION_GRAVE,0,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
-end
-function cm.operation(e,tp,eg,ep,ev,re,r,rp)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
-		Duel.SendtoDeck(tc,nil,0,REASON_EFFECT)
+	if tc:IsRelateToEffect(e) and Duel.SSet(tp,tc)>0 then
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
+		e1:SetValue(LOCATION_DECKTOP)
+		e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
+		sg:RegisterEffect(e1)
 	end
 end
 
---Truth: Shine
-function cm.truthop(e,tp,eg,ep,ev,re,r,rp)
-	local a=Duel.GetAttacker()
-	if Duel.GetAttackTarget()~=nil then return end
-	if Duel.Remove(a,POS_FACEDUP,REASON_EFFECT)~=0 then
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(Card.IsDirectAttacked,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
+	if g:GetCount()>0 and Duel.SendtoDeck(g,nil,2,REASON_EFFECT)~=0 then
 		Duel.BreakEffect()
 		Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
 	end
 end
 
---To the Path of Truth
-function cm.Tsetcon(e,tp,eg,ep,ev,re,r,rp)
+function s.con99(e,tp,eg,ep,ev,re,r,rp)
 	if not re then return false end
 	local rc=re:GetHandler()
 	return e:GetHandler():IsReason(REASON_EFFECT) and rc==e:GetHandler()
 end
-function cm.Tsettg(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tar99(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=4
 		and Duel.GetDecktopGroup(tp,4):FilterCount(Card.IsSSetable,nil)>0 end
 	Duel.SetTargetPlayer(tp)
 end
-function cm.Tsetfil(c)
-	return c:IsSetCard(0xe07) and c:IsType(YuL.ST) and c:IsSSetable()
+function s.op99fil(c)
+	return c:IsSetCard(0xe07) and c:IsST() and c:IsSSetable()
 end
-function cm.Tsetop(e,tp,eg,ep,ev,re,r,rp)
+function s.op99(e,tp,eg,ep,ev,re,r,rp)
 	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
 	Duel.ConfirmDecktop(p,4)
 	local g=Duel.GetDecktopGroup(p,4)
-	if g:GetCount()>0 and g:IsExists(cm.Tsetfil,1,nil) then
+		if g:GetCount()>0 and g:IsExists(s.op99fil,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-		local sg=g:FilterSelect(p,cm.Tsetfil,1,1,nil)
+		local sg=g:FilterSelect(p,s.op99fil,1,1,nil)
 		Duel.SSet(tp,sg)
 		Duel.ConfirmCards(1-tp,sg)
 		tc=sg:GetFirst()
