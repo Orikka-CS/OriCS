@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e1:SetCode(EFFECT_CANNOT_ATTACK)
 	e1:SetRange(LOCATION_SZONE)
 	e1:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
-	e1:SetTarget(function(c,e) return not (c:IsAttribute(ATTRIBUTE_LIGHT+ATTRIBUTE_DARK)) end)
+	e1:SetTarget(function(e,c) return not c:IsAttribute(ATTRIBUTE_LIGHT|ATTRIBUTE_DARK) end)
 	c:RegisterEffect(e1)
 	
 	local e2=Effect.CreateEffect(c)

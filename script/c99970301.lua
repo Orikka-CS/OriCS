@@ -53,7 +53,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.val4(e,c)
-	return Duel.GetMatchingGroupCount(Card.IsSetCard,c:GetControler(),LOCATION_GRAVE+LOCATION_ONFIELD,0,nil,0xe07)*500
+	return Duel.GetMatchingGroupCount(aux.FaceupFilter(Card.IsSetCard,0xe07),c:GetControler(),LOCATION_GRAVE+LOCATION_ONFIELD,0,nil)*500
 end
 
 function s.con5(e,tp,eg,ep,ev,re,r,rp)
