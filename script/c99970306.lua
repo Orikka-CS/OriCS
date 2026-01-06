@@ -36,13 +36,13 @@ function s.initial_effect(c)
 	
 end
 
-function s.cost2fil(c)
+function s.cost1fil(c)
 	return c:IsSetCard(0xe07) and c:IsST() and c:IsAbleToDeckAsCost()
 end
-function s.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cost2fil,tp,LOCATION_GRAVE,0,1,nil) end
+function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.cost1fil,tp,LOCATION_GRAVE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,s.cost2fil,tp,LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.cost1fil,tp,LOCATION_GRAVE,0,1,1,nil)
 	Duel.SendtoDeck(g,nil,SEQ_DECKTOP,REASON_COST)
 end
 function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
