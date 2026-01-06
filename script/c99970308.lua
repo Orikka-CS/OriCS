@@ -55,7 +55,7 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsDirectAttacked,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
-	if g:GetCount()>0 and Duel.SendtoDeck(g,nil,2,REASON_EFFECT)~=0 then
+	if g:GetCount()>0 and Duel.Remove(g,POS_FACEUP,REASON_EFFECT)~=0 then
 		Duel.BreakEffect()
 		Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
 	end
