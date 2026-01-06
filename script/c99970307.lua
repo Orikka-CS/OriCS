@@ -55,8 +55,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)==Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)
-		and rp~=tp and Duel.IsChainDisablable(ev) 
+	return Duel.IsBattlePhase() and rp~=tp and Duel.IsChainDisablable(ev) 
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
