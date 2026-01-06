@@ -1,7 +1,7 @@
 --NECROWALKER@SPELL
 local s,id=GetID()
 function s.initial_effect(c)
-	--
+	--그 카드의 종류에 따라 이하의 효과를 적용한다.
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_REMOVE)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
@@ -27,6 +27,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_series={0xc24,0xc13}
+s.listed_names={99000355}
 function s.rmfilter(c,e,tp)
 	local res=nil
 	if c:IsType(TYPE_MONSTER) then
@@ -40,7 +41,7 @@ function s.spfilter(c,e,tp,code)
 	return not c:IsOriginalCodeRule(code) and c:IsSetCard(0xc24) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.thfilter(c,code)
-	return not c:IsOriginalCodeRule(code) and c:IsSetCard(0xc13) and c:IsSpell() and c:IsAbleToHand()
+	return not c:IsOriginalCodeRule(code) and (c:IsSetCard(0xc24) or c:IsSetCard(0xc13)) and c:IsSpell() and c:IsAbleToHand()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
@@ -57,16 +58,33 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if not tc:IsRelateToEffect(e) or tc:IsFacedown() then return end
 	local code=tc:GetOriginalCodeRule()
-	if tc:IsType(TYPE_MONSTER) then
+	local op=0
+	if tc:IsRelateToEffect(e) then
+		if tc:IsFacedown() then return end
+		if tc:IsType(TYPE_MONSTER) then
+			op=1
+		else
+			op=2
+		end
+	else
+		code=99000355
+		local spg=Duel.GetMatchingGroup(s.spfilter,tp,LOCATION_DECK|LOCATION_GRAVE,0,nil,e,tp,code)
+		local thg=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_DECK|LOCATION_GRAVE,0,nil,code)
+		local b1=#spg>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		local b2=#thg>0
+		op=Duel.SelectEffect(tp,
+		{b1,aux.Stringid(id,1)},
+		{b2,aux.Stringid(id,2)})
+	end
+	if op==1 then
 		if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.spfilter),tp,LOCATION_DECK|LOCATION_GRAVE,0,1,1,nil,e,tp,code)
 		if #g>0 then
 			Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		end
-	else
+	elseif op==2 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.thfilter),tp,LOCATION_DECK|LOCATION_GRAVE,0,1,1,nil,code)
 		if #g>0 then
