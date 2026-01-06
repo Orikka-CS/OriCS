@@ -1,4 +1,4 @@
---란샤르드 라스 니드헬
+--란샤르드 라스 니드호크
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

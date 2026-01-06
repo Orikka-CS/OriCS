@@ -1,4 +1,4 @@
---란샤르드 캄 미미르
+--란샤르드 캄 미미스
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

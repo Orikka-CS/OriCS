@@ -1,4 +1,4 @@
---란샤르드 그리프 나스트로
+--란샤르드 그리프 글레프
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

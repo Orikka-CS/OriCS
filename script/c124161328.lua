@@ -1,4 +1,4 @@
---스노위퍼 그레이
+--스노위퍼 베어치
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

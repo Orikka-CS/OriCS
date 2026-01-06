@@ -1,4 +1,4 @@
---언엔달 그라스프
+--언엔달 석세션
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

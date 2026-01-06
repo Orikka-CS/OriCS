@@ -1,4 +1,4 @@
---스노위퍼 마테아
+--스노위퍼 헤체나
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
