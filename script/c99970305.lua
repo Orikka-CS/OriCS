@@ -47,7 +47,7 @@ end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Group.CreateGroup()
 	for tc in aux.Next(Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,LOCATION_MZONE,nil,TYPE_LINK)) do
-		if eg:IsExists(s.con2fil,1,nil,tc) then g:Add(tc) end
+		if eg:IsExists(s.con2fil,1,nil,tc) then g:AddCard(tc) end
 	end
 	if #g==0 then return end
 	if Duel.Remove(g,POS_FACEDOWN,REASON_EFFECT)~=0 then
