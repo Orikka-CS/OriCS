@@ -49,7 +49,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
 		e1:SetValue(LOCATION_DECK)
 		e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
-		sg:RegisterEffect(e1)
+		tc:RegisterEffect(e1)
 	end
 end
 
