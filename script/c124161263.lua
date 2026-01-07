@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(function(e) return e:GetHandler():IsStatus(STATUS_SUMMON_TURN+STATUS_SPSUMMON_TURN) end)
+	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -26,6 +26,15 @@ function s.initial_effect(c)
 end
 
 --effect 1
+function s.con1filter(c)
+	return c:IsFaceup() and not c:IsSetCard(0xf31)
+end
+
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)
+	return g==0
+end
+
 function s.tg1filter(c)
 	return c:IsSetCard(0xf31) and c:IsSpell() and c:IsAbleToHand()
 end

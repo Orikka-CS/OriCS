@@ -20,10 +20,32 @@ function s.initial_effect(c)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(function(e) return e:GetHandler():IsStatus(STATUS_SUMMON_TURN+STATUS_SPSUMMON_TURN) end)
+	e2:SetCondition(function(e,tp) return Duel.GetFlagEffect(tp,id)>0 end)
 	e2:SetTarget(Fusion.SummonEffTG(params))
 	e2:SetOperation(Fusion.SummonEffOP(params))
 	c:RegisterEffect(e2)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_TO_GRAVE)
+		ge1:SetOperation(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
+end
+
+function s.cntfilter(c)
+	return c:IsSetCard(0xf30)
+end
+
+function s.cnt(e,tp,eg,ep,ev,re,r,rp)
+	local g=eg:Filter(s.cntfilter,nil)
+	if #g==0 then return end
+	for p=0,1 do
+		if g:IsExists(Card.IsControler,1,nil,p) and not (Duel.GetFlagEffect(p,id)>0) then
+			Duel.RegisterFlagEffect(p,id,RESET_PHASE+PHASE_END,0,1)
+		end
+	end
 end
 
 --effect 1
