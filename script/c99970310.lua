@@ -58,9 +58,12 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_MZONE,nil)
-	if g:GetCount()>0 and Duel.SendtoDeck(g,nil,SEQ_DECKTOP,REASON_EFFECT)~=0 then
-		Duel.BreakEffect()
-		Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
+	if g:GetCount()>0 then 
+		local sg=g:Select(tp,1,1,nil)
+		if Duel.SendtoDeck(sg,nil,SEQ_DECKTOP,REASON_EFFECT)~=0 then
+			Duel.BreakEffect()
+			Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
+		end
 	end
 end
 
