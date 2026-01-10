@@ -64,7 +64,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local ag=Duel.GetMatchingGroup(s.tg1afilter,tp,LOCATION_MZONE,0,nil)
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if #ag>0 then
-		local asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP):GetFirst()
+		local asg=aux.SelectUnselectGroup(ag,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATKDEF):GetFirst()
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
