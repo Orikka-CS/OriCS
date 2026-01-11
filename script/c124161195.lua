@@ -28,7 +28,7 @@ function s.tg1ffilter(c)
 end
 
 function s.tg1filter(c,e,tp)
-	return c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsRankAbove(4) and Duel.GetMatchingGroupCount(s.tg1ffilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,e:GetHandler())>=c:GetRank()//2 and Duel.GetLocationCountFromEx(tp,tp,nil,c)
+	return c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsRankAbove(2) and Duel.GetMatchingGroupCount(s.tg1ffilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,e:GetHandler())>=c:GetRank()//2 and Duel.GetLocationCountFromEx(tp,tp,nil,c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
