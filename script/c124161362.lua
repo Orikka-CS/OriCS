@@ -65,7 +65,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			tg=tg:Select(tp,1,1,nil)
 		end
 		local atk=e:GetLabel()
-		if tg:GetFirst():IsImmuneToEffect(e) then
+		if not tg:GetFirst():IsImmuneToEffect(e) then
 			local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_UPDATE_ATTACK)
