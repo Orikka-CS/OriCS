@@ -13,7 +13,7 @@ function cm.initial_effect(c)
 	e99:SetCode(EFFECT_SPSUMMON_PROC)
 	e99:SetRange(LOCATION_HAND)
 	e99:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
-	e99:SetCondition(cm.sspcon)
+	e99:SetCondition(s.sspcon)
 	c:RegisterEffect(e99)
 	
 	--equip
