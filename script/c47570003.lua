@@ -5,13 +5,22 @@ local cm=_G["c"..m]
 
 function cm.initial_effect(c)
 	
+	--ss
+	local e99=Effect.CreateEffect(c)
+	e99:SetType(EFFECT_TYPE_FIELD)
+	e99:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e99:SetCode(EFFECT_SPSUMMON_PROC)
+	e99:SetRange(LOCATION_HAND)
+	e99:SetCountLimit(1,m)
+	e99:SetCondition(cm.sspcon)
+	c:RegisterEffect(e99)
+	
 	--equip
 	local e0=Effect.CreateEffect(c)
 	e0:SetCategory(CATEGORY_EQUIP)
 	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e0:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e0:SetCode(EVENT_TO_GRAVE)
-	e0:SetCountLimit(1,m)
 	e0:SetCondition(cm.eqcon)
 	e0:SetTarget(cm.eqtg)
 	e0:SetOperation(cm.eqop)
@@ -29,6 +38,12 @@ function cm.initial_effect(c)
 	e1:SetOperation(cm.thop)
 	c:RegisterEffect(e1)
 
+end
+
+function s.sspcon(e,c)
+	if c==nil then return true end
+	local tp=e:GetHandlerPlayer()
+	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0,nil)==0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 end
 
 function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
