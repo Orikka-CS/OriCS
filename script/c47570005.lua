@@ -2,16 +2,17 @@
 
 local m=47570005
 local cm=_G["c"..m]
+local s,id=GetID()
 
 function cm.initial_effect(c)
-
+	
 	--ss
 	local e99=Effect.CreateEffect(c)
 	e99:SetType(EFFECT_TYPE_FIELD)
 	e99:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e99:SetCode(EFFECT_SPSUMMON_PROC)
 	e99:SetRange(LOCATION_HAND)
-	e99:SetCountLimit(1,m)
+	e99:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e99:SetCondition(cm.sspcon)
 	c:RegisterEffect(e99)
 		

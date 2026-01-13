@@ -1,6 +1,7 @@
 --블렌디아 와인
 local m=47570023
 local cm=_G["c"..m]
+local s,id=GetID()
 
 function cm.initial_effect(c)
 	
@@ -10,7 +11,7 @@ function cm.initial_effect(c)
 	e99:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e99:SetCode(EFFECT_SPSUMMON_PROC)
 	e99:SetRange(LOCATION_HAND)
-	e99:SetCountLimit(1,m)
+	e99:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e99:SetCondition(cm.sspcon)
 	c:RegisterEffect(e99)
 		

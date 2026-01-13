@@ -1,6 +1,7 @@
 --블렌디아 보드카
 local m=47570001
 local cm=_G["c"..m]
+local s,id=GetID()
 
 function cm.initial_effect(c)
 	
@@ -10,7 +11,7 @@ function cm.initial_effect(c)
 	e99:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e99:SetCode(EFFECT_SPSUMMON_PROC)
 	e99:SetRange(LOCATION_HAND)
-	e99:SetCountLimit(1,m)
+	e99:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e99:SetCondition(cm.sspcon)
 	c:RegisterEffect(e99)
 
@@ -42,7 +43,7 @@ end
 function s.sspcon(e,c)
 	if c==nil then return true end
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0,nil)==0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+	return Duel.GetFieldGroupCount(c:GetControler(),LOCATION_MZONE,0,nil)==0 and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
 end
 
 function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)
