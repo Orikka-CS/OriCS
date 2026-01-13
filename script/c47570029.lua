@@ -91,7 +91,7 @@ function cm.cfilter(c,tp)
 end
 
 function cm.descon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(cm.cfilter,1,e:GetHandler(),tp) and e:GetHandler():IsLocation(LOCATION_GRAVE)
+	return eg:IsExists(cm.cfilter,1,e:GetHandler(),tp)
 end
 
 function cm.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
