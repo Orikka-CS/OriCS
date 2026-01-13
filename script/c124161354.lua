@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_DRAW)
+	e1:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_MZONE)
@@ -41,7 +41,6 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_ATKCHANGE,sg,1,0,-e:GetHandler():GetBaseAttack())
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 
 function s.op1filter(c)
@@ -58,26 +57,22 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 			Duel.SendtoHand(sg,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,sg)
-			local mg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
-			if #mg==0 then return end
-			local _,max=mg:GetMaxGroup(Card.GetAttack)
-			local _,min=mg:GetMinGroup(Card.GetAttack)
-			if (max-min)>=c:GetBaseAttack() and Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-				Duel.BreakEffect()
-				Duel.Draw(tp,1,REASON_EFFECT)
-			end
 		end
 	end
 end
 
 --effect 2
-function s.con2filter(c,e)
-	return c:IsFaceup() and c:IsAttackAbove(e:GetHandler():GetBaseAttack())
+function s.con2filter(c)
+	return c:IsFaceup() and c:IsLinked()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e)
-	return g>0
+	local c=e:GetHandler()
+	local g=Duel.GetMatchingGroup(s.con2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
+	if #g==0 then return false end
+	local _,max=g:GetMaxGroup(Card.GetAttack)
+	local _,min=g:GetMinGroup(Card.GetAttack)
+	return (max-min)>=c:GetBaseAttack()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

@@ -12,11 +12,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetCategory(CATEGORY_ATKCHANGE)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetCode(EVENT_BATTLE_START)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(s.cst2)
+	e2:SetCondition(s.con2)
+	e2:SetCost(Cost.SelfBanish)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -58,62 +60,28 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.cst2filter(c)
-	return c:IsSetCard(0xf37) and c:IsAbleToRemoveAsCost()
-end
-
-function s.tg2filter(c,e,tp,lk)
-	return c:IsSetCard(0xf37) and c:IsType(TYPE_LINK) and c:IsLink(lk) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_LINK,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
-end
-
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_GRAVE,0,c)   
-	if chk==0 then
-		if not c:IsAbleToRemoveAsCost() then return false end
-		for i=1,6 do
-			if #g>=i-1 and Duel.IsExistingMatchingCard(s.tg2filter,tp,LOCATION_EXTRA,0,1,nil,e,tp,i) then
-				return true
-			end
-		end
-		return false
-	end
-	local nums={}
-	for i=1,6 do
-		if #g>=i-1 and Duel.IsExistingMatchingCard(s.tg2filter,tp,LOCATION_EXTRA,0,1,nil,e,tp,i) then
-			table.insert(nums,i)
-		end
-	end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_LVRANK)
-	local ct=Duel.AnnounceNumber(tp,table.unpack(nums))
-	local sg=nil
-	if ct>1 then
-		sg=aux.SelectUnselectGroup(g,e,tp,ct-1,ct-1,aux.TRUE,1,tp,HINTMSG_REMOVE)
-	else
-		sg=Group.CreateGroup()
-	end
-	sg:AddCard(c)
-	
-	Duel.Remove(sg,POS_FACEUP,REASON_COST)
-	e:SetLabel(ct)
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local a,at=Duel.GetAttacker(),Duel.GetAttackTarget()
+	if not at then return false end
+	if a:IsControler(1-tp) then a,at=at,a end
+	return a:IsSetCard(0xf37) and a:IsControler(tp) and at:IsControler(1-tp)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_ATKCHANGE,nil,1,tp,LOCATION_MZONE)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local ct=e:GetLabel()
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_EXTRA,0,nil,e,tp,ct)
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
-		local sc=sg:GetFirst()
-		if sc then
-			sc:SetMaterial(nil)
-			if Duel.SpecialSummon(sc,SUMMON_TYPE_LINK,tp,tp,false,false,POS_FACEUP)>0 then
-				sc:CompleteProcedure()
-			end
-		end
+	local a,at=Duel.GetAttacker(),Duel.GetAttackTarget()
+	if not at then return end
+	if a:IsControler(1-tp) then a,at=at,a end
+	if a:IsControler(tp) and a:IsSetCard(0xf37) and at:IsControler(1-tp) and at:IsRelateToBattle() and at:IsFaceup() then
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
+		e1:SetValue(0)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		at:RegisterEffect(e1)
 	end
 end

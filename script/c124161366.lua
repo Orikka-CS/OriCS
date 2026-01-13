@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_DAMAGE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -44,6 +44,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -52,7 +53,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		if Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)>0 then
 			local val=tg:GetBaseAttack()
 			if val>0 then
-				Duel.SetLP(tp,Duel.GetLP(tp)-val)
+				Duel.Damage(tp,val,REASON_EFFECT)
 			end
 		end
 	end

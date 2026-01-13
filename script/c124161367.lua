@@ -30,7 +30,7 @@ end
 
 --effect 1
 function s.con1filter(c)
-	return c:IsSetCard(0xf37) and c:IsType(TYPE_LINK) and c:IsFaceup()
+	return c:IsSetCard(0xf37) and c:IsType(TYPE_LINK) and c:IsLinked() and c:IsFaceup()
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)

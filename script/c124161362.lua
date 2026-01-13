@@ -42,7 +42,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM):GetFirst()
 	Duel.ConfirmCards(1-tp,sg)
-	e:SetLabel(sg:GetAttack())
+	e:SetLabel(sg:GetBaseAttack())
 	Duel.ShuffleHand(tp)
 end
 
@@ -54,35 +54,45 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_ATKCHANGE,nil,1,0,0)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,1-tp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,1-tp,LOCATION_MZONE)
+end
+
+function s.op1dfilter(c)
+	return c:IsFaceup() and c:IsAbleToDeck()
+end
+
+function s.op1rescon(sg,e,tp,mg)
+	return sg:GetSum(Card.GetAttack)<=e:GetLabel()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 	if #g>0 then
-		local tg,val=g:GetMaxGroup(Card.GetAttack)
-		if #tg>1 then
-			tg=tg:Select(tp,1,1,nil)
+		local mg,val=g:GetMaxGroup(Card.GetAttack)
+		local sg
+		if #mg>1 then
+			sg=aux.SelectUnselectGroup(mg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATKDEF):GetFirst()
+		else
+			sg=mg:GetFirst()
 		end
-		local atk=e:GetLabel()
-		if not tg:GetFirst():IsImmuneToEffect(e) then
-			local e1=Effect.CreateEffect(e:GetHandler())
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_UPDATE_ATTACK)
-			e1:SetValue(atk)
-			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-			tc:RegisterEffect(e1) 
-			local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil)
-			local hg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_HAND,nil)
-			local sg
-			if Duel.SelectYesNo(tp,aux.Stringid(id,0)) and #g+#hg>0 then
-				if #g==0 or (#hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1))) then
-					sg=hg:RandomSelect(tp,1):GetFirst()
-				else
-					sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK):GetFirst()
-				end
-				Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-			end
+		if sg then
+			local atk=e:GetLabel()
+			sg:UpdateAttack(atk,nil,e:GetHandler())
+		end
+	end
+	local lg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
+	if #lg<2 then return end
+	local _,max=lg:GetMaxGroup(Card.GetAttack)
+	local _,min=lg:GetMinGroup(Card.GetAttack)
+	local diff=max-min
+	local dg=Duel.GetMatchingGroup(s.op1dfilter,tp,0,LOCATION_MZONE,nil)
+	if #dg>0 and diff>0 and dg:IsExists(function(c) return c:GetAttack()<=diff end,1,nil) 
+		and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.BreakEffect()
+		e:SetLabel(diff)
+		local sg=aux.SelectUnselectGroup(dg,e,tp,1,#dg,s.op1rescon,1,tp,HINTMSG_TODECK)
+		if #sg>0 then
+			Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 		end
 	end
 end
