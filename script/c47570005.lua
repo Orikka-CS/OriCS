@@ -6,26 +6,28 @@ local s,id=GetID()
 
 function cm.initial_effect(c)
 	
-	--ss
-	local e99=Effect.CreateEffect(c)
-	e99:SetType(EFFECT_TYPE_FIELD)
-	e99:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e99:SetCode(EFFECT_SPSUMMON_PROC)
-	e99:SetRange(LOCATION_HAND)
-	e99:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
-	e99:SetCondition(s.sspcon)
-	c:RegisterEffect(e99)
-		
+	--special_summon_and_equip
+	local e3=Effect.CreateEffect(c)
+	e3:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_EQUIP)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e3:SetType(EFFECT_TYPE_IGNITION)
+	e3:SetRange(LOCATION_HAND)
+	e3:SetCode(EVENT_FREE_CHAIN)
+	e3:SetCountLimit(1,m)
+	e3:SetTarget(cm.sptg)
+	e3:SetOperation(cm.spop)
+	c:RegisterEffect(e3)
+	
 	--equip
-	local e0=Effect.CreateEffect(c)
-	e0:SetCategory(CATEGORY_EQUIP)
-	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e0:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
-	e0:SetCode(EVENT_TO_GRAVE)
-	e0:SetCondition(cm.eqcon)
-	e0:SetTarget(cm.eqtg)
-	e0:SetOperation(cm.eqop)
-	c:RegisterEffect(e0)
+	local e4=Effect.CreateEffect(c)
+	e4:SetCategory(CATEGORY_EQUIP)
+	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e4:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e4:SetCode(EVENT_TO_GRAVE)
+	e4:SetCondition(cm.eqcon)
+	e4:SetTarget(cm.eqtg)
+	e4:SetOperation(cm.eqop)
+	c:RegisterEffect(e4)
 
 	--equip grave
 	local e1=Effect.CreateEffect(c)
@@ -41,10 +43,42 @@ function cm.initial_effect(c)
 
 end
 
-function s.sspcon(e,c)
-	if c==nil then return true end
-	local tp=e:GetHandlerPlayer()
-	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0,nil)==0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+function cm.eqfilter2(c)
+	return c:IsType(TYPE_MONSTER) and c:IsSetCard(0xccd)
+end
+
+function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_GRAVE) and cm.eqfilter2(chkc) end
+
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.GetLocationCount(tp,LOCATION_SZONE)>0
+		and Duel.IsExistingTarget(cm.eqfilter2,tp,LOCATION_GRAVE,0,1,nil)
+		and e:GetHandler():IsCanBeSpecialSummoned(e,0,tp,false,false)
+	end
+
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
+	local sg=Duel.SelectTarget(tp,cm.eqfilter2,tp,LOCATION_GRAVE,0,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_EQUIP,sg,1,0,0)
+end
+
+function cm.eqlimit2(e,c)
+	return e:GetOwner()==c and not c:IsDisabled()
+end
+
+function cm.spop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=Duel.GetFirstTarget()
+
+	if c:IsRelateToEffect(e) and tc and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0 then
+		if not Duel.Equip(tp,tc,c) then return end
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_EQUIP_LIMIT)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		e1:SetValue(cm.eqlimit2)
+		tc:RegisterEffect(e1)
+	end
 end
 
 function cm.eqcon(e,tp,eg,ep,ev,re,r,rp)

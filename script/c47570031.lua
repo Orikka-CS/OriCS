@@ -28,6 +28,18 @@ function cm.initial_effect(c)
 	e1:SetTarget(cm.eqtg2)
 	e1:SetOperation(cm.eqop2)
 	c:RegisterEffect(e1)
+
+	--equip grave
+	local e2=Effect.CreateEffect(c)
+	e2:SetCategory(CATEGORY_DAMAGE)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetCountLimit(1,m+1)
+	e2:SetCondition(cm.drcon)
+	e2:SetTarget(cm.e3tg)
+	e2:SetOperation(cm.e3op)
+	c:RegisterEffect(e2)
 end
 
 function cm.eqfilter(c)
@@ -105,4 +117,15 @@ end
 
 function cm.eqlimit2(e,c)
 		return c==e:GetLabelObject()
+end
+
+function cm.e3tg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetTargetPlayer(1-tp)
+	Duel.SetTargetParam(1000)
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,1000)
+end
+function cm.e3op(e,tp,eg,ep,ev,re,r,rp)
+	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
+	Duel.Damage(p,d,REASON_EFFECT)
 end
