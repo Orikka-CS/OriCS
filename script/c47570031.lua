@@ -17,7 +17,6 @@ function cm.initial_effect(c)
 	e0:SetOperation(cm.eqop)
 	c:RegisterEffect(e0)
 
-	
 	--equip
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
@@ -36,7 +35,7 @@ function cm.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetCountLimit(1,m+1)
-	e2:SetCondition(cm.drcon)
+	e2:SetCondition(cm.e3con)
 	e2:SetTarget(cm.e3tg)
 	e2:SetOperation(cm.e3op)
 	c:RegisterEffect(e2)
@@ -117,6 +116,11 @@ end
 
 function cm.eqlimit2(e,c)
 		return c==e:GetLabelObject()
+end
+
+function cm.e3con(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	return c:GetPreviousLocation()==LOCATION_SZONE
 end
 
 function cm.e3tg(e,tp,eg,ep,ev,re,r,rp,chk)
