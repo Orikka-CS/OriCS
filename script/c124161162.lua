@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	Xyz.AddProcedure(c,nil,9,3,s.ovfilter,aux.Stringid(id,0),3,s.ovop)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_POSITION+CATEGORY_TODECK)
+	e1:SetCategory(CATEGORY_POSITION+CATEGORY_TODECK+CATEGORY_SET)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)

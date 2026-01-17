@@ -10,6 +10,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
+	e2:SetCategory(CATEGORY_SET)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
@@ -36,7 +37,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 			local ig=Duel.GetMatchingGroup(s.tg1ifilter,tp,LOCATION_MZONE,0,nil) 
 			return #ig>0
 		else
-			e:SetCategory(CATEGORY_POSITION)
+			e:SetCategory(CATEGORY_POSITION+CATEGORY_SET)
 			local og=Duel.GetMatchingGroup(s.tg1ofilter,tp,LOCATION_MZONE,0,nil)
 			return #og>0
 		end

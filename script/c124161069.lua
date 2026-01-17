@@ -6,6 +6,7 @@ function s.initial_effect(c)
 	Fusion.AddProcMix(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf24),aux.FilterBoolFunctionEx(Card.IsRace,RACE_FIEND))
 	--effect 1
 	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_SET)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
 	e1:SetCode(EVENT_FREE_CHAIN)
