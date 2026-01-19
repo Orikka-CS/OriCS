@@ -70,27 +70,23 @@ function s.op2filter(c)
 	return c:IsFaceup() and c:IsLinked()
 end
 
-function s.op2gfilter(c)
-	return c:IsSetCard(0xf37) and c:IsMonster() and c:IsAbleToGrave()
-end
-
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)	  
+		Duel.ConfirmCards(1-tp,sg)	
 		local mg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 		if #mg==0 then return end
 		local _,max=mg:GetMaxGroup(Card.GetAttack)
 		local _,min=mg:GetMinGroup(Card.GetAttack)
 		local diff=max-min
-		local gg=Duel.GetMatchingGroup(s.op2gfilter,tp,LOCATION_DECK,0,nil)	 
-		if diff>=c:GetBaseAttack() and #gg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		local rg=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
+		if diff>=c:GetBaseAttack() and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			local gsg=aux.SelectUnselectGroup(gg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-			Duel.SendtoGrave(gsg,REASON_EFFECT)
+			local rsg=rg:RandomSelect(tp,1)
+			aux.RemoveUntil(rsg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
 		end
 	end
 end

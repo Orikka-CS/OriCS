@@ -63,14 +63,14 @@ end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
-	if chk==0 then return #g>=2 end
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,2,0,0)
+	if chk==0 then return #g>=1 end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
-	if #g>=2 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.TRUE,1,tp,HINTMSG_DESTROY)
+	if #g>=1 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
 		Duel.Destroy(sg,REASON_EFFECT)
 	end
 end
