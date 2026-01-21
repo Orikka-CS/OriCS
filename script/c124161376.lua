@@ -1,7 +1,7 @@
 --웨딩 스큐드라스 릴리
 local s,id=GetID()
 function s.initial_effect(c)
-	--xyz summon
+	--xyz
 	c:EnableReviveLimit()
 	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_FIRE),4,2)
 	--effect 1

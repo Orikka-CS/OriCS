@@ -1,7 +1,7 @@
 --이브닝 스큐드라스 리코리스
 local s,id=GetID()
 function s.initial_effect(c)
-	--xyz summon
+	--xyz
 	c:EnableReviveLimit()
 	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf38),4,2)
 	--effect 1
