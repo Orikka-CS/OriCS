@@ -54,7 +54,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			if #ng>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 				Duel.BreakEffect()
 				local nsg=aux.SelectUnselectGroup(ng,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISABLE):GetFirst()
-				nsg:NegateEffects(e:GetHandler(),RESET_PHASE+PHASE_END,true)
+				nsg:NegateEffects(e:GetHandler(),nil,true)
 			end
 		end
 	end
