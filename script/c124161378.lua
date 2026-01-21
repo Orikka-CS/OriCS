@@ -52,7 +52,7 @@ function s.val1(e,c)
 	for tc in aux.Next(g) do
 		x=x+tc:GetOverlayCount()
 	end
-	return x*200
+	return x*300
 end
 
 --effect 2

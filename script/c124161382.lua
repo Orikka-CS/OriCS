@@ -71,25 +71,31 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local b1=false
 	local b2=false
 	local b3=false
+	local b4=false
 	if #g1>0 then b1=true end
 	if #g2>0 then b2=true end
 	if #g3>0 then b3=true end
 	local b
 	for i=1,dt do
 		if not (b1 or b2 or b3) then break end
-		b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)},{b3,aux.Stringid(id,2)})
+		b=Duel.SelectEffect(tp,{b1,aux.Stringid(id,0)},{b2,aux.Stringid(id,1)},{b3,aux.Stringid(id,2)},{b4,aux.Stringid(id,3)})
 		if b==1 then
 			local hg=g1:RandomSelect(tp,1)
 			sg:Merge(hg)
 			b1=false
+			b4=true
 		elseif b==2 then
 			local fg=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 			sg:Merge(fg)
 			b2=false
+			b4=true
 		elseif b==3 then
 			local gg=aux.SelectUnselectGroup(g3,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 			sg:Merge(gg)
 			b3=false
+			b4=true
+		else
+			break
 		end
 	end
 	local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP):GetFirst()

@@ -48,7 +48,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local g=Duel.GetMatchingGroup(s.op1matfilter,tp,LOCATION_GRAVE,0,nil)
 		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,2,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
 			Duel.Overlay(tg,sg,true)
 		end
 	end
