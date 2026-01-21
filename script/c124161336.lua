@@ -55,7 +55,7 @@ function s.tg2filter(c,e)
 end
 
 function s.tg2xfilter(c)
-	return c:GetSequence()==0 or c:GetSequence()==4
+	return c:GetSequence()==0 or c:GetSequence()==4 and c:IsAbleToChangeControler() and not c:IsType(TYPE_TOKEN)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

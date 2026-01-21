@@ -40,7 +40,7 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.tg1filter(c,tp)
-	return c:GetAttack()<=Duel.GetFlagEffect(tp,124161059)*500 and c:IsFaceup() and c:IsCanBeXyzMaterial()
+	return c:GetAttack()<=Duel.GetFlagEffect(tp,124161059)*500 and c:IsFaceup() and c:IsAbleToChangeControler() and not c:IsType(TYPE_TOKEN)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)

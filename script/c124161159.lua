@@ -77,7 +77,7 @@ end
 
 
 function s.tg2filter(c,e)
-	return c:IsAbleToChangeControler() and c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsCanBeXyzMaterial()
+	return c:IsAbleToChangeControler() and c:IsFaceup() and c:IsCanBeEffectTarget(e) and not c:IsType(TYPE_TOKEN)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

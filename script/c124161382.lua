@@ -25,7 +25,7 @@ end
 
 --effect 1
 function s.tg1filter(c,e)
-	return (c:IsAbleToChangeControler() or not c:IsLocation(LOCATION_ONFIELD)) and c:IsCanBeXyzMaterial()
+	return (c:IsAbleToChangeControler() or not c:IsLocation(LOCATION_ONFIELD)) and not c:IsType(TYPE_TOKEN)
 end
 
 function s.tg1vfilter(c)

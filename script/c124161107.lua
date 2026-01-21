@@ -44,6 +44,10 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 end
 
+function s.op1filter(c)
+	return (c:IsLocation(LOCATION_ONFIELD) or not c:IsAbleToChangeControler()) and not c:IsType(TYPE_TOKEN)
+end
+
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
@@ -52,7 +56,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if not tg then return end
 	Duel.SendtoGrave(ov,REASON_EFFECT)
 	if not Duel.NegateActivation(ev) then return end
-	local xg=Duel.GetMatchingGroup(Card.IsCanBeXyzMaterial,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil)
+	local xg=Duel.GetMatchingGroup(s.op1filter,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil)
 	if #xg==0 then return end
 	Duel.BreakEffect()
 	local xsg=aux.SelectUnselectGroup(xg+rc,e,tp,1,ovc,aux.TRUE,1,tp,HINTMSG_XMATERIAL)

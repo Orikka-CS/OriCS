@@ -68,7 +68,7 @@ end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():GetEquipGroup():IsExists(s.ovffilter,1,nil,tp) then return false end
 	local rc=re:GetHandler()
-	return rp==1-tp and rc:IsOnField() and rc:IsRelateToEffect(re)
+	return rp==1-tp and rc:IsOnField() and rc:IsRelateToEffect(re) and rc:IsAbleToChangeControler() and not rc:IsType(TYPE_TOKEN)
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
