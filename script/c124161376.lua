@@ -100,9 +100,9 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
 		Duel.Overlay(sg,c)
 		local hg=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
-		if #hg>1 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
+		if #hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
 			Duel.BreakEffect()
-			local hsg=hg:RandomSelect(tp,2)
+			local hsg=hg:RandomSelect(tp,1)
 			Duel.ConfirmCards(tp,hsg)
 			Duel.ShuffleHand(1-tp)
 		end
