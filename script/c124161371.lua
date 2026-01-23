@@ -32,15 +32,21 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 
+function s.op1filter(c)
+	return c:IsFaceup() and c:IsSetCard(0xf38) and c:IsType(TYPE_XYZ)
+end
+
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_EXTRA,0,nil,e,tp)
 	if Duel.GetLocationCountFromEx(tp)>0 and #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON):GetFirst()
 		Duel.SpecialSummon(sg,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)
-		if c:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		local xg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_MZONE,0,nil)
+		if c:IsRelateToEffect(e) and #xg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			Duel.Overlay(sg,c)
+			local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP):GetFirst()
+			Duel.Overlay(xsg,c)
 		end
 		sg:CompleteProcedure()
 	end

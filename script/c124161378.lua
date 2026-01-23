@@ -23,7 +23,7 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOGRAVE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetCode(EVENT_CHAINING)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetCountLimit(1,id)
 	e2:SetCondition(s.con2)
@@ -56,12 +56,8 @@ function s.val1(e,c)
 end
 
 --effect 2
-function s.con2filter(c)
-	return c:IsSummonLocation(LOCATION_EXTRA)
-end
-
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:FilterCount(s.con2filter,nil)>0
+	return rp==tp and re:GetHandler():IsType(TYPE_XYZ)
 end
 
 function s.tg2filter(c,e,tp)
