@@ -3,8 +3,9 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DAMAGE)
+	e1:SetCategory(CATEGORY_ATKCHANGE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,id)
@@ -26,25 +27,39 @@ function s.initial_effect(c)
 end
 
 --effect 1
+function s.tg1filter(c)
+	return c:IsSetCard(0xf38) and c:IsFaceup()
+end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,300)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.tg1filter(chkc) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATKDEF)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_ATKCHANGE,sg,1,tp,0)
 end
 
 function s.op1filter(c)
-	return c:IsFaceup() and c:IsSetCard(0xf38) and c:IsType(TYPE_XYZ)
+	return c:IsSetCard(0xf38) and c:IsType(TYPE_XYZ) and c:IsFaceup()
 end
 
-
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Damage(1-tp,300,REASON_EFFECT)
-	local c=e:GetHandler()
-	local xg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_MZONE,0,nil)
-	if c:IsRelateToEffect(e) and #xg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-		Duel.BreakEffect()
-		local xsg=aux.SelectUnselectGroup(xg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP):GetFirst()
-		Duel.Overlay(xsg,c)
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg and tg:IsFaceup() and tg:IsRelateToEffect(e) then
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
+		e1:SetValue(tg:GetAttack()*2)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+		tg:RegisterEffect(e1)
+		local c=e:GetHandler()
+		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_MZONE,0,nil)
+		if c:IsRelateToEffect(e) and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+			Duel.BreakEffect()
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_XMATERIAL)
+			Duel.Overlay(sg:GetFirst(),c)
+		end
 	end
 end
 
