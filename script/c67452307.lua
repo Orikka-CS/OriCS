@@ -92,7 +92,7 @@ function c67452307.cost4(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		return c:IsAbleToGraveAsCost()
 	end
-	Duel.SendtoGrave(c,RESAON_COST)
+	Duel.SendtoGrave(c,REASON_COST)
 end
 function c67452307.tfil4(c,e,tp)
 	return c:IsSetCard(0x2db) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:GetAttack()>Duel.GetLP(tp)
