@@ -56,12 +56,12 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	return rp==1-tp and Duel.IsChainNegatable(ev)
 end
 
-function s.tg2filter(c,tp)
+function s.tg2filter(c)
 	return c:IsAbleToDeck() and c:IsCode(124161384)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_GRAVE,0,nil) end
+	if chk==0 then return Duel.GetMatchingGroupCount(s.tg2filter,tp,LOCATION_GRAVE,0,nil)>0 end
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
