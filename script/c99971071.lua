@@ -20,30 +20,28 @@ function s.initial_effect(c)
 	local e3=MakeEff(c,"FC","R")
 	e3:SetCode(EVENT_ADJUST)
 	e3:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-	WriteEff(e3,3,"NO")
+	WriteEff(e3,3,"O")
 	c:RegisterEffect(e3)
 	
 	aux.GlobalCheck(s,function()
 		s[0]=0
+		s[1]=0
 		aux.AddValuesReset(function()
 			s[0]=0
+			s[1]=0
 		end)
-		local e4=Effect.CreateEffect(c)
-		e4:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-		e4:SetCode(EVENT_CHAINING)
-		e4:SetOperation(s.checkop)
-		Duel.RegisterEffect(e4,0)
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+		ge1:SetCode(EVENT_CHAINING)
+		ge1:SetOperation(s.checkop)
+		Duel.RegisterEffect(ge1,0)
 	end)
 	
 end
 
 function s.checkop(e,tp,eg,ep,ev,re,r,rp)
-	local temp=re:GetActiveType()&0x7
-	local p=e:GetHandlerPlayer()
-	if rp~=p and s[0]==TYPE_MONSTER and temp==TYPE_SPELL then
-		Duel.RegisterFlagEffect(p,id,RESET_PHASE|PHASE_END,0,1)
-	end
-	s[0]=temp
+	s[1]=s[0]
+	s[0]=re:GetActiveType()&0x7
 end
 
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -110,9 +108,10 @@ function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetDecktopGroup(tp,3)
 	local g2=Duel.GetDecktopGroup(1-tp,3)
-	if (not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,id),tp,LOCATION_ONFIELD,0,1,nil))
-		and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0 then
-		Duel.ResetFlagEffect(tp,id)
+	if not (rp~=tp and s[1]==TYPE_MONSTER and s[0]==TYPE_SPELL
+		and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsPlayerCanSpecialSummon(tp) and c:IsFacedown()
+		and (not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,id),tp,LOCATION_ONFIELD,0,1,nil))) then return end
+	if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0 then
 		if g:FilterCount(Card.IsAbleToRemove,nil)==3 and g2:FilterCount(Card.IsAbleToRemove,nil)==3
 			and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 			g:Merge(g2)
