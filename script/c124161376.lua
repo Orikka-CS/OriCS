@@ -1,4 +1,4 @@
---프레리 스큐드라스 데이지
+--웨딩 스큐드라스 릴리
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz summon
