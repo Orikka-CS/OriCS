@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	
 	local e3=MakeEff(c,"FC","R")
-	e3:SetCode(EVENT_ADJUST)
+	e3:SetCode(EVENT_CHAINING)
 	e3:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 	WriteEff(e3,3,"O")
 	c:RegisterEffect(e3)
@@ -94,16 +94,6 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
-function s.con3(e)
-	local c=e:GetHandler()
-	local tp=e:GetHandlerPlayer()
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummon(tp)
-		and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and c:IsFacedown()
-		and (not Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsCode,id),tp,LOCATION_ONFIELD,0,1,nil))
-		and Duel.HasFlagEffect(tp,id,1)
-end
 function s.op3(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetDecktopGroup(tp,3)

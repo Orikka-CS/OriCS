@@ -16,7 +16,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 	
 	local e3=MakeEff(c,"FC","R")
-	e3:SetCode(EVENT_ADJUST)
+	e3:SetCode(EVENT_CHAINING)
 	e3:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 	WriteEff(e3,3,"O")
 	c:RegisterEffect(e3)
