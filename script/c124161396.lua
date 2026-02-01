@@ -36,14 +36,14 @@ function s.tg1filter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,e:GetHandler())
 	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp) end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,nil)
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,e:GetHandler())
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,#g,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
 		local ct=Duel.SendtoGrave(sg,REASON_EFFECT)
@@ -53,7 +53,7 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return rp==1-tp and Duel.IsChainNegatable(ev)
+	return rp==1-tp and re:IsActiveType(TYPE_MONSTER) and Duel.IsChainNegatable(ev)
 end
 
 function s.tg2filter(c)
