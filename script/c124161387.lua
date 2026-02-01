@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DISABLE+CATEGORY_SPECIAL_SUMMON+CATEGORY_TODECK)
+	e1:SetCategory(CATEGORY_DISABLE+CATEGORY_SPECIAL_SUMMON+CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -47,7 +47,7 @@ function s.op1filter(c)
 end
 
 function s.op1dfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_TUNER) and c:IsAbleToDeck()
+	return c:IsFaceup() and c:IsType(TYPE_TUNER) and c:IsAbleToHand()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -60,8 +60,8 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			local dg=Duel.GetMatchingGroup(s.op1dfilter,tp,0,LOCATION_MZONE,nil)
 			if g>0 and #dg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 				Duel.BreakEffect()
-				local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
-				Duel.SendtoDeck(dsg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+				local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+				Duel.SendtoHand(dsg,nil,REASON_EFFECT)
 			end
 		end
 	end
