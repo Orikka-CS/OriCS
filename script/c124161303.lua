@@ -54,7 +54,7 @@ end
 
 function s.val1(e,c)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetMatchingGroupCount(s.val1filter,tp,LOCATION_GRAVE,0,nil)*100
+	return Duel.GetMatchingGroupCount(s.val1filter,tp,LOCATION_SZONE,0,nil)*300
 end
 
 --effect 2
