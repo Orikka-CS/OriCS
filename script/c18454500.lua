@@ -1,0 +1,154 @@
+--시간이 얼어붙기 이전으로(디셈버❆ 리와인드)
+local s,id=GetID()
+function s.initial_effect(c)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
+	e1:SetTarget(s.tar1)
+	e1:SetOperation(s.op1)
+	c:RegisterEffect(e1)
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetCode(EFFECT_ADD_CODE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e2:SetValue(24094653)
+	c:RegisterEffect(e2)
+	if not s.global_check then
+		s.global_check=true
+		s[0]=Group.CreateGroup()
+		s[0]:KeepAlive()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_STARTUP)
+		ge1:SetOperation(s.gop1)
+		Duel.RegisterEffect(ge1,0)
+	end
+end
+s.listed_series={0x2cf}
+function s.gop1(e,tp,eg,ep,ev,re,r,rp)
+	for i=1,2 do
+		local token=Duel.CreateToken(0,18454514)
+		s[0]:AddCard(token)
+	end
+end
+function s.tfil1(c,e,tp,m1,m2,f,chkf)
+	local mg=m1
+	if c.december_fmaterial then
+		mg:Merge(m2)
+	end
+	mg:Merge(s[0])
+	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x2cf) and (not f or f(c))
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial(mg,nil,chkf)
+end
+function s.tffil1(c)
+	return s[0]:IsContains(c)
+end
+function s.tfun1(tp,sg,fc)
+	local ct=sg:FilterCount(s.tffil1,nil)
+	local lp=Duel.GetLP(tp)
+	return lp>ct*1000
+end
+function s.tar1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		local chkf=tp
+		local mg1=Duel.GetFusionMaterial(tp)
+		local mg2=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_HAND+LOCATION_ONFIELD,0,nil,TYPE_SPELL+TYPE_TRAP)
+		SatoneFusionFilter=function(c,e,tp)
+			return s[0]:IsContains(c)
+		end
+		SatoneFusionEffect=e
+		SatoneFusionPlayer=tp
+		aux.FGoalCheckAdditional=s.tfun1
+		Fusion.CheckAdditional=s.tfun1
+		local res=Duel.IsExistingMatchingCard(s.tfil1,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg1,mg2,nil,chkf)
+		SatoneFusionFilter=nil
+		SatoneFusionEffect=nil
+		SatoneFusionPlayer=nil
+		aux.FGoalCheckAdditional=nil
+		Fusion.CheckAdditional=nil
+		if not res then
+			local ce=Duel.GetChainMaterial(tp)
+			if ce~=nil then
+				local fgroup=ce:GetTarget()
+				local mg3=fgroup(ce,e,tp)
+				local mf=ce:GetValue()
+				res=Duel.IsExistingMatchingCard(s.tfil1,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg3,Group.CreateGroup(),mf,chkf)
+			end
+		end
+		return res
+	end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+end
+function s.ofil1(c,e)
+	return not c:IsImmuneToEffect(e)
+end
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local ct=0
+	while true do
+		local c=e:GetHandler()
+		local chkf=tp
+		local mg1=Duel.GetFusionMaterial(tp):Filter(s.ofil1,nil,e)
+		local mg2=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_HAND+LOCATION_ONFIELD,0,nil,TYPE_SPELL		+TYPE_TRAP):Filter(s.ofil1,nil,e)
+		SatoneFusionFilter=function(c,e,tp)
+			return s[0]:IsContains(c)
+		end
+		SatoneFusionEffect=e
+		SatoneFusionPlayer=tp
+		aux.FGoalCheckAdditional=s.tfun1
+		Fusion.CheckAdditional=s.tfun1
+		local sg1=Duel.GetMatchingGroup(s.tfil1,tp,LOCATION_EXTRA,0,nil,e,tp,mg1,mg2,nil,chkf)
+		local mg3=nil
+		local sg2=nil
+		if ce~=nil then
+			local fgroup=ce:GetTarget()
+			mg3=fgroup(ce,e,tp)
+			local mf=ce:GetValue()
+			sg2=Duel.GetMatchingGroup(s.tfil1,tp,LOCATION_EXTRA,0,nil,e,tp,mg3,Group.CreateGroup(),mf,chkf)
+		end
+		if (sg1:GetCount()>0 or (sg2~=nil and sg2:GetCount()>0))
+			and (ct==0 or Duel.SelectYesNo(tp,aux.Stringid(id,0))) then
+			local sg=sg1:Clone()
+			if sg2 then
+				sg:Merge(sg2)
+			end
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+			local tg=sg:Select(tp,1,1,nil)
+			local tc=tg:GetFirst()
+			if sg1:IsContains(tc) and (sg2==nil or not sg2:IsContains(tc) or not Duel.SelectYesNo(tp,ce:GetDescription())) then
+				if tc.december_fmaterial then
+					mg1:Merge(mg2)
+				end
+				mg1:Merge(s[0])
+				local mat1=Duel.SelectFusionMaterial(tp,tc,mg1,nil,chkf)
+				local mat0=mat1:Filter(s.tffil1,nil)
+				mat1:Sub(mat0)
+				tc:SetMaterial(mat1)
+				mustpay=true
+				Duel.PayLPCost(tp,#mat0*1000)
+				mustpay=false
+				Duel.SendtoGrave(mat1,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
+				Duel.BreakEffect()
+				Duel.SpecialSummon(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
+			else
+				local mat2=Duel.SelectFusionMaterial(tp,tc,mg3,nil,chkf)
+				local fop=ce:GetOperation()
+				fop(ce,e,tp,tc,mat2)
+			end
+			tc:CompleteProcedure()
+		else
+			break
+		end
+		ct=ct+1
+		SatoneFusionFilter=nil
+		SatoneFusionEffect=nil
+		SatoneFusionPlayer=nil
+		aux.FGoalCheckAdditional=nil
+		Fusion.CheckAdditional=nil
+	end
+	SatoneFusionFilter=nil
+	SatoneFusionEffect=nil
+	SatoneFusionPlayer=nil
+	aux.FGoalCheckAdditional=nil
+	Fusion.CheckAdditional=nil
+end
