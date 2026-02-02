@@ -17,7 +17,7 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
-	e1:SetCL(1,{id,1})
+	e2:SetCL(1,{id,1})
 	WriteEff(e2,2,"TO")
 	c:RegisterEffect(e2)
 
