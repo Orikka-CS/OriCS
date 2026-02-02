@@ -1,4 +1,4 @@
---다운폴루스턴 스파셀리
+--폴루스턴 헤이즈 스파셀리
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

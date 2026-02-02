@@ -1,4 +1,4 @@
---글리테일모어 브륄레
+--테일모어 파티시에르 브륄레
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

@@ -1,4 +1,4 @@
---언엔달 위치 체사레
+--언엔달 체사레
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---글리테일모어 서비드
+--테일모어 로티쇠르 서비드
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

@@ -1,4 +1,4 @@
---나우프라테 컨서베이터 바사
+--나우프라테 컨서베이터 드미트리
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

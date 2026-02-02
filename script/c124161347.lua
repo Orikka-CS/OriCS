@@ -1,4 +1,4 @@
---다운폴루스턴 애시데인
+--폴루스턴 몬순 애시데인
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

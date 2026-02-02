@@ -1,4 +1,4 @@
---나우프라테 디자이너 케이트
+--나우프라테 디자이너 마리아
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

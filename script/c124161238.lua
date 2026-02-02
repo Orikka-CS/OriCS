@@ -1,4 +1,4 @@
---글리테일모어 구르멜리아
+--테일모어 구르메 카라멜리아
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

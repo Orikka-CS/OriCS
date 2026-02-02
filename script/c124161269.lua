@@ -1,4 +1,4 @@
---메가히트 디바 원더플람
+--오메가히트 디바 원더플람
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

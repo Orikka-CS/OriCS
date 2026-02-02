@@ -1,4 +1,4 @@
---메가히트 셀리스티 안젤리카
+--오메가히트 셀리스티 안젤리카
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

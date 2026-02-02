@@ -1,4 +1,4 @@
---다운폴루스턴 헤모이그
+--폴루스턴 스코쳐 헤모이그
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

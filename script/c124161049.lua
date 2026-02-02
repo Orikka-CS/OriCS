@@ -1,4 +1,4 @@
---언엔달 로크 칸토어
+--언엔달 칸토어
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

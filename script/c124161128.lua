@@ -1,4 +1,4 @@
---나우프라테 도슨트 드미트리
+--나우프라테 도슨트
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

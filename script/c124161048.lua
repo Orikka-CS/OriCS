@@ -1,4 +1,4 @@
---언엔달 엠버 피닉스
+--언엔달 피닉스
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

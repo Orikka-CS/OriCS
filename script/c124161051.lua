@@ -1,4 +1,4 @@
---언엔달 홀더 힐베르트
+--언엔달 힐버트
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

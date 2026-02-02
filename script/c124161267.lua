@@ -1,4 +1,4 @@
---메가히트 소울 깁스넬
+--오메가히트 소울 깁스넬
 local s,id=GetID()
 function s.initial_effect(c)
 	--link

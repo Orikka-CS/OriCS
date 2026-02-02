@@ -1,4 +1,4 @@
---나우프라테 큐레이터 마리아
+--나우프라테 큐레이터
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
