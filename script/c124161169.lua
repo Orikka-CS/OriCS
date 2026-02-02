@@ -28,7 +28,7 @@ end
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	return Duel.IsChainNegatable(ev) and rp==1-tp and and rc:IsAbleToChangeControler() and not rc:IsType(TYPE_TOKEN)
+	return Duel.IsChainNegatable(ev) and rp==1-tp and rc:IsAbleToChangeControler() and not rc:IsType(TYPE_TOKEN)
 end
 
 function s.tg1filter(c)
