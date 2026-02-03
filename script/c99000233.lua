@@ -25,6 +25,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.thop2)
 	c:RegisterEffect(e2)
 end
+s.listed_series={0xc17}
 function s.ordfil1(c)
 	return c:IsSummonLocation(LOCATION_HAND) and (c:IsSummonType(SUMMON_TYPE_NORMAL) or c:IsSummonType(SUMMON_TYPE_SPECIAL))
 end

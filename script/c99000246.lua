@@ -25,6 +25,7 @@ function s.initial_effect(c)
 	e2:SetValue(aux.tgoval)
 	c:RegisterEffect(e2)
 end
+s.listed_series={0xc18}
 function s.ordfil1(c)
 	return c:IsSummonLocation(LOCATION_DECK|LOCATION_EXTRA) and c:IsSummonType(SUMMON_TYPE_SPECIAL)
 end
