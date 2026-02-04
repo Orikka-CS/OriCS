@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.repop)
 	c:RegisterEffect(e2)
 end
-s.listed_series={0xc18}
+s.listed_series={0xc18,0xc17}
 function s.filter(c)
 	return c:IsRace(RACE_MACHINE) and c:GetLevel()==4 and c:IsAbleToHand()
 end

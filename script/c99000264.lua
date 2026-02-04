@@ -135,8 +135,11 @@ function s.effop(e,tp,eg,ep,ev,re,r,rp)
 		--자신은 2장 드로우한다. 그 후, 자신의 패를 1장 고르고 묘지로 보낸다.
 		if Duel.Draw(p,op,REASON_EFFECT)==2 then
 			Duel.ShuffleHand(p)
-			Duel.BreakEffect()
-			Duel.DiscardHand(p,nil,1,1,REASON_EFFECT|REASON_DISCARD)
+			local hg=Duel.SelectMatchingCard(tp,Card.IsAbleToGrave,tp,LOCATION_HAND,0,1,1,nil)
+			if #hg>0 then
+				Duel.BreakEffect()
+				Duel.SendtoGrave(hg,REASON_EFFECT)
+			end
 		end
 	end
 end
