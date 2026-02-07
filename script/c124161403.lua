@@ -66,7 +66,7 @@ end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_MZONE,0,nil)
-	return rp==1-tp and re:IsActiveType(TYPE_SPELL+TYPE_TRAP) and g>0 and Duel.IsChainDisablable(ev)
+	return rp==1-tp and g>0 and Duel.IsChainDisablable(ev) and re:IsActiveType(TYPE_MONSTER)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

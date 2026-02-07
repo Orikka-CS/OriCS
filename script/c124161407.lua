@@ -18,13 +18,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_CANNOT_DISEFFECT)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetTarget(s.tg2)
-	e2:SetOperation(s.op2)
+	e2:SetValue(s.val2)
 	c:RegisterEffect(e2)
 end
 
@@ -46,14 +43,14 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.cst1filter(c)
-	return c:IsSetCard(0xf3a) and c:IsFaceup() and c:IsAbleToDeckAsCost()
+	return c:IsSetCard(0xf3a) and c:IsAbleToRemoveAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_REMOVED,0,nil)
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_GRAVE,0,nil)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
-	Duel.SendtoDeck(sg,nil,SEQ_DECKBOTTOM,REASON_COST)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -79,22 +76,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.tg2filter(c,e)
-	return c:IsType(TYPE_EFFECT) and c:IsFaceup() and c:IsAbleToHand() and c:IsCanBeEffectTarget(e) and not c:IsType(TYPE_EXTRA)
-end
-
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and s.tg2filter(chkc,e) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,LOCATION_REMOVED,nil,e)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
-end
-
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e):GetFirst()
-	if tg then
-		Duel.SendtoHand(tg,tp,REASON_EFFECT)
-	end
+function s.val2(e,ct)
+	local trig_e,trig_p,trig_loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
+	if not trig_p==e:GetHandlerPlayer() then return false end
+	local trig_c=trig_e:GetHandler()
+	return  trig_c:IsSetCard(0xf3a) and trig_e:IsActiveType(TYPE_MONSTER)
 end

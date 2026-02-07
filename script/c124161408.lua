@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetCode(EVENT_REMOVE)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
@@ -47,11 +47,11 @@ end
 
 --effect 1
 function s.cst1filter(c)
-	return c:IsSetCard(0xf3a) and c:IsAbleToRemoveAsCost()
+	return c:IsSetCard(0xf3a) and c:IsMonster() and not c:IsType(TYPE_FUSION) and c:IsAbleToRemoveAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_GRAVE,0,nil)
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_HAND+LOCATION_MZONE+LOCATION_GRAVE,0,nil)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.Remove(sg,POS_FACEUP,REASON_COST)
@@ -77,8 +77,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.con2filter(c)
+	return c:IsType(TYPE_EFFECT) and c:IsFaceup()
+end
+
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return not eg:IsContains(e:GetHandler())
+	return eg:FilterCount(s.con2filter,nil)>0
 end
 
 function s.tg2filter(c,e,tp)

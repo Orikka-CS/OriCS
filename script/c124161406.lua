@@ -50,7 +50,7 @@ end
 
 --effect 1
 function s.con1filter(c,tp)
-	return c:IsControler(1-tp) and c:IsSummonLocation(LOCATION_EXTRA)
+	return c:IsControler(1-tp)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
