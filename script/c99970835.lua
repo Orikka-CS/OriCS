@@ -20,7 +20,7 @@ function s.initial_effect(c)
 	e3:SetRange(LOCATION_SZONE)
 	e3:SetTargetRange(LOCATION_MZONE,0)
 	e3:SetTarget(function(_,c) return c:IsSetCard(0x5d6e) and c:GetOverlayCount()==0 end)
-	e3:SetValue(function(e,te) return te:GetOwnerPlayer()==1-e:GetHandlerPlayer() and te:IsMonsterEffect() and not te:IsSummonLocation(LOCATION_EXTRA) end)
+	e3:SetValue(function(e,te) return te:IsMonsterEffect() and not te:IsSummonLocation(LOCATION_EXTRA) end)
 	c:RegisterEffect(e3)
 	
 end
