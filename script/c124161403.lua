@@ -32,30 +32,50 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return rp==tp and re:GetHandler():IsSetCard(0xf3a)
 end
 
-function s.tg1filter1(c,e)
-	return c:IsSetCard(0xf3a) and c:IsCanBeEffectTarget(e)
-end
-
-function s.tg1filter2(c,e)
-	return c:IsCanBeEffectTarget(e)
+function s.tg1filter(c,e)
+	return c:IsFaceup() and c:IsType(TYPE_EFFECT) and c:IsCanBeEffectTarget(e)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return false end
-	local g1=Duel.GetMatchingGroup(s.tg1filter1,tp,LOCATION_ONFIELD,0,nil,e)
-	local g2=Duel.GetMatchingGroup(s.tg1filter2,tp,0,LOCATION_ONFIELD,nil,e)
-	if chk==0 then return #g1>0 and #g2>0 end
-	local sg1=aux.SelectUnselectGroup(g1,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
-	local sg2=aux.SelectUnselectGroup(g2,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
-	sg1:Merge(sg2)
-	Duel.SetTargetCard(sg1)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,sg1,2,0,0)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,c,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e)
-	if #tg>0 then
-		Duel.Destroy(tg,REASON_EFFECT)
+	local c=e:GetHandler()
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if c:IsRelateToEffect(e) and Duel.Destroy(c,REASON_EFFECT)>0 and tg and tg:IsFaceup() then
+		local c=e:GetHandler()
+		local e1=Effect.CreateEffect(c)
+		e1:SetCategory(CATEGORY_DESTROY)
+		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
+		e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+		e1:SetRange(LOCATION_MZONE)
+		e1:SetCondition(s.op1con)
+		e1:SetTarget(s.op1tg)
+		e1:SetOperation(s.op1op)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		tg:RegisterEffect(e1,true)
+	end
+end
+
+function s.op1con(e,tp,eg,ep,ev,re,r,rp)
+	return not eg:IsContains(e:GetHandler()) and eg:FilterCount(Card.IsControler,nil,tp)
+end
+
+function s.op1tg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,e:GetHandler(),1,0,0)
+end
+
+function s.op1op(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_MZONE,0,nil)
+	if #g>0 then
+		Duel.Destroy(g,REASON_EFFECT)
 	end
 end
 
@@ -66,7 +86,7 @@ end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_MZONE,0,nil)
-	return rp==1-tp and g>0 and Duel.IsChainDisablable(ev) and re:IsActiveType(TYPE_MONSTER)
+	return rp==1-tp and g>0 and Duel.IsChainDisablable(ev) and re:IsActiveType(TYPE_SPELL+TYPE_TRAP)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

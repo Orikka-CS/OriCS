@@ -3,10 +3,10 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DISABLE)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetRange(LOCATION_HAND)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
 	e1:SetCountLimit(1,id)
 	e1:SetCondition(s.con1)
 	e1:SetCost(Cost.SelfBanish)
@@ -29,20 +29,49 @@ end
 
 --effect 1
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local ch=ev-1
-	if ch==0 or not (ep==1-tp and Duel.IsChainDisablable(ev)) or re:GetHandler():IsDisabled() then return false end
-	local ch_player,ch_eff=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_EFFECT)
-	local ch_c=ch_eff:GetHandler()
-	return ch_player==tp and (ch_c:IsSetCard(0xf3a) and ch_eff:IsHasCategory(CATEGORY_SPECIAL_SUMMON))
+	return re:IsActiveType(TYPE_MONSTER)
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.tg1filter(c,e)
+	return c:IsFaceup() and c:IsType(TYPE_EFFECT) and c:IsCanBeEffectTarget(e)
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and s.tg1filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,0,LOCATION_MZONE,nil,e)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TARGET)
+	Duel.SetTargetCard(sg)
+end
+
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg and tg:IsFaceup() then
+		local c=e:GetHandler()
+		local e1=Effect.CreateEffect(c)
+		e1:SetCategory(CATEGORY_DRAW)
+		e1:SetType(EFFECT_TYPE_QUICK_F)
+		e1:SetCode(EVENT_CHAINING)
+		e1:SetRange(LOCATION_MZONE)
+		e1:SetCondition(s.op1con)
+		e1:SetTarget(s.op1tg)
+		e1:SetOperation(s.op1op)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		tg:RegisterEffect(e1,true)
+	end
+end
+
+function s.op1con(e,tp,eg,ep,ev,re,r,rp)
+	return rp==1-tp and re:IsActiveType(TYPE_SPELL) and re:GetHandler():IsSetCard(0xf3a) and re:IsHasType(EFFECT_TYPE_ACTIVATE)
+end
+
+function s.op1tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_DISABLE,eg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,1-tp,1)
 end
 
-function s.op1(e,tp,eg,ep,ev,re,r,rp) 
-	Duel.NegateEffect(ev)
+function s.op1op(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Draw(1-tp,1,REASON_EFFECT)
 end
 
 --effect 2
