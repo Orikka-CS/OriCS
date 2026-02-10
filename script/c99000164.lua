@@ -62,5 +62,5 @@ function cm.ctop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.incon(e)
-	return Duel.GetCounter(e:GetHandlerPlayer(),1,1,0x1015)>=4
+	return Duel.GetCounter(e:GetHandlerPlayer(),1,1,0x1015)>=3
 end

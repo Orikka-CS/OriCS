@@ -18,10 +18,14 @@ function cm.initial_effect(c)
 	e3:SetOperation(cm.efop)
 	c:RegisterEffect(e3)
 end
+function cm.cfilter(c)
+	return c:IsFaceup() and c:GetCounter(0x1015)>0
+end
 function cm.spcon(e,c)
 	if c==nil then return true end
-	return Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0 and
-		Duel.GetCounter(e:GetHandlerPlayer(),1,1,0x1015)>=2
+	local tp=c:GetControler()
+	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(cm.cfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil)
 end
 function cm.efcon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(r,REASON_FUSION+REASON_SYNCHRO+REASON_XYZ+REASON_LINK)~=0 and
