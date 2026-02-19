@@ -97,7 +97,7 @@ function s.con2filter(c)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return rp==1-tp and not re:GetHandler():IsType(TYPE_TUNER) and Duel.IsChainNegatable(ev) and Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)>0
+	return rp==1-tp and Duel.IsChainNegatable(ev) and Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)>0
 end
 
 function s.tg2filter(c)
@@ -111,6 +111,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if rc:IsRelateToEffect(re) then
 		Duel.SetOperationInfo(0,CATEGORY_REMOVE,eg,1,0,0)
 	end
+	Duel.SetChainLimit(function(e,ep,tp) return ep==tp or not (e:IsActiveType(TYPE_MONSTER) and e:GetHandler():IsType(TYPE_TUNER)) end)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)

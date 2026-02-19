@@ -31,23 +31,36 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1filter(c)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
+end
+
+function s.op1filter(c)
 	return c:IsSetCard(0xf39) and c:IsAbleToGrave()
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,e:GetHandler())
-	if chk==0 then return #g>0 and Duel.IsPlayerCanDraw(tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
-end
-
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_HAND,0,e:GetHandler())
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,#g,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-		local ct=Duel.SendtoGrave(sg,REASON_EFFECT)
-		Duel.Draw(tp,ct+1,REASON_EFFECT)
+	local c=e:GetHandler()
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
+	e1:SetTargetRange(LOCATION_ONFIELD,0)
+	e1:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xf39))
+	e1:SetValue(1)
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	Duel.RegisterEffect(e1,tp)
+	local e2=e1:Clone()
+	e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+	Duel.RegisterEffect(e2,tp)
+	local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND,0,nil)
+	if #g>0 and Duel.IsPlayerCanDraw(tp,2) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		Duel.BreakEffect()
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+		if Duel.SendtoGrave(sg,REASON_EFFECT)>0 then
+			Duel.Draw(tp,2,REASON_EFFECT)
+		end
 	end
 end
 

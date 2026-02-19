@@ -15,7 +15,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TOGRAVE)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
@@ -72,7 +72,6 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 
 function s.op2filter(c)
@@ -84,14 +83,16 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
-		Duel.ShuffleDeck(tp)
+		Duel.ConfirmCards(1-tp,sg)	 
 		local ct=Duel.GetMatchingGroupCount(s.op2filter,tp,LOCATION_MZONE,0,nil)
-		if ct>0 and Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		local hg=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
+		if ct>0 and #hg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
-			Duel.DisableShuffleCheck()
-			local g=Duel.GetDecktopGroup(tp,ct)
-			Duel.SendtoGrave(g,REASON_EFFECT)
+			local ct=math.min(ct,#hg)
+			local ac=Duel.AnnounceNumberRange(tp,1,ct)
+			local hsg=hg:RandomSelect(tp,ac)
+			Duel.ConfirmCards(tp,hsg)
+			Duel.ShuffleHand(1-tp)
 		end
 	end
 end

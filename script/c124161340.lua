@@ -8,7 +8,6 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -37,15 +36,6 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.con1filter(c)
-	return c:IsFaceup() and not c:IsSetCard(0xf36)
-end
-
-function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con1filter,tp,LOCATION_MZONE,0,nil)
-	return g==0
-end
-
 function s.tg1ffilter(c,e,tp,cd)
 	return c:IsSetCard(0xf36) and not c:IsCode(cd) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end

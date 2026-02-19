@@ -53,6 +53,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local e1=Effect.CreateEffect(c)
 		e1:SetCategory(CATEGORY_DESTROY)
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
+		e1:SetProperty(EFFECT_FLAG_DELAY)
 		e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 		e1:SetRange(LOCATION_MZONE)
 		e1:SetCondition(s.op1con)
@@ -63,8 +64,12 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
+function s.op1confilter(c,tp)
+	return c:IsControler(1-tp) and c:IsSetCard(0xf3a) and c:IsFaceup()
+end
+
 function s.op1con(e,tp,eg,ep,ev,re,r,rp)
-	return not eg:IsContains(e:GetHandler()) and eg:FilterCount(Card.IsControler,nil,tp)
+	return not eg:IsContains(e:GetHandler()) and eg:FilterCount(s.op1confilter,nil,tp)
 end
 
 function s.op1tg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -73,9 +78,10 @@ function s.op1tg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1op(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_MZONE,0,nil)
+	local g=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_MZONE,0,e:GetHandler())
 	if #g>0 then
-		Duel.Destroy(g,REASON_EFFECT)
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESTROY)
+		Duel.Destroy(sg,REASON_EFFECT)
 	end
 end
 

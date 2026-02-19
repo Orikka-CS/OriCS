@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetCost(Cost.PayLP(500))
+	e1:SetCost(s.cst1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -25,6 +25,18 @@ function s.initial_effect(c)
 end
 
 --effect 1
+function s.cst1filter(c)
+	return c:IsSetCard(0xf33) and c:IsType(TYPE_SYNCHRO) and c:IsFacedown()
+end
+
+function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.cst1filter,tp,LOCATION_EXTRA,0,nil)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_CONFIRM)
+	Duel.ConfirmCards(1-tp,sg)
+	Duel.ShuffleExtra(tp)
+end
+
 function s.tg1filter(c,e,tp)
 	if not (c:IsType(TYPE_EQUIP) and c:CheckEquipTarget(e:GetHandler()) and c:CheckUniqueOnField(tp)) then return false end
 	local effs={c:GetOwnEffects()}
