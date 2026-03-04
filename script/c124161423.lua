@@ -79,7 +79,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			local rc=re:GetHandler()
 			if ep==tp and rc:IsSetCard(0xf3b) then
 				local ty=rc:GetType() & (TYPE_MONSTER|TYPE_SPELL|TYPE_TRAP)
-				local rg=Duel.GetMatchingGroup(s.op1rmfilter,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil,ty)		   
+				local rg=Duel.GetMatchingGroup(s.op1rmfilter,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil,ty)		  
 				if #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 					Duel.BreakEffect()
 					Duel.Remove(rg,POS_FACEUP,REASON_EFFECT)
@@ -95,7 +95,7 @@ function s.con2filter(c)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_GRAVE,0,nil)
+	local g=Duel.GetMatchingGroupCount(s.con2filter,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil)
 	return g>0
 end
 
