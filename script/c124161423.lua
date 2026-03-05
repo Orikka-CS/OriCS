@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	--link
 	c:EnableReviveLimit()
-	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xf3b),2,4)
+	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_LINK),2,nil,s.linkfilter)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_REMOVE)
@@ -29,6 +29,11 @@ function s.initial_effect(c)
 	local e3=e2:Clone()
 	e3:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 	c:RegisterEffect(e3)
+end
+
+--link
+function s.linkfilter(g,lnkc,sumtype,sp)
+	return g:IsExists(Card.IsSetCard,1,nil,0xf3b,lnkc,sumtype,sp)
 end
 
 --effect 1
@@ -79,7 +84,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			local rc=re:GetHandler()
 			if ep==tp and rc:IsSetCard(0xf3b) then
 				local ty=rc:GetType() & (TYPE_MONSTER|TYPE_SPELL|TYPE_TRAP)
-				local rg=Duel.GetMatchingGroup(s.op1rmfilter,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil,ty)		  
+				local rg=Duel.GetMatchingGroup(s.op1rmfilter,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil,ty)		 
 				if #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 					Duel.BreakEffect()
 					Duel.Remove(rg,POS_FACEUP,REASON_EFFECT)
