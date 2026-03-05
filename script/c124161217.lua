@@ -1,4 +1,4 @@
---란샤르드 티슬
+--란샤르드 티스틀
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

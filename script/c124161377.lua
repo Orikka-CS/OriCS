@@ -1,4 +1,4 @@
---이브닝 스큐드라스 리코리스
+--이브닝 스큐드라스 에노세라
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

@@ -1,4 +1,4 @@
---란샤르드 로제
+--란샤르드 로자세
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

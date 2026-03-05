@@ -1,4 +1,4 @@
---스노위퍼 바실리
+--스노위퍼 자체프
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

@@ -1,4 +1,4 @@
---칵테일 스큐드라스 피오니
+--칵테일 스큐드라스 비올라
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz

@@ -1,4 +1,4 @@
---콘트라기온 폴리오
+--콘트라기온 미엘리
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1
