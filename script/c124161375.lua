@@ -43,7 +43,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return #g>0 end
 	local ct=1
 	if c:IsSummonLocation(LOCATION_OVERLAY) then
-		ct=c:GetOverlayCount()+1
+		ct=c:GetOverlayGroup():FilterCount(Card.IsSetCard,nil,0xf38)+1
 	end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_POSCHANGE)
 	Duel.SetTargetCard(sg)

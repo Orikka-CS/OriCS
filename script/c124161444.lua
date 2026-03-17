@@ -19,7 +19,7 @@ function s.initial_effect(c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_CHAINING)
 	e2:SetRange(LOCATION_SZONE)
@@ -79,29 +79,21 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsOnField()
+	return rp==1-tp and re:IsActiveType(TYPE_MONSTER) and re:GetActivateLocation()==LOCATION_MZONE
 end
 
 function s.tg2filter(c,e)
-	return c:IsFaceup() and c:IsAbleToDeck() and c:IsCanBeEffectTarget(e)
-end
-
-function s.tg2reqfilter(c,tp)
-	return c:IsSetCard(0xf3c) and c:IsControler(tp)
-end
-
-function s.tg2rescon(sg,e,tp,mg)
-	return sg:IsExists(s.tg2reqfilter,1,nil,tp)
+	return c:IsSetCard(0xf3c) and c:IsCanBeEffectTarget(e) and c:IsAbleToDeck() and c:IsFaceup()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return false end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,LOCATION_GRAVE+LOCATION_REMOVED,nil,e)
-	if chk==0 then return #g>2 and g:IsExists(s.tg2reqfilter,1,nil,tp) and Duel.IsPlayerCanDraw(tp,1) end
-	local sg=aux.SelectUnselectGroup(g,e,tp,3,3,s.tg2rescon,1,tp,HINTMSG_TODECK)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e)
+	if chk==0 then return #g>2 and Duel.IsPlayerCanDraw(tp,2) end
+	local sg=aux.SelectUnselectGroup(g,e,tp,3,3,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,#sg,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
@@ -109,6 +101,6 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #tg>0 then
 		Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 		Duel.ShuffleDeck(tp)
-		Duel.Draw(tp,1,REASON_EFFECT)
+		Duel.Draw(tp,2,REASON_EFFECT)
 	end
 end

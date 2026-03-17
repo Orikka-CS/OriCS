@@ -37,8 +37,12 @@ function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return re:GetHandler()~=e:GetHandler()
 end
 
+function s.tg1filter(c)
+	return c:IsFaceup() and c:IsSetCard(0xf35)
+end
+
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetFieldGroup(tp,LOCATION_MMZONE,0)
+	local g=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_MMZONE,0,nil)
 	if chk==0 then return aux.SelectUnselectGroup(g,e,tp,2,2,aux.TRUE,0) end
 end
 
@@ -47,7 +51,7 @@ function s.op1filter(c)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetFieldGroup(tp,LOCATION_MMZONE,0)
+	local g=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_MMZONE,0,nil)
 	if #g==0 then return end
 	local swap_g=aux.SelectUnselectGroup(g,e,tp,2,2,aux.TRUE,1,tp,HINTMSG_TOZONE)
 	if #swap_g~=2 then return end

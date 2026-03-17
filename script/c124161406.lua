@@ -77,42 +77,34 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
+function s.con2cfilter(c)
+	return c:IsSetCard(0xf3a) and c:IsFaceup()
+end
+
 function s.con2filter(c,tp)
-	return c:IsControler(1-tp)
+	return c:IsControler(tp)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:FilterCount(s.con2filter,nil,tp)>0
+	local g=Duel.GetMatchingGroupCount(s.con2cfilter,tp,LOCATION_REMOVED,0,nil)
+	return g>0 and eg:FilterCount(s.con2filter,nil,1-tp)>0
 end
 
 function s.tg2filter(c,e)
 	return c:IsAbleToRemove() and c:IsCanBeEffectTarget(e)
 end
 
-function s.tg2cfilter(c,e)
-	return c:IsAbleToRemove() and c:IsCanBeEffectTarget(e) and c:IsSetCard(0xf3a)
-end
-
-function s.tg2confilter(c,tp)
-	return c:IsSetCard(0xf3a) and c:IsControler(tp) 
-end
-
-function s.tg2con(sg,e,tp,mg)
-	return sg:IsExists(s.tg2confilter,1,nil,tp)
-end
-
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and s.tg2filter(chkc,e) end
-	local ct=Duel.GetMatchingGroupCount(s.tg2cfilter,tp,LOCATION_GRAVE,0,nil,e)
-	if chk==0 then return ct>0 end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,LOCATION_GRAVE,nil,e)
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,3,s.tg2con,1,tp,HINTMSG_REMOVE)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,3,aux.TRUE,1,tp,HINTMSG_REMOVE)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,sg,#sg,0,0)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e) --
+	local tg=Duel.GetTargetCards(e)
 	if #tg>0 then
 		Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)
 	end
