@@ -76,14 +76,14 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)	
+		Duel.ConfirmCards(1-tp,sg)  
 		local mg=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 		if #mg==0 then return end
 		local _,max=mg:GetMaxGroup(Card.GetAttack)
 		local _,min=mg:GetMinGroup(Card.GetAttack)
 		local diff=max-min
 		local rg=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
-		if diff>=c:GetBaseAttack() and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if diff>=c:GetBaseAttack() and #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
 			Duel.BreakEffect()
 			local rsg=rg:RandomSelect(tp,1)
 			aux.RemoveUntil(rsg,POS_FACEUP,REASON_EFFECT,PHASE_END,id,e,tp,function(rg) Duel.SendtoHand(rg,nil,REASON_EFFECT) end)
