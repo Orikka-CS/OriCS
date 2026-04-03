@@ -34,7 +34,7 @@ function s.chlimit(e,ep,tp)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 end
 	Duel.SetChainLimit(s.chlimit)
 end
 

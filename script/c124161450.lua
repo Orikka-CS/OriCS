@@ -58,7 +58,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCode(EFFECT_CHANGE_TYPE)
 		e1:SetValue(TYPE_SPELL+TYPE_CONTINUOUS)
 		e1:SetReset(RESET_EVENT|(RESETS_STANDARD&~RESET_TURN_SET))
-		tg:RegisterEffect(e1)	
+		tg:RegisterEffect(e1)   
 		local mg=tg:GetMaterial()
 		local ct=#mg
 		local sumtype=tg:GetSummonType()
@@ -98,7 +98,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_POSCHANGE):GetFirst()
 		local pos=Duel.SelectPosition(tp,sg,POS_DEFENSE)
 		if Duel.ChangePosition(sg,pos)>0 then
-			if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 				Duel.BreakEffect()
 				Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 			end
