@@ -43,7 +43,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return #g>0 end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE):GetFirst()
 	local te,ceg,cep,cev,cre,cr,crp=sg:CheckActivateEffect(false,true,true)
-	Duel.SendtoGrave(sg,REASON_EFFECT)
+	Duel.SendtoGrave(sg,REASON_COST)
 	e:SetProperty(te:GetProperty())
 	local ta=te:GetTarget()
 	if ta then ta(e,tp,ceg,cep,cev,cre,cr,crp,1) end
@@ -58,18 +58,6 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	e:SetLabelObject(te:GetLabelObject())
 	local op=te:GetOperation()
 	if op then op(e,tp,eg,ep,ev,re,r,rp) end
-end
-
-function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local te=e:GetLabelObject()
-	if te then
-		e:SetLabel(te:GetLabel())
-		e:SetLabelObject(te:GetLabelObject())
-		local op=te:GetOperation()
-		if op then op(e,tp,eg,ep,ev,re,r,rp) end
-		te:SetLabel(e:GetLabel())
-		te:SetLabelObject(e:GetLabelObject())
-	end
 end
 
 --effect 2
