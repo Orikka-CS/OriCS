@@ -43,10 +43,9 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tc=e:GetLabelObject()
-	Duel.SetLP(tp,Duel.GetLP(tp)-1000)
-	if tc and tc:IsLocation(LOCATION_GRAVE) then
-		Duel.SendtoDeck(tc,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+	local tg=e:GetLabelObject()
+	if tg and tg:IsLocation(LOCATION_GRAVE) then
+		Duel.SendtoDeck(tg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
 end
 

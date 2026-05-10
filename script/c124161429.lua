@@ -17,17 +17,6 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	--effect 2
-	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_RECOVER)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(Cost.SelfBanish)
-	e2:SetTarget(s.tg2)
-	e2:SetOperation(s.op2)
-	c:RegisterEffect(e2)
 end
 
 --activate
@@ -75,23 +64,5 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	end
 	if #dg>0 then
 		Duel.Destroy(dg,REASON_EFFECT)
-	end
-end
-
---effect 2
-function s.tg2ctfilter(c)
-	return c:IsCode(124161426) and c:IsFaceup()
-end
-
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetMatchingGroupCount(s.tg2ctfilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)>0 end
-	local ct=Duel.GetMatchingGroupCount(s.tg2ctfilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)
-	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,ct*1500)
-end
-
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local ct=Duel.GetMatchingGroupCount(s.tg2ctfilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)
-	if ct>0 then
-		Duel.Recover(tp,ct*1500,REASON_EFFECT)
 	end
 end

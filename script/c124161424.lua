@@ -20,10 +20,10 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOGRAVE)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_TODECK)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_CHAIN_NEGATED)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetCountLimit(1,id)
 	e2:SetCondition(s.con2)
@@ -67,29 +67,34 @@ function s.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.tg2mfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xf3b) and not c:IsType(TYPE_FIELD) and c:IsAbleToGrave()
+function s.con2filter(c,tp)
+	return c:IsControler(tp) and c:IsSetCard(0xf3b) and not c:IsType(TYPE_FIELD) and not c:IsPreviousLocation(LOCATION_ONFIELD) and c:IsAbleToHand()
 end
 
-function s.tg2ofilter(c)
-	return c:IsAbleToGrave()
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:FilterCount(s.con2filter,nil,tp)>0
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local mg=Duel.GetMatchingGroup(s.tg2mfilter,tp,LOCATION_ONFIELD,0,nil)
-	local og=Duel.GetMatchingGroup(s.tg2ofilter,tp,0,LOCATION_ONFIELD,nil)
-	if chk==0 then return #mg>0 and #og>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,2,PLAYER_ALL,LOCATION_ONFIELD)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return eg:IsContains(chkc) and s.con2filter(chkc,tp) end
+	local g=eg:Filter(s.con2filter,nil,tp)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,1-tp,LOCATION_GRAVE)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local mg=Duel.GetMatchingGroup(s.tg2mfilter,tp,LOCATION_ONFIELD,0,nil)
-	local og=Duel.GetMatchingGroup(s.tg2ofilter,tp,0,LOCATION_ONFIELD,nil)
-	if #mg>0 and #og>0 then
-		local msg=aux.SelectUnselectGroup(mg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-		local osg=aux.SelectUnselectGroup(og,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-		msg:Merge(osg)
-		Duel.SendtoGrave(msg,REASON_EFFECT)
+	local tg=Duel.GetFirstTarget()
+	if tg:IsRelateToEffect(e) and Duel.SendtoHand(tg,nil,REASON_EFFECT)>0 then
+		Duel.ConfirmCards(1-tp,tg)
+		local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_GRAVE,nil)
+		if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+			Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+		end
 	end
 end
 

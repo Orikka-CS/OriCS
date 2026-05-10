@@ -96,7 +96,7 @@ function s.op2(e,tp)
 		elseif seq==6 then op_seq=1
 		end
 		if op_seq then
-			zone=zone|(1<<(16+8+op_seq))
+			zone=zone|(1<<(16+op_seq))
 		end
 	end
 	return zone

@@ -99,6 +99,6 @@ function s.op2filter(c)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local dmg=(Duel.GetMatchingGroupCount(s.op2filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)+1)*300
+	local dmg=(Duel.GetMatchingGroupCount(s.op2filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil)+1)*500
 	Duel.Damage(1-tp,dmg,REASON_EFFECT)
 end

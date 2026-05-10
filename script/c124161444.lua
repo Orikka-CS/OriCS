@@ -32,7 +32,7 @@ end
 
 --effect 1
 function s.cst1filter(c)
-	return c:IsSetCard(0xf3c) and c:IsType(TYPE_FUSION) and c:IsReleasable()
+	return c:IsSetCard(0xf3c) and c:IsReleasable()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
