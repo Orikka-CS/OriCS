@@ -33,7 +33,7 @@ function s.tg1cfilter(c)
 end
 
 function s.tg1filter(c,e)
-	return c:IsFaceup() and c:IsCanBeEffectTarget(e)
+	return c:IsFaceup() and c:IsCanBeEffectTarget(e) and c:IsNegatable()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

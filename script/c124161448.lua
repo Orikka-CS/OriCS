@@ -75,7 +75,7 @@ end
 function s.tg2filter(c,e,tp)
 	local cg=c:GetColumnGroup()
 	cg:AddCard(c)
-	return c:IsFaceup() and c:IsCanBeEffectTarget(e) and cg:IsExists(s.tg2ffilter,1,nil,tp)
+	return c:IsFaceup() and c:IsCanBeEffectTarget(e) and cg:IsExists(s.tg2ffilter,1,nil,tp) and c:IsNegatable()
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
