@@ -1,6 +1,10 @@
 --충격과 공포의 붉은 실
 local s,id=GetID()
 function s.initial_effect(c)
+	local e2=Fusion.CreateSummonEff(c,aux.FilterBoolFunction(Card.IsSetCard,0xc00))
+	e2:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
+	e2:SetCost(s.cost1)
+	c:RegisterEffect(e2)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -11,18 +15,6 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tar1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_ACTIVATE)
-	e2:SetCode(EVENT_CHAINING)	
-	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
-	e2:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
-	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
-	e2:SetCondition(s.con2)
-	e2:SetCost(s.cost1)
-	e2:SetTarget(s.tar2)
-	e2:SetOperation(s.op2)
-	c:RegisterEffect(e2)
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,0))
 	e3:SetType(EFFECT_TYPE_SINGLE)
@@ -86,42 +78,4 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.oval11(e,re)
 	return e:GetOwnerPlayer()~=re:GetOwnerPlayer()
-end
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local rc=re:GetHandler()
-	return ep~=tp and re:IsActiveType(TYPE_MONSTER) and rc:IsAttribute(ATTRIBUTE_EARTH+ATTRIBUTE_LIGHT+ATTRIBUTE_WIND)
-		and Duel.IsChainNegatable(ev)
-end
-function s.tar2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then
-		return true
-	end
-	local act_from_hand_chk=e:IsHasType(EFFECT_TYPE_ACTIVATE) and c:IsStatus(STATUS_ACT_FROM_HAND) and 1 or 0
-	e:SetLabel(act_from_hand_chk)
-	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
-	local rc=re:GetHandler()
-	if rc:IsDestructable() and rc:IsRelateToEffect(re) then
-		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
-	end
-end
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local rc=re:GetHandler()
-	if Duel.NegateActivation(ev) and rc:IsRelateToEffect(re) then
-		Duel.Destroy(eg,REASON_EFFECT)
-	end
-	if e:IsHasType(EFFECT_TYPE_ACTIVATE) and e:GetLabel()==1 then
-		local e1=Effect.CreateEffect(c)
-		e1:SetDescription(aux.Stringid(id,2))
-		e1:SetType(EFFECT_TYPE_FIELD)
-		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
-		e1:SetCode(EFFECT_CANNOT_ACTIVATE)
-		e1:SetTargetRange(1,0)
-		e1:SetValue(function(_,re)
-			local rc=re:GetHandler()
-			return re:IsMonsterEffect() and rc:IsAttribute(ATTRIBUTE_LIGHT|ATTRIBUTE_EARTH|ATTRIBUTE_WIND)
-		end)
-		Duel.RegisterEffect(e1,tp)
-	end
 end
