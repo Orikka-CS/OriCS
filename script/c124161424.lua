@@ -68,7 +68,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsControler(tp) and c:IsSetCard(0xf3b) and not c:IsType(TYPE_FIELD) and not c:IsPreviousLocation(LOCATION_ONFIELD) and c:IsAbleToHand()
+	return c:IsControler(tp) and c:IsSetCard(0xf3b) and not c:IsType(TYPE_FIELD) and c:IsLocation(LOCATION_GRAVE) and not c:IsPreviousLocation(LOCATION_ONFIELD) and c:IsAbleToHand()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
