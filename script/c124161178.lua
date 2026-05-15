@@ -1,4 +1,4 @@
---백연초의 역마 시가렛
+--백연초의 유마 시가렛
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion
