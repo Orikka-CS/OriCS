@@ -38,28 +38,34 @@ end
 
 --effect 1
 function s.tg1filter(c)
-	return c:IsAbleToHand() and c:IsSetCard(0xf26) and c:IsSpell()
+	return c:IsSetCard(0xf26) and c:IsSpell() and c:IsAbleToHand()
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,e:GetHandler(),1,tp,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND)
+end
+
+function s.op1filter(c)
+	return c:IsSetCard(0xf26) and c:IsAbleToGrave()
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
-		if c:IsRelateToEffect(e) then
+		Duel.ShuffleHand(tp)
+		local dg=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,nil)
+		if #dg>0 then
 			Duel.BreakEffect()
-			Duel.SendtoGrave(c,REASON_EFFECT)
+			local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
+			Duel.SendtoGrave(dsg,REASON_EFFECT)
 		end
-	end 
+	end
 end
 
 --effect 2

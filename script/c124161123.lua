@@ -40,6 +40,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,sg,#sg,0,0)
 	if e:GetHandler():IsPreviousLocation(LOCATION_REMOVED) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
 		e:SetLabel(1)
+		Duel.SetPossibleOperationInfo(0,CATEGORY_REMOVE,sg,#sg,0,LOCATION_GRAVE)
 	else
 		e:SetLabel(0)
 	end
@@ -48,10 +49,12 @@ end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e)
 	if #tg>0 then
-		if e:GetLabel()==0 then
-			Duel.Destroy(tg,REASON_EFFECT)
-		else
-			Duel.Destroy(tg,REASON_EFFECT,LOCATION_REMOVED)
+		local ct=Duel.Destroy(tg,REASON_EFFECT)
+		local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_GRAVE,LOCATION_GRAVE,nil)
+		if ct>0 and e:GetLabel()==1 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_REMOVE)
+			Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 		end
 	end
 end

@@ -33,12 +33,12 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.unendalf(c)
-	return c:IsCode(124161059) and c:IsFaceup()
-end
-
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
 	return re:GetHandler()~=e:GetHandler()
+end
+
+function s.tg1eqfilter(c)
+	return c:IsCode(124161059)
 end
 
 function s.tg1filter(c)
@@ -47,34 +47,27 @@ end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local mg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
-	local eg=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,124161059)
-	if chk==0 then return #mg>0 and ((#eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0) or Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_SZONE,0,1,nil)) end
-	local ch=Duel.GetCurrentChain()-1
-	local trig_p,trig_e=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_EFFECT)
-	if ch>0 and trig_p==1-tp and trig_e:IsMonsterEffect() and Duel.IsChainDisablable(ch)
-		then
+	local eg=Duel.GetMatchingGroup(s.tg1eqfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil)
+	if chk==0 then return #mg>0 and #eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 end
+	if rp==1-tp and re:IsMonsterEffect() and Duel.IsChainDisablable(ev) then
 		e:SetLabel(1)
+		Duel.SetOperationInfo(0,CATEGORY_DISABLE,eg,1,0,0)
 	else
 		e:SetLabel(0)
 	end
+	Duel.SetOperationInfo(0,CATEGORY_EQUIP,eg,1,tp,LOCATION_HAND+LOCATION_GRAVE)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local mg=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
-	local eg=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,124161059)
-	if #mg>0 and ((#eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0) or Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil)) then
-		local seg=nil
-		if Duel.IsExistingMatchingCard(s.unendalf,tp,LOCATION_ONFIELD,0,1,nil) then
-			seg=Duel.GetMatchingGroup(s.unendalf,tp,LOCATION_ONFIELD,0,nil):GetFirst() 
-		else
-			seg=aux.SelectUnselectGroup(eg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
-		end
-		local smg=aux.SelectUnselectGroup(mg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
-		Duel.Equip(tp,seg,smg)
+	local eg=Duel.GetMatchingGroup(s.tg1eqfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil)
+	if #mg>0 and #eg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
+		local esg=aux.SelectUnselectGroup(eg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
+		local msg=aux.SelectUnselectGroup(mg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
+		Duel.Equip(tp,esg,msg)
 	end
-	local ch=Duel.GetCurrentChain()-1
 	if e:GetLabel()==1 then
-		Duel.NegateEffect(ch)
+		Duel.NegateEffect(ev)
 	end
 end
 

@@ -4,6 +4,7 @@ function s.initial_effect(c)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_EQUIP)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -26,26 +27,30 @@ function s.initial_effect(c)
 end
 
 --effect 1
-function s.tg1filter(c,e)
-	return c:IsCode(124161059) and c:IsCanBeEffectTarget(e) and c:GetEquipTarget()
+function s.tg1filter(c,e,tp)
+	return c:IsCode(124161059) and c:GetEquipTarget() and c:IsAbleToHand() and c:IsCanBeEffectTarget(e)
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)   
-	if chkc then return chkc:IsLocation(LOCATION_SZONE) and chkc:IsControler(tp) and s.tg1filter(chck,e) end
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_SZONE,0,nil,e)
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_SZONE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_SZONE,0,nil,e,tp)
 	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_EQUIP,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_EQUIP,nil,1,tp,LOCATION_HAND)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e):GetFirst()
-	if not tg and not tg:IsFaceup() and not tg then return end
-	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
-	if #mg==0 then return end
-	local msg=aux.SelectUnselectGroup(mg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
-	Duel.Equip(tp,tg,msg)
+	if tg and Duel.SendtoHand(tg,nil,REASON_EFFECT)>0 and tg:IsLocation(LOCATION_HAND) then
+		local g=Duel.GetMatchingGroup(s.op1filter,tp,LOCATION_MZONE,0,nil)
+		if #g>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+			Duel.BreakEffect()
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
+			Duel.Equip(tp,tg,sg)
+		end
+	end
 end
 
 --effect 2
@@ -64,7 +69,7 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
 	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false) then
-		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+		if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 			Duel.BreakEffect()
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATKDEF):GetFirst()
 			local e3=Effect.CreateEffect(c)
