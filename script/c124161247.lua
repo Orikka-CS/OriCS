@@ -61,7 +61,7 @@ end
 
 --effect 2
 function s.con2filter(c,tp)
-	return c:IsSetCard(0xf30) and c:IsControler(tp) and c:IsFaceup()
+	return c:IsSetCard(0xf30) and c:IsType(TYPE_FUSION) and c:IsSummonLocation(LOCATION_EXTRA) and c:IsControler(tp) and c:IsFaceup()
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
