@@ -61,7 +61,7 @@ end
 
 --effect 2
 function s.cst2filter(c)
-	return c:IsSetCard(0xf3e) and c:IsAbleToGraveAsCost()
+	return c:IsSetCard(0xf3e) and c:IsMonster() and c:IsAbleToGraveAsCost()
 end
 
 function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
