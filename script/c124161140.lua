@@ -41,11 +41,13 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		if Duel.SendtoHand(sg,nil,REASON_EFFECT)>0 then
 			Duel.ConfirmCards(1-tp,sg)
-			if e:GetHandler():IsRelateToEffect(e) then
+			local dg=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,LOCATION_HAND,0,nil)
+			if #dg>0 then
 				Duel.BreakEffect()
 				Duel.ShuffleDeck(tp)
 				Duel.DisableShuffleCheck()
-				Duel.SendtoDeck(e:GetHandler(),nil,SEQ_DECKBOTTOM,REASON_EFFECT)
+				local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+				Duel.SendtoDeck(dsg,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 			end
 		end
 	end

@@ -1,4 +1,4 @@
---아토뮬베이릿 안구서치
+--캬프뮬베이릿 안구서치
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

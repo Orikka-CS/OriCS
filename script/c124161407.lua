@@ -1,4 +1,4 @@
---아토뮬베이릿 네가로돈
+--캬프뮬베이릿 네가로돈
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

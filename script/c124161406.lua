@@ -1,4 +1,4 @@
---아토뮬베이릿 리무부텐
+--캬프뮬베이릿 리무부텐
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion

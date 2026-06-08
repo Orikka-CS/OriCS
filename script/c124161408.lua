@@ -1,4 +1,4 @@
---아토뮬베이릿 옴니블리크
+--캬프뮬베이릿 옴니블리크
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion
