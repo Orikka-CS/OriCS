@@ -55,24 +55,25 @@ function s.tg1filter(c,e)
 	return c:IsSetCard(0xf3f) and c:IsFaceup() and c:IsAbleToDeck() and c:IsCanBeEffectTarget(e)
 end
 
+function s.tg1nfilter(c)
+	return c:IsFaceup() and c:IsMonster() and not c:IsSetCard(0xf3f)
+end
+
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg1filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e)
-	if chk==0 then return #g>1 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.TRUE,1,tp,HINTMSG_TODECK)
+	local ng=Duel.GetMatchingGroup(s.tg1nfilter,tp,0,LOCATION_MZONE,nil)
+	if chk==0 then return #g>2 and #ng>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,3,3,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,#sg,0,0)
-end
-
-function s.op1filter(c)
-	return c:IsFaceup() and c:IsMonster() and not c:IsSetCard(0xf3f)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e)
 	if #tg>0 and Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 then
 		Duel.BreakEffect()
-		local g=Duel.GetMatchingGroup(s.op1filter,tp,0,LOCATION_MZONE,nil)
+		local g=Duel.GetMatchingGroup(s.tg1nfilter,tp,0,LOCATION_MZONE,nil)
 		for tc in g:Iter() do
 			local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetType(EFFECT_TYPE_SINGLE)
