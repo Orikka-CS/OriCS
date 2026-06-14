@@ -1,88 +1,163 @@
---엔비램블 콤플렉스
+--엔비램블 스파이어
 local s,id=GetID()
 function s.initial_effect(c)
+	--activate
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_ACTIVATE)
+	e0:SetCode(EVENT_FREE_CHAIN)
+	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,id)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_UPDATE_ATTACK)
+	e1:SetRange(LOCATION_FZONE)
+	e1:SetTargetRange(LOCATION_MZONE,0)
 	e1:SetTarget(s.tg1)
-	e1:SetOperation(s.op1)
+	e1:SetValue(s.val1)
 	c:RegisterEffect(e1)
+	local e1a=e1:Clone()
+	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
+	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_DRAW)
 	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetRange(LOCATION_GRAVE)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetRange(LOCATION_FZONE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
-	e2:SetCost(Cost.SelfBanish)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
+	--effect 3
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_UNRELEASABLE_SUM)
+	e3:SetRange(LOCATION_FZONE)
+	e3:SetTargetRange(LOCATION_MZONE,0)
+	e3:SetTarget(s.tg3)
+	e3:SetValue(s.sumlimit)
+	c:RegisterEffect(e3)
+	local e3a=e3:Clone()
+	e3a:SetCode(EFFECT_UNRELEASABLE_NONSUM)
+	e3a:SetValue(s.rellimit)
+	c:RegisterEffect(e3a)
+	local e3b=e3:Clone()
+	e3b:SetCode(EFFECT_CANNOT_BE_FUSION_MATERIAL)
+	e3b:SetValue(s.matlimit)
+	c:RegisterEffect(e3b)
+	local e3c=e3:Clone()
+	e3c:SetCode(EFFECT_CANNOT_BE_SYNCHRO_MATERIAL)
+	e3c:SetValue(s.matlimit)
+	c:RegisterEffect(e3c)
+	local e3d=e3:Clone()
+	e3d:SetCode(EFFECT_CANNOT_BE_XYZ_MATERIAL)
+	e3d:SetValue(s.matlimit)
+	c:RegisterEffect(e3d)
+	local e3e=e3:Clone()
+	e3e:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
+	e3e:SetValue(s.matlimit)
+	c:RegisterEffect(e3e)
+	--count
+	aux.GlobalCheck(s,function()
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD)
+		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
+		ge1:SetCode(EFFECT_MATERIAL_CHECK)
+		ge1:SetValue(s.cnt)
+		Duel.RegisterEffect(ge1,0)
+	end)
 end
 
---effect 1
-function s.tg1filter(c)
-	return c:IsSetCard(0xf3f) and not c:IsCode(id) and c:IsAbleToHand()
+--count
+function s.cntfilter(c,tp)
+	return c:IsControler(1-tp) and c:IsLocation(LOCATION_MZONE)
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
-end
-
-function s.op1spfilter(c,e,tp)
-	return c:IsSetCard(0xf3f) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,1-tp)
-end
-
-function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
-		if Duel.SendtoHand(sg,nil,REASON_EFFECT)>0 then
-			Duel.ConfirmCards(1-tp,sg)
-			Duel.ShuffleDeck(tp)
-			local spg=Duel.GetMatchingGroup(s.op1spfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,e,tp)
-			if Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 and #spg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-				Duel.BreakEffect()
-				local spsg=aux.SelectUnselectGroup(spg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON):GetFirst()
-				if Duel.SpecialSummon(spsg,0,tp,1-tp,false,false,POS_FACEUP)>0 then
-					spsg:NegateEffects(e:GetHandler(),nil)
-				end
-			end
+function s.cnt(e,c)
+	local g=c:GetMaterial()
+	local tp=c:GetControler()
+	local ct=g:FilterCount(s.cntfilter,nil,tp)
+	if c:IsType(TYPE_LINK) and ct>0 then
+		for i=1,ct do
+			c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
 		end
 	end
 end
 
+--effect 1
+function s.tg1(e,c)
+	return c:IsSetCard(0xf3f) and c:IsMonster() and c:IsFaceup()
+end
+
+function s.val1(e,c)
+	local tp=e:GetHandlerPlayer()
+	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_LINK)
+	local ct=0
+	for tc in g:Iter() do
+		ct=ct+tc:GetFlagEffect(id)
+	end
+	return ct*300
+end
+
 --effect 2
-function s.con2filter(c)
-	return c:IsSetCard(0xf3f) and c:IsType(TYPE_LINK) and c:IsFaceup()
+function s.tg2filter(c,e,tp)
+	if not (c:IsSetCard(0xf3f) and c:IsFaceup() and c:GetOwner()==tp and not c:IsType(TYPE_FIELD) and c:IsAbleToHand() and c:IsCanBeEffectTarget(e)) then return false end
+	if c:IsControler(1-tp) then
+		return Duel.IsPlayerCanDraw(tp,1)
+	else
+		return Duel.IsExistingMatchingCard(s.op2filter,tp,0,LOCATION_ONFIELD,1,c)
+	end
 end
 
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_MZONE,0,nil)
-	return g>0
+function s.op2filter(c)
+	return c:IsAbleToHand()
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonCount(tp,1)
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,124161475,0xf3f,TYPES_TOKEN,300,0,1,RACE_PLANT,ATTRIBUTE_EARTH,POS_FACEUP_DEFENSE,1-tp) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,0)
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and s.tg2filter(chkc,e,tp) end
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil,e,tp)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
+	if sg:GetFirst():IsControler(1-tp) then
+		Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	else
+		Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,1-tp,LOCATION_ONFIELD)
+	end
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local ft=Duel.GetLocationCount(1-tp,LOCATION_MZONE)
-	if ft<=0 or not Duel.IsPlayerCanSpecialSummonCount(tp,1) then return end
-	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft=1 end
-	if not Duel.IsPlayerCanSpecialSummonMonster(tp,124161475,0xf3f,TYPES_TOKEN,300,0,1,RACE_PLANT,ATTRIBUTE_EARTH,POS_FACEUP_DEFENSE,1-tp) then return end
-	for i=1,ft do
-		local token=Duel.CreateToken(tp,124161475)
-		Duel.SpecialSummonStep(token,0,tp,1-tp,false,false,POS_FACEUP_DEFENSE)
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if not tg then return end
+	if tg:IsControler(1-tp) then
+		if Duel.IsPlayerCanDraw(tp,1) then
+			Duel.Draw(tp,1,REASON_EFFECT)
+		end
+		Duel.SendtoHand(tg,nil,REASON_EFFECT)
+	else
+		local g=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_ONFIELD,tg)
+		if #g>0 then
+			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+			Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		end
+		Duel.SendtoHand(tg,nil,REASON_EFFECT)
 	end
-	Duel.SpecialSummonComplete()
+end
+
+--effect 3
+function s.tg3(e,c)
+	return c:IsSetCard(0xf3f) and c:IsMonster() and c:IsFaceup()
+end
+
+function s.sumlimit(e,c)
+	return c and c:GetControler()==1-e:GetHandlerPlayer()
+end
+
+function s.rellimit(e,re,rp)
+	return rp==1-e:GetHandlerPlayer()
+end
+
+function s.matlimit(e,c)
+	return c and c:GetControler()==1-e:GetHandlerPlayer()
 end

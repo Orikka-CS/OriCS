@@ -1,62 +1,39 @@
---엔비램블 스파이어
+--엔비램블 쥬노 오셀라이
 local s,id=GetID()
 function s.initial_effect(c)
-	--activate
+	--link
+	c:EnableReviveLimit()
+	Link.AddProcedure(c,nil,2,99,s.linkfilter)
 	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_ACTIVATE)
-	e0:SetCode(EVENT_FREE_CHAIN)
+	e0:SetType(EFFECT_TYPE_FIELD)
+	e0:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE)
+	e0:SetCode(EFFECT_EXTRA_MATERIAL)
+	e0:SetRange(LOCATION_EXTRA)
+	e0:SetTargetRange(1,1)
+	e0:SetOperation(s.extracon0)
+	e0:SetValue(s.extraval0)
 	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetRange(LOCATION_FZONE)
-	e1:SetTargetRange(LOCATION_MZONE,0)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCountLimit(1,id)
 	e1:SetTarget(s.tg1)
-	e1:SetValue(s.val1)
+	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	local e1a=e1:Clone()
-	e1a:SetCode(EFFECT_UPDATE_DEFENSE)
-	c:RegisterEffect(e1a)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_DRAW)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetRange(LOCATION_FZONE)
-	e2:SetCountLimit(1,{id,1})
+	e2:SetCategory(CATEGORY_DRAW)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
-	--effect 3
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_UNRELEASABLE_SUM)
-	e3:SetRange(LOCATION_FZONE)
-	e3:SetTargetRange(LOCATION_MZONE,0)
-	e3:SetTarget(s.tg3)
-	e3:SetValue(s.sumlimit)
-	c:RegisterEffect(e3)
-	local e3a=e3:Clone()
-	e3a:SetCode(EFFECT_UNRELEASABLE_NONSUM)
-	e3a:SetValue(s.rellimit)
-	c:RegisterEffect(e3a)
-	local e3b=e3:Clone()
-	e3b:SetCode(EFFECT_CANNOT_BE_FUSION_MATERIAL)
-	e3b:SetValue(s.matlimit)
-	c:RegisterEffect(e3b)
-	local e3c=e3:Clone()
-	e3c:SetCode(EFFECT_CANNOT_BE_SYNCHRO_MATERIAL)
-	e3c:SetValue(s.matlimit)
-	c:RegisterEffect(e3c)
-	local e3d=e3:Clone()
-	e3d:SetCode(EFFECT_CANNOT_BE_XYZ_MATERIAL)
-	e3d:SetValue(s.matlimit)
-	c:RegisterEffect(e3d)
-	local e3e=e3:Clone()
-	e3e:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
-	e3e:SetValue(s.matlimit)
-	c:RegisterEffect(e3e)
 	--count
 	aux.GlobalCheck(s,function()
 		local ge1=Effect.CreateEffect(c)
@@ -67,6 +44,7 @@ function s.initial_effect(c)
 		Duel.RegisterEffect(ge1,0)
 	end)
 end
+s.curgroup=nil
 
 --count
 function s.cntfilter(c,tp)
@@ -76,88 +54,156 @@ end
 function s.cnt(e,c)
 	local g=c:GetMaterial()
 	local tp=c:GetControler()
-	local ct=g:FilterCount(s.cntfilter,nil,tp)
-	if c:IsType(TYPE_LINK) and ct>0 then
-		for i=1,ct do
-			c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+	if c:IsType(TYPE_LINK) and g:IsExists(s.cntfilter,1,nil,tp) then
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,1)
+	end
+end
+
+--link
+function s.linkfilter(g,lc,sumtype,tp)
+	return g:IsExists(Card.IsSetCard,1,nil,0xf3f,lc,sumtype,tp)
+end
+
+function s.closed_sky_filter(c)
+	return not (c:HasFlagEffect(71818935) and #c:GetCardTarget()>0)
+end
+
+function s.extracon0(c,e,tp,sg,mg,lc,og,chk)
+	if not s.curgroup then return true end
+	local g=s.curgroup:Filter(s.closed_sky_filter,nil)
+	local max_count=1
+	local must_include=Group.CreateGroup()
+	local effs={Duel.GetPlayerEffect(tp,EFFECT_EXTRA_MATERIAL)}
+	for _,eff in ipairs(effs) do
+		if not eff:GetOwner():IsCode(id) then
+			if #(eff:GetValue()(0,SUMMON_TYPE_LINK,eff,tp,lc))>0 then
+				local handler=eff:GetHandler()
+				must_include:Merge(handler)
+				if #(sg&must_include)>0 or lc==handler then
+					max_count=max_count+1
+				end
+			end
 		end
+	end
+	return #(sg&g)<=max_count
+end
+
+function s.extraval0(chk,summon_type,e,...)
+	if chk==0 then
+		local tp,sc=...
+		if summon_type~=SUMMON_TYPE_LINK or sc~=e:GetHandler() then
+			return Group.CreateGroup()
+		else
+			s.curgroup=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
+			s.curgroup:KeepAlive()
+			return s.curgroup
+		end
+	elseif chk==2 then
+		if s.curgroup then
+			s.curgroup:DeleteGroup()
+		end
+		s.curgroup=nil
 	end
 end
 
 --effect 1
-function s.tg1(e,c)
-	return c:IsSetCard(0xf3f) and c:IsMonster() and c:IsFaceup()
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		local c=e:GetHandler()
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetCode(EFFECT_EXTRA_MATERIAL)
+		e1:SetRange(LOCATION_MZONE)
+		e1:SetTargetRange(1,0)
+		e1:SetOperation(s.extracon1)
+		e1:SetValue(s.extraval1)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		c:RegisterEffect(e1)
+		local res=Duel.IsExistingMatchingCard(Card.IsLinkSummonable,tp,LOCATION_EXTRA,0,1,nil)
+		e1:Reset()
+		return res
+	end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 
-function s.val1(e,c)
-	local tp=e:GetHandlerPlayer()
-	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_LINK)
-	local ct=0
-	for tc in g:Iter() do
-		ct=ct+tc:GetFlagEffect(id)
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local e1=nil
+	if c:IsRelateToEffect(e) then
+		e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetCode(EFFECT_EXTRA_MATERIAL)
+		e1:SetRange(LOCATION_MZONE)
+		e1:SetTargetRange(1,0)
+		e1:SetOperation(s.extracon1)
+		e1:SetValue(s.extraval1)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		c:RegisterEffect(e1)
 	end
-	return ct*300
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local sg=Duel.SelectMatchingCard(tp,Card.IsLinkSummonable,tp,LOCATION_EXTRA,0,1,1,nil)
+	local sc=sg:GetFirst()
+	if sc then
+		Duel.LinkSummon(tp,sc)
+		if e1 then
+			local eff_code=Duel.GetCurrentChain()==1 and EVENT_SPSUMMON or EVENT_SPSUMMON_SUCCESS
+			local e2=Effect.CreateEffect(c)
+			e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+			e2:SetCode(eff_code)
+			e2:SetOperation(function(e) e1:Reset() e:Reset() end)
+			Duel.RegisterEffect(e2,tp)
+		end
+	elseif e1 then
+		e1:Reset()
+	end
+end
+
+function s.extraval1filter(c)
+	return c:IsFaceup() and c:IsMonster()
+end
+
+function s.extracon1filter(c,tp)
+	return c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) and c:IsSetCard(0xf3f) and c:IsMonster()
+end
+
+function s.extracon1(c,e,tp,sg,mg,lc,og,chk)
+	local g=Duel.GetMatchingGroup(s.extraval1filter,tp,0,LOCATION_MZONE,nil)
+	if #(sg&g)==0 then return true end
+	return #(sg&g)<=1 and sg:IsExists(s.extracon1filter,1,nil,tp)
+end
+
+function s.extraval1(chk,summon_type,e,...)
+	if chk==0 then
+		local tp,sc=...
+		if summon_type~=SUMMON_TYPE_LINK then
+			return Group.CreateGroup()
+		else
+			return Duel.GetMatchingGroup(s.extraval1filter,tp,0,LOCATION_MZONE,nil)
+		end
+	elseif chk==1 then
+		local sg,sc,tp=...
+		if summon_type&SUMMON_TYPE_LINK==SUMMON_TYPE_LINK and #sg>0 then
+			Duel.Hint(HINT_CARD,tp,id)
+		end
+	end
 end
 
 --effect 2
-function s.tg2filter(c,e,tp)
-	if not (c:IsSetCard(0xf3f) and c:IsFaceup() and c:GetOwner()==tp and not c:IsType(TYPE_FIELD) and c:IsAbleToHand() and c:IsCanBeEffectTarget(e)) then return false end
-	if c:IsControler(1-tp) then
-		return Duel.IsPlayerCanDraw(tp,1)
-	else
-		return Duel.IsExistingMatchingCard(s.op2filter,tp,0,LOCATION_ONFIELD,1,c)
-	end
+function s.con2filter(c,tp,mc)
+	return c:IsControler(tp) and c~=mc and c:IsSummonType(SUMMON_TYPE_LINK) and c:GetFlagEffect(id)>0
 end
 
-function s.op2filter(c)
-	return c:IsAbleToHand()
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:FilterCount(s.con2filter,nil,tp,e:GetHandler())>0
 end
 
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and s.tg2filter(chkc,e,tp) end
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil,e,tp)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
-	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,0,0)
-	if sg:GetFirst():IsControler(1-tp) then
-		Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
-	else
-		Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,1-tp,LOCATION_ONFIELD)
-	end
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetTargetCards(e):GetFirst()
-	if not tg then return end
-	if tg:IsControler(1-tp) then
-		if Duel.IsPlayerCanDraw(tp,1) then
-			Duel.Draw(tp,1,REASON_EFFECT)
-		end
-		Duel.SendtoHand(tg,nil,REASON_EFFECT)
-	else
-		local g=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_ONFIELD,tg)
-		if #g>0 then
-			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
-			Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		end
-		Duel.SendtoHand(tg,nil,REASON_EFFECT)
-	end
-end
-
---effect 3
-function s.tg3(e,c)
-	return c:IsSetCard(0xf3f) and c:IsMonster() and c:IsFaceup()
-end
-
-function s.sumlimit(e,c)
-	return c and c:GetControler()==1-e:GetHandlerPlayer()
-end
-
-function s.rellimit(e,re,rp)
-	return rp==1-e:GetHandlerPlayer()
-end
-
-function s.matlimit(e,c)
-	return c and c:GetControler()==1-e:GetHandlerPlayer()
+	Duel.Draw(tp,1,REASON_EFFECT)
 end

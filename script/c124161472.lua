@@ -1,70 +1,73 @@
---브릿지버스터 레조넌스
+--브릿지버스터 리로드
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate
 	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetCode(EFFECT_TRAP_ACT_IN_HAND)
-	e0:SetCondition(function(e) return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_MZONE)>1 end)
+	e0:SetType(EFFECT_TYPE_ACTIVATE)
+	e0:SetCode(EVENT_FREE_CHAIN)
 	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_TODECK)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_TO_GRAVE)
+	e1:SetRange(LOCATION_SZONE)
 	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
+	--effect 2
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_IMMUNE_EFFECT)
+	e2:SetRange(LOCATION_SZONE)
+	e2:SetTargetRange(LOCATION_MZONE,0)
+	e2:SetTarget(s.tg2)
+	e2:SetValue(s.val2)
+	c:RegisterEffect(e2)
 end
 
 --effect 1
-function s.tg1filter(c)
-	return c:IsSetCard(0xf3e) and c:IsFaceup()
+function s.con1filter(c,tp)
+	return c:IsMonster() and c:IsControler(tp) and c:IsLocation(LOCATION_GRAVE)
 end
 
-function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_ATKCHANGE,g,#g,0,0)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,1-tp,LOCATION_ONFIELD)
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	return eg:FilterCount(s.con1filter,nil,tp)==1
 end
 
-function s.op1xyzfilter(c)
-	return c:IsSetCard(0xf3e) and c:IsType(TYPE_XYZ) and c:IsFaceup()
+function s.tg1filter(c,e,tp)
+	return c:IsSetCard(0xf3e) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
-function s.op1atkval(c)
-	return math.max(c:GetAttack(),0)
-end
-
-function s.op1tdfilter(c)
-	return c:IsAbleToDeck()
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tg1filter(chkc,e,tp) end
+	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_GRAVE,0,nil,e,tp)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
+	Duel.SetTargetCard(sg)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,sg,1,0,0)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_MZONE,0,nil)
-	if #g==0 then return end
-	local atk=g:GetSum(s.op1atkval)
-	for tc in g:Iter() do
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
-		e1:SetValue(atk)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-		tc:RegisterEffect(e1)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+		Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
 	end
-	local ct=Duel.GetMatchingGroupCount(s.op1xyzfilter,tp,LOCATION_MZONE,0,nil)
-	local dg=Duel.GetMatchingGroup(s.op1tdfilter,tp,0,LOCATION_ONFIELD,nil)
-	if ct>0 and #dg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-		Duel.BreakEffect()
-		local sg=aux.SelectUnselectGroup(dg,e,tp,1,ct,aux.TRUE,1,tp,HINTMSG_TODECK)
-		Duel.DisableShuffleCheck()
-		Duel.SendtoDeck(sg,nil,SEQ_DECKTOP,REASON_EFFECT)
-		local og=Duel.GetOperatedGroup()
-		local tc1=og:FilterCount(Card.IsLocation,nil,LOCATION_DECK)
-		if tc1>1 then
-			Duel.SortDecktop(tp,1-tp,tc1)
-		end
+end
+
+--effect 2
+function s.tg2(e,c)
+	return c:IsFaceup() and c:IsSetCard(0xf3e) and c:IsType(TYPE_XYZ)
+end
+
+function s.val2(e,re,c)
+	if not re:IsActivated() then return false end
+	if re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then
+		local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
+		return not (g and g:IsContains(c))
 	end
+	return true
 end
