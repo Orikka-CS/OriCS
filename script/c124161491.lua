@@ -94,5 +94,5 @@ end
 
 function s.val2(e,te)
 	local tp=e:GetHandlerPlayer()
-	return te:IsActivated() and te:GetHandlerPlayer()==1-tp
+	return te:IsActiveType(TYPE_MONSTER) and te:GetHandlerPlayer()==1-tp
 end
