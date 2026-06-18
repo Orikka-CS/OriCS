@@ -30,7 +30,7 @@ function s.initial_effect(c)
 end
 --effect 1
 function s.cst1filter(c)
-	return c:IsAbleToGraveAsCost() and c:IsSetCard(0xf39) and (c:IsSpellTrap()) and c:CheckActivateEffect(false,true,false)~=nil and not (c:IsType(TYPE_FIELD+TYPE_CONTINUOUS)) 
+	return c:IsAbleToRemoveAsCost() and c:IsSetCard(0xf39) and (c:IsSpellTrap()) and c:CheckActivateEffect(false,true,false)~=nil and not (c:IsType(TYPE_FIELD+TYPE_CONTINUOUS)) 
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -40,7 +40,7 @@ end
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.cst1filter,tp,LOCATION_DECK,0,1,nil) end
 	local g=Duel.SelectMatchingCard(tp,s.cst1filter,tp,LOCATION_DECK,0,1,1,nil)
-	if not Duel.SendtoGrave(g,REASON_COST) then return end
+	if not Duel.Remove(g,POS_FACEUP,REASON_COST) then return end
 	local te=g:GetFirst():CheckActivateEffect(false,true,false)
 	e:SetLabel(te:GetLabel())
 	e:SetLabelObject(te:GetLabelObject())

@@ -52,13 +52,8 @@ function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 
-function s.tg1filter(c)
-	return c:IsSetCard(0xf3b) and c:IsSpellTrap() and c:IsSSetable()
-end
-
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_DECK,0,nil)
-	if chk==0 then return g>0 end
+	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 end
 
@@ -68,27 +63,13 @@ end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) then
-		local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET):GetFirst()
-		if Duel.SSet(tp,sg)>0 then
-			local e1=Effect.CreateEffect(e:GetHandler())
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			if sg:IsQuickPlaySpell() then
-				e1:SetCode(EFFECT_QP_ACT_IN_SET_TURN)
-			elseif sg:IsTrap() then
-				e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-			end
-			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-			sg:RegisterEffect(e1)
-			local rc=re:GetHandler()
-			if ep==tp and rc:IsSetCard(0xf3b) then
-				local ty=rc:GetType() & (TYPE_MONSTER|TYPE_SPELL|TYPE_TRAP)
-				local rg=Duel.GetMatchingGroup(s.op1rmfilter,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil,ty)		 
-				if #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-					Duel.BreakEffect()
-					Duel.Remove(rg,POS_FACEUP,REASON_EFFECT)
-				end
+		local rc=re:GetHandler()
+		if ep==tp and rc:IsSetCard(0xf3b) then
+			local ty=rc:GetType() & (TYPE_MONSTER|TYPE_SPELL|TYPE_TRAP)
+			local rg=Duel.GetMatchingGroup(s.op1rmfilter,tp,0,LOCATION_ONFIELD+LOCATION_GRAVE,nil,ty)	   
+			if #rg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+				Duel.BreakEffect()
+				Duel.Remove(rg,POS_FACEUP,REASON_EFFECT)
 			end
 		end
 	end

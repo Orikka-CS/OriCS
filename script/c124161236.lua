@@ -22,7 +22,7 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e2:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetTargetRange(LOCATION_SZONE,0)
+	e2:SetTargetRange(LOCATION_SZONE+LOCATION_GRAVE,0)
 	e2:SetTarget(s.tg2)
 	e2:SetValue(aux.tgoval)
 	c:RegisterEffect(e2)
@@ -72,5 +72,5 @@ end
 
 --effect 2
 function s.tg2(e,c)
-	return c:IsFaceup() and c:IsSetCard(0xf2f)
+	return c:IsFaceup() and c:IsContinuousSpell()
 end

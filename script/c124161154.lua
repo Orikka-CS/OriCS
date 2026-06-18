@@ -16,9 +16,8 @@ function s.initial_effect(c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetCode(EVENT_CHAINING)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
@@ -62,12 +61,9 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2filter(c,tp)
-	return c:IsControler(tp) and c:IsFaceup() and c:IsSetCard(0xf2a)
-end
-
-function s.con2(e,tp,eg)
-	return eg:FilterCount(s.con2filter,nil,tp)>0
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	local rc=re:GetHandler()
+	return rp==tp and re:IsActiveType(TYPE_MONSTER) and rc:IsSetCard(0xf2a) and rc:IsType(TYPE_XYZ)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

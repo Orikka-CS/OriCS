@@ -35,6 +35,7 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
 	e3:SetCode(EFFECT_CANNOT_DISEFFECT)
 	e3:SetRange(LOCATION_FZONE)
+	e3:SetCondition(s.con3)
 	e3:SetValue(s.val3)
 	c:RegisterEffect(e3)
 	--count
@@ -99,8 +100,18 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 3
+function s.con3filter(c)
+	return c:IsFaceup() and c:IsSetCard(0xf3b)
+end
+
+function s.con3(e,tp,eg,ep,ev,re,r,rp)
+	local tp=e:GetHandlerPlayer()
+	local g=Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_MZONE,0,nil)
+	return g>0
+end
+
 function s.val3(e,ct)
 	local p=e:GetHandler():GetControler()
 	local te,tp,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
-	return p==tp and te:IsActiveType(TYPE_SPELL) and te:GetHandler():IsSetCard(0xf3b)
+	return p==tp and te:IsActiveType(TYPE_SPELL)
 end

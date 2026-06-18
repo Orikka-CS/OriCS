@@ -16,12 +16,10 @@ function s.initial_effect(c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
+	e2:SetCost(s.cst2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -65,12 +63,15 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.con2filter(c,tp)
-	return c:IsType(TYPE_LINK) and c:IsSetCard(0xf28) and c:IsControler(tp)
+function s.cst2filter(c)
+	return c:IsFaceup() and c:IsContinuousTrap() and c:IsAbleToHandAsCost()
 end
 
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:FilterCount(s.con2filter,nil,tp)>0
+function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_ONFIELD,0,nil)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_RTOHAND)
+	Duel.SendtoHand(sg,nil,REASON_COST)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
