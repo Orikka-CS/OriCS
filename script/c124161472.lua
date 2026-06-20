@@ -31,11 +31,11 @@ end
 
 --effect 1
 function s.con1filter(c,tp)
-	return c:IsMonster() and c:IsControler(tp) and c:IsLocation(LOCATION_GRAVE)
+	return c:IsMonster() and c:IsSetCard(0xf3e) and c:IsControler(tp) and c:IsLocation(LOCATION_GRAVE)
 end
 
 function s.con1(e,tp,eg,ep,ev,re,r,rp)
-	return eg:FilterCount(s.con1filter,nil,tp)==1
+	return #eg==1 and eg:FilterCount(s.con1filter,nil,tp)>0
 end
 
 function s.tg1filter(c,e,tp)

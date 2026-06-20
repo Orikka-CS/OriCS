@@ -11,23 +11,11 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	--effect 2
-	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_TO_GRAVE)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.con2)
-	e2:SetTarget(s.tg2)
-	e2:SetOperation(s.op2)
-	c:RegisterEffect(e2)
 end
 
 --effect 1
 function s.cst1filter(c)
-	return c:IsSetCard(0xf3e) and c:IsMonster() and c:IsAbleToGraveAsCost()
+	return c:IsSetCard(0xf3e) and c:IsAbleToGraveAsCost()
 end
 
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -57,27 +45,5 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 			end
 		end
 		Duel.ShuffleHand(1-tp)
-	end
-end
-
---effect 2
-function s.con2filter(c,tp)
-	return c:IsSetCard(0xf3e) and c:IsMonster() and c:IsControler(tp)
-end
-
-function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:FilterCount(s.con2filter,nil,tp)==1 and not eg:IsContains(e:GetHandler())
-end
-
-function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsAbleToHand() end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,0,LOCATION_GRAVE)
-end
-
-function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then
-		Duel.SendtoHand(c,nil,REASON_EFFECT)
 	end
 end

@@ -84,7 +84,7 @@ function s.con2filter(c,tp)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:FilterCount(s.con2filter,nil,tp)==1
+	return #eg==1 and eg:FilterCount(s.con2filter,nil,tp)>0
 end
 
 function s.tg2filter(c,e)

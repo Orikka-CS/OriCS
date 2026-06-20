@@ -8,11 +8,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--effect 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_TO_GRAVE)
 	e1:SetRange(LOCATION_SZONE)
 	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
@@ -31,6 +32,14 @@ function s.initial_effect(c)
 end
 
 --effect 1
+function s.con1filter(c,tp)
+	return c:IsMonster() and c:IsControler(tp) and c:IsLocation(LOCATION_GRAVE)
+end
+
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	return #eg==1 and eg:FilterCount(s.con1filter,nil,tp)>0
+end
+
 function s.tg1filter(c,e)
 	return c:IsFaceup() and c:IsSetCard(0xf3e) and c:IsType(TYPE_XYZ) and c:IsCanBeEffectTarget(e)
 end

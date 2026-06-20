@@ -1,4 +1,4 @@
---엔비램블 맬리스
+--엔비램블 신드롬
 local s,id=GetID()
 function s.initial_effect(c)
 	--effect 1

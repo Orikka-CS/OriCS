@@ -1,4 +1,4 @@
---엔비램블 신드롬
+--엔비램블 글레어
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate
