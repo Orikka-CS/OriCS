@@ -1,0 +1,93 @@
+--다이아보이드 컬리넌
+local s,id=GetID()
+function s.initial_effect(c)
+	--effect 1
+	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DELAY)
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetRange(LOCATION_HAND+LOCATION_GRAVE)
+	e1:SetCountLimit(1,id)
+	e1:SetCondition(s.con1)
+	e1:SetTarget(s.tg1)
+	e1:SetOperation(s.op1)
+	c:RegisterEffect(e1)
+	--effect 2
+	local e2=Effect.CreateEffect(c)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TODECK)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_SUMMON_SUCCESS)
+	e2:SetCountLimit(1,{id,1})
+	e2:SetTarget(s.tg2)
+	e2:SetOperation(s.op2)
+	c:RegisterEffect(e2)
+	local e2a=e2:Clone()
+	e2a:SetCode(EVENT_SPSUMMON_SUCCESS)
+	c:RegisterEffect(e2a)
+end
+
+--effect 1
+function s.con1filter(c)
+	return c:IsSummonLocation(LOCATION_EXTRA) and c:IsType(TYPE_EFFECT) and c:IsLocation(LOCATION_MZONE)
+end
+
+function s.con1(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.con1filter,1,nil)
+end
+
+function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
+end
+
+function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
+		e1:SetValue(LOCATION_REMOVED)
+		e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
+		c:RegisterEffect(e1,true)
+	end
+end
+
+--effect 2
+function s.tg2filter(c)
+	return c:IsSetCard(0xf40) and c:IsMonster() and not c:IsCode(id) and c:IsAbleToHand()
+end
+
+function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
+	if chk==0 then return #g>0 end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_DECK)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_TODECK,nil,1,1-tp,LOCATION_MZONE)
+end
+
+function s.op2xfilter(c)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and not c:IsType(TYPE_EFFECT)
+end
+
+function s.op2dfilter(c)
+	return c:IsMonster() and c:IsAbleToDeck()
+end
+
+function s.op2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_DECK,0,nil)
+	if #g>0 then
+		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
+		if Duel.SendtoHand(sg,nil,REASON_EFFECT)>0 then
+			Duel.ConfirmCards(1-tp,sg)
+			local dg=Duel.GetMatchingGroup(s.op2dfilter,tp,0,LOCATION_MZONE,nil)
+			if Duel.GetMatchingGroupCount(s.op2xfilter,tp,LOCATION_MZONE,0,nil)>0 and #dg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+				Duel.BreakEffect()
+				local dsg=aux.SelectUnselectGroup(dg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TODECK)
+				Duel.SendtoDeck(dsg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
+			end
+		end
+	end
+end
