@@ -1,4 +1,4 @@
---나우프라테 브릴리언스
+--나우프라테 디신터먼트
 local s,id=GetID()
 function s.initial_effect(c)
 	--activate
