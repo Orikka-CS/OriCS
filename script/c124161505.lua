@@ -17,7 +17,7 @@ function s.initial_effect(c)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(s.cst2)
+	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -61,17 +61,16 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.cst2xfilter(c)
-	return c:IsType(TYPE_XYZ) and not c:IsType(TYPE_EFFECT) and c:IsFaceup() and c:GetOverlayCount()>0
+function s.con2efilter(c)
+	return c:IsSetCard(0xf40) and c:IsMonster() and c:IsType(TYPE_EFFECT) and c:IsFaceup()
 end
 
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst2xfilter,tp,LOCATION_MZONE,0,nil)
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_FACEUP):GetFirst()
-	local og=sg:GetOverlayGroup()
-	local osg=aux.SelectUnselectGroup(og,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(osg,REASON_COST)
+function s.con2xfilter(c)
+	return c:IsType(TYPE_XYZ) and not c:IsType(TYPE_EFFECT) and c:IsFaceup()
+end
+
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsExistingMatchingCard(s.con2efilter,tp,LOCATION_MZONE,0,1,nil) and Duel.IsExistingMatchingCard(s.con2xfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
