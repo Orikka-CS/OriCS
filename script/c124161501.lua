@@ -107,4 +107,3 @@ function s.val3(e,ct)
 	local te,tp=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER)
 	return tp==e:GetHandlerPlayer() and te:GetHandler():IsSetCard(0xf40) and te:IsActiveType(TYPE_MONSTER)
 end
-
