@@ -40,7 +40,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ct=Duel.GetMatchingGroupCount(s.tg1ctfilter,tp,LOCATION_MZONE,0,nil)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,nil)
 	if chk==0 then return ct>0 and #g>0 end
-	if Duel.IsExistingMatchingCard(s.tg1chainfilter,tp,LOCATION_MZONE,0,1,nil) then
+	if Duel.GetMatchingGroupCount(s.tg1chainfilter,tp,LOCATION_MZONE,0,nil)>0 then
 		Duel.SetChainLimit(s.chainlm)
 	end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,math.min(ct,#g),1-tp,LOCATION_ONFIELD)
@@ -70,7 +70,7 @@ function s.con2xfilter(c)
 end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsExistingMatchingCard(s.con2efilter,tp,LOCATION_MZONE,0,1,nil) and Duel.IsExistingMatchingCard(s.con2xfilter,tp,LOCATION_MZONE,0,1,nil)
+	return Duel.GetMatchingGroupCount(s.con2efilter,tp,LOCATION_MZONE,0,nil)>0 and Duel.GetMatchingGroupCount(s.con2xfilter,tp,LOCATION_MZONE,0,nil)>0
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -92,4 +92,3 @@ function s.op2(e,tp,eg,ep,ev,re,r,rp)
 		c:RegisterEffect(e1)
 	end
 end
-

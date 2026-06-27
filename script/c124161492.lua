@@ -60,7 +60,7 @@ end
 
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsLocation(LOCATION_GRAVE) and not c:IsPreviousLocation(LOCATION_ONFIELD) and Duel.IsExistingMatchingCard(s.con2filter,tp,LOCATION_MZONE,0,1,nil)
+	return c:IsLocation(LOCATION_GRAVE) and not c:IsPreviousLocation(LOCATION_ONFIELD) and Duel.GetMatchingGroupCount(s.con2filter,tp,LOCATION_MZONE,0,nil)>0
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)

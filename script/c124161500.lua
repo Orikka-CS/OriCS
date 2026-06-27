@@ -77,7 +77,7 @@ function s.tg2dfilter(c,e,tp,tc)
 end
 
 function s.tg2filter(c,e,tp)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsCanBeEffectTarget(e) and Duel.IsExistingMatchingCard(s.tg2dfilter,tp,LOCATION_DECK,0,1,nil,e,tp,c)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsCanBeEffectTarget(e) and Duel.GetMatchingGroupCount(s.tg2dfilter,tp,LOCATION_DECK,0,nil,e,tp,c)>0
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

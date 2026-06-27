@@ -34,7 +34,7 @@ function s.tg1filter(c)
 end
 
 function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.tg1filter,tp,LOCATION_MZONE,0,1,nil) end
+	if chk==0 then return Duel.GetMatchingGroupCount(s.tg1filter,tp,LOCATION_MZONE,0,nil)>0 end
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
@@ -57,7 +57,7 @@ function s.tg2spfilter(c,e,tp,mc)
 end
 
 function s.tg2filter(c,e,tp)
-	return c:IsSetCard(0xf40) and c:IsType(TYPE_XYZ) and c:IsFaceup() and c:IsCanBeEffectTarget(e) and Duel.IsExistingMatchingCard(s.tg2spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c)
+	return c:IsSetCard(0xf40) and c:IsType(TYPE_XYZ) and c:IsFaceup() and c:IsCanBeEffectTarget(e) and Duel.GetMatchingGroupCount(s.tg2spfilter,tp,LOCATION_EXTRA,0,nil,e,tp,c)>0
 end
 
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

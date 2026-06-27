@@ -31,8 +31,9 @@ end
 
 --effect 1
 function s.cst1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,nil,REASON_COST) end
-	local sg=aux.SelectUnselectGroup(Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,nil,REASON_COST),e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
+	local g=Duel.GetMatchingGroup(Card.IsDiscardable,tp,LOCATION_HAND,0,nil,REASON_COST)
+	if chk==0 then return #g>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DISCARD)
 	Duel.SendtoGrave(sg,REASON_COST+REASON_DISCARD)
 end
 
