@@ -93,17 +93,13 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DESTROY,nil,1,1-tp,LOCATION_ONFIELD)
 end
 
-function s.op2dfilter(c,e)
-	return c:IsDestructable(e)
-end
-
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetTargetCards(e):GetFirst()
 	if c:IsRelateToEffect(e) and tg and tg:IsRelateToEffect(e) and c:IsCanBeXyzMaterial(tg,tp,REASON_EFFECT) then
 		Duel.Overlay(tg,c,true)
 		local ct=tg:GetOverlayCount()
-		local g=Duel.GetMatchingGroup(s.op2dfilter,tp,0,LOCATION_ONFIELD,nil,e)
+		local g=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil,e)
 		if ct>0 and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 			Duel.BreakEffect()
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,math.min(ct,#g),aux.TRUE,1,tp,HINTMSG_DESTROY)
