@@ -18,10 +18,10 @@ function s.initial_effect(c)
 	e1:SetTarget(s.tg1)
 	e1:SetOperation(s.op1)
 	c:RegisterEffect(e1)
-	--effect 2
+		--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
+	e2:SetCategory(CATEGORY_TODECK+CATEGORY_REMOVE)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_MZONE)
@@ -87,24 +87,36 @@ function s.tg2filter(c,e)
 	return c:IsSetCard(0xf37) and c:IsFaceup() and c:IsAbleToDeck() and c:IsCanBeEffectTarget(e)
 end
 
+function s.tg2rmfilter(c)
+	return c:IsAbleToRemove()
+end
+
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and s.tg2filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_REMOVED,0,nil,e)
-	if chk==0 then return #g>2 and Duel.IsPlayerCanDraw(tp,1) end
-	local sg=aux.SelectUnselectGroup(g,e,tp,3,3,aux.TRUE,1,tp,HINTMSG_TODECK)
+	local rg=Duel.GetMatchingGroup(s.tg2rmfilter,tp,0,LOCATION_GRAVE,nil)
+	if chk==0 then return #g>1 and #rg>0 end
+	local sg=aux.SelectUnselectGroup(g,e,tp,2,2,aux.TRUE,1,tp,HINTMSG_TODECK)
 	Duel.SetTargetCard(sg)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,3,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_GRAVE)
+end
+
+function s.op2filter(c)
+	return c:IsAbleToRemove()
 end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetTargetCards(e)
 	if #tg>0 then
-		Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
-		if Duel.IsPlayerCanDraw(tp,1) then
+		Duel.DisableShuffleCheck()
+		if Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 then
 			Duel.BreakEffect()
-			Duel.ShuffleDeck(tp)
-			Duel.Draw(tp,1,REASON_EFFECT)
+			local g=Duel.GetMatchingGroup(s.op2filter,tp,0,LOCATION_GRAVE,nil)
+			if #g>0 then
+				local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_REMOVE)
+				Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+			end
 		end
 	end
 end
