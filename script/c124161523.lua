@@ -60,12 +60,12 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetTargetCards(e):GetFirst()
-	if tc and tc:IsRelateToEffect(e) and tc:IsFaceup() then
-		local g=Duel.GetMatchingGroup(s.tg1mfilter,tp,0,LOCATION_MZONE,nil,tc)
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg and tg:IsRelateToEffect(e) and tg:IsFaceup() then
+		local g=Duel.GetMatchingGroup(s.tg1mfilter,tp,0,LOCATION_MZONE,nil,tg)
 		if #g>0 then
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
-			Duel.Equip(tp,tc,sg)
+			Duel.Equip(tp,tg,sg)
 		end
 	end
 end

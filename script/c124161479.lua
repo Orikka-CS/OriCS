@@ -88,10 +88,10 @@ end
 
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tc=Duel.GetTargetCards(e):GetFirst()
-	if tc and c:IsRelateToEffect(e) and c:IsFaceup() and c:IsCanBeLinkMaterial()
-		and tc:IsFaceup() and tc:IsCanBeLinkMaterial() and not tc:IsImmuneToEffect(e) then
-		local mg=Group.FromCards(c,tc)
+	local tg=Duel.GetTargetCards(e):GetFirst()
+	if tg and c:IsRelateToEffect(e) and c:IsFaceup() and c:IsCanBeLinkMaterial()
+		and tg:IsFaceup() and tg:IsCanBeLinkMaterial() and not tg:IsImmuneToEffect(e) then
+		local mg=Group.FromCards(c,tg)
 		local g=Duel.GetMatchingGroup(s.lkfilter,tp,LOCATION_EXTRA,0,nil,mg)
 		if #g>0 then
 			local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SPSUMMON)
