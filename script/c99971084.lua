@@ -21,7 +21,7 @@ s.listed_series={0x6d72}
 s.listed_names={99971089}
 function s.banish_top(e,tp)
 	local g=Duel.GetDecktopGroup(1-tp,1)
-	if #g>0 then Duel.Remove(g,POS_FACEUP,REASON_EFFECT) end
+	if #g>0 and Duel.GetCurrentChain()>1 then Duel.Remove(g,POS_FACEUP,REASON_EFFECT) end
 end
 function s.random_discard(tp)
 	local g=Group.CreateGroup()
