@@ -14,10 +14,12 @@ function s.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetRange(LOCATION_FZONE)
 	e2:SetCountLimit(1,id)
-	e2:SetCost(s.cst2)
+	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
@@ -52,14 +54,11 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --effect 2
-function s.cst2filter(c)
-	return c:IsSetCard(0x3f20) and c:IsAbleToGraveAsCost()
+function s.con2filter(c,tp,re)
+	return c:IsSetCard(0x3f20) and c:IsReason(REASON_COST) and c:IsControler(tp) and re and re:IsActivated() and re:GetHandler():IsSetCard(0x3f20)
 end
-function s.cst2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.cst2filter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,e:GetHandler())
-	if chk==0 then return #g>0 end
-	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_TOGRAVE)
-	Duel.SendtoGrave(sg,REASON_COST)
+function s.con2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:FilterCount(s.con2filter,nil,tp,re)>0
 end
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ct=Duel.GetFlagEffect(tp,124162013)

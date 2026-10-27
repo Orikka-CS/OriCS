@@ -34,17 +34,24 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if chk==0 then return #g>0 end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,tp,LOCATION_DECK)
-	Duel.SetPossibleOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+	Duel.SetPossibleOperationInfo(0,CATEGORY_EQUIP,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE)
+end
+function s.op1filter(c,tp,mc)
+	return c:IsCode(124162013) and c:CheckUniqueOnField(tp) and c:CheckEquipTarget(mc)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.tg1filter,tp,LOCATION_DECK,0,nil)
 	if #g==0 then return end
 	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 	if Duel.SendtoHand(sg,nil,REASON_EFFECT)==0 then return end
 	Duel.ConfirmCards(1-tp,sg)
-	if Duel.GetFlagEffect(tp,124162013)>0 and Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+	if not c:IsRelateToEffect(e) or not c:IsFaceup() or not c:IsLocation(LOCATION_MZONE) or not c:IsControler(tp) or Duel.GetLocationCount(tp,LOCATION_SZONE)<1 then return end
+	local eg=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.op1filter),tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp,c)
+	if #eg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.BreakEffect()
-		Duel.Draw(tp,1,REASON_EFFECT)
+		local esg=aux.SelectUnselectGroup(eg,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
+		Duel.Equip(tp,esg,c)
 	end
 end
 
