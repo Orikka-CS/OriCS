@@ -1,4 +1,4 @@
---언엔달 발린 뢰크르트
+--언엔달 수르트 니드뢰크
 local s,id=GetID()
 function s.initial_effect(c)
 	--xyz
