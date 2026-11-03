@@ -1,4 +1,4 @@
---말렉스카브 큐레이터 페스트
+--말렉스카브 에데마 페스트
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

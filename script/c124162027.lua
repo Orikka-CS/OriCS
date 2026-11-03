@@ -73,7 +73,7 @@ function s.con2filter(c,tp)
 		and c:IsReason(REASON_MATERIAL) and c:IsPreviousTypeOnField(TYPE_TRAP) and c:IsPreviousTypeOnField(TYPE_CONTINUOUS)
 end
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return eg:FilterCount(s.con2filter,nil,tp)>0
+	return not eg:IsContains(e:GetHandler()) and eg:FilterCount(s.con2filter,nil,tp)>0
 end
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsSSetable() end

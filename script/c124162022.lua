@@ -1,4 +1,4 @@
---말렉스카브 컨서베이터 스플루
+--말렉스카브 네크로시스 스플루
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

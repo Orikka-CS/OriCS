@@ -24,14 +24,13 @@ function s.initial_effect(c)
 	--effect 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_SET)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_CHAINING)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e2:SetCode(EFFECT_DESTROY_REPLACE)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.con2)
 	e2:SetTarget(s.tg2)
+	e2:SetValue(s.val2)
 	e2:SetOperation(s.op2)
 	c:RegisterEffect(e2)
 end
@@ -64,10 +63,9 @@ function s.op1filter(c,tp)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local bonus=c:IsFaceup() and c:IsRelateToEffect(e) and c:IsSummonType(SUMMON_TYPE_SYNCHRO) and c:GetFlagEffect(id)>0
 	local tg=Duel.GetTargetCards(e):Filter(Card.IsFaceup,nil)
 	local sg=tg:Filter(s.op1filter,nil,tp)
-	if #tg==0 or Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)==0 or not bonus then return end
+	if #tg==0 or Duel.ChangePosition(tg,POS_FACEDOWN_DEFENSE)==0 then return end
 	for tc in sg:Iter() do
 		if tc:IsFacedown() and tc:IsLocation(LOCATION_STZONE) and tc:IsControler(tp) then
 			local e1=Effect.CreateEffect(c)
@@ -83,20 +81,33 @@ end
 
 --effect 2
 function s.con2(e,tp,eg,ep,ev,re,r,rp)
-	return rp==tp and re:IsActiveType(TYPE_TRAP)
+	local c=e:GetHandler()
+	return c:IsSummonType(SUMMON_TYPE_SYNCHRO) and c:GetFlagEffect(id)>0
 end
-function s.tg2filter(c)
-	return c:IsSetCard(0x5f20) and c:IsSpellTrap() and c:IsSSetable()
+function s.tg2filter(c,tp)
+	return c:IsFaceup() and c:IsControler(tp) and c:IsLocation(LOCATION_ONFIELD)
+		and (c:IsSetCard(0x5f20) or c:IsContinuousTrap())
+		and c:IsReason(REASON_BATTLE+REASON_EFFECT) and not c:IsReason(REASON_REPLACE)
+end
+function s.tg2rfilter(c,e)
+	return c:IsDestructable(e) and not c:IsStatus(STATUS_DESTROY_CONFIRMED+STATUS_BATTLE_DESTROYED)
 end
 function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
-	if chk==0 then return #g>0 end
-	Duel.SetOperationInfo(0,CATEGORY_SET,g,1,tp,LOCATION_GRAVE)
+	local g=Duel.GetMatchingGroup(s.tg2rfilter,tp,0,LOCATION_ONFIELD,nil,e)
+	if chk==0 then return eg:FilterCount(s.tg2filter,nil,tp)>0 and #g>0 end
+	if not Duel.SelectYesNo(tp,aux.Stringid(id,3)) then return false end
+	Duel.Hint(HINT_CARD,0,id)
+	local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_DESREPLACE):GetFirst()
+	Duel.HintSelection(sg)
+	e:SetLabelObject(sg)
+	sg:SetStatus(STATUS_DESTROY_CONFIRMED,true)
+	return true
+end
+function s.val2(e,c)
+	return s.tg2filter(c,e:GetHandlerPlayer())
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(s.tg2filter,tp,LOCATION_GRAVE,0,nil)
-	if #g>0 then
-		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_SET)
-		Duel.SSet(tp,sg)
-	end
+	local sg=e:GetLabelObject()
+	sg:SetStatus(STATUS_DESTROY_CONFIRMED,false)
+	Duel.Destroy(sg,REASON_EFFECT+REASON_REPLACE)
 end

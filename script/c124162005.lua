@@ -88,7 +88,7 @@ end
 function s.op2op(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or not c:IsFaceup() or not c:IsControler(tp) or Duel.GetLocationCount(tp,LOCATION_SZONE)<1 then return end
-	local g=Duel.GetMatchingGroup(s.op2filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,tp,c)
+	local g=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.op2filter),tp,LOCATION_DECK+LOCATION_GRAVE,0,nil,tp,c)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
 		Duel.Equip(tp,sg,c)

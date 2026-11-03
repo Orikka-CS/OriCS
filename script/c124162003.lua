@@ -45,7 +45,7 @@ function s.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)
 end
 function s.op1(e,tp,eg,ep,ev,re,r,rp)
-	local g=eg:Filter(s.tg1filter,nil,tp)
+	local g=eg:Filter(aux.NecroValleyFilter(s.tg1filter),nil,tp)
 	if #g>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_ATOHAND)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)

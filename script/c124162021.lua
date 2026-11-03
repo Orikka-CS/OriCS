@@ -1,4 +1,4 @@
---말렉스카브 도슨트 바리올라
+--말렉스카브 래쉬 바리올라
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro

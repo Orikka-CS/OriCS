@@ -83,7 +83,7 @@ function s.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.op2(e,tp,eg,ep,ev,re,r,rp)
 	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
-	local g=Duel.GetMatchingGroup(s.tg2eqfilter,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil,tp,mg)
+	local g=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.tg2eqfilter),tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil,tp,mg)
 	if #g>0 and #mg>0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
 		local sg=aux.SelectUnselectGroup(g,e,tp,1,1,aux.TRUE,1,tp,HINTMSG_EQUIP):GetFirst()
 		local hg=mg:Filter(function(c) return sg:CheckEquipTarget(c) end,nil)

@@ -52,7 +52,7 @@ end
 
 --effect 2
 function s.tg2filter(c)
-	return c:IsSetCard(0x5f20) and c:IsMonster() and c:IsAbleToGrave()
+	return c:IsSetCard(0x5f20) and c:IsAbleToGrave()
 end
 function s.tg2sfilter(c,e)
 	return c:IsLocation(LOCATION_STZONE) and c:IsFacedown() and c:IsCanBeEffectTarget(e)
